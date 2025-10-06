@@ -1,20 +1,22 @@
-Landing Page
+Landing Page - Kozos
 
-Pohárnyi Alkoholos
-Pohárnyi Nem Alkoholos
+Pohárnyi Alkoholos - Marcell
+Pohárnyi Nem Alkoholos - Kavics
 
-Közösségi Alkoholos
-Közösségi Nem Alkoholos
+Közösségi Alkoholos - Kavics
+Közösségi Nem Alkoholos - Kornel
 
-Regisztárciós
+Regisztárciós - Marcell
 
-Bejelentkezési
+Bejelentkezési - Kornel
 
-Felhasználói adatlap
+Felhasználói adatlap - Marcell
 
-Admin Panel
+Admin Panel - Kornel
 
-Új Koktél Létrehozása
+Új Koktél Létrehozása - Kavics
+
+Koktel oldala - ?
 
 
 Optional: Mi van a polcon?
