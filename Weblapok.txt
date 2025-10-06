@@ -1,0 +1,20 @@
+Landing Page
+
+Pohárnyi Alkoholos
+Pohárnyi Nem Alkoholos
+
+Közösségi Alkoholos
+Közösségi Nem Alkoholos
+
+Regisztárciós
+
+Bejelentkezési
+
+Felhasználói adatlap
+
+Admin Panel
+
+Új Koktél Létrehozása
+
+
+Optional: Mi van a polcon?
