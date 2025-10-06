@@ -16,5 +16,7 @@ Admin Panel - Kornel
 
 Új Koktél Létrehozása - Kavics
 
+Koktel oldala - ?
+
 
 Optional: Mi van a polcon?
