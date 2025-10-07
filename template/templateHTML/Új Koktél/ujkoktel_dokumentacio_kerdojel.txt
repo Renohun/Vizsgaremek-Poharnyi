@@ -21,4 +21,4 @@ feltölti az adatbázisba a megadott adatokat
 az oldal functionjei:
 feltolt() - blank/modal
 osszetevohozzaadas() - létrehoz egy új sort majd egy text-input mezőt és ezeket appendeli a már meglévő form keretébe.
-megse() - blank
+megse() - blank  
