@@ -1,9 +1,17 @@
 a NewCocktail weblap formázása Bootstrap keretrendszerel és Css-el történt. a weboldal további funkcióji javascriptben kerültek megvalósításra
 
+a NewCocktail weblap mappái/fáljai:
+NewCocktail_img - az oldalon található képeket tartalmazza
+kepfeltolt.js - a kép input mezőt kezeli
+newcocktail.css - az oldal bootstrapen kivüli formázására szolgál.
+NewCocktail.html
+NewCocktail.js - az oldal main js fájlja, egyelőre: Form/input kezelése
+
 A NewCocktail weblap funkciója:
 	
 A felhasználó az input mezőkön keresztül létre tudja hozni a saját receptjét, amelyet aztán a küldés gombbal feltölt a "közösségi" adatbázisba
 megadható adatok:
+- alkoholos v alkohol mentes
 - név
 - borítókép
 - alap(koktél alapjául szolgáló alkohol, csak alkoholosnál)
@@ -22,3 +30,5 @@ az oldal functionjei:
 feltolt() - blank/modal
 osszetevohozzaadas() - létrehoz egy új sort majd egy text-input mezőt és ezeket appendeli a már meglévő form keretébe.
 megse() - blank  
+
+UploadImage() - az object-ként feltöltött képhez generál elérési útvonalat majd beállítja az input mező hátterének - megjeleníti az oldalon. egyelőre.
