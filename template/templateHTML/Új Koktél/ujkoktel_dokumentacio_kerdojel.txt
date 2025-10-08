@@ -1,0 +1,24 @@
+a NewCocktail weblap formázása Bootstrap keretrendszerel és Css-el történt. a weboldal további funkcióji javascriptben kerültek megvalósításra
+
+A NewCocktail weblap funkciója:
+	
+A felhasználó az input mezőkön keresztül létre tudja hozni a saját receptjét, amelyet aztán a küldés gombbal feltölt a "közösségi" adatbázisba
+megadható adatok:
+- név
+- borítókép
+- alap(koktél alapjául szolgáló alkohol, csak alkoholosnál)
+- kész koktél mennyisége
+- összetevők
+- recept részletes leírása
+
+további elemek az oldalon a küldés és a mégse gomb.
+
+mégse gomb:
+törli a formban található adatokat
+küldés gomb:
+feltölti az adatbázisba a megadott adatokat
+
+az oldal functionjei:
+feltolt() - blank/modal
+osszetevohozzaadas() - létrehoz egy új sort majd egy text-input mezőt és ezeket appendeli a már meglévő form keretébe.
+megse() - blank  
