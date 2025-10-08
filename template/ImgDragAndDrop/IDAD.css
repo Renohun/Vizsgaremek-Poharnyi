@@ -1,0 +1,43 @@
+.main
+{
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#drop-area
+{
+    width: 280px;
+    height: 280px;
+   
+   
+    text-align: center;
+    border-radius: 10px ;
+    display: flex;
+    justify-content   : center;
+    flex-direction: column;
+}
+#img-view
+{
+    width: 280px;
+    height: 280px;
+    
+    border: 2px dashed black;
+    background: rgb(157, 216, 255);
+      align-content: center;
+    justify-items: center;
+    background-position: center;
+    background-size: cover;
+}
+#img-view p
+{
+    font-size: 20px;
+  
+}
+#icon{
+  height:   120px;
+  width: 120px;
+}

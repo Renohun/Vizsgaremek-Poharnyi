@@ -9,12 +9,12 @@ let gombnyomasszam = 1;
 let koktelurlap = document.getElementById("koktelurlap")
 let osszetevodiv;
 let megsegomb;
+let radioMentes;
+let radioAlk;
+let alap;
+let alapInput;
 document.addEventListener("DOMContentLoaded", () => 
 {
-//értékadás a kepfeltolt változónak
-kepfeltolt = document.getElementById("kepfeltoltes")
-//click listener meghívása
-kepfeltolt.addEventListener("click",feltolt)
 //új összetevő meghívására szolgáló gomb értékadása
 osszetevogomb = document.getElementById("osszetevogomb")
 //addeventlistener hozzáaadása
@@ -23,13 +23,36 @@ osszetevogomb.addEventListener("click",osszetevohozzaadas)
 // megse gomb létrehozása és listener hozzáadása
 megsegomb = document.getElementById("megse")
 megsegomb.addEventListener("click", megsefugv)
+//radiogombok értékének lekérése
+radioMentes = document.getElementById("mentes")
+radioAlk = document.getElementById("alkoholos")
+//melyik radiobutton van kiválasztva, ás attól függően eltüntetjük vagy visszahozzuk az alap div tartalmát
+
+
+radioAlk.addEventListener("change",()=>{
+ if(radioAlk.checked == true)
+    {
+        alap = document.getElementById("alapEltuntet")
+        alap.style.visibility ="visible"
+       
+    }   
 
 })
-//A koktél borítóképének feltöltésére szolgáló function
-function feltolt()
-{
-    alert("sikeres feltöltés!")
-}
+radioMentes.addEventListener("change",()=>{
+ if(radioMentes.checked == true)
+    {
+        alapInput = document.getElementById("alap")
+        alap = document.getElementById("alapEltuntet")
+        alap.style.visibility ="hidden"
+        alapInput.value = "";
+        
+    }   
+
+})
+
+})
+
+
 
 
 
@@ -61,3 +84,5 @@ function megsefugv()
 {
     alert("sikeres törlés!")
 }
+
+
