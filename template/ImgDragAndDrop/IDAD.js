@@ -11,9 +11,9 @@ inputFile.addEventListener("change",uploadImage)
 function uploadImage()
 {
 imgLink = URL.createObjectURL( inputFile.files[0]);//az objectet elérési útvonallá  alakítjuk
-  ImgView.style.backgroundImage = `url(${imgLink})`;//beállítjuk a képet háttérnek, majd formázzuk
-   ImgView.textContent = "";
-   ImgView.style.border = "none"
+    ImgView.style.backgroundImage = `url(${imgLink})`;//beállítjuk a képet háttérnek, majd formázzuk
+    ImgView.textContent = "";
+    ImgView.style.border = "none"
     console.log(imgLink)
 }
 
