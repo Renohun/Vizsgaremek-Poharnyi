@@ -35,6 +35,12 @@ body{
     border: 0px solid black;
     padding: 20px;
 }
+.profil-display{
+    background-color: lightgray;
+    border-radius: 100%;
+    border: 0px solid black;
+    padding: 100px;
+}
 .navbar-nav > li > .dropdown-menu { background-color: #9acd32; border-radius: 0px; }
 
 div>li{

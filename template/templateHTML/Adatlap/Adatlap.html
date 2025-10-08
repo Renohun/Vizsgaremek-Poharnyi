@@ -38,13 +38,9 @@
                      </li>  
                 </div>  
             </div>
-            <div class="justify-content-space-between">
-                <input type="button" class="btn btn-secondary nav-item" value="Regisztárció" id="Register">
-                <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="Login">
-            </div>
             <div>
-                <input type="button" class="nav-item btn btn-warning" hidden value="Saját koktél létrehozása" id="Keszites">
-                <input type="button" class="nav-item profil" hidden value="     " id="Profile">
+                <input type="button" class="nav-item btn btn-warning" value="Saját koktél létrehozása" id="Keszites">
+                <input type="button" class="nav-item profil" value="     " id="Profile">
             </div>
         </div>
         </nav>
@@ -63,24 +59,209 @@
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Adatlap</p>
                     </div>
-                    <p>Profilképed:</p>
-                    <img src="" alt="">
-                    <input type="image" src="" alt="">
-                    <label for="Felhasználónév">Felhasználónév:</label>
-                    <input type="text" disabled id="Felhasználónév">
-                    <label for="Email-cím">Email-cím:</label>
-                    <input type="text" disabled id="Email-cím">
-                    <label for="Jelszó">Jelszó:</label>
-                    <input type="text" disabled id="Jelszó">
+                    <div class="row justify-content-center">
+
+                        <div class="col-2">
+                            <div class="flex-column align-items-center">
+                                <p>Profilképed:</p>
+                                <img src="" alt="" class="profil-display" id="profilkep">
+                            </div>
+                            <div class="flex-column d-flex">
+                                <label for="Felhasználónév">Felhasználónév:</label>
+                                <input type="text" disabled id="Felhasználónév">
+                            </div>
+                            <div class="flex-column d-flex">
+                                <label for="Email-cím">Email-cím:</label>
+                                <input type="email" disabled id="Email-cím">
+                            </div>
+                            <div class="flex-column d-flex">
+                                <label for="Jelszó">Jelszó:</label>
+                                <input type="password" disabled id="Jelszó">
+                            </div>
+                            <input type="submit" value="Mentés">
+                            <input type="reset" value="Mégse">
+                        </div>
+                        <div class="col-1">
+
+                        </div>
+                        <div class="col-2">
+                            <p>Regisztárció dátuma:</p>
+                            <p>Készített koktélok:</p>
+                            <p>Kedvelt koktélok:</p>
+                            <p>Kommentek száma:</p>
+                            <p>Értékelések száma:</p>
+                        </div>
+                    </div>
                 </div>
                 <div hidden id="kedvencoldal" class="col-md-11 col-sm-9 col-lg-11 col-9">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Kedvenc Koktélok</p>
+                        
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="card col-md-2">
+                         <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                         <div class="card-body">
+                            <h4 class="card-title">Sidecar</h4>
+                            <p class="card-text">
+                                <span class="badge text-bg-info"> Whiskey</span>
+                                <p>Összetevők:</p>
+                                <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
+                            </p>
+                            <input type="button" value="Tovább a Receptre">
+                         </div>       
+                        </div>
+                        <div class="card col-md-2">
+                         <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                         <div class="card-body">
+                            <h4 class="card-title">Mojito</h4>
+                            <p class="card-text">
+                                <span class="badge text-bg-info"> Whiskey</span>
+                                <p>Összetevők:</p>
+                                <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
+                            </p>
+                            <input type="button" value="Tovább a Receptre">
+                         </div>       
+                        </div>
+                        <div class="card col-md-2">
+                         <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                         <div class="card-body">
+                            <h4 class="card-title">Hurricane</h4>
+                            <p class="card-text">
+                                <span class="badge text-bg-info"> Whiskey</span>
+                                <p>Összetevők:</p>
+                                <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
+                            </p>
+                            <input type="button" value="Tovább a Receptre">
+                         </div>       
+                        </div>
+                        <div class="card col-md-2">
+                         <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                         <div class="card-body">
+                            <h4 class="card-title">Manhattan</h4>
+                            <p class="card-text">
+                                <span class="badge text-bg-info"> Whiskey</span>
+                                <p>Összetevők:</p>
+                                <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
+                            </p>
+                            <input type="button" value="Tovább a Receptre">
+                         </div>       
+                        </div>
+                        <div class="card col-md-2">
+                         <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                         <div class="card-body">
+                            <h4 class="card-title">Martini</h4>
+                            <p class="card-text">
+                                <span class="badge text-bg-info"> Whiskey</span>
+                                <p>Összetevők:</p>
+                                <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
+                            </p>
+                            <input type="button" value="Tovább a Receptre">
+                         </div>       
+                        </div>
                     </div>
                 </div>
                 <div hidden id="kokteloldal" class="col-md-11 col-sm-9 col-lg-11 col-9">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Saját Koktélok</p>
+                        
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="card col-md-2">
+                         <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                         <div class="card-body">
+                            <h4 class="card-title">Sidecar</h4>
+                            <p class="card-text">
+                                <p>
+                                    Értékelés: Még nincs értékelés
+                                </p>
+                                <p>
+                                    Kommentek száma: 0
+                                </p>
+                                <p>
+                                    Állapot: Elfogadva
+                                </p>
+                            </p>
+                            <input type="button" value="Tovább a Receptre">
+                            <input type="button" value="Kezelés">
+                         </div>       
+                        </div>
+                        <div class="card col-md-2">
+                         <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                         <div class="card-body">
+                            <h4 class="card-title">Mojito</h4>
+                            <p class="card-text">
+                                <p>
+                                    Értékelés: 4.9
+                                </p>
+                                <p>
+                                    Kommentek száma: 12
+                                </p>
+                                <p>
+                                    Állapot: Elfogadva
+                                </p>
+                            </p>
+                            <input type="button" value="Tovább a Receptre">
+                            <input type="button" value="Kezelés">
+                         </div>       
+                        </div>
+                        <div class="card col-md-2">
+                         <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                         <div class="card-body">
+                            <h4 class="card-title">Hurricane</h4>
+                            <p class="card-text">
+                                <p>
+                                    Értékelés: 3.7
+                                </p>
+                                <p>
+                                    Kommentek száma: 6
+                                </p>
+                                <p>
+                                    Állapot: Elfogadva
+                                </p>
+                            </p>
+                            <input type="button" value="Tovább a Receptre">
+                            <input type="button" value="Kezelés">
+                         </div>       
+                        </div>
+                        <div class="card col-md-2">
+                         <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                         <div class="card-body">
+                            <h4 class="card-title">Manhattan</h4>
+                            <p class="card-text">
+                                <p>
+                                    Értékelés: 4.2
+                                </p>
+                                <p>
+                                    Kommentek száma: 8
+                                </p>
+                                <p>
+                                    Állapot: Elfogadva
+                                </p>
+                            </p>
+                            <input type="button" value="Tovább a Receptre">
+                            <input type="button" value="Kezelés">
+                         </div>       
+                        </div>
+                        <div class="card col-md-2">
+                         <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                         <div class="card-body">
+                            <h4 class="card-title">Martini</h4>
+                            <p class="card-text">
+                                <p>
+                                    Értékelés: 2.4
+                                </p>
+                                <p>
+                                    Kommentek száma: 5
+                                </p>
+                                <p>
+                                    Állapot: 1 jelentés!
+                                </p>
+                            </p>
+                            <input type="button" value="Tovább a Receptre">
+                            <input type="button" value="Kezelés">
+                         </div>       
+                        </div>
                     </div>
                 </div>
                 <div hidden id="reportoldal" class="col-md-11 col-sm-9 col-lg-11 col-9">

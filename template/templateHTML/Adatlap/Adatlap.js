@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     let kedvoldal=document.getElementById("kedvencoldal")
     let koktoldal=document.getElementById("kokteloldal")
     let repoldal=document.getElementById("reportoldal")
+
     adat.addEventListener("click",()=>{
         adatoldal.removeAttribute("hidden","true")
         kedvoldal.setAttribute("hidden","true")
@@ -31,5 +32,9 @@ document.addEventListener("DOMContentLoaded",()=>{
         kedvoldal.setAttribute("hidden","true")
         koktoldal.setAttribute("hidden","true")
         repoldal.removeAttribute("hidden","true")
+    })
+    let kep=document.getElementById("profilkep")
+    kep.addEventListener("focus",()=>{
+        
     })
 })
