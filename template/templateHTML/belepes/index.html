@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="../bootstrap-5.2.3-dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body class="bg-dark">
+    <div class="container">
+      <div class="row my-5">
+        <div class="col-lg-4"></div>
+        <div class="col-md-4 px-5 pb-5 border border-secondary rounded">
+            <div class="text-center"><h3 class=" text-white mt-4">Bejelentkezés</h3></div>
+          
+          <form>
+            <div class="mb-3 d-flex flex-column mt-3">
+              <label for="azonosito" class="form-label text-white fw-bold"
+                >E-mail / Felhasznalonév</label
+              >
+              <input
+                class="form-control"
+                type="text"
+                name="azonosiot"
+                id="azonosito"
+                placeholder="Irjon be az e-mail cimet vagy a felhasznalonévet!"
+              />
+            </div>
+            <div class="mb-3 d-flex flex-column mt-3">
+              <label for="jelszo_input" class="form-label text-white fw-bold"
+                >Jelszo</label
+              >
+              <input
+                class="form-control"
+                type="password"
+                name="jelszo_input"
+                id="jelszo_input"
+                placeholder="Irja be jelszavat!"
+              />
+            </div>
+            <div>
+              <input type="checkbox" name="jelszomutatas" id="mutatas" />
+              <label for="mutatas" class="form-label text-white fw-bold"
+                >jelszomutatas</label
+              >
+            </div>
+            <div>
+              <input
+                type="button"
+                value="Belepes"
+                class="btn btn-success w-100"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="cold-lg-4"></div>
+        </div>
+      </div>
+    </div>
+    <script src="../bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="jelszomutatas.js"></script>
+  </body>
+</html>
