@@ -14,35 +14,3 @@ a{
 
 
 
-.jelenlegi{
-    text-decoration: underline;
-}
-.hatter{
-    background-color: #9acd32;
-}
-body{
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-#alszoveg{
-    font-size: x-small;
-}
-#marka{
-    font-size: xx-large;
-}
-.profil{
-    background-color: lightgray;
-    border-radius: 100%;
-    border: 0px solid black;
-    padding: 20px;
-}
-.profil-display{
-    background-color: lightgray;
-    border-radius: 100%;
-    border: 0px solid black;
-    padding: 100px;
-}
-.navbar-nav > li > .dropdown-menu { background-color: #9acd32; border-radius: 0px; }
-
-div>li{
-    border-left:1px solid gray ;
-}

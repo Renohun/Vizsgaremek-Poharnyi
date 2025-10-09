@@ -33,8 +33,5 @@ document.addEventListener("DOMContentLoaded",()=>{
         koktoldal.setAttribute("hidden","true")
         repoldal.removeAttribute("hidden","true")
     })
-    let kep=document.getElementById("profilkep")
-    kep.addEventListener("focus",()=>{
-        
-    })
+
 })
