@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../bootstrap-5.2.3-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../UniversalCSS/NavBar.css">
+    <link rel="stylesheet" href="../Navbar/NavBar.css">
+    <link rel="stylesheet" href="PohAlc.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
@@ -54,132 +55,275 @@
     </nav>
     <div class="container" id="keresofelulet">
         <label for="Koktelnev">Keresés</label>
-        <div class="col-md-2">
-            <div class="">
+        <div class="row">
+            <div class="col-md-8 col-sm-8 col-lg-10 col-8">
                 <input type="text" name="" id="Koktelnev" class="form-control" placeholder="írja be a koktél nevét">
-                <input type="button" value="Keresés">
+            </div>
+            <div class=" col-md-4 col-sm-4 col-lg-2 col-4">
+                <input type="button" class="btn btn-secondary w-100" data-bs-toggle="collapse" data-bs-target="#parameterek" aria-expanded="false" aria-controls="parameterek" value="További Szűrés" id="filter">
+            </div>
+            <div class="collapse mt-1" id="parameterek">
+                <div class="card card-body">
+                    <div class="row">
+                        <div class="col-md">
+                            <label for="Erősség">A koktél erőssége</label>
+                            <select name=""id="Erősség" class="col-3 form-select">
+                                <option value=""hidden selected></option>
+                                <option value="">Erős</option>
+                                <option value="">Közepes</option>
+                                <option value="">Gyenge</option>
+                            </select>
+                        </div>
+                        <div class="col-md">    
+                            <label for="Alap">A koktél alapja</label>
+                            <select name=""id="Alap" class="col-3 form-select">
+                                <option value=""hidden selected></option>
+                                <option value="">Whisky</option>
+                                <option value="">Rum</option>
+                                <option value="">Brandy</option>
+                                <option value="">Bourbon</option>
+                            </select>
+                        </div>
+                        <div class="col-md">    
+                            <label for="Allergének">Allergének</label>
+                            <select name=""id="Allergének" class="col-3 form-select">
+                                <option value=""hidden selected></option>
+                                <option value="">Whisky</option>
+                                <option value="">Rum</option>
+                                <option value="">Brandy</option>
+                                <option value="">Bourbon</option>
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <label for="Rendezés">Rendezés</label>
+                            <select name=""id="Rendezés" class="col-3 form-select">
+                                <option value=""hidden selected></option>
+                                <option value="">Legtöbb értékelés</option>
+                                <option value="">Legjobb értékelés elöl</option>
+                                <option value="">Legjobb értékelés hátul</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="card col-md-5 col-lg-3 col-sm-6 col-6">
-            <img src="SpicyMargaritas-9fcdbe2.webp" class="img-fluid" alt="">
-            <div class="card-body">
-                <h4 class="card-title">Sidecar</h4>
-                <p class="card-text">
-                    <span class="badge text-bg-info"> Konyak</span>
-                    <span class="badge text-bg-danger"> Erős</span>
-                    <span class="badge text-bg-success"> Savanyú</span>
-                    <p>Összetevők:</p>
-                    <ul>
-                        <li>Konyak</li>
-                        <li>Triple Sec</li>
-                        <li>Citromlé</li>
-                        <li>és 5 további..</li>
-                    </ul>
-                </p>
-                <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
-            </div>       
+    <div class="container">
+        <div class="row row-cols-md-2 row-cols-sm-2 row-cols-2 row-cols-lg-4 justify-content-center mt-1">
+        <div class="mb-1">
+            <div class="card h-100">
+                <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">Sidecar</h4>
+                    <span id="ertekeles">
+                        Értékelés: <span id="ertekelesszam">4.9/5</span>
+                    </span>
+                    <div class="card-text">
+                        <div>
+                            <span class="badge text-bg-info"> Konyak</span>
+                            <span class="badge text-bg-danger"> Erős</span>
+                            <span class="badge text-bg-success"> Savanyú</span>
+                        </div>
+                        <span>Összetevők:</span>
+                        <ul>
+                            <li>Konyak</li>
+                            <li>Triple Sec</li>
+                            <li>Citromlé</li>
+                            <li>és 5 további..</li>
+                        </ul>
+                    </div>
+                    <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
+                    <a href="">Megosztás</a>
+                </div>       
+            </div>
         </div>
-        <div class="card col-md-5 col-lg-3 col-sm-6 col-6">
-            <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
-            <div class="card-body">
-                <h4 class="card-title">Mojito</h4>
-                <p class="card-text">
-                    <span class="badge text-bg-info"> Whiskey</span>
-                    <p>Összetevők:</p>
-                    <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
-                </p>
-                <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
-            </div>       
+        <div class="mb-1">
+            <div class="card h-100">
+                <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">Mojito</h4>
+                    <span id="ertekeles">
+                        Értékelés: <span id="ertekelesszam">4.9/5</span>
+                    </span>
+                    <div class="card-text">
+                        <div>
+                            <span class="badge text-bg-info"> Whiskey</span>
+                        </div>
+                        <span>Összetevők:</span>
+                        <ul>
+                            <li>Konyak</li>
+                            <li>Triple Sec</li>
+                            <li>Citromlé</li>
+                            <li>és 5 további..</li>
+                        </ul>
+                    </div>
+                    <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
+                    <a href="">Megosztás</a>
+                </div>       
+            </div>
         </div>
-        <div class="card col-md-5 col-lg-3 col-sm-6 col-6">
-            <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
-            <div class="card-body">
-                <h4 class="card-title">Hurricane</h4>
-                <p class="card-text">
-                    <span class="badge text-bg-info"> Whiskey</span>
-                    <p>Összetevők:</p>
-                    <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
-                </p>
-                <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
-            </div>       
+        <div class="mb-1">
+            <div class="card h-100">
+                <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">Hurricane</h4>
+                    <span id="ertekeles">
+                        Értékelés: <span id="ertekelesszam">4.9/5</span>
+                    </span>
+                    <div class="card-text">
+                        <div>
+                            <span class="badge text-bg-info"> Whiskey</span>
+                        </div>
+                        <span>Összetevők:</span>
+                        <ul>
+                            <li>Konyak</li>
+                            <li>Triple Sec</li>
+                            <li>Citromlé</li>
+                            <li>és 5 további..</li>
+                        </ul>
+                    </div>
+                    <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
+                    <a href="">Megosztás</a>
+                </div>       
+            </div>
         </div>
-        <div class="card col-md-5 col-lg-3 col-sm-6 col-6">
-            <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
-            <div class="card-body">
-                <h4 class="card-title">Manhattan</h4>
-                <p class="card-text">
-                    <span class="badge text-bg-info"> Whiskey</span>
-                    <p>Összetevők:</p>
-                    <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
-                </p>
-                <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
-            </div>       
+        <div class="mb-1">
+            <div class="card h-100">
+                <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">Manhattan</h4>
+                    <span id="ertekeles">
+                        Értékelés: <span id="ertekelesszam">4.9/5</span>
+                    </span>
+                    <div class="card-text">
+                        <div>
+                            <span class="badge text-bg-info"> Whiskey</span>
+                        </div>
+                        <span>Összetevők:</span>
+                        <ul>
+                            <li>Konyak</li>
+                            <li>Triple Sec</li>
+                            <li>Citromlé</li>
+                            <li>és 5 további..</li>
+                        </ul>
+                    </div>
+                    <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
+                    <a href="">Megosztás</a>
+                </div>       
+            </div>
+        </div>
+        </div>
+        <div class="row row-cols-md-2 row-cols-sm-2 row-cols-2 row-cols-lg-4 justify-content-center mt-1">
+        <div class="mb-1">
+            <div class="card h-100">
+                <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">Sidecar</h4>
+                    <span id="ertekeles">
+                        Értékelés: <span id="ertekelesszam">4.9/5</span>
+                    </span>
+                    <div class="card-text">
+                        <div>
+                            <span class="badge text-bg-info"> Konyak</span>
+                            <span class="badge text-bg-danger"> Erős</span>
+                            <span class="badge text-bg-success"> Savanyú</span>
+                        </div>
+                        <span>Összetevők:</span>
+                        <ul>
+                            <li>Konyak</li>
+                            <li>Triple Sec</li>
+                            <li>Citromlé</li>
+                            <li>és 5 további..</li>
+                        </ul>
+                    </div>
+                    <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
+                    <a href="">Megosztás</a>
+                </div>       
+            </div>
+        </div>
+
+        <div class="mb-1">
+            <div class="card h-100">
+                <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">Mojito</h4>
+                    <span id="ertekeles">
+                        Értékelés: <span id="ertekelesszam">4.9/5</span>
+                    </span>
+                    <div class="card-text">
+                        <div>
+                            <span class="badge text-bg-info"> Whiskey</span>
+                        </div>
+                        <span>Összetevők:</span>
+                        <ul>
+                            <li>Konyak</li>
+                            <li>Triple Sec</li>
+                            <li>Citromlé</li>
+                            <li>és 5 további..</li>
+                        </ul>
+                    </div>
+                    <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
+                    <a href="">Megosztás</a>
+                </div>       
+            </div>
+        </div>
+
+        <div class="mb-1">
+            <div class="card h-100">
+                <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">Hurricane</h4>
+                    <span id="ertekeles">
+                        Értékelés: <span id="ertekelesszam">4.9/5</span>
+                    </span>
+                    <div class="card-text">
+                        <div>
+                            <span class="badge text-bg-info"> Whiskey</span>
+                        </div>
+                        <span>Összetevők:</span>
+                        <ul>
+                            <li>Konyak</li>
+                            <li>Triple Sec</li>
+                            <li>Citromlé</li>
+                            <li>és 5 további..</li>
+                        </ul>
+                    </div>
+                    <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
+                    <a href="">Megosztás</a>
+                </div>       
+            </div>
+        </div>
+
+        <div class="mb-1">
+            <div class="card h-100">
+                <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">Manhattan</h4>
+                    <span id="ertekeles">
+                        Értékelés: <span id="ertekelesszam">4.9/5</span>
+                    </span>
+                    <div class="card-text">
+                        <div>
+                            <span class="badge text-bg-info"> Whiskey</span>
+                        </div>
+                        <span>Összetevők:</span>
+                        <ul>
+                            <li>Konyak</li>
+                            <li>Triple Sec</li>
+                            <li>Citromlé</li>
+                            <li>és 5 további..</li>
+                        </ul>
+                    </div>
+                    <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
+                    <a href="">Megosztás</a>
+                </div>       
+            </div>
+        </div>
+
         </div>
     </div>
-</div>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="card col-md-5 col-lg-3 col-sm-6 col-6">
-            <img src="SpicyMargaritas-9fcdbe2.webp" class="img-fluid" alt="">
-            <div class="card-body">
-                <h4 class="card-title">Sidecar</h4>
-                <p class="card-text">
-                    <span class="badge text-bg-info"> Konyak</span>
-                    <span class="badge text-bg-danger"> Erős</span>
-                    <span class="badge text-bg-success"> Savanyú</span>
-                    <p>Összetevők:</p>
-                    <ul>
-                        <li>Konyak</li>
-                        <li>Triple Sec</li>
-                        <li>Citromlé</li>
-                        <li>és 5 további..</li>
-                    </ul>
-                </p>
-                <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
-            </div>       
-        </div>
-        <div class="card col-md-5 col-lg-3 col-sm-6 col-6">
-            <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
-            <div class="card-body">
-                <h4 class="card-title">Mojito</h4>
-                <p class="card-text">
-                    <span class="badge text-bg-info"> Whiskey</span>
-                    <p>Összetevők:</p>
-                    <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
-                </p>
-                <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
-            </div>       
-        </div>
-        <div class="card col-md-5 col-lg-3 col-sm-6 col-6">
-            <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
-            <div class="card-body">
-                <h4 class="card-title">Hurricane</h4>
-                <p class="card-text">
-                    <span class="badge text-bg-info"> Whiskey</span>
-                    <p>Összetevők:</p>
-                    <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
-                </p>
-                <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
-            </div>       
-        </div>
-        <div class="card col-md-5 col-lg-3 col-sm-6 col-6">
-            <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="">
-            <div class="card-body">
-                <h4 class="card-title">Manhattan</h4>
-                <p class="card-text">
-                    <span class="badge text-bg-info"> Whiskey</span>
-                    <p>Összetevők:</p>
-                    <p>Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla...</p>
-                </p>
-                <input type="button" class="btn btn-secondary" value="Tovább a Receptre">
-            </div>       
-        </div>
-    </div>
-</div>
     
-    <script src="../bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
+    
+<script src="../bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

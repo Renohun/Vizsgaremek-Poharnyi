@@ -25,6 +25,11 @@ body {
     border-radius: 0px;
 }
 
+.navbar-nav > li > .dropdown-menu {
+    background-color: #9acd32;
+    border-radius: 0px;
+}
+
 div > li {
     border-left: 1px solid gray;
 }
