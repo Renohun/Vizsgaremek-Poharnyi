@@ -1,0 +1,43 @@
+#filter {
+    height: 70px;
+    width: 100%;
+    background-color: rgb(85, 88, 87);
+    border: 2px solid rgb(167, 162, 162);
+    border-radius: 5pt;
+}
+#koktelAllergenek {
+    border-radius: 5pt;
+    background-color: rgb(242, 244, 246);
+    width: 100px;
+}
+#keresesField {
+    height: 30px;
+    border-radius: 5pt;
+    border: none;
+}
+#koktelKartya {
+    width: 300px;
+    height: 450px;
+    background-color: rgb(85, 88, 87);
+    border: 2px solid rgb(167, 162, 162);
+    border-radius: 5pt;
+}
+#tagPelda {
+    width: 60px;
+    height: 20px;
+    background-color: rgb(232, 172, 31);
+    border-radius: 25pt;
+    font-weight: 500;
+}
+#koktelNev {
+    margin: none;
+}
+#Ertekeles {
+    margin-bottom: 5px;
+}
+#koktelReszletek {
+    height: 60px;
+    width: 280px;
+    border: 1px solid rgb(167, 162, 162);
+    border-radius: 5pt;
+}
