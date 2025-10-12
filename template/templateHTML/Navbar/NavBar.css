@@ -1,26 +1,33 @@
-.jelenlegi{
+.jelenlegi {
     text-decoration: underline;
 }
-.hatter{
+.hatter {
     background-color: #9acd32;
 }
-body{
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode',
+        Geneva, Verdana, sans-serif;
 }
-#alszoveg{
+#alszoveg {
     font-size: x-small;
 }
-#marka{
+#marka {
     font-size: xx-large;
 }
-.profil{
+.profil {
     background-color: lightgray;
     border-radius: 100%;
     border: 0px solid black;
     padding: 20px;
 }
-.navbar-nav > li > .dropdown-menu { background-color: #9acd32; border-radius: 0px; }
+.navbar-nav > li > .dropdown-menu {
+    background-color: #9acd32;
+    border-radius: 0px;
+}
 
-div>li{
-    border-left:1px solid gray ;
+div > li {
+    border-left: 1px solid gray;
+}
+.nav-link {
+    margin-left: 5px;
 }
