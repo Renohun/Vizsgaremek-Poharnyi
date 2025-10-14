@@ -1,0 +1,40 @@
+
+#Searchbtn
+{
+    width: 10%;
+    margin-left: 0cap;
+     border: 1px solid grey;
+    border-left: none; 
+  cursor: pointer;
+  padding: 10px;
+   padding: 10px;
+  font-size: 17px;
+}
+#Searchbtn:hover
+{
+    background-color: #b4b4b4;
+}
+#searchBar
+{
+    padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 90%;
+  background: #f1f1f1;
+  
+     
+}
+#searchBarDiv{
+    margin-top: 20px;
+    
+}
+#searchbarForm{
+
+    margin-left: auto;
+    margin-right: auto;
+}
+#szuresCol{
+
+}
+
