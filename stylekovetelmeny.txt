@@ -1,0 +1,8 @@
+ÁLTALÁNOS STíLUS:
+
+Navbar-Szín: 
+Web-Háttérszín: 
+Elemek-Háttérszíne:
+Card-Border:
+Text-Color(ha kell):
+Font:
