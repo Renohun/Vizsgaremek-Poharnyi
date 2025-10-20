@@ -1,31 +1,12 @@
-#sideBorder {
-    margin-top: 100px;
-    border-right: 5px solid gray;
-    border-radius: 3%;
+#Sidebar {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana,
+        sans-serif;
+    background-color: #9acd32;
+    align-items: center;
+    /*Puszillak Stackoverflow*/
+    position: sticky;
+    top: 0;
 }
-#masodikOszlop {
-    margin-top: 100px;
-}
-h4 {
+a:hover {
     cursor: pointer;
-}
-#felhasznaloTorlesGomb,
-#koktelTorlesGomb {
-    margin-bottom: 50px;
-    width: 200px;
-    height: 70px;
-}
-#felhasznoKereses,
-#koktelKereses {
-    width: 500px;
-}
-#profilKep {
-    background-color: aliceblue;
-    margin-right: 15px;
-    border-radius: 5pt;
-    width: 50px;
-    height: 50px;
-}
-#felhasznaloNev {
-    color: aliceblue;
 }

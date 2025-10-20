@@ -84,7 +84,10 @@
                     <div>
                         <h3>Margaritas</h3>
                         <h5>Alkoholos</h5>
-                        <h5>Mennyiseg: X ml</h5>
+                        <h5>
+                            Mennyiseg:
+                            <span><input type="text" name="mennyiseg" placeholder="Hany ml legyen?" /></span> ml
+                        </h5>
                         <h5>Osszetevok</h5>
                         <ul>
                             <li>Osszetevok 1</li>
@@ -127,7 +130,7 @@
             <div class="row">
                 <div class="col-md-12"><p class="fw-bold">Ertekeles:</p></div>
             </div>
-            <div class="row mx-1 w-100">
+            <div class="row mx-1 w-100" id="komment">
                 <div
                     class="col-md-12 border rounded d-flex w-100 py-2 px-2"
                     style="background-color: rgb(149, 149, 149)"
@@ -143,7 +146,30 @@
                     ></textarea>
                 </div>
                 <div class="col-md-12 d-flex justify-content-end w-100">
-                    <input type="button" class="btn btn-success mt-2 w-25" value="Kuldes" name="" id="" />
+                    <input type="button" class="btn btn-success mt-2 w-25 mb-3" value="Kuldes" name="" id="" />
+                </div>
+            </div>
+            <div class="row mx-1 mt-4 w-100" id="komment">
+                <div
+                    class="col-md-12 border rounded d-flex w-100 py-2 px-2"
+                    style="background-color: rgb(149, 149, 149)"
+                >
+                    <div>
+                        <div id="profilKep" class="float-start"></div>
+                        <p class="text-white me-2">Felhasznalonev</p>
+                    </div>
+                    <p class="text-white">
+                        Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
+                        took a galley of type and scrambled it to make a type specimen book. It has survived not only
+                        five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
+                        passages, and more recently with desktop publishing software like Aldus PageMaker including
+                        versions of Lorem Ipsum
+                    </p>
+                </div>
+                <div class="col-md-12 d-flex justify-content-end w-100">
+                    <input type="button" class="btn btn-danger mt-2 w-25 mb-3" value="Jelentes" name="" id="" />
                 </div>
             </div>
             <div class="row mx-1 mt-4 w-100">
@@ -166,30 +192,7 @@
                     </p>
                 </div>
                 <div class="col-md-12 d-flex justify-content-end w-100">
-                    <input type="button" class="btn btn-danger mt-2 w-25" value="Jelentes" name="" id="" />
-                </div>
-            </div>
-            <div class="row mx-1 mt-4 w-100">
-                <div
-                    class="col-md-12 border rounded d-flex w-100 py-2 px-2"
-                    style="background-color: rgb(149, 149, 149)"
-                >
-                    <div>
-                        <div id="profilKep" class="float-start"></div>
-                        <p class="text-white me-2">Felhasznalonev</p>
-                    </div>
-                    <p class="text-white">
-                        Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
-                        took a galley of type and scrambled it to make a type specimen book. It has survived not only
-                        five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
-                        passages, and more recently with desktop publishing software like Aldus PageMaker including
-                        versions of Lorem Ipsum
-                    </p>
-                </div>
-                <div class="col-md-12 d-flex justify-content-end w-100">
-                    <input type="button" class="btn btn-danger mt-2 w-25" value="Jelentes" name="" id="" />
+                    <input type="button" class="btn btn-danger mt-2 w-25 mb-3" value="Jelentes" name="" id="" />
                 </div>
             </div>
         </div>
