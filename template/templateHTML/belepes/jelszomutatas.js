@@ -1,10 +1,8 @@
-document.addEventListener("DOMContentLoaded", function () {
-  let checkButton = document.getElementsByName("jelszomutatas");
-  const jelszoInput = document.getElementsByName("jelszo_input");
+document.addEventListener('DOMContentLoaded', function () {
+    let checkButton = document.getElementById('jelszomutatas');
+    const jelszoInput = document.getElementById('jelszo');
 
-  checkButton[0].addEventListener("change", function () {
-    checkButton[0].checked
-      ? jelszoInput[0].setAttribute("type", "text")
-      : jelszoInput[0].setAttribute("type", "password");
-  });
+    checkButton.addEventListener('change', function () {
+        checkButton.checked ? jelszoInput.setAttribute('type', 'text') : jelszoInput.setAttribute('type', 'password');
+    });
 });
