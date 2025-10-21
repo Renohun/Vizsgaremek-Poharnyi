@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const koktelKezeles = document.getElementsByName('koktelKezeles');
     const kommentKezeles = document.getElementsByName('kommentKezeles');
 
+    document.getElementById('fiokTextInput').focus();
+
     console.log(koktelKezeles[1]);
     console.log(kommentKezeles[1]);
 
