@@ -5,8 +5,8 @@
     background-color: #9acd32;
 }
 body {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode',
-        Geneva, Verdana, sans-serif;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana,
+        sans-serif;
 }
 #alszoveg {
     font-size: x-small;
@@ -35,4 +35,9 @@ div > li {
 }
 .nav-link {
     margin-left: 5px;
+}
+#ThemeSwitcher {
+    width: 50px;
+    height: 50px;
+    background-color: white;
 }

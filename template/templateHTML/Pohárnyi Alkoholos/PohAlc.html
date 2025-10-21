@@ -6,8 +6,8 @@
         <title>Document</title>
         <link rel="stylesheet" href="../bootstrap-5.2.3-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../Navbar/NavBar.css" />
-        <link rel="stylesheet" href="PohAlc.css" />
         <link rel="stylesheet" href="../UnversalCSS/universalCSS.css" />
+        <link rel="stylesheet" href="../UnversalCSS/lightTheme.css" />
     </head>
     <body>
         <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
@@ -35,7 +35,9 @@
                             >
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">Alkoholos Koktélok</a></li>
-                                <li><a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -49,7 +51,9 @@
                             >
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">Alkoholos Koktélok</a></li>
-                                <li><a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -57,6 +61,7 @@
                         </li>
                     </div>
                     <div>
+                        <input type="button" value="" id="ThemeSwitcher" />
                         <input type="button" class="btn btn-secondary nav-item" value="Regisztárció" id="Register" />
                         <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="Login" />
 
@@ -333,5 +338,6 @@
         </div>
 
         <script src="../bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../Theme Switcher/themeSwitcher.js"></script>
     </body>
 </html>
