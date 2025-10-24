@@ -63,17 +63,14 @@
                     </div>
                     <div>
                         <input type="button" value="" id="ThemeSwitcher" />
-                        <input type="button" class="btn btn-secondary nav-item" value="Regisztárció" id="Register" />
-                        <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="Login" />
-
                         <input
                             type="button"
                             class="nav-item btn btn-warning"
-                            hidden
+                            
                             value="Saját koktél létrehozása"
                             id="Keszites"
                         />
-                        <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
+                        <img src="../UnversalCSS/whatever.png" class="profil" alt="">
                     </div>
                 </div>
             </div>
@@ -81,12 +78,12 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-1 col-3 vh-100" id="Sidebar">
-                    <div class="mb-auto mt-auto"><a class="link-dark jelenlegi" id="Adatlap">Adatlap</a></div>
-                    <div class="mb-auto mt-auto"><a class="link-dark" id="Kedvencek">Kedvencek</a></div>
-                    <div class="mb-auto mt-auto"><a class="link-dark" id="Koktélok">Saját Koktélok</a></div>
-                    <div class="mb-auto mt-auto"><a class="link-dark" id="Jelentések">Jelentések</a></div>
+                    <div class="mb-auto mt-auto"><input type="button" value="Adatlap" class="gomb jelenlegi" id="Adatlap"></div>
+                    <div class="mb-auto mt-auto"><input type="button" value="Kedvencek" class="gomb" id="Kedvencek"></div>
+                    <div class="mb-auto mt-auto"><input type="button" value="Saját Koktélok" class="gomb" id="Koktélok"></div>
+                    <div class="mb-auto mt-auto"><input type="button" value="Jelentések" class="gomb" id="Jelentések"></div>
                     <!--Does Nothing:-->
-                    <div class="mb-auto mt-auto"><a class="link-danger" id="">Fiók Törlése</a></div>
+                    <div class="mb-auto mt-auto"><input type="button" value="Fiók Törlése" class="torles-gomb" id=""></div>
                 </div>
                 <div id="adatoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9">
                     <div class="d-flex justify-content-center">
@@ -97,7 +94,7 @@
                         <div class="col-9 col-sm-9 col-md-5 col-lg-5 col-xl-5">
                             <div class="flex-column align-items-center">
                                 <p>Profilképed:</p>
-                                <img src="" alt="" class="profil" id="profilkep">
+                                <img src="../UnversalCSS/whatever.png" alt="" class="profil-big" id="profilkep">
                             </div>
                             <div class="flex-column d-flex">
                                 <label for="Felhasználónév">Felhasználónév:</label>
