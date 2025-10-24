@@ -31,3 +31,9 @@ a{
 .gomb:hover,.torles-gomb:hover{
     background-color: #a4e71c;
 }
+.paros{
+    background-color: lightgray;
+}
+.paros,.paratlan{
+    padding: 20px;
+}
