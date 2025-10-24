@@ -4,10 +4,6 @@
 .hatter {
     background-color: #9acd32;
 }
-body {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana,
-        sans-serif;
-}
 #alszoveg {
     font-size: x-small;
 }
@@ -15,10 +11,8 @@ body {
     font-size: xx-large;
 }
 .profil {
-    background-color: lightgray;
-    border-radius: 100%;
-    border: 0px solid black;
-    padding: 20px;
+    width: 80px;
+    height: 80px;
 }
 .navbar-nav > li > .dropdown-menu {
     background-color: #9acd32;
