@@ -35,3 +35,6 @@ div > li {
     height: 50px;
     background-color: white;
 }
+#Profile {
+    cursor: pointer;
+}
