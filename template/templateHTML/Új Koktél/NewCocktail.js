@@ -13,6 +13,8 @@ let radioMentes;
 let radioAlk;
 let alap;
 let alapInput;
+let osszetevoform;
+let torlesgomb
 document.addEventListener("DOMContentLoaded", () => 
 {
 //új összetevő meghívására szolgáló gomb értékadása
@@ -33,7 +35,7 @@ radioAlk.addEventListener("change",()=>{
  if(radioAlk.checked == true)
     {
         alap = document.getElementById("alapEltuntet")
-        alap.style.visibility ="visible"
+        alap.hidden = false
        
     }   
 
@@ -43,7 +45,7 @@ radioMentes.addEventListener("change",()=>{
     {
         alapInput = document.getElementById("alap")
         alap = document.getElementById("alapEltuntet")
-        alap.style.visibility ="hidden"
+        alap.hidden = true
         alapInput.value = "";
         
     }   
@@ -61,21 +63,28 @@ function osszetevohozzaadas()
 {
     gombnyomasszam ++;
     //új összetevő input mezőjének létrehozása DOM segítségével és bootstrap osztályok hozzáadása
-  
+  osszetevoform = document.createElement("form")
     osszetevodiv = document.getElementById("osszetevoDiv")
+    torlesgomb = document.createElement("button")
+    torlesgomb.type ="button"
+    torlesgomb.innerText = "X"
+    torlesgomb.classList.add("Osszetevobtn")
+     torlesgomb.classList.add("osszetevobtnuj")
     let col = document.createElement("div")
     col.classList.add("col-sm-12")
     col.id ="osszetevoCol" + gombnyomasszam;
     let input = document.createElement("input")
-    input.classList.add("form-control")
+    input.classList.add("OsszetevoBar")
     input.type = "text"
     input.placeholder = "Összetevő" + " " + gombnyomasszam;
     input.id = "osszetevo" + gombnyomasszam
     input.style.marginTop = "5px"
     //parent-child viszonyok meghatározása
-    
+    col.appendChild(osszetevoform)
+    osszetevoform.appendChild(input)
+    osszetevoform.appendChild(torlesgomb)
     osszetevodiv.appendChild(col)
-    col.appendChild(input)
+
 }
 
 //megse gomb törlés függvény

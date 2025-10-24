@@ -34,10 +34,13 @@ div>li{
     
     padding: 60px;
     background-image: url(NewCocktail_img/testkep.jfif);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position-y: -300px ;
-    margin-bottom: 15px;
+  background-size: cover;
+    background-repeat:repeat-x;
+    background-attachment:scroll;/*FIXED?*/
+    background-position: center;
+    position: -1px;
+    height:300px;
+    width: 100%;
 }
 
 #bg{
@@ -117,9 +120,48 @@ div>li{
     width: 120px;
     height: 120px;
 }
+#radiobtn{
+    display: flex;
+    justify-content: space-between;
+}
+
+.Osszetevobtn
+{
+    width: 3.5%;
+    margin-left: 0cap;
+     border: 1px solid grey;
+    border-left: none; 
+  cursor: pointer;
+ 
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  height: 42px;
+  text-align: center;
+  padding:15px;
+}
+.osszetevobtnuj{
+    margin-top: 10px;
+}
+.Osszetevobtn:hover
+{
+    background-color: #b4b4b4;
+}
+.OsszetevoBar
+{
+    padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  height: 100%;
+  background: #f1f1f1;
+  
+     
+}
 /*#leiras
 {
     height: 100px;
-
+@media only screen and (max-width: 600px) {
 }
 */
