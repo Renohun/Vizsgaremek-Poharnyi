@@ -111,16 +111,13 @@ body{
   text-align: center;
   padding:15px;
 }
-.osszetevobtnuj{
-    margin-top: 10px;
-}
 .Osszetevobtn:hover
 {
     background-color: #b4b4b4;
 }
 .OsszetevoBar
 {
-    padding: 10px;
+  
   font-size: 17px;
   border: 1px solid grey;
   float: left;

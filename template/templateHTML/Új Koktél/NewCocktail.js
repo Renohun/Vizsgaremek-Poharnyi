@@ -69,16 +69,14 @@ function osszetevohozzaadas()
     torlesgomb.type ="button"
     torlesgomb.innerText = "X"
     torlesgomb.classList.add("Osszetevobtn")
-     torlesgomb.classList.add("osszetevobtnuj")
     let col = document.createElement("div")
-    col.classList.add("col-sm-12")
+    col.classList.add("row","mt-1")
     col.id ="osszetevoCol" + gombnyomasszam;
     let input = document.createElement("input")
     input.classList.add("OsszetevoBar")
     input.type = "text"
     input.placeholder = "Összetevő" + " " + gombnyomasszam;
-    input.id = "osszetevo" + gombnyomasszam
-    input.style.marginTop = "5px"
+    input.id = "osszetevo" + gombnyomasszam 
     //parent-child viszonyok meghatározása
     col.appendChild(osszetevoform)
     osszetevoform.appendChild(input)
