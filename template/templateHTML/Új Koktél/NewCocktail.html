@@ -23,7 +23,12 @@
                 <div class="navbar-collapse collapse justify-content-between" id="collapsable">
                     <div class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active jelenlegi" href="#" aria-current="page">Főoldal</a>
+                            <a
+                                class="nav-link active jelenlegi"
+                                href="../Landing Page/Landing Page.html"
+                                aria-current="page"
+                                >Főoldal</a
+                            >
                         </li>
                         <li class="nav-item dropdown">
                             <a
@@ -35,7 +40,11 @@
                                 >Poháryni koktélok</a
                             >
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Alkoholos Koktélok</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="../Pohárnyi Alkoholos/PohAlc.html"
+                                        >Alkoholos Koktélok</a
+                                    >
+                                </li>
                                 <li>
                                     <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
                                 </li>
@@ -63,17 +72,17 @@
                     </div>
                     <div>
                         <input type="button" value="" id="ThemeSwitcher" />
-                        <input type="button" hidden class="btn btn-secondary nav-item" value="Regisztárció" id="Register" />
-                        <input type="button" hidden class="btn btn-warning nav-item" value="Bejelentkezés" id="Login" />
+                        <input type="button" class="btn btn-secondary nav-item" value="Regisztárció" id="Register" />
+                        <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="Login" />
 
                         <input
                             type="button"
                             class="nav-item btn btn-warning"
-                            disabled
+                            hidden
                             value="Saját koktél létrehozása"
                             id="Keszites"
                         />
-                        <img src="../UnversalCSS/whatever.png" class="profil" alt="">
+                        <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
                     </div>
                 </div>
             </div>
@@ -200,5 +209,6 @@
         <script src="NewCocktail.js"></script>
         <script src="kepfeltolt.js"></script>
         <script src="../Theme Switcher/themeSwitcher.js"></script>
+        <script src="../Navbar/NavBar.js"></script>
     </body>
 </html>
