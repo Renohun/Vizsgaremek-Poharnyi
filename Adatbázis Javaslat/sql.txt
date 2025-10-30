@@ -1,0 +1,47 @@
+
+
+Alkoholos
+		koktelID(automatikusan novekszik) - kulcs
+		keszitoId -kulcs (a felhasznaloId), nem kötelező
+		keszitesDatuma
+		alap
+		osszetevok(lista tele osszetevoIdkkel)
+		osszetevokMennyisege(lista tele osszetevoMennyiseggel)
+		kommentek(lista tele kommentIdkel)
+		ertekelesek(lista tele erteleloIdkel)
+		
+Nem alkoholos
+		koktelID(automatikusan novekszik) - kulcs
+		keszitoId -kulcs (a felhasznaloId), nem kötelező
+		keszitesDatuma
+		osszetevok(lista tele osszetevoIdkkel)
+		osszetevokMennyisege(lista tele osszetevoMennyiseggel)
+		kommentek(lista tele kommentIdkel)
+		ertekelesek(lista tele erteleloIdkel)
+		
+Felhasználó
+		felhasznaloId(automatikusan novekszik)- kulcs
+		felhasznalonev
+		email-cim
+		jelszo kodolva
+		profil-kep(nem kotelezo)
+		keszitettKoktelok
+Komment
+		kommentId (automatikusan novekszik)
+		keszitoId - kulcs (a felhasznaloId)
+		tartalom
+Ertekeles
+		erteleloId - kulcs (a felhasznaloId)
+		ertekeles
+Webshop
+		osszetevoId - kulcs (az osszetevo neve)
+		kiszerelés - kulcs
+		ar
+		
+		
+		
+JELENLEG NEM TUDOM HOGYAN ÁLLíTSAM ÖSSZE:
+	Jelentés
+		jelentesId(automatikusan novekszik)
+		kommentId - kulcs
+		tartalom
