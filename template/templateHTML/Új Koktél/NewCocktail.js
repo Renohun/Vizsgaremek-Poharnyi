@@ -3,7 +3,7 @@ let kepfeltolt;
 let koktelnev;
 let koktelalap;
 let koktelmennyiseg;
-let osszetevok = [];
+let osszetevok = ["osztv1"];
 let osszetevogomb;
 let gombnyomasszam = 1;
 let koktelurlap = document.getElementById("koktelurlap")
@@ -15,6 +15,8 @@ let alap;
 let alapInput;
 let osszetevoform;
 let torlesgomb
+let DeleteOsszetevo;
+let osszetevo;
 document.addEventListener("DOMContentLoaded", () => 
 {
 //új összetevő meghívására szolgáló gomb értékadása
@@ -51,7 +53,14 @@ radioMentes.addEventListener("change",()=>{
     }   
 
 })
-
+//elso osztv törlése
+osszetevo = document.getElementById("osztv1")
+osszetevo.addEventListener("click",()=>{
+osszetevodiv = document.getElementById("osszetevoDiv")
+let elsoOsztv = document.getElementById("elsoOsszetevo")
+osszetevodiv.removeChild(elsoOsztv)
+console.log("kala")
+})
 })
 
 
@@ -63,25 +72,34 @@ function osszetevohozzaadas()
 {
     gombnyomasszam ++;
     //új összetevő input mezőjének létrehozása DOM segítségével és bootstrap osztályok hozzáadása
-  osszetevoform = document.createElement("form")
+    osszetevoform = document.createElement("form")
     osszetevodiv = document.getElementById("osszetevoDiv")
     torlesgomb = document.createElement("button")
     torlesgomb.type ="button"
     torlesgomb.innerText = "X"
     torlesgomb.classList.add("Osszetevobtn")
+    torlesgomb.id = "osztv" + gombnyomasszam;
     let col = document.createElement("div")
     col.classList.add("row","mt-1")
     col.id ="osszetevoCol" + gombnyomasszam;
     let input = document.createElement("input")
     input.classList.add("OsszetevoBar")
     input.type = "text"
-    input.placeholder = "Összetevő" + " " + gombnyomasszam;
+    input.placeholder = "Összetevő";
     input.id = "osszetevo" + gombnyomasszam 
     //parent-child viszonyok meghatározása
     col.appendChild(osszetevoform)
     osszetevoform.appendChild(input)
     osszetevoform.appendChild(torlesgomb)
     osszetevodiv.appendChild(col)
+    osszetevok.push(torlesgomb.id);
+    console.log(osszetevok)
+   
+    //torles
+    torlesgomb.addEventListener("click",()=>{
+    osszetevodiv.removeChild(col)
+        
+    })
 
 }
 
