@@ -109,7 +109,7 @@
                         <label for="input-file" id="drop-area" class="mx-auto">
                             <input type="file" accept="image/*" id="input-file" hidden />
                             <div id="img-view">
-                                <img src="NewCocktail_img/icon.png" alt="" id="icon" />
+                                <img src="NewCocktail_img/icon.png" alt="" class="icon" id="iconkep" />
                                 <p id="szoveg">Kattints ide, vagy húzd be a képet a feltöltéshez</p>
                             </div>
                         </label>
@@ -142,12 +142,12 @@
                         </form>
                     </div>
                 </div>
-                <div class="row mt-3" id="osszetevoDiv">
-                    <div class="row">
+                <label for="osszetevo" class="form-label">Add hozzá az összetevőket: </label>
+                <div class="row mt-1" id="osszetevoDiv">
                     
-                        <label for="osszetevo" class="form-label">Add hozzá az összetevőket: </label>
-                         <form class="searchbarForm">
-                            <input class="OsszetevoBar" type="text" placeholder="1. összetevő" name="search" />
+                    <div class="row" id="elsoOsszetevo">
+                        <form class="searchbarForm" id="osztv1">
+                            <input class="OsszetevoBar" type="text" placeholder="összetevő" name="search" />
                             <button class="Osszetevobtn" type="button">X</button
                             ><!--utána kell nézni!!!-->
                        
@@ -164,7 +164,7 @@
                 <div class="row mt-3" id="leiras">
                     <div class="col-sm-12">
                         <label for="leiras" class="form-label">A recept pontos és részletes leírása: </label>
-                        <textarea class="form-control" id="leiras">ethaetrztstgwr</textarea>
+                        <textarea class="form-control" id="leiras"></textarea>
                     </div>
                 </div>
                 <!--Küldés és mégse gomb-->
@@ -217,5 +217,6 @@
         <script src="kepfeltolt.js"></script>
         <script src="../Theme Switcher/themeSwitcher.js"></script>
         <script src="../Navbar/NavBar.js"></script>
-    </body>
+        <script src="formDelete.js"></script>
+        </body>
 </html>

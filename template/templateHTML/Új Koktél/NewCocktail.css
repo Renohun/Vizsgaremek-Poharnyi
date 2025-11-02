@@ -69,6 +69,7 @@ body{
     display: flex;
     justify-content   : center;
     flex-direction: column;
+    
 }
 #img-view
 {
@@ -81,13 +82,17 @@ body{
     justify-items: center;
     background-position: center;
     background-size: cover;
+     font-size: 20px;
+}
+.ujHatter{
+      background: rgb(233, 233, 233);
 }
 #img-view p
 {
     font-size: 20px;
   
 }
-#icon{
+.icon{
     width: 120px;
     height: 120px;
 }
@@ -103,7 +108,7 @@ body{
      border: 1px solid grey;
     border-left: none; 
   cursor: pointer;
- 
+ background: #f8f8f8;
   display: flex;
   align-items: center;
   justify-content: center; 
@@ -117,13 +122,13 @@ body{
 }
 .OsszetevoBar
 {
-  
+   
   font-size: 17px;
   border: 1px solid grey;
   float: left;
   width: 80%;
   height: 100%;
-  background: #f1f1f1;
+  background: #f8f8f8;
   
      
 }
