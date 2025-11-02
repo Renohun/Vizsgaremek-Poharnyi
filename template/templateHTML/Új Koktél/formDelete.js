@@ -48,14 +48,16 @@ megseTorles.addEventListener("click",()=>{
     let apa;
     let nagypapa;
     for (let i = 0; i < Osszetevok.length; i++)
-    {
+    {  
+        console.log(Osszetevok[i]);
+        
        let torles = document.getElementById(Osszetevok[i])
        apa = torles.parentElement;
        nagypapa = apa.parentElement;
+       console.log(apa)
         console.log(nagypapa)
         osszetevoDiv.removeChild(nagypapa)
     }
-    szamlalo = 1;
     Osszetevok = [];
 })
 })
