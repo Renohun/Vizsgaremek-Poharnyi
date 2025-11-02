@@ -3,7 +3,7 @@ let kepfeltolt;
 let koktelnev;
 let koktelalap;
 let koktelmennyiseg;
-let osszetevok = ["osztv1"];
+
 let osszetevogomb;
 let gombnyomasszam = 1;
 let koktelurlap = document.getElementById("koktelurlap")
@@ -92,8 +92,7 @@ function osszetevohozzaadas()
     osszetevoform.appendChild(input)
     osszetevoform.appendChild(torlesgomb)
     osszetevodiv.appendChild(col)
-    osszetevok.push(torlesgomb.id);
-    console.log(osszetevok)
+
    
     //torles
     torlesgomb.addEventListener("click",()=>{
