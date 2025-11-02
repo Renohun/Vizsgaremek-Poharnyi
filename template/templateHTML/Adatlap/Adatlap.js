@@ -4,6 +4,19 @@ document.addEventListener("DOMContentLoaded",()=>{
         gombok[i].addEventListener("click",()=>{oldalvaltas(i,gombok)})
         
     }
+    let fajl=document.getElementById("input")
+    let kep=document.getElementById("profilkep")
+    fajl.addEventListener("change",()=>{
+        kep.setAttribute("src",URL.createObjectURL(fajl.files[0]))
+        console.log(URL.createObjectURL(fajl.files[0]));
+        
+    })
+    let NavProfil=document.getElementById("Profile")
+    let mentes=document.getElementById("Mentés")
+    let mégse=document.getElementById("Mégse")
+    mentes.addEventListener("click",()=>{
+        NavProfil.setAttribute("src",URL.createObjectURL(fajl.files[0]))
+    })
 })
 
 function oldalvaltas(selected,gombok){

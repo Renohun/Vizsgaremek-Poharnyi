@@ -11,8 +11,9 @@
     font-size: xx-large;
 }
 .profil {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
 }
 .navbar-nav > li > .dropdown-menu {
     background-color: #9acd32;
