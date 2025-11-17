@@ -11,11 +11,14 @@ const apiRoutes = require('./api/api');
 server.use('/api', apiRoutes);
 
 //Mindent toltson be a Frontend mappabol, a css/bootstrap miatt
-server.use(express.static(path.join(__dirname, '..', 'Frontend', 'templateHTML')));
+server.use(express.static(path.join(__dirname, '../Frontend/templateHTML')));
 
 //szerver futattas eseten a landing page legyen az elso html amit megnyit
 server.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'Frontend', 'templateHTML', 'Landing Page', 'Landing Page.html'));
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Landing Page/Landing Page.html'));
+});
+server.get('/PohAlc', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Pohárnyi Alkoholos/PohAlc.html'));
 });
 
 server.listen(port, ip, () => {
