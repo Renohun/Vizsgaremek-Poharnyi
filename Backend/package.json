@@ -1,0 +1,23 @@
+{
+  "name": "poharny-backend",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Renohun/Vizsgaremek-Poharnyi#readme",
+  "bugs": {
+    "url": "https://github.com/Renohun/Vizsgaremek-Poharnyi/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Renohun/Vizsgaremek-Poharnyi.git"
+  },
+  "license": "ISC",
+  "author": "Sziklai Dávid, Benczik Marcell Ferenc, Bettes Kornél",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
