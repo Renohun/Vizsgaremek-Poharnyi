@@ -1,23 +1,29 @@
 {
-  "name": "poharny-backend",
-  "version": "1.0.0",
-  "description": "",
-  "homepage": "https://github.com/Renohun/Vizsgaremek-Poharnyi#readme",
-  "bugs": {
-    "url": "https://github.com/Renohun/Vizsgaremek-Poharnyi/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Renohun/Vizsgaremek-Poharnyi.git"
-  },
-  "license": "ISC",
-  "author": "Sziklai Dávid, Benczik Marcell Ferenc, Bettes Kornél",
-  "type": "commonjs",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "express": "^5.1.0"
-  }
+    "name": "poharny-backend",
+    "version": "1.0.0",
+    "description": "",
+    "homepage": "https://github.com/Renohun/Vizsgaremek-Poharnyi#readme",
+    "bugs": {
+        "url": "https://github.com/Renohun/Vizsgaremek-Poharnyi/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Renohun/Vizsgaremek-Poharnyi.git"
+    },
+    "license": "ISC",
+    "author": "Sziklai Dávid, Benczik Marcell Ferenc, Bettes Kornél",
+    "type": "commonjs",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js",
+        "dev": "nodemon"
+    },
+    "dependencies": {
+        "express": "^5.1.0",
+        "express-session": "^1.18.2",
+        "multer": "^2.0.2",
+        "mysql2": "^3.15.3",
+        "nodemon": "^3.1.11"
+    }
 }
