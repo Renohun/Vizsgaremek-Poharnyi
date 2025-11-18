@@ -11,7 +11,7 @@ router.post('/felhasznalok', (request, response) => {
     try {
         felhasznaloObj = {
             email: request.body.email,
-            felhasznalokNev: request.body.felhasznaloNev,
+            felhasznaloNev: request.body.felhasznaloNev,
             jelszo: request.body.jelszo
         };
 
@@ -20,7 +20,7 @@ router.post('/felhasznalok', (request, response) => {
         response.status(200).json({
             message: 'Sikeres muvelet'
         });
-        console.log(email + ' - ' + felhasznaloNev + ' - ' + jelszo);
+        console.log(felhasznaloObj.email + ' - ' + felhasznaloObj.felhasznaloNev + ' - ' + felhasznaloObj.jelszo);
     } catch (err) {
         console.log('Sikertelen muvelet');
         response.status(500).json({
