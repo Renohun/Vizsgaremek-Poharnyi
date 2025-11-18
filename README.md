@@ -1,8 +1,8 @@
-#P rojekt neve: Pohárnyi
+# Projekt neve: Pohárnyi
 ### Csoport tagjai:
-● ### Benczik Marcell Ferenc
-● ### Bettes Kornél
-● ### Sziklai Dávid
+● Benczik Marcell Ferenc
+● Bettes Kornél
+● Sziklai Dávid
 ## Projekt funkciója:
 Az alkalmazás célja egy központi alkoholos és nem alkoholos koktél adattár létrehozása,
 melyben előre létrehozott koktélok között tud böngészni a felhasználó. Emellett lehetőség
