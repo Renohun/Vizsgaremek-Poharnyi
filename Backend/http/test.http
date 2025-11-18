@@ -1,0 +1,10 @@
+POST "http://127.0.0.1:8000/api/felhasznalok"
+Content-Type: application/javascript
+
+{
+    "email": "asd@gmail.com",
+    "felhasznaloNev": "renohun",
+    "jelszo": "asd123"
+}
+###
+GET "http://127.0.0.1:8000/api/felhasznalok"
