@@ -1,9 +1,9 @@
-#Projekt neve: Pohárnyi
-###Csoport tagjai:
-● ###Benczik Marcell Ferenc
-● ###Bettes Kornél
-● ###Sziklai Dávid
-##Projekt funkciója:
+#P rojekt neve: Pohárnyi
+### Csoport tagjai:
+● ### Benczik Marcell Ferenc
+● ### Bettes Kornél
+● ### Sziklai Dávid
+## Projekt funkciója:
 Az alkalmazás célja egy központi alkoholos és nem alkoholos koktél adattár létrehozása,
 melyben előre létrehozott koktélok között tud böngészni a felhasználó. Emellett lehetőség
 adódik a felhasználónak saját koktélt feltölteni a weboldalra, amely megfelel az előre
@@ -28,7 +28,7 @@ segítségével tud kommunikálni, adatokat lekérni.
 ###Miért választottuk ezt: Nem tartottuk megfelelőnek a már online elérhető magyar nyelvű
 lehetőségeket koktélkészítésre.
 
-###Használt nyelvek:
+### Használt nyelvek:
 ● HTML
 ● CSS
 o Bootstrap
@@ -41,7 +41,7 @@ o NodeJS
 
 Az alábbi felsorolás nem kimerítő, a feladatok mennyisége és felosztása a projekt során
 változhat
-###Csoporttagok feladatai:
+### Csoporttagok feladatai:
 Bettes Kornél: Főoldal elkészítése, Közösségi adatbázisok létrehozása, Felhasználói adatbázis
 létrehozása, Jelszó titkosítás, JS Szerver létrehozása, Backend API létrehozása
 Benczik Marcell Ferenc: Bejelentkezési felület elkészítése, Kúrált Nem alkoholos koktélok
