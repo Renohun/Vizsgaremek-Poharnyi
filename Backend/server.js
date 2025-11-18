@@ -13,13 +13,43 @@ server.use('/api', apiRoutes);
 //Mindent toltson be a Frontend mappabol, a css/bootstrap miatt
 server.use(express.static(path.join(__dirname, '../Frontend/templateHTML')));
 
-//szerver futattas eseten a landing page legyen az elso html amit megnyit
+//Ne / legyen a default hanem A Fooldal
 server.get('/', (req, res) => {
+   res.redirect('/Fooldal') 
+});
+
+//Landing Page
+server.get('/Fooldal', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Landing Page/Landing Page.html'));
 });
-server.get('/PohAlc', (req, res) => {
+//PohAlc
+server.use(express.static(path.join(__dirname, '../Frontend/templateHTML/Pohárnyi Alkoholos')));
+server.get('/PoharnyiAlkoholosKoktelok', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Pohárnyi Alkoholos/PohAlc.html'));
 });
+
+//Regisztracio
+server.get('/Regisztralj', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Regisztráció/Regisztracio.html'));
+});
+
+//Bejelentkezes
+server.get('/LepjBe', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/belepes/index.html'));
+});
+
+//KoktelKeszites
+server.use(express.static(path.join(__dirname, '../Frontend/templateHTML/Új Koktél/NewCocktail_img')));
+server.get('/Keszites', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Új Koktél/NewCocktail.html'));
+});
+
+//Adatok
+
+server.get('/Adatlap', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Adatlap/Adatlap.html'));
+});
+
 
 server.listen(port, ip, () => {
     console.log(`http://${ip}:${port}`);
