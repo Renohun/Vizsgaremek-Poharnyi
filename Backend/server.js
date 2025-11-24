@@ -51,6 +51,15 @@ server.get('/Adatlap', (req, res) => {
     //A Kozeljovoben ha valaki erre hivatkozik, akkor gonosz es nincs bejelentkezve, ezert szamuzzunk oda
     //res.redirect('/belepes') 
 });
+//KoktelParam
+let KoktelID
+
+server.get("/Koktel/:koktelID", (req, res) =>{
+     KoktelID =  parseInt(req.params.koktelID);
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/KoktelAdatlap/KoktelAdatlap.html'))
+})
+
+server.post("Koktel/:koktelID")
 
 
 server.listen(port, ip, () => {
