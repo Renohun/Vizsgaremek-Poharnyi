@@ -20,6 +20,7 @@
         "dev": "nodemon"
     },
     "dependencies": {
+        "argon2": "^0.44.0",
         "express": "^5.1.0",
         "express-session": "^1.18.2",
         "multer": "^2.0.2",
