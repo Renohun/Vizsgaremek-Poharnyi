@@ -39,7 +39,7 @@ server.get('/LepjBe', (req, res) => {
 });
 
 //KoktelKeszites
-server.use(express.static(path.join(__dirname, '../Frontend/templateHTML/Új Koktél/NewCocktail_img')));
+server.use(express.static(path.join(__dirname, '../Frontend/templateHTML/Új Koktél/')));
 server.get('/Keszites', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Új Koktél/NewCocktail.html'));
 });
@@ -48,6 +48,8 @@ server.get('/Keszites', (req, res) => {
 
 server.get('/Adatlap', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Adatlap/Adatlap.html'));
+    //A Kozeljovoben ha valaki erre hivatkozik, akkor gonosz es nincs bejelentkezve, ezert szamuzzunk oda
+    //res.redirect('/belepes') 
 });
 
 
