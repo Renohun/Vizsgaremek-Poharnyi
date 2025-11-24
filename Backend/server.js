@@ -49,6 +49,15 @@ server.get('/Keszites', (req, res) => {
 server.get('/Adatlap', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Adatlap/Adatlap.html'));
 });
+//KoktelParam
+let KoktelID
+
+server.get("/Koktel/:koktelID", (req, res) =>{
+     KoktelID =  parseInt(req.params.koktelID);
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/KoktelAdatlap/KoktelAdatlap.html'))
+})
+
+server.post("Koktel/:koktelID")
 
 
 server.listen(port, ip, () => {
