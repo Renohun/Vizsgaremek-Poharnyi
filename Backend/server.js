@@ -15,7 +15,7 @@ server.use(express.static(path.join(__dirname, '../Frontend/templateHTML')));
 
 //Ne / legyen a default hanem A Fooldal
 server.get('/', (req, res) => {
-   res.redirect('/Fooldal') 
+    res.redirect('/Fooldal');
 });
 
 //Landing Page
@@ -35,7 +35,7 @@ server.get('/Regisztralj', (req, res) => {
 
 //Bejelentkezes
 server.get('/LepjBe', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/belepes/index.html'));
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/belepes/belepes.html'));
 });
 
 //KoktelKeszites
@@ -49,18 +49,17 @@ server.get('/Keszites', (req, res) => {
 server.get('/Adatlap', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Adatlap/Adatlap.html'));
     //A Kozeljovoben ha valaki erre hivatkozik, akkor gonosz es nincs bejelentkezve, ezert szamuzzunk oda
-    //res.redirect('/belepes') 
+    //res.redirect('/belepes')
 });
 //KoktelParam
-let KoktelID
+let KoktelID;
 
-server.get("/Koktel/:koktelID", (req, res) =>{
-     KoktelID =  parseInt(req.params.koktelID);
-    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/KoktelAdatlap/KoktelAdatlap.html'))
-})
+server.get('/Koktel/:koktelID', (req, res) => {
+    KoktelID = parseInt(req.params.koktelID);
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/KoktelAdatlap/KoktelAdatlap.html'));
+});
 
-server.post("Koktel/:koktelID")
-
+//server.post('Koktel/:koktelID');
 
 server.listen(port, ip, () => {
     console.log(`http://${ip}:${port}`);
