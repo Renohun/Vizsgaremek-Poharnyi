@@ -101,6 +101,55 @@ router.get('/LepjBe', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/belepes/belepes.html'));
 });
 
+//Ne / legyen a default hanem A Fooldal
+router.get('/', (req, res) => {
+    res.redirect('/Fooldal');
+});
+
+//Landing Page
+router.get('/Fooldal', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Landing Page/Landing Page.html'));
+});
+//PohAlc
+router.use(express.static(path.join(__dirname, '../Frontend/templateHTML/Pohárnyi Alkoholos')));
+router.get('/PoharnyiAlkoholosKoktelok', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Pohárnyi Alkoholos/PohAlc.html'));
+});
+
+//Regisztracio
+router.use(express.static(path.join(__dirname, '../Frontend/templateHTML/Regisztráció')));
+router.get('/Regisztralj', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Regisztráció/Regisztracio.html'));
+});
+
+//Bejelentkezes
+router.use(express.static(path.join(__dirname, '../Frontend/templateHTML/belepes')));
+router.get('/LepjBe', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/belepes/belepes.html'));
+});
+
+//KoktelKeszites
+router.use(express.static(path.join(__dirname, '../Frontend/templateHTML/Új Koktél/')));
+router.get('/Keszites', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Új Koktél/NewCocktail.html'));
+});
+
+//Adatok
+router.get('/Adatlap', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Adatlap/Adatlap.html'));
+    //A Kozeljovoben ha valaki erre hivatkozik, akkor gonosz es nincs bejelentkezve, ezert szamuzzunk oda
+    //res.redirect('/belepes')
+});
+//KoktelParam
+let KoktelID;
+
+router.get('/Koktel/:koktelID', (req, res) => {
+    KoktelID = parseInt(req.params.koktelID);
+    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/KoktelAdatlap/KoktelAdatlap.html'));
+});
+
+//server.post('Koktel/:koktelID');
+
 //!API endpoints
 app.use('/', router);
 const endpoints = require('./api/api.js');

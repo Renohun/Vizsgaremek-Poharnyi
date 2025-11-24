@@ -11,7 +11,7 @@ POST http://127.0.0.1:3000/api/belepes
 Content-Type: application/json
 
 {
-    "felhasznalo": "test@gmail.com",
+    "felhasznalo": "adf@gmail.com",
     "jelszo": "test123"
 }
 

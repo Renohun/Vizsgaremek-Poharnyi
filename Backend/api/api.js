@@ -60,7 +60,7 @@ router.post('/regisztracio', async (request, response) => {
     }
 });
 
-router.get('/belepes', async (request, response) => {
+router.post('/belepes', async (request, response) => {
     try {
         const felhasznaloObj = {
             felhasznalo: request.body.felhasznalo,
@@ -84,6 +84,10 @@ router.get('/belepes', async (request, response) => {
                 if (jelszoEll) {
                     response.status(200).json({
                         message: 'Sikeres belepes!'
+                    });
+                } else {
+                    response.status(401).json({
+                        message: 'Hibas jelszo'
                     });
                 }
             }

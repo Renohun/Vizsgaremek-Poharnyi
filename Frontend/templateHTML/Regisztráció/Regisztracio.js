@@ -18,7 +18,7 @@ async function POSTfetch(url, obj) {
 
 async function POSTKuldes(Obj) {
     try {
-        const data = await POSTfetch('http://127.0.0.1:3000/api/felhasznalok', Obj);
+        const data = await POSTfetch('http://127.0.0.1:3000/api/regisztracio', Obj);
         console.log(data);
     } catch (error) {
         console.error('Hiba tortent: ' + error);
