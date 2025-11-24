@@ -17,7 +17,7 @@ router.get('/test', (req, res) => {
     });
 });
 //Regisztracio oldalrol hoz ide majd tolti fel az adatokat az adatbazisba
-router.post('/regisztralcio', async (request, response) => {
+router.post('/regisztracio', async (request, response) => {
     try {
         const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
 
