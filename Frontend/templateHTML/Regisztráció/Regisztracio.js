@@ -26,6 +26,19 @@ async function POSTKuldes(Obj) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const MutatBox = document.getElementById('jelszoMutatas');
+    MutatBox.addEventListener('change', () => {
+        const jelszoElementek = document.getElementsByClassName('jelszoElement');
+
+        if (MutatBox.checked) {
+            jelszoElementek[0].setAttribute('type', 'text');
+            jelszoElementek[1].setAttribute('type', 'text');
+        } else {
+            jelszoElementek[0].setAttribute('type', 'password');
+            jelszoElementek[1].setAttribute('type', 'password');
+        }
+    });
+
     let felhasznaloTomb = [];
     let vanHiba;
 
@@ -63,6 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 jelszo: felhasznaloTomb[2]
             };
             POSTKuldes(POSTobj);
+            alert('Sikeres regisztralcio');
+            window.location.href = '/LepjBe';
         }
     });
 });

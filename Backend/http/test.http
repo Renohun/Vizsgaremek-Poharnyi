@@ -2,7 +2,7 @@ POST http://127.0.0.1:3000/api/regisztracio
 Content-Type: application/json
 
 {
-    "email": "asd@gmail.com",
+    "email": "adf@gmail.com",
     "felhasznaloNev": "hashTest",
     "jelszo": "asd123"
 }
@@ -12,6 +12,6 @@ Content-Type: application/json
 
 {
     "felhasznalo": "adf@gmail.com",
-    "jelszo": "test123"
+    "jelszo": "asd1234"
 }
 

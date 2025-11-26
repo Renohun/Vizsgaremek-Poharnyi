@@ -21,19 +21,19 @@ router.post('/regisztracio', async (request, response) => {
     try {
         const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
 
-        felhasznaloObj = {
+        felhasznaloObjReg = {
             email: request.body.email,
             felhasznaloNev: request.body.felhasznaloNev,
             jelszo: hashed
         };
 
-        console.log(felhasznaloObj.jelszo);
+        //console.log(felhasznaloObjReg.jelszo);
 
         const sqlQuery = 'INSERT INTO felhasználó (Felhasználónév, Email, Jelszó) VALUES (?,?,?)';
 
         DBconnetion.query(
             sqlQuery,
-            [felhasznaloObj.felhasznaloNev, felhasznaloObj.email, felhasznaloObj.jelszo],
+            [felhasznaloObjReg.felhasznaloNev, felhasznaloObjReg.email, felhasznaloObjReg.jelszo],
             (err, result) => {
                 if (err) {
                     response.status(500).json({
@@ -46,11 +46,11 @@ router.post('/regisztracio', async (request, response) => {
                     });
                     console.log(
                         'Adatok melyek felettek toltve: ' +
-                            felhasznaloObj.felhasznaloNev +
+                            felhasznaloObjReg.felhasznaloNev +
                             ' ' +
-                            felhasznaloObj.email +
+                            felhasznaloObjReg.email +
                             ' ' +
-                            felhasznaloObj.jelszo
+                            felhasznaloObjReg.jelszo
                     );
                 }
             }
@@ -63,7 +63,7 @@ router.post('/regisztracio', async (request, response) => {
 router.post('/belepes', async (request, response) => {
     try {
         const felhasznaloObj = {
-            felhasznalo: request.body.felhasznalo,
+            felhasznalo: request.body.email,
             jelszo: request.body.jelszo
         };
         const sqlQuery = 'SELECT * FROM felhasználó WHERE Email LIKE ?';
@@ -75,20 +75,21 @@ router.post('/belepes', async (request, response) => {
                 });
             } else {
                 const felhasznaloDB = rows[0];
-                const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
+                console.log(felhasznaloDB);
 
                 if (felhasznaloDB == undefined) {
-                    response.status(401).json({ message: 'Hibas email!' });
-                }
-
-                if (jelszoEll) {
-                    response.status(200).json({
-                        message: 'Sikeres belepes!'
-                    });
+                    response.status(200).json({ message: 'Hibas email! Avagy nem letezik ilyen felhasznalo' });
                 } else {
-                    response.status(401).json({
-                        message: 'Hibas jelszo'
-                    });
+                    const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
+                    if (jelszoEll) {
+                        response.status(200).json({
+                            message: 'Sikeres belepes!'
+                        });
+                    } else {
+                        response.status(200).json({
+                            message: 'Hibas jelszo'
+                        });
+                    }
                 }
             }
         });
