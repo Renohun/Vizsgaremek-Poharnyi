@@ -43,22 +43,33 @@ document.addEventListener('DOMContentLoaded', () => {
     let vanHiba;
 
     document.getElementById('RegisztracioGomb').addEventListener('click', () => {
-        for (let i = 0; i < document.getElementsByClassName('form-control').length; i++) {
-            const jelenlegiElement = document.getElementsByClassName('form-control')[i].value;
+        const inputElementek = document.getElementsByClassName('form-control');
+        let i = 0;
 
-            if (i === 0) {
-                jelenlegiElement != '' && /^\S+@\S+\.\S+$/.test(jelenlegiElement)
-                    ? felhasznaloTomb.push(jelenlegiElement)
+        switch (i) {
+            case 0:
+                /^\S+@\S+\.\S+\$/.test(inputElementek[i].value)
+                    ? felhasznaloTomb.push(inputElementek[i].value)
                     : felhasznaloTomb.push('');
-            } else if (i === 2 || i === 3) {
-                //REGEX: ^: Kezdes \S+ minden mehet kiveve whitespace $: vege
-                //Mindezt korbe kell venni / /
-                jelenlegiElement != '' && /^\S+$/.test(jelenlegiElement)
-                    ? felhasznaloTomb.push(jelenlegiElement)
+                i++;
+                break;
+            case 1:
+                /^\S+$/.test(inputElementek[i].value)
+                    ? felhasznaloTomb.push(inputElementek[i].value)
                     : felhasznaloTomb.push('');
-            } else {
-                jelenlegiElement != '' ? felhasznaloTomb.push(jelenlegiElement) : felhasznaloTomb.push('');
-            }
+                i++;
+                break;
+            case 2:
+                //jelszo ell
+                /^\S+$/.test(inputElementek[i].value) &&
+                //egyezik e mindketto
+                inputElementek[i].value == inputElementek[i + 1].value &&
+                //jelszo megegyszer ell
+                /^\S+$/.test(inputElementek[i + 1].value)
+                    ? felhasznaloTomb.push(inputElementek[i].value)
+                    : felhasznaloTomb.push('');
+                i++;
+                break;
         }
 
         if (felhasznaloTomb.includes('') || felhasznaloTomb[2] !== felhasznaloTomb[3]) {

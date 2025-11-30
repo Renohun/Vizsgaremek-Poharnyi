@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 const hivas = async () => {
                     const data = await POSTKuldes(POSTobj);
-                    console.log(data.message);
+                    alert(data.message);
                 };
                 hivas();
             } else {

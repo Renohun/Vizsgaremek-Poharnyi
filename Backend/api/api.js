@@ -74,12 +74,14 @@ router.post('/belepes', async (request, response) => {
                     message: 'Adatbazissal kapcsolatos hiba!'
                 });
             } else {
+                //ez az adatbazisbol kapott felhasznaloi sor
                 const felhasznaloDB = rows[0];
                 console.log(felhasznaloDB);
 
                 if (felhasznaloDB == undefined) {
                     response.status(200).json({ message: 'Hibas email! Avagy nem letezik ilyen felhasznalo' });
                 } else {
+                    //megnezi az argon package ellenorzi hogy az eltarolt jelszo megegyezik a beirt jelszoval
                     const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
                     if (jelszoEll) {
                         response.status(200).json({

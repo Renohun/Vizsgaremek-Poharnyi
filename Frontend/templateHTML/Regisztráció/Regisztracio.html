@@ -94,28 +94,31 @@
                         <p class="text-center fs-1 card-title">Regisztrálj a weblapunkra</p>
                         <div>
                             <label for="">Adj meg email címét:</label>
-                            <input type="email" class="form-control mb-2" placeholder="pl: poharnyi@weblap.hu" />
+                            <input type="email" class="form-control mb-2" placeholder="example@gmail.com" />
                         </div>
                         <div>
-                            <label for="">Adja meg a felhasználónevét</label>
-                            <input type="text" class="form-control mb-2" placeholder="pl: Sörhasi1" />
+                            <label for="">Adja meg a felhasználónevét (Min: 3 Max: 30)</label>
+                            <input
+                                type="text"
+                                class="form-control mb-2"
+                                min="3"
+                                max="30"
+                                placeholder="Felhasznalo Nev"
+                            />
                         </div>
                         <div>
-                            <label for="">Adja meg a jelszavát</label>
-                            <input type="password" class="form-control mb-2 jelszoElement" />
+                            <label for="">Adja meg a jelszavát (Min: 5 Max: 30)</label>
+                            <input type="password" min="5" max="30" class="form-control mb-2 jelszoElement" />
                         </div>
                         <div>
-                            <label for="">Ismételje meg jelszavát</label>
-                            <input type="password" class="form-control mb-2 jelszoElement" />
+                            <label for="">Ismételje meg jelszavát (Min: 5 Max: 30)</label>
+                            <input type="password" min="5" max="30" class="form-control mb-2 jelszoElement" />
                         </div>
                         <div>
                             <input type="checkbox" name="jelszoMutatas" id="jelszoMutatas" />
                             <label for="jelszoMutatas">Jelszo mutatasa</label>
                         </div>
-                        <div><input type="checkbox" name="" id="" /> Elfogadom az <a href="">ÁFSZ</a> feltételeit</div>
-                        <div>
-                            <input type="checkbox" name="" id="" /> Ha kellene mégegy gomb amit bepipálhatsz, itt van :)
-                        </div>
+                        <div><input type="checkbox" name="" id="" />Elfogadom az <a href="">ÁFSZ</a> feltételeit</div>
                         <div>
                             <input type="submit" id="RegisztracioGomb" value="Regisztráció" class="btn btn-success" />
                             <input type="reset" value="Vissza az oldalra" class="btn btn-danger" />
