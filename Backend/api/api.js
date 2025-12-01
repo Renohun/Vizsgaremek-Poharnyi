@@ -59,7 +59,7 @@ router.post('/regisztracio', async (request, response) => {
         console.log('Valamilyen extra hiba tortent: ' + err);
     }
 });
-
+//A belepes oldal hoz ide, lekeri azt a sort amiben a felhasznalo adatai vannak, persz ha van ilyen egyaltalan
 router.post('/belepes', async (request, response) => {
     try {
         const felhasznaloObj = {
@@ -84,8 +84,11 @@ router.post('/belepes', async (request, response) => {
                     //megnezi az argon package ellenorzi hogy az eltarolt jelszo megegyezik a beirt jelszoval
                     const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
                     if (jelszoEll) {
+                        //itt visszaadom a felhaszanalo nevet azt hogy admin e
+                        //Igy majd tudunk dolgozni a felhasznalo adataival a frontenden
                         response.status(200).json({
-                            message: 'Sikeres belepes!'
+                            felhasznloNev: felhasznaloDB.Felhasználónév,
+                            adminE: felhasznaloDB.Admin
                         });
                     } else {
                         response.status(200).json({

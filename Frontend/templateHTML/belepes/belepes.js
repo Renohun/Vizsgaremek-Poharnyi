@@ -42,7 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 const hivas = async () => {
                     const data = await POSTKuldes(POSTobj);
-                    alert(data.message);
+                    alert('Sikeres bejelentkezes!');
+                    //ennek a cookie segitsegevel tudjuk hogy a fellhasznalo bejelentkezett, innen jon a neve az admin statusza
+                    //!!!!! FONTOS !!!!!!
+                    //Admin dolgokat mindig az adatbazisbol ellenorizzuk, tehat majd az adminpanel-nel, meg kell nezunk hogy a felhasznalo tenyleg admin-e!!!!
+                    document.cookie = `felhasznaloNev=${data.felhasznaloNev}; admin=${data.adminE}; path=/`;
                 };
                 hivas();
             } else {

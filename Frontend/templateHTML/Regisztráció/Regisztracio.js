@@ -39,52 +39,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    let felhasznaloTomb = [];
     let vanHiba;
 
     document.getElementById('RegisztracioGomb').addEventListener('click', () => {
         const inputElementek = document.getElementsByClassName('form-control');
-        let i = 0;
 
-        switch (i) {
-            case 0:
-                /^\S+@\S+\.\S+\$/.test(inputElementek[i].value)
-                    ? felhasznaloTomb.push(inputElementek[i].value)
-                    : felhasznaloTomb.push('');
-                i++;
-                break;
-            case 1:
-                /^\S+$/.test(inputElementek[i].value)
-                    ? felhasznaloTomb.push(inputElementek[i].value)
-                    : felhasznaloTomb.push('');
-                i++;
-                break;
-            case 2:
-                //jelszo ell
-                /^\S+$/.test(inputElementek[i].value) &&
-                //egyezik e mindketto
-                inputElementek[i].value == inputElementek[i + 1].value &&
-                //jelszo megegyszer ell
-                /^\S+$/.test(inputElementek[i + 1].value)
-                    ? felhasznaloTomb.push(inputElementek[i].value)
-                    : felhasznaloTomb.push('');
-                i++;
-                break;
-        }
+        const emailElement = inputElementek[0].value;
+        const felhasznaloNevElement = inputElementek[1].value;
+        const jelszoElement = inputElementek[2].value;
+        const jelszoElementMegint = inputElementek[3].value;
 
-        if (felhasznaloTomb.includes('') || felhasznaloTomb[2] !== felhasznaloTomb[3]) {
+        if (!/^\S+@\S+\.\S+$/.test(emailElement)) {
             vanHiba = true;
-        } else {
-            vanHiba = false;
+        }
+        if (!/^\S+$/.test(felhasznaloNevElement)) {
+            vanHiba = true;
+        }
+        if (!/^\S+$/.test(jelszoElement) || jelszoElement !== jelszoElementMegint) {
+            vanHiba = true;
         }
 
         if (vanHiba) {
             alert('Kitoltes soran volt egy vagy tobb hiba!');
         } else {
             const POSTobj = {
-                email: felhasznaloTomb[0],
-                felhasznaloNev: felhasznaloTomb[1],
-                jelszo: felhasznaloTomb[2]
+                email: emailElement,
+                felhasznaloNev: felhasznaloNevElement,
+                jelszo: jelszoElement
             };
             POSTKuldes(POSTobj);
             alert('Sikeres regisztralcio');
