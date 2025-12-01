@@ -21,7 +21,7 @@
     flex-direction: column;
     background-color: aqua;
     width: 30%;
-    height: autos;
+    height: auto;
 }
 #TermekCimDiv{
      display: flex ;
@@ -34,7 +34,7 @@
 #TermekAdatokMainContent{
     display: flex ;
     flex-direction: row;
-    
+   
     justify-content: space-around;
 }
 #TermekKep{
@@ -42,9 +42,13 @@
    height: auto;
    display: flex;
    justify-content: center;
+     padding-bottom:80%;
+    
+    overflow:hidden;
+    position:relative;
 }
 #TermekImg{
-    width:80%;
+    width:100%;
 
     height: auto;
 }
@@ -53,10 +57,66 @@
      display: flex ;
      flex-direction: column;
     align-items: center;
+    margin-left: 5px;
 }
 #TermekSzovegDiv{
     display: flex ;
     justify-content: center;
+}
+#Tulajdonsagok{
+    width: 100%;
+    border-top:solid rgb(207, 207, 198) 1px ;
+}
+#ReszletesAdatok{
+    width: 100%;
+    border-top:solid rgb(207, 207, 198) 1px ;
+}
+.content {
+  padding: 0 18px;
+  background-color: lightgoldenrodyellow;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out
+
+}
+.TovGomb{
+    margin-top: 5px;
+    width: 100px;
+    height: 25px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(31, 31, 31);
+    border: 1px gray solid;
+    text-align: center;
+    
+}
+.active, .TovGomb:hover{
+    border: solid rgb(53, 53, 53) 1px;
+    background-color: aliceblue;
+}
+table,.lol {
+  border: 1px solid black;
+}
+.tablazat {
+  border: 1px solid black;
+}
+#TulGomb{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+#TulContent{
+    margin-top: 15px;
+    text-align: left;
+    position: relative;
+    right:18px;
+    z-index: -1;
+}
+#BovitContent{
+     margin-top: 15px;
+    text-align: left;
+    position: relative;
+    right:18px;
+    z-index: -1;
 }
 @media only screen and (max-width: 768px){
     #main
