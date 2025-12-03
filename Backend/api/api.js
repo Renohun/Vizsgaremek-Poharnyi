@@ -76,7 +76,7 @@ router.post('/belepes', async (request, response) => {
             } else {
                 //ez az adatbazisbol kapott felhasznaloi sor
                 const felhasznaloDB = rows[0];
-                console.log(felhasznaloDB);
+                //console.log(felhasznaloDB);
 
                 if (felhasznaloDB == undefined) {
                     response.status(200).json({ message: 'Hibas email! Avagy nem letezik ilyen felhasznalo' });
@@ -87,7 +87,7 @@ router.post('/belepes', async (request, response) => {
                         //itt visszaadom a felhaszanalo nevet azt hogy admin e
                         //Igy majd tudunk dolgozni a felhasznalo adataival a frontenden
                         response.status(200).json({
-                            felhasznloNev: felhasznaloDB.Felhasználónév,
+                            felhasznaloID: felhasznaloDB.FelhID,
                             adminE: felhasznaloDB.Admin
                         });
                     } else {
