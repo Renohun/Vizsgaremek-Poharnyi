@@ -1,0 +1,35 @@
+Adatlap (marci):
+  - felhasznaloi adatok modositasa es megjenelitese
+  - kedvenc koktelok megjelenitese
+  - sajat koktelok megjelenitese
+  - jelentesek allapotainak megjelenitese
+  - kosar
+
+Admin Panel (Kornel):
+  - fiokok torlese
+  - koktelok torlese
+  - poharny koktel feltoltese
+  - jelentett kommentek kezelese (lezarasa / torlese)
+
+Koktel adatlap (marci):
+  - dinamukusan megjeleniteni a koktelt + komment + egyeb oldalon levo funkciok megcsinalasa
+
+Landing page (kavics):
+  - megcsinalni vegre
+
+Mind a 4 koktelos oldal(Kornel):
+  - ezeken levo tartalmak dinamikus megjelenitese
+
+Termek Oldal (kavics): 
+  - dinamikus megjelenites
+
+Uj koktel (kavics): 
+  - adatbazisba valo feltoltese
+
+Webshop (kavics):
+  - dinamikus megjelenites
+
+Kosar weblap (kavics)
+  - ennek elkeszitese
+
+dizajn? a vegen
