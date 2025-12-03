@@ -1,9 +1,12 @@
 document.addEventListener("DOMContentLoaded",()=>{
-    let gombok=[document.getElementById("Adatlap"),document.getElementById("Kedvencek"),document.getElementById("Koktélok"),document.getElementById("Jelentések")]
+    //A Sidebar gombjainak listája
+    let gombok=[document.getElementById("Adatlap"),document.getElementById("Kedvencek"),document.getElementById("Koktélok"),document.getElementById("Jelentések"),document.getElementById("Kosár")]
+    //Mindegyiknek adunk egy eventListenert
     for (let i = 0; i < gombok.length; i++) {
         gombok[i].addEventListener("click",()=>{oldalvaltas(i,gombok)})
         
     }
+    //Profilkep Változtatás
     let fajl=document.getElementById("input")
     let kep=document.getElementById("profilkep")
     fajl.addEventListener("change",()=>{
@@ -19,8 +22,9 @@ document.addEventListener("DOMContentLoaded",()=>{
     })
 })
 
+//Megkeressük annak a gombnak a párját amit lenyomtunk, és azt mutatjuk, illetve átteszük az aláhúzást
 function oldalvaltas(selected,gombok){
-    let oldalak=[document.getElementById("adatoldal"),document.getElementById("kedvencoldal"),document.getElementById("kokteloldal"),document.getElementById("reportoldal")]
+    let oldalak=[document.getElementById("adatoldal"),document.getElementById("kedvencoldal"),document.getElementById("kokteloldal"),document.getElementById("reportoldal"),document.getElementById("kosároldal")]
     for (let i = 0; i < oldalak.length; i++) {
         if(oldalak[i]==oldalak[selected]){
             oldalak[i].removeAttribute("hidden","true")

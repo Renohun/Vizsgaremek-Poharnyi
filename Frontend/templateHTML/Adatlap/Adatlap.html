@@ -77,9 +77,12 @@
         </nav>
         <div class="container-fluid">
             <div class="row">
-                <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-1 col-3 vh-100" id="Sidebar">
+                <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-2 col-xxl-1 col-3 vh-100" id="Sidebar">
                     <div class="mb-auto mt-auto">
                         <input type="button" value="Adatlap" class="gomb jelenlegi" id="Adatlap" />
+                    </div>
+                    <div class="mb-auto mt-auto">
+                        <input type="button" value="Kosár" class="gomb" id="Kosár" />
                     </div>
                     <div class="mb-auto mt-auto">
                         <input type="button" value="Kedvencek" class="gomb" id="Kedvencek" />
@@ -95,7 +98,7 @@
                         <input type="button" value="Fiók Törlése" class="torles-gomb" id="" />
                     </div>
                 </div>
-                <div id="adatoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9">
+                <div id="adatoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Adatlap</p>
                     </div>
@@ -137,12 +140,20 @@
                         </div>
                     </div>
                 </div>
-                <div hidden id="kedvencoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9">
+                <div hidden id="kosároldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                    <div class="d-flex justify-content-center">
+                        <p class="fs-1">A Kosarad</p>
+                    </div>
+                    <p>A Kosárban lévő termékek</p>
+                    <input type="button" value="Tovább A Fizetéshez">
+                    <input type="button" value="Kosár Ürítése">
+                </div>
+                <div hidden id="kedvencoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Kedvenc Koktélok</p>
                     </div>
                     <div class="row justify-content-center">
-                        <div class="col-8 col-sm-7 col-md-6 col-lg-5 col-xl-2 mb-1">
+                        <div class="col-8 col-sm-7 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-1">
                             <div class="card">
                                 <img src="Sidecar.webp" class="card-img-top kep" alt="" />
                                 <div class="card-body">
@@ -166,7 +177,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-8 col-sm-7 col-md-6 col-lg-5 col-xl-2 mb-1">
+                        <div class="col-8 col-sm-7 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-1">
                             <div class="card">
                                 <img src="Mojito.webp" class="card-img-top img-fluid kep" alt="" />
                                 <div class="card-body">
@@ -188,7 +199,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-8 col-sm-7 col-md-6 col-lg-5 col-xl-2 mb-1">
+                        <div class="col-8 col-sm-7 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-1">
                             <div class="card">
                                 <img src="hurricane.jpg" class="card-img-top img-fluid kep" alt="" />
                                 <div class="card-body">
@@ -210,7 +221,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-8 col-sm-7 col-md-6 col-lg-5 col-xl-2 mb-1">
+                        <div class="col-8 col-sm-7 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-1">
                             <div class="card">
                                 <img src="manhattan.jpg" class="card-img-top img-fluid kep" alt="" />
                                 <div class="card-body">
@@ -234,12 +245,12 @@
                         </div>
                     </div>
                 </div>
-                <div hidden id="kokteloldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9">
+                <div hidden id="kokteloldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Saját Koktélok</p>
                     </div>
                     <div class="row justify-content-center">
-                        <div class="col-8 col-sm-7 col-md-6 col-lg-5 col-xl-2 mb-1">
+                        <div class="col-8 col-sm-7 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-1">
                             <div class="card">
                                 <img src="Sidecar.webp" class="card-img-top kep" alt="" />
                                 <div class="card-body">
@@ -251,7 +262,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-8 col-sm-7 col-md-6 col-lg-5 col-xl-2 mb-1">
+                        <div class="col-8 col-sm-7 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-1">
                             <div class="card">
                                 <img src="Mojito.webp" class="card-img-top img-fluid kep" alt="" />
                                 <div class="card-body">
@@ -263,7 +274,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-8 col-sm-7 col-md-6 col-lg-5 col-xl-2 mb-1">
+                        <div class="col-8 col-sm-7 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-1">
                             <div class="card">
                                 <img src="hurricane.jpg" class="card-img-top img-fluid kep" alt="" />
                                 <div class="card-body">
@@ -275,7 +286,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-8 col-sm-7 col-md-6 col-lg-5 col-xl-2 mb-1">
+                        <div class="col-8 col-sm-7 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-1">
                             <div class="card">
                                 <img src="manhattan.jpg" class="card-img-top img-fluid kep" alt="" />
                                 <div class="card-body">
@@ -289,7 +300,7 @@
                         </div>
                     </div>
                 </div>
-                <div hidden id="reportoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9">
+                <div hidden id="reportoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Jelentések</p>
                     </div>
