@@ -1,0 +1,39 @@
+#Sidebar{
+    background-color: #9acd32;
+    align-items: center;
+    /*Puszillak Stackoverflow*/
+    position: sticky;
+    top: 0;
+}
+a{
+    text-decoration: none;
+    text-align: left;
+}
+.profil-big{
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    /*background-image: url(../UnversalCSS/whatever.png);*/
+}
+/*TODO: ha a profilra raviszi az egeret a bro, fedje le egy "kattints a profilkép megváltoztatásáért" felirat"*/
+
+.kep{
+    width: 100%;
+    height: 400px;
+}
+.torles-gomb{
+    color: crimson;
+}
+.gomb,.torles-gomb{
+    background-color: #9acd32;
+    border: 0px;
+}
+.gomb:hover,.torles-gomb:hover{
+    background-color: #a4e71c;
+}
+.paros{
+    background-color: lightgray;
+}
+.paros,.paratlan{
+    padding: 20px;
+}

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="Adatlap.css" />
+        <link rel="stylesheet" href="../kellékek/NavBar.css" />
+        <link rel="stylesheet" href="../kellékek/lightTheme.css" />
+        <link rel="stylesheet" href="../kellékek/universalCSS.css" />
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
+            <div class="container-fluid hatter">
+                <div class="navbar-brand">
+                    <a class="navbar-brand" id="marka" href="#">Pohárnyi</a>
+                    <p id="alszoveg">Az online koktélbár</p>
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse justify-content-between" id="collapsable">
+                    <div class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active jelenlegi" href="/Fooldal" aria-current="page">Főoldal</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                href="#"
+                                role="button"
+                                aria-expanded="false"
+                                >Poháryni koktélok</a
+                            >
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="/PoharnyiAlkoholosKoktelok">Alkoholos Koktélok</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                href="#"
+                                role="button"
+                                aria-expanded="false"
+                                >Ti koktéljaitok</a
+                            >
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Alkoholos Koktélok</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">Mi van a polcon?</a>
+                        </li>
+                    </div>
+                    <div>
+                        <input type="button" value="" id="ThemeSwitcher" />
+                        <a href="/Keszites">
+                            <input type="button" class="nav-item btn btn-warning"  value="Saját koktél létrehozása" id=""/>
+                        </a>
+                        <a href="/Adatlap">
+                            <input type="button" class="nav-item profil"  value="     " id="Profile" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-2 col-xxl-1 col-3 vh-100" id="Sidebar">
+                    <div class="mb-auto mt-auto">
+                        <input type="button" value="Adatlap" class="gomb jelenlegi" id="Adatlap" />
+                    </div>
+                    <div class="mb-auto mt-auto">
+                        <input type="button" value="Kosár" class="gomb" id="Kosár" />
+                    </div>
+                    <div class="mb-auto mt-auto">
+                        <input type="button" value="Kedvencek" class="gomb" id="Kedvencek" />
+                    </div>
+                    <div class="mb-auto mt-auto">
+                        <input type="button" value="Saját Koktélok" class="gomb" id="Koktélok" />
+                    </div>
+                    <div class="mb-auto mt-auto">
+                        <input type="button" value="Jelentések" class="gomb" id="Jelentések" />
+                    </div>
+                    <!--Does Nothing:-->
+                    <div class="mb-auto mt-auto">
+                        <input type="button" value="Fiók Törlése" class="torles-gomb" id="" />
+                    </div>
+                </div>
+                <div id="adatoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                    <div class="d-flex justify-content-center">
+                        <p class="fs-1">Adatlap</p>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-9 col-sm-9 col-md-5 col-lg-5 col-xl-5">
+                            <div class="flex-column align-items-center">
+                                <p>Profilképed:</p>
+                                <label>
+                                    <input type="file" hidden  id="input"/>
+                                    <img src="../UnversalCSS/whatever.png" class="profil-big" alt="A Profilképednek kéne itt lennie... valami nem sikerült." title="A Profilképed!" id="profilkep"/>
+                                </label>
+                            </div>
+                            <div class="flex-column d-flex">
+                                <label for="Felhasználónév">Felhasználónév:</label>
+                                <input type="text" disabled id="Felhasználónév" />
+                            </div>
+                            <div class="flex-column d-flex">
+                                <label for="Email-cím">Email-cím:</label>
+                                <input type="email" disabled id="Email-cím" />
+                            </div>
+                            <div class="flex-column d-flex">
+                                <label for="Jelszó">Jelszó:</label>
+                                <input type="password" disabled id="Jelszó" />
+                            </div>
+                            <div class="mt-1">
+                                <input type="submit" class="btn btn-success" value="Mentés" id="Mentés"/>
+                                <input type="reset" class="btn btn-danger" value="Mégse" id="Mégse"/>
+                            </div>
+                        </div>
+                        <div class="col-8 col-sm-9 col-md-4 col-lg-4 col-xl-4">
+                            <div class="fs-3">Statisztikák:</div>
+                            <div class="card">
+                                <div class="paratlan">
+                                    Regisztárció dátuma: <span id="RegDate"></span>
+                                </div>
+                                <div class="paros">
+                                    Saját koktélok száma: <span id="KeszitKoktelNum"></span>
+                                </div>
+                                <div class="paratlan">
+                                    Kedvelt koktélok száma: <span id="KedveltKoktelNum"></span>
+                                </div>
+                                <div class="paros">
+                                    Kommentek száma: <span id="KommentNum"></span>
+                                </div>
+                                <div class="paratlan">
+                                    Értékelések száma: <span id="ErtekNum"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div hidden id="kosároldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                    <div class="d-flex justify-content-center">
+                        <p class="fs-1">A Kosarad</p>
+                    </div>
+                    <p>A Kosárban lévő termékek</p>
+                    <div class="KosarTermek">
+
+                    </div>
+                    <p id="Összár"></p>
+                    <input type="button" value="Tovább A Fizetéshez">
+                    <input type="button" value="Kosár Ürítése">
+                </div>
+                <div hidden id="kedvencoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                    <div class="d-flex justify-content-center">
+                        <p class="fs-1">Kedvenc Koktélok</p>
+                    </div>
+                    <div class="row justify-content-center" id="KedveltKoktelOldal">
+                    </div>
+                </div>
+                <div hidden id="kokteloldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                    <div class="d-flex justify-content-center">
+                        <p class="fs-1">Saját Koktélok</p>
+                    </div>
+                    <div class="row justify-content-center" id="KeszitKoktelOldal">
+                    </div>    
+                </div>
+                <div hidden id="reportoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                    <div class="d-flex justify-content-center">
+                        <p class="fs-1">Jelentések</p>
+                    </div>
+                    <p>Általad feltett Jelentések:</p>
+                    <div id="Jelentések">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="Adatlap.js"></script>
+        <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../kellékek/themeSwitcher.js"></script>
+    </body>
+</html>
