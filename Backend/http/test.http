@@ -15,14 +15,5 @@ Content-Type: application/json
     "jelszo": "asd1234"
 }
 ###
-GET http://127.0.0.1:3000/api/lekeres
+GET http://127.0.0.1:3000/api/AdatlapLekeres
 Content-Type: application/json
-
-{
-    "table":"koktél",
-    "params":"Felhasználónév,KeszitesDatuma,COUNT(HovaIrták) as KommentekSzáma",
-    "filter":"where koktél.Keszito like ?",
-    "joins":"inner join felhasználó on felhasználó.FelhID=koktél.Keszito inner join ertekeles on koktél.KoktélID=ertekeles.HovaIrták",
-    "value":"2"
-}
-

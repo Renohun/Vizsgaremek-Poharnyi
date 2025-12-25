@@ -91,7 +91,8 @@ app.use(
 //!Routing
 //?Főoldal:
 
-app.use(express.static(path.join(__dirname, '..', 'Frontend', 'templateHTML')));
+//A DINAMIKUS MAPPA NEM MŰKÖDIK HA EZ NEM EGY KOMMENT
+//app.use(express.static(path.join(__dirname, '..', 'Frontend', 'templateHTML')));
 
 router.get('/', (request, response) => {
     response.sendFile(path.join(__dirname, '..', 'Frontend', 'templateHTML', 'Landing Page', 'Landing Page.html'));
@@ -135,8 +136,9 @@ router.get('/Keszites', (req, res) => {
 });
 
 //Adatok
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak')));
 router.get('/Adatlap', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Adatlap/Adatlap.html'));
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Adatlap/Adatlap.html'));
     //A Kozeljovoben ha valaki erre hivatkozik, akkor gonosz es nincs bejelentkezve, ezert szamuzzunk oda
     //res.redirect('/belepes')
 });

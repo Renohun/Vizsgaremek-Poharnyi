@@ -102,26 +102,23 @@ router.post('/belepes', async (request, response) => {
         console.log('Valami egyeb hiba tortent: ' + err);
     }
 });
-//Univerzalis lekeres test
-router.get("/lekeres",async(request,response)=>{
+
+router.get("/AdatlapLekeres",async(request,response)=>{
     //A Kapott értékek definiálása
-    const lekeres={
-        tabla :request.body.table,
-        paramok:request.body.params,
-        filter:request.body.filter,
-        kotesek:request.body.joins,
-        ertekek:request.body.value
+
+    let query="SELECT Felhasználónév,Email,Jelszó,ProfilkepUtvonal,RegisztracioDatuma from felhasználó WHERE FelhID LIKE ?;SELECT COUNT(KiKedvelteID) AS KEDVID from kedvencek where KiKedvelteID like ? ;SELECT COUNT(Keszito) AS KOMMID from komment where Keszito like ?;SELECT COUNT(Keszito) AS RATEID from ertekeles where Keszito like ?;SELECT COUNT(Keszito) AS MAKEID from koktél where Keszito like ?;"
+    
+    let ertekek=[]
+    for (let i = 0; i < 5; i++) {
+        ertekek.push(2)
     }
-    //Rendbe rakjuk a lekérést
-    let query=`SELECT ${lekeres.paramok} FROM ${lekeres.tabla} ${lekeres.kotesek} ${lekeres.filter}`
-   //console.log(query);
-   //console.log(lekeres.ertekek);
-   
-   //Lekérdezés
-    DBconnetion.query(query,lekeres.ertekek, async (err, rows) => {
+    //Lekérdezés
+    
+        DBconnetion.query(query,ertekek, async (err, rows) => {
         if (err) {
             response.status(500).json({
-                message: 'Hiba tortent lekeres kozben!'
+                message: 'Hiba tortent lekeres kozben!',
+                hiba:err
             });
         } 
         else {
@@ -130,7 +127,9 @@ router.get("/lekeres",async(request,response)=>{
             });
         }
 
-    })
+     })
+   
+
 
 })
 module.exports = router;
