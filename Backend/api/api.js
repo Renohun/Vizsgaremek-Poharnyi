@@ -110,23 +110,22 @@ router.post('/belepes', async (request, response) => {
 //
 //
 //
-
-//TODO:
-/*const AdatbazisQuery=async(query,params,result)=>{
+const AdatbazisQuery=async(query,params)=>{
+    let result
     DBconnetion.query(query,params, async (hiba, eredmeny) => {
         if (hiba) 
         {
             console.error(`hiba történt: ${hiba}`)
-            result="hiba"
         } 
         else 
         {
-            result.push(eredmeny)
+            result=JSON.stringify(eredmeny)
+            return result
         }
         
      })
-     return result
-}*/
+
+}
 router.get("/AdatlapLekeres/FelhAdatok/:id",async(request,response)=>{
 
     //A Lekérés definiálása
@@ -152,6 +151,10 @@ router.get("/AdatlapLekeres/FelhAdatok/:id",async(request,response)=>{
         }
      })
 })
+//NEM MŰKÖDIK
+//MIÉRT NEM?
+//CSAK EZ A /KEDVENCEK A BAJ
+//DE MIÉRT
 router.get("/AdatlapLekeres/Kedvencek/:id",async(request,response)=>{
 
 //A Lekérés definiálása
@@ -165,126 +168,15 @@ router.get("/AdatlapLekeres/Kedvencek/:id",async(request,response)=>{
     let osszetevok=[]
     let kokteladatok=[]
     //Lekérdezés
-        DBconnetion.query(query1,felhaszanalo, async (err, rows) => {
-            if (err) {
-                console.log("hiba!", err);
-                response.status(500).json({
-                    message: 'Hiba tortent lekeres kozben!',
-                    hiba:err
-                })
-            } 
-            else {
-                kokteladatok.push(rows)
-                //Eltároljuk az IDket egy listában
-                for (let i = 0; i < rows.length; i++) {
-                    koktelok.push(rows[i].KoktélID)
-                }
-                //végigmegyünk rajta és minden koktélnak lekérjük az értékeléseit és az összetevőket
-                for (let i = 0; i < koktelok.length; i++) {
-                    DBconnetion.query(query2,koktelok[i], async (err, rows) => {
-                            if (err) {
-                                console.log("hiba!", err);
-                            
-                            } 
-                            else {
-                                //majd eltároljuk
-                                
-                                ertekelesek.push(rows)
-                            
-                            }
-                        
-                    }) 
-                    DBconnetion.query(query3,koktelok[i], async (err, rows) => {
-                            if (err) {
-                                console.log("hiba!", err);
-                            
-                            } 
-                            else {
-                                //majd eltároljuk
-                                osszetevok.push(rows)
-                            }
-                        
-                    }) 
-                    if (i==koktelok.length) {
-
-                    }
-                }
-                 response.status(200).json({
-                     message:"Sikeres Lekérés!",
-                     adatok:kokteladatok,
-                     rating:ertekelesek,
-                     ingredients:osszetevok
-                 });
-                
-            }
-        
-        })
-
-})
-router.get("/AdatlapLekeres/Koktelok/:id",async(request,response)=>{
-
-    //A Lekérés definiálása
-    let query1="SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?"
-    let query2="SELECT AVG(Ertekeles) from ertekeles where HovaIrták like ?"
-    let query3="SELECT Osszetevo from koktelokosszetevoi where KoktélID like ?"
-    //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
-    let felhaszanalo = request.params.id
-    let koktelok=[]
-    let ertekelesek=[]
-    let osszetevok=[]
-    let kokteladatok=[]
-    //Lekérdezés
-        DBconnetion.query(query1,felhaszanalo, async (err, rows) => {
-            if (err) {
-                console.log("hiba!", err);
-                response.status(500).json({
-                    message: 'Hiba tortent lekeres kozben!',
-                    hiba:err
-                })
-            } 
-            else {
-                kokteladatok.push(rows)
-                //Eltároljuk az IDket egy listában
-                for (let i = 0; i < rows.length; i++) {
-                    koktelok.push(rows[i].KoktélID)
-                }
-                //végigmegyünk rajta és minden koktélnak lekérjük az értékeléseit és az összetevőket
-                for (let i = 0; i < koktelok.length; i++) {
-                    console.log("a");
-
-                    DBconnetion.query(query2,koktelok[i], async (err, rows) => {
-                            if (err) {
-                                console.log("hiba!", err);
-                            
-                            } 
-                            else {
-                                //majd eltároljuk
-                                ertekelesek.push(rows)
-                            
-                            }
-                        
-                    }) 
-                    DBconnetion.query(query3,koktelok[i], async (err, rows) => {
-                            if (err) {
-                                console.log("hiba!", err);
-                            
-                            } 
-                            else {
-                                //majd eltároljuk
-                                osszetevok.push(rows)
-                            
-                            }
-                        
-                    }) 
-                }
-                response.status(200).json({
-                    message:"Sikeres Lekérés!",
-                    tartalom:rows
-                });
-                
-            }
-        
-        })
+    const c =await AdatbazisQuery(query1,felhaszanalo)
+    let ertek=c
+    console.log(ertek);
+    response.status(200).json({
+        response:ertek
+    })
+    
+    
+    
 })
 router.get("/AdatlapLekeres/Jelentesek/:id",async(request,response)=>{
 
@@ -296,7 +188,7 @@ router.get("/AdatlapLekeres/Jelentesek/:id",async(request,response)=>{
         ertekek.push(request.params.id)
     }
     //Lekérdezés
-        DBconnetion.query(query,ertekek, async (err, rows) => {
+    DBconnetion.query(query,ertekek, async (err, rows) => {
         if (err) {
             response.status(500).json({
                 message: 'Hiba tortent lekeres kozben!',
@@ -314,25 +206,32 @@ router.get("/AdatlapLekeres/Jelentesek/:id",async(request,response)=>{
 router.get("/AdatlapLekeres/Kosar/:id",async(request,response)=>{
 
     //A Lekérés definiálása
-    let query=""
-    let ertekek=[]
+    let kerdes="SELECT TermekID,Darabszam,EgysegAr FROM kosártermék WHERE KosarID = ?;"
+    let kerdes2="SELECT TermekCim,TermekLeiras FROM webshoptermek WHERE TermekID = ?;"
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
-    for (let i = 0; i < 5; i++) {
-        ertekek.push(request.params.id)
-    }
+    let felhaszanalo=request.params.id
+    let c=[]
     //Lekérdezés
-        DBconnetion.query(query,ertekek, async (err, rows) => {
-        if (err) {
+        DBconnetion.query(kerdes,felhaszanalo, async (err, rows) => {
+        if (err) {            
             response.status(500).json({
                 message: 'Hiba tortent lekeres kozben!',
                 hiba:err
             });
         } 
         else {
-            response.status(200).json({
-                message: "Sikeres Lekérés!",
-                tartalom:rows
+            c.push(rows)
+        }
+    })
+     DBconnetion.query(kerdes,felhaszanalo, async (err, rows) => {
+        if (err) {            
+            response.status(500).json({
+                message: 'Hiba tortent lekeres kozben!',
+                hiba:err
             });
+        } 
+        else {
+            c.push(rows)
         }
      })
 })

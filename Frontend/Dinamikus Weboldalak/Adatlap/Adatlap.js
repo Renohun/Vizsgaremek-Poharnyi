@@ -98,13 +98,13 @@ async function AdatlapLekeres(){
     document.getElementById("ErtekNum").innerHTML=(valasz.tartalom[3][0]).RATEID
 }
 async function KedvencekLekeres() {
-    const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/"+2)
     console.log("Kedvenc");
+    const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/"+2)
     
 }
 async function KoktelokLekeres() {
-    const valasz=await AdatGet("/api/AdatlapLekeres/Koktelok/"+2)
     console.log("Koktél");
+    const valasz=await AdatGet("/api/AdatlapLekeres/Koktelok/"+2)
     
 }
 async function JelentesekLekeres() {
