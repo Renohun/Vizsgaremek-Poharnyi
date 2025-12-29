@@ -22,9 +22,8 @@ document.addEventListener("DOMContentLoaded",()=>{
     })
     mégse.addEventListener("click",()=>{
         undo()
-        alert("Sikeres Törlés")
     })
-    adatkeres()
+    AdatlapLekeres()
 })
 
 //Megkeressük annak a gombnak a párját amit lenyomtunk, és azt mutatjuk, illetve átteszük az aláhúzást
@@ -62,27 +61,73 @@ const AdatGet=async(url)=>{
         console.error(error)
     }
 }
-async function adatkeres(){
+const AdatPost=async(url,data)=>{
+    try {
+      const ertek=await fetch(url,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:data
+      })  
+      if (ertek.ok) {
+        return ertek.json()
+      }
+      else{
+        console.log("hiba");
+        
+      }
+    } 
+    catch (error) {
+        console.error(error)
+    }
+}
+async function AdatlapLekeres(){
     
     let celpontok=[document.getElementById("Felhasználónév"),document.getElementById("Email-cím"),document.getElementById("Jelszó"),document.getElementById("profilkep"),document.getElementById("RegDate")]
     let valtozok=["Felhasználónév","Email","Jelszó","ProfilkepUtvonal","RegisztracioDatuma"]
-    const valasz=await AdatGet("/api/AdatlapLekeres")
-    let ertek=valasz.message[0][0];
+    const valasz=await AdatGet("/api/AdatlapLekeres/FelhAdatok/"+2)
+    let ertek=valasz.tartalom[0][0];
     
     for (let index = 0; index < celpontok.length-1; index++) {
         celpontok[index].value=ertek[valtozok[index]]
         
     }
     celpontok[4].innerHTML=ertek[valtozok[4]]
-    document.getElementById("KeszitKoktelNum").innerHTML=(valasz.message[4][0]).MAKEID
-    document.getElementById("KedveltKoktelNum").innerHTML=(valasz.message[1][0]).KEDVID
-    document.getElementById("KommentNum").innerHTML=(valasz.message[2][0]).KOMMID
-    document.getElementById("ErtekNum").innerHTML=(valasz.message[3][0]).RATEID
+    document.getElementById("KeszitKoktelNum").innerHTML=(valasz.tartalom[4][0]).MAKEID
+    document.getElementById("KedveltKoktelNum").innerHTML=(valasz.tartalom[1][0]).KEDVID
+    document.getElementById("KommentNum").innerHTML=(valasz.tartalom[2][0]).KOMMID
+    document.getElementById("ErtekNum").innerHTML=(valasz.tartalom[3][0]).RATEID
 }
+async function KedvencekLekeres() {
+    const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/"+2)
+    console.log("Kedvenc");
+    
+}
+async function KoktelokLekeres() {
+    const valasz=await AdatGet("/api/AdatlapLekeres/Koktelok/"+2)
+    console.log("Koktél");
+    
+}
+async function JelentesekLekeres() {
+    const valasz=await AdatGet("/api/AdatlapLekeres/Jelentesek/"+2)
+    console.log("Jelentés");
+    
+}
+async function KosarLekeres() {
+    const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/"+2)
+    console.log("Kosár");
+    
+}
+
 function betoltes(oldal){
-    console.log(oldal);
+    let oldalak=[AdatlapLekeres,KedvencekLekeres,KoktelokLekeres,JelentesekLekeres,KosarLekeres]
+    oldalak[oldal]()
     
 }
 function undo(){
-
+    try {
+        alert("Sikeres Törlés")
+    } 
+    catch (error) {
+        
+    }
 }

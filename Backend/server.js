@@ -140,7 +140,7 @@ router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak
 router.get('/Adatlap', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Adatlap/Adatlap.html'));
     //A Kozeljovoben ha valaki erre hivatkozik, akkor gonosz es nincs bejelentkezve, ezert szamuzzunk oda
-    //res.redirect('/belepes')
+    //res.redirect('/LepjBe')
 });
 //KoktelParam
 let KoktelID;
