@@ -110,23 +110,6 @@ router.post('/belepes', async (request, response) => {
 //
 //
 //
-
-//TODO:
-/*const AdatbazisQuery=async(query,params,result)=>{
-    DBconnetion.query(query,params, async (hiba, eredmeny) => {
-        if (hiba) 
-        {
-            console.error(`hiba történt: ${hiba}`)
-            result="hiba"
-        } 
-        else 
-        {
-            result.push(eredmeny)
-        }
-        
-     })
-     return result
-}*/
 router.get("/AdatlapLekeres/FelhAdatok/:id",async(request,response)=>{
 
     //A Lekérés definiálása
@@ -137,7 +120,7 @@ router.get("/AdatlapLekeres/FelhAdatok/:id",async(request,response)=>{
         ertekek.push(request.params.id)
     }
     //Lekérdezés
-        DBconnetion.query(query,ertekek, async (err, rows) => {
+    DBconnetion.query(query,ertekek, async (err, rows) => {
         if (err) {
             response.status(500).json({
                 message: 'Hiba tortent lekeres kozben!',
@@ -150,7 +133,8 @@ router.get("/AdatlapLekeres/FelhAdatok/:id",async(request,response)=>{
                 tartalom:rows
             });
         }
-     })
+    })
+    
 })
 router.get("/AdatlapLekeres/Kedvencek/:id",async(request,response)=>{
 
@@ -160,131 +144,75 @@ router.get("/AdatlapLekeres/Kedvencek/:id",async(request,response)=>{
     let query3="SELECT Osszetevő from koktelokosszetevoi where KoktélID like ?"
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     let felhaszanalo = request.params.id
-    let koktelok=[]
+    let kokteladatok=[]
     let ertekelesek=[]
     let osszetevok=[]
-    let kokteladatok=[]
     //Lekérdezés
-        DBconnetion.query(query1,felhaszanalo, async (err, rows) => {
-            if (err) {
-                console.log("hiba!", err);
-                response.status(500).json({
-                    message: 'Hiba tortent lekeres kozben!',
-                    hiba:err
-                })
-            } 
-            else {
-                kokteladatok.push(rows)
-                //Eltároljuk az IDket egy listában
-                for (let i = 0; i < rows.length; i++) {
-                    koktelok.push(rows[i].KoktélID)
-                }
-                //végigmegyünk rajta és minden koktélnak lekérjük az értékeléseit és az összetevőket
-                for (let i = 0; i < koktelok.length; i++) {
-                    DBconnetion.query(query2,koktelok[i], async (err, rows) => {
-                            if (err) {
-                                console.log("hiba!", err);
-                            
-                            } 
-                            else {
-                                //majd eltároljuk
-                                
-                                ertekelesek.push(rows)
-                            
-                            }
-                        
-                    }) 
-                    DBconnetion.query(query3,koktelok[i], async (err, rows) => {
-                            if (err) {
-                                console.log("hiba!", err);
-                            
-                            } 
-                            else {
-                                //majd eltároljuk
-                                osszetevok.push(rows)
-                            }
-                        
-                    }) 
-                    if (i==koktelok.length) {
-
-                    }
-                }
-                 response.status(200).json({
-                     message:"Sikeres Lekérés!",
-                     adatok:kokteladatok,
-                     rating:ertekelesek,
-                     ingredients:osszetevok
-                 });
-                
-            }
-        
+    try {
+        await DBconnetion.promise().query(query1,felhaszanalo).then(([rows]) => {
+        kokteladatok.push(rows)
         })
-
+        for (let i = 0; i < kokteladatok[0].length; i++) {
+            await DBconnetion.promise().query(query2,kokteladatok[0][i].KoktélID).then(([rows]) => {
+                ertekelesek.push(rows)
+            })
+            .catch(console.log("hiba"));
+            await DBconnetion.promise().query(query3,kokteladatok[0][i].KoktélID).then(([rows]) => {
+                osszetevok.push(rows)
+            })
+            .catch(console.log("hiba"));
+        }
+        response.status(200).json({
+            message:"siker!",
+            adat:kokteladatok,
+            ertek:ertekelesek,
+            ossztev:osszetevok
+        })
+    } 
+    catch (error) {
+        response.status(500).json({
+            message:"Hiba"
+        })
+    }
 })
 router.get("/AdatlapLekeres/Koktelok/:id",async(request,response)=>{
 
     //A Lekérés definiálása
     let query1="SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?"
     let query2="SELECT AVG(Ertekeles) from ertekeles where HovaIrták like ?"
-    let query3="SELECT Osszetevo from koktelokosszetevoi where KoktélID like ?"
+    let query3="SELECT Count(HovaIrták) from komment where HovaIrták like ?"
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     let felhaszanalo = request.params.id
-    let koktelok=[]
-    let ertekelesek=[]
-    let osszetevok=[]
     let kokteladatok=[]
+    let ertekelesek=[]
+    let kommentek=[]
     //Lekérdezés
-        DBconnetion.query(query1,felhaszanalo, async (err, rows) => {
-            if (err) {
-                console.log("hiba!", err);
-                response.status(500).json({
-                    message: 'Hiba tortent lekeres kozben!',
-                    hiba:err
-                })
-            } 
-            else {
-                kokteladatok.push(rows)
-                //Eltároljuk az IDket egy listában
-                for (let i = 0; i < rows.length; i++) {
-                    koktelok.push(rows[i].KoktélID)
-                }
-                //végigmegyünk rajta és minden koktélnak lekérjük az értékeléseit és az összetevőket
-                for (let i = 0; i < koktelok.length; i++) {
-                    console.log("a");
-
-                    DBconnetion.query(query2,koktelok[i], async (err, rows) => {
-                            if (err) {
-                                console.log("hiba!", err);
-                            
-                            } 
-                            else {
-                                //majd eltároljuk
-                                ertekelesek.push(rows)
-                            
-                            }
-                        
-                    }) 
-                    DBconnetion.query(query3,koktelok[i], async (err, rows) => {
-                            if (err) {
-                                console.log("hiba!", err);
-                            
-                            } 
-                            else {
-                                //majd eltároljuk
-                                osszetevok.push(rows)
-                            
-                            }
-                        
-                    }) 
-                }
-                response.status(200).json({
-                    message:"Sikeres Lekérés!",
-                    tartalom:rows
-                });
-                
-            }
-        
+    try {
+        await DBconnetion.promise().query(query1,felhaszanalo).then(([rows]) => {
+        kokteladatok.push(rows)
         })
+        for (let i = 0; i < kokteladatok[0].length; i++) {
+            await DBconnetion.promise().query(query2,kokteladatok[0][i].KoktélID).then(([rows]) => {
+                ertekelesek.push(rows)
+            })
+            .catch(console.log("hiba"));
+            await DBconnetion.promise().query(query3,kokteladatok[0][i].KoktélID).then(([rows]) => {
+                kommentek.push(rows)
+            })
+            .catch(console.log("hiba"));
+        }
+        response.status(200).json({
+            message:"siker!",
+            adat:kokteladatok,
+            ertek:ertekelesek,
+            kommnum:kommentek
+        })
+    } 
+    catch (error) {
+        response.status(500).json({
+            message:"Hiba"
+        })
+    }
 })
 router.get("/AdatlapLekeres/Jelentesek/:id",async(request,response)=>{
 
