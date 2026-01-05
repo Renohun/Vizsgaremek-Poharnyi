@@ -49,12 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         alert('Hibas email! Avagy nem letezik ilyen felhasznalo');
                     } else if (data.message == "Sikeres bejelentkezes") {
                         alert('Bejelentkeztel ugyesen!');
-                        
                     }
-                    //ennek a cookie segitsegevel tudjuk hogy a fellhasznalo bejelentkezett, innen jon a neve az admin statusza
-                    //!!!!! FONTOS !!!!!!
-                    //Admin dolgokat mindig az adatbazisbol ellenorizzuk, tehat majd az adminpanel-nel, meg kell nezunk hogy a felhasznalo tenyleg admin-e!!!!
-                    //document.cookie = `felhasznaloNev=${data.felhasznaloNev}; admin=${data.adminE}; path=/`;
                 };
                 hivas();
             } else {
