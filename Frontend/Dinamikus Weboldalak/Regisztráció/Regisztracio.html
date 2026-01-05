@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="../AdminPanel - Dinamikus/adminPanel.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
@@ -66,89 +65,75 @@
                     <div>
                         <input type="button" value="" id="ThemeSwitcher" />
                         <a href="/Regisztralj">
-                            <input type="button" hidden class="btn btn-secondary nav-item" value="Regisztárció" id="" />
+                            <input type="button" class="btn btn-secondary nav-item" value="Regisztárció" id="" />
                         </a>
                         <a href="/LepjBe">
-                            <input type="button" hidden class="btn btn-warning nav-item" value="Bejelentkezés" id="" />
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="" />
                         </a>
 
                         <a href="/Keszites">
-                            <input type="button" class="nav-item btn btn-warning"  value="Saját koktél létrehozása" id=""/>
+                            <input
+                                type="button"
+                                class="nav-item btn btn-warning"
+                                hidden
+                                value="Saját koktél létrehozása"
+                                id=""
+                            />
                         </a>
                         <a href="/Adatlap">
-                            <input type="button" class="nav-item profil"  value="     " id="Profile" />
+                            <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
                         </a>
                     </div>
                 </div>
             </div>
         </nav>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-1 col-3 vh-100" id="Sidebar">
-                    <div class="mb-auto mt-auto" id="textHover">
-                        <a class="link-dark jelenlegi fs-5" name="fiokKezeles">Fiokok Kezelese</a>
-                    </div>
-                    <div class="mb-auto mt-auto" id="textHover">
-                        <a class="link-dark fs-5" name="koktelKezeles">Koktelok Kezelese</a>
-                    </div>
-                    <div class="mb-auto mt-auto" id="textHover">
-                        <a class="link-dark fs-5" name="kommentKezeles">Kommentek Kezelese</a>
-                    </div>
-                    <!--Does Nothing:-->
-                    <div class="mb-auto mt-auto" id="textHover">
-                        <a class="link-danger fs-5" name="">Fiók Törlése</a>
-                    </div>
-                </div>
-                <div
-                    name="fiokKezeles"
-                    class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5 d-flex flex-column align-items-center"
-                >
-                    <div class="card w-50">
-                        <div class="card-header">Fiok torlese</div>
-                        <div class="card-body">
-                            <input type="text" class="form-control" id="fiokTextInput" />
+        <div class="container d-flex justify-content-center">
+            <div class="col-8">
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <p class="text-center fs-1 card-title">Regisztrálj a weblapunkra</p>
+                        <div>
+                            <label for="">Adj meg email címét:</label>
+                            <input type="email" class="form-control mb-2" placeholder="example@gmail.com" />
                         </div>
-                        <div class="card-footer">
-                            <input type="button" name="" value="Fiok ellenorzese" class="btn btn-success" id="" />
-                            <input type="button" value="Fiok torlese" class="btn btn-danger" />
+                        <div>
+                            <label for="">Adja meg a felhasználónevét (Min: 3 Max: 30)</label>
+                            <input
+                                type="text"
+                                class="form-control mb-2"
+                                min="3"
+                                max="30"
+                                placeholder="Felhasznalo Nev"
+                            />
                         </div>
-                    </div>
-                </div>
-                <div
-                    hidden="true"
-                    name="koktelKezeles"
-                    class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5 d-none d-flex flex-column align-items-center"
-                >
-                    <div class="card w-50">
-                        <div class="card-header">Koktel torlese</div>
-                        <div class="card-body">
-                            <input type="text" class="form-control" id="koktelTextInput" />
+                        <div>
+                            <label for="">Adja meg a jelszavát (Min: 5 Max: 30)</label>
+                            <input type="password" min="5" max="30" class="form-control mb-2 jelszoElement" />
                         </div>
-                        <div class="card-footer">
-                            <input type="button" name="" value="Koktel ellenorzese" class="btn btn-success" id="" />
-                            <input type="button" value="Koktel torlese" class="btn btn-danger" />
+                        <div>
+                            <label for="">Ismételje meg jelszavát (Min: 5 Max: 30)</label>
+                            <input type="password" min="5" max="30" class="form-control mb-2 jelszoElement" />
+                        </div>
+                        <div>
+                            <input type="checkbox" name="jelszoMutatas" id="jelszoMutatas" />
+                            <label for="jelszoMutatas">Jelszo mutatasa</label>
+                        </div>
+                        <div><input type="checkbox" name="" id="" />Elfogadom az <a href="">ÁFSZ</a> feltételeit</div>
+                        <div>
+                            <input type="submit" id="RegisztracioGomb" value="Regisztráció" class="btn btn-success" />
+                            <input type="reset" value="Vissza az oldalra" class="btn btn-danger" />
                         </div>
                     </div>
-                </div>
-                <div
-                    hidden="true"
-                    name="kommentKezeles"
-                    class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5 d-none d-flex flex-column align-items-center"
-                >
-                    <div class="card w-50">
-                        <div class="card-header">Komment torlese</div>
-                        <div class="card-body">
-                            <input type="text" class="form-control" id="kommentTextInput" />
-                        </div>
-                        <div class="card-footer">
-                            <input type="button" value="Komment torlese" class="btn btn-danger" />
-                        </div>
+                    <div class="card-footer">
+                        <label for="">Van már fiókod?</label>
+                        <a href="/LepjBe"><input type="button" class="btn btn-secondary" value="Bejelentkezés" /></a>
                     </div>
                 </div>
             </div>
         </div>
-        <script src="../AdminPanel - Dinamikus/adminPanelJS.js"></script>
+
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
+        <script src="../Regisztráció/Regisztracio.js"></script>
     </body>
 </html>

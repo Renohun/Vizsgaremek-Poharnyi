@@ -96,16 +96,12 @@ app.use(
 
 //A DINAMIKUS MAPPA NEM MŰKÖDIK HA EZ NEM EGY KOMMENT
 //app.use(express.static(path.join(__dirname, '..', 'Frontend', 'templateHTML')));
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/')));
 
 
 router.get('/', (request, response) => {
     response.sendFile(path.join(__dirname, '..', 'Frontend', 'templateHTML', 'Landing Page', 'Landing Page.html'));
 });
-//NavBar routing
-router.get('/LepjBe', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/belepes/belepes.html'));
-});
-
 //Ne / legyen a default hanem A Fooldal
 router.get('/', (req, res) => {
     res.redirect('/Fooldal');
@@ -121,16 +117,16 @@ router.get('/PoharnyiAlkoholosKoktelok', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Pohárnyi Alkoholos/PohAlc.html'));
 });
 
-//Regisztracio
-router.use(express.static(path.join(__dirname, '../Frontend/templateHTML/Regisztráció')));
+//Regisztracio - Dinamikus
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Regisztráció/')));
 router.get('/Regisztralj', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Regisztráció/Regisztracio.html'));
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Regisztráció/Regisztracio.html'));
 });
 
-//Bejelentkezes
-router.use(express.static(path.join(__dirname, '../Frontend/templateHTML/belepes')));
+//Bejelentkezes - Dinamikus
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
 router.get('/LepjBe', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/belepes/belepes.html'));
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/belepes.html'));
 });
 
 //KoktelKeszites
@@ -140,8 +136,6 @@ router.get('/Keszites', (req, res) => {
 });
 
 //Adatok - Dinamikus
-router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak')));
-
 router.get('/Adatlap', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Adatlap/Adatlap.html'));
     //A Kozeljovoben ha valaki erre hivatkozik, akkor gonosz es nincs bejelentkezve, ezert szamuzzunk oda
