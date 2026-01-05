@@ -14,12 +14,24 @@ Content-Type: application/json
     "felhasznalo": "adf@gmail.com",
     "jelszo": "asd1234"
 }
+
+###Adatlap
+
 ###
 GET http://127.0.0.1:3000/api/AdatlapLekeres/Kedvencek/2
 Content-Type: application/json
-
 ###
 GET http://127.0.0.1:3000/api/AdatlapLekeres/FelhAdatok/2
+Content-Type: application/json
+
+###
+GET http://127.0.0.1:3000/api/AdatlapLekeres/Kosar/1
+Content-Type: application/json
+###
+GET http://127.0.0.1:3000/api/AdatlapLekeres/Jelentesek/2
+Content-Type: application/json
+###
+GET http://127.0.0.1:3000/api/AdatlapLekeres/Kosar/1
 Content-Type: application/json
 ###
 GET http://127.0.0.1:3000/api/AdatlapLekeres/Koktelok/2
