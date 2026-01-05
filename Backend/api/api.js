@@ -91,7 +91,7 @@ router.post('/belepes', async (request, response) => {
                             userID: felhasznaloDB.FelhID,
                             adminStatus: felhasznaloDB.Admin
                         },
-                        process.env.JWT_SECRET || "ig_nagyon_titkos_jelszo_ez",
+                        process.env.JWT_SECRET,
                         {
                             expiresIn: "1h"
                         }
