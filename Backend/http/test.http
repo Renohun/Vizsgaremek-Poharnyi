@@ -33,3 +33,6 @@ Content-Type: application/json
 ###
 GET http://127.0.0.1:3000/api/AdatlapLekeres/Kosar/1
 Content-Type: application/json
+###
+GET http://127.0.0.1:3000/api/AdatlapLekeres/Koktelok/2
+Content-Type: application/json

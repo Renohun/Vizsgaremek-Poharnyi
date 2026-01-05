@@ -2,6 +2,7 @@ const express = require('express');
 const DBconnetion = require('../database.js');
 const argon = require('argon2');
 const router = express.Router();
+const JWT = require("jsonwebtoken")
 
 router.get('/test', (req, res) => {
     DBconnetion.query('SELECT * FROM felhasználó', (err, rows) => {
@@ -84,12 +85,30 @@ router.post('/belepes', async (request, response) => {
                     //megnezi az argon package ellenorzi hogy az eltarolt jelszo megegyezik a beirt jelszoval
                     const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
                     if (jelszoEll) {
-                        //itt visszaadom a felhaszanalo nevet azt hogy admin e
-                        //Igy majd tudunk dolgozni a felhasznalo adataival a frontenden
+
+                        //web token letrehozasa
+                        const WebToken = JWT.sign({
+                            userID: felhasznaloDB.FelhID,
+                            adminStatus: felhasznaloDB.Admin
+                        },
+                        process.env.JWT_SECRET || "ig_nagyon_titkos_jelszo_ez",
+                        {
+                            expiresIn: "1h"
+                        }
+                        )
+
+                        //sutibe valo betetele
+                        response.cookie("auth_token", WebToken, {
+                            httpOnly: "true",
+                            sameSite: "none",
+                            secure: "true",
+                            path: "/"
+                        })
+
                         response.status(200).json({
-                            felhasznaloID: felhasznaloDB.FelhID,
-                            adminE: felhasznaloDB.Admin
-                        });
+                            message: "Sikeres bejelentkezes"
+                        })
+
                     } else {
                         response.status(200).json({
                             message: 'Hibas jelszo'
@@ -110,22 +129,6 @@ router.post('/belepes', async (request, response) => {
 //
 //
 //
-const AdatbazisQuery=async(query,params)=>{
-    let result
-    DBconnetion.query(query,params, async (hiba, eredmeny) => {
-        if (hiba) 
-        {
-            console.error(`hiba történt: ${hiba}`)
-        } 
-        else 
-        {
-            result=JSON.stringify(eredmeny)
-            return result
-        }
-        
-     })
-
-}
 router.get("/AdatlapLekeres/FelhAdatok/:id",async(request,response)=>{
 
     //A Lekérés definiálása
@@ -136,7 +139,7 @@ router.get("/AdatlapLekeres/FelhAdatok/:id",async(request,response)=>{
         ertekek.push(request.params.id)
     }
     //Lekérdezés
-        DBconnetion.query(query,ertekek, async (err, rows) => {
+    DBconnetion.query(query,ertekek, async (err, rows) => {
         if (err) {
             response.status(500).json({
                 message: 'Hiba tortent lekeres kozben!',
@@ -149,7 +152,8 @@ router.get("/AdatlapLekeres/FelhAdatok/:id",async(request,response)=>{
                 tartalom:rows
             });
         }
-     })
+    })
+    
 })
 //NEM MŰKÖDIK
 //MIÉRT NEM?
@@ -163,20 +167,75 @@ router.get("/AdatlapLekeres/Kedvencek/:id",async(request,response)=>{
     let query3="SELECT Osszetevő from koktelokosszetevoi where KoktélID like ?"
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     let felhaszanalo = request.params.id
-    let koktelok=[]
+    let kokteladatok=[]
     let ertekelesek=[]
     let osszetevok=[]
-    let kokteladatok=[]
     //Lekérdezés
-    const c =await AdatbazisQuery(query1,felhaszanalo)
-    let ertek=c
-    console.log(ertek);
-    response.status(200).json({
-        response:ertek
-    })
-    
-    
-    
+    try {
+        await DBconnetion.promise().query(query1,felhaszanalo).then(([rows]) => {
+        kokteladatok.push(rows)
+        })
+        for (let i = 0; i < kokteladatok[0].length; i++) {
+            await DBconnetion.promise().query(query2,kokteladatok[0][i].KoktélID).then(([rows]) => {
+                ertekelesek.push(rows)
+            })
+            .catch(console.log("hiba"));
+            await DBconnetion.promise().query(query3,kokteladatok[0][i].KoktélID).then(([rows]) => {
+                osszetevok.push(rows)
+            })
+            .catch(console.log("hiba"));
+        }
+        response.status(200).json({
+            message:"siker!",
+            adat:kokteladatok,
+            ertek:ertekelesek,
+            ossztev:osszetevok
+        })
+    } 
+    catch (error) {
+        response.status(500).json({
+            message:"Hiba"
+        })
+    }
+})
+router.get("/AdatlapLekeres/Koktelok/:id",async(request,response)=>{
+
+    //A Lekérés definiálása
+    let query1="SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?"
+    let query2="SELECT AVG(Ertekeles) from ertekeles where HovaIrták like ?"
+    let query3="SELECT Count(HovaIrták) from komment where HovaIrták like ?"
+    //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
+    let felhaszanalo = request.params.id
+    let kokteladatok=[]
+    let ertekelesek=[]
+    let kommentek=[]
+    //Lekérdezés
+    try {
+        await DBconnetion.promise().query(query1,felhaszanalo).then(([rows]) => {
+        kokteladatok.push(rows)
+        })
+        for (let i = 0; i < kokteladatok[0].length; i++) {
+            await DBconnetion.promise().query(query2,kokteladatok[0][i].KoktélID).then(([rows]) => {
+                ertekelesek.push(rows)
+            })
+            .catch(console.log("hiba"));
+            await DBconnetion.promise().query(query3,kokteladatok[0][i].KoktélID).then(([rows]) => {
+                kommentek.push(rows)
+            })
+            .catch(console.log("hiba"));
+        }
+        response.status(200).json({
+            message:"siker!",
+            adat:kokteladatok,
+            ertek:ertekelesek,
+            kommnum:kommentek
+        })
+    } 
+    catch (error) {
+        response.status(500).json({
+            message:"Hiba"
+        })
+    }
 })
 router.get("/AdatlapLekeres/Jelentesek/:id",async(request,response)=>{
 

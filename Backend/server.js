@@ -73,11 +73,14 @@ const path = require('path');
 const app = express();
 const router = express.Router();
 
+
 const ip = '127.0.0.1';
 const port = 3000;
 
 app.use(express.json()); //?Middleware JSON
 app.set('trust proxy', 1); //?Middleware Proxy
+
+
 
 //!Session beállítása:
 app.use(
@@ -93,6 +96,7 @@ app.use(
 
 //A DINAMIKUS MAPPA NEM MŰKÖDIK HA EZ NEM EGY KOMMENT
 //app.use(express.static(path.join(__dirname, '..', 'Frontend', 'templateHTML')));
+
 
 router.get('/', (request, response) => {
     response.sendFile(path.join(__dirname, '..', 'Frontend', 'templateHTML', 'Landing Page', 'Landing Page.html'));
@@ -135,13 +139,22 @@ router.get('/Keszites', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Új Koktél/NewCocktail.html'));
 });
 
-//Adatok
+//Adatok - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak')));
+
 router.get('/Adatlap', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Adatlap/Adatlap.html'));
     //A Kozeljovoben ha valaki erre hivatkozik, akkor gonosz es nincs bejelentkezve, ezert szamuzzunk oda
     //res.redirect('/LepjBe')
 });
+//AdminPanel - Dinamikus
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/AdminPanel - Dinamikus')));
+router.get("/AdminPanel", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "Frontend", "Dinamikus Weboldalak", "AdminPanel - Dinamikus", "index.html"))
+})
+
+
+
 //KoktelParam
 let KoktelID;
 

@@ -47,14 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         alert('Szar a jelszvad!');
                     } else if (data.message == 'Hibas email! Avagy nem letezik ilyen felhasznalo') {
                         alert('Hibas email! Avagy nem letezik ilyen felhasznalo');
-                    } else if (data.message == undefined) {
+                    } else if (data.message == "Sikeres bejelentkezes") {
                         alert('Bejelentkeztel ugyesen!');
-                        document.cookie = `felhasznaloID=${data.felhasznaloID}; admin=${data.adminE}; path=/`;
                     }
-                    //ennek a cookie segitsegevel tudjuk hogy a fellhasznalo bejelentkezett, innen jon a neve az admin statusza
-                    //!!!!! FONTOS !!!!!!
-                    //Admin dolgokat mindig az adatbazisbol ellenorizzuk, tehat majd az adminpanel-nel, meg kell nezunk hogy a felhasznalo tenyleg admin-e!!!!
-                    //document.cookie = `felhasznaloNev=${data.felhasznaloNev}; admin=${data.adminE}; path=/`;
                 };
                 hivas();
             } else {

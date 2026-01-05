@@ -4,10 +4,10 @@
 
 INSERT INTO Felhasználó(Felhasználónév,Email,Jelszó)
 VALUES
-("Benczik Marcell","benczik.marci@gmail.com","SzeretemAMacskákat"),
-("Legnagyobb Mudfield Fan","davidhoki@gmail.com","Frad1Sz1v!"),
-("RenoHUN","kornelbettes@gmail.com","FrappansJelszo2"),
-("A Magyar Daredevil","katai-nemeth-vilmos@tisza.hu","FrappansJelszo3")
+("Benczik Marcell","benczik.marci@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
+("Legnagyobb Mudfield Fan","davidhoki@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o!"),
+("RenoHUN","kornelbettes@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
+("A Magyar Daredevil","katai-nemeth-vilmos@tisza.hu","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o")
 ;
 
 INSERT INTO Koktél(Keszito,KoktelCim,Recept,Alkoholos,Alap,Közösségi)

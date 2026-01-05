@@ -1,0 +1,12 @@
+#Sidebar {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana,
+        sans-serif;
+    background-color: #9acd32;
+    align-items: center;
+    /*Puszillak Stackoverflow*/
+    position: sticky;
+    top: 0;
+}
+a:hover {
+    cursor: pointer;
+}
