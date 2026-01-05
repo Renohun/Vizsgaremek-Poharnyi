@@ -92,7 +92,7 @@ app.use(
 //?Főoldal:
 
 //A DINAMIKUS MAPPA NEM MŰKÖDIK HA EZ NEM EGY KOMMENT
-//app.use(express.static(path.join(__dirname, '..', 'Frontend', 'templateHTML')));
+app.use(express.static(path.join(__dirname, '..', 'Frontend', 'templateHTML')));
 
 router.get('/', (request, response) => {
     response.sendFile(path.join(__dirname, '..', 'Frontend', 'templateHTML', 'Landing Page', 'Landing Page.html'));

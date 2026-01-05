@@ -2,6 +2,7 @@ const express = require('express');
 const DBconnetion = require('../database.js');
 const argon = require('argon2');
 const router = express.Router();
+const JWT = require("jsonwebtoken")
 
 router.get('/test', (req, res) => {
     DBconnetion.query('SELECT * FROM felhasználó', (err, rows) => {
@@ -84,12 +85,30 @@ router.post('/belepes', async (request, response) => {
                     //megnezi az argon package ellenorzi hogy az eltarolt jelszo megegyezik a beirt jelszoval
                     const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
                     if (jelszoEll) {
-                        //itt visszaadom a felhaszanalo nevet azt hogy admin e
-                        //Igy majd tudunk dolgozni a felhasznalo adataival a frontenden
+
+                        //web token letrehozasa
+                        const WebToken = JWT.sign({
+                            userID: felhasznaloDB.FelhID,
+                            adminStatus: felhasznaloDB.Admin
+                        },
+                        process.env.JWT_SECRET || "ig_nagyon_titkos_jelszo_ez",
+                        {
+                            expiresIn: "1h"
+                        }
+                        )
+
+                        //sutibe valo betetele
+                        response.cookie("auth_token", WebToken, {
+                            httpOnly: "true",
+                            sameSite: "none",
+                            secure: "true",
+                            path: "/"
+                        })
+
                         response.status(200).json({
-                            felhasznaloID: felhasznaloDB.FelhID,
-                            adminE: felhasznaloDB.Admin
-                        });
+                            message: "Sikeres bejelentkezes"
+                        })
+
                     } else {
                         response.status(200).json({
                             message: 'Hibas jelszo'

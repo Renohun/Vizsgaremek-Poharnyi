@@ -21,8 +21,10 @@
     },
     "dependencies": {
         "argon2": "^0.44.0",
+        "cookie-parser": "^1.4.7",
         "express": "^5.1.0",
         "express-session": "^1.18.2",
+        "jsonwebtoken": "^9.0.3",
         "multer": "^2.0.2",
         "mysql2": "^3.15.3",
         "nodemon": "^3.1.11"
