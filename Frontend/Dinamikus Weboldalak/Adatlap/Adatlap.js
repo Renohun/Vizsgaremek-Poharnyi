@@ -98,8 +98,101 @@ async function AdatlapLekeres(){
     document.getElementById("ErtekNum").innerHTML=(valasz.tartalom[3][0]).RATEID
 }
 async function KedvencekLekeres() {
-    console.log("Kedvenc");
-    const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/"+2)
+    const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/"+1)
+    //Ideiglenes Számolás a soroknak. További adatok kellenek a tényleges "Stressz Teszthez"
+    console.log(valasz.adat.length);
+    console.log(valasz.adat.length/4);
+    console.log(valasz.adat.length/4+0.5);
+    console.log(Math.round(valasz.adat.length/4));
+    console.log(Math.round((valasz.adat.length/4)+0.5));
+    let kulsoertek=0
+    let sorszam=Math.round((valasz.adat.length/4)+0.5)
+    let hova=document.getElementById("kedvencoldal")
+    for (let i = 0; i < sorszam; i++) 
+    {
+        let sor=document.createElement("div")
+        sor.classList.add("row","justify-content-center")
+        let maxertek=4+i*4
+        for (kulsoertek; kulsoertek < maxertek; kulsoertek++) 
+        {
+            if (valasz.adat[kulsoertek]!=null) {
+                console.log(valasz.adat[kulsoertek]);
+                //elemek létrehozása
+                let koktelDiv=document.createElement("div")
+                let koktelCard=document.createElement("div")
+                let koktelKep=document.createElement("img") //Pathinget ki kell még találni
+                let koktelTartalom=document.createElement("div")
+                let koktelNev=document.createElement("h4")
+                let koktelErtekeles=document.createElement("span")
+                let koktelSzoveg=document.createElement("div")
+                let koktelBadge=document.createElement("div") //Jelenleg semmit se csinal
+                let koktelOsszetevok=document.createElement("span")
+                let koktelOsszetevoLista=document.createElement("ul")
+                let koktelOldal=document.createElement("input")
+                //bootstrap és css elemek megadása
+                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                koktelCard.classList.add("card","h-100")
+                koktelKep.classList.add("card-img-top","kep")
+                koktelTartalom.classList.add("card-body")
+                koktelNev.classList.add("card-title")
+                koktelSzoveg.classList.add("card-text")
+                koktelOldal.classList.add("btn","btn-secondary")
+                //értékek megadása
+                koktelKep.setAttribute("src",valasz.adat[kulsoertek].BoritoKepUtvonal)
+                koktelKep.setAttribute("alt","Itt a koktélnak kéne megjelennie teljes gyönyörében.. de nincs itt.")
+                koktelKep.setAttribute("title",`így néz ki egy ${valasz.adat[kulsoertek].KoktelCim}`)
+                koktelNev.innerHTML=valasz.adat[kulsoertek].KoktelCim
+                koktelOsszetevok.innerHTML="Összetevők:"
+                koktelOldal.setAttribute("type","button")
+                koktelOldal.setAttribute("value","Tovább a Receptre")
+                //Van-e értékelés
+                if (valasz.ertek[kulsoertek][0].Osszert!=null) 
+                {
+                    koktelErtekeles.innerHTML=`Értékelés:${valasz.ertek[kulsoertek][0].Osszert}/5`
+                }
+                else
+                {
+                     koktelErtekeles.innerHTML="Nincs még értékelés!"
+                }
+                //Összevetők kijelzése
+                for (let i = 0; i < 2; i++)
+                {   
+                    let Osszetevo=document.createElement("li")
+                    Osszetevo.innerHTML=valasz.ossztev[kulsoertek][i].Osszetevő
+                    koktelOsszetevoLista.appendChild(Osszetevo)
+                }
+                if (valasz.ossztev[kulsoertek].length==3) //nincs 1 elemű koktél(Ami legális) szoval nem kell azzal szenvedni
+                {
+                     let VegsoOsszetevo=document.createElement("li")
+                     VegsoOsszetevo.innerHTML=valasz.ossztev[kulsoertek][2].Osszetevő
+                     koktelOsszetevoLista.appendChild(VegsoOsszetevo)
+                }
+                else if (valasz.ossztev[kulsoertek].length>3) //nincs 1 elemű koktél(Ami legális) szoval nem kell azzal szenvedni
+                {
+                     let VegsoOsszetevo=document.createElement("li")
+                     VegsoOsszetevo.innerHTML=`és ${(valasz.ossztev[kulsoertek].length)-2}`
+                     koktelOsszetevoLista.appendChild(VegsoOsszetevo)
+                }
+                //feltöltés
+                koktelCard.appendChild(koktelKep)
+                koktelTartalom.appendChild(koktelNev)
+                koktelTartalom.appendChild(koktelErtekeles)
+                koktelSzoveg.appendChild(koktelBadge)
+                koktelSzoveg.appendChild(koktelOsszetevok)
+                koktelSzoveg.appendChild(koktelOsszetevoLista)
+                koktelTartalom.appendChild(koktelSzoveg)
+                koktelTartalom.appendChild(koktelOldal)
+                koktelCard.appendChild(koktelTartalom)
+                koktelDiv.appendChild(koktelCard)
+                sor.appendChild(koktelDiv)
+            }
+            else
+            {
+
+            }
+            hova.appendChild(sor)
+        }
+    }
     
 }
 async function KoktelokLekeres() {
