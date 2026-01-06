@@ -65,31 +65,24 @@ server.listen(port, ip, () => {
     console.log(`http://${ip}:${port}`);
 });*/
 //!Module-ok importálása
+require("dotenv").config()
+console.log(process.env)
 const express = require('express'); //?npm install express
-const session = require('express-session'); //?npm install express-session
 const path = require('path');
+const cookie_parser = require("cookie-parser")
+const AuthMiddleware = require("./api/authentication_Util.js")
+const AuthorizaitionMiddleware = require("./api/authorizationUtil.js")
 
 //!Beállítások
 const app = express();
 const router = express.Router();
-
 
 const ip = '127.0.0.1';
 const port = 3000;
 
 app.use(express.json()); //?Middleware JSON
 app.set('trust proxy', 1); //?Middleware Proxy
-
-
-
-//!Session beállítása:
-app.use(
-    session({
-        secret: 'titkos_kulcs', //?Ezt generálni kell a későbbiekben
-        resave: false,
-        saveUninitialized: true
-    })
-);
+app.use(cookie_parser())
 
 //!Routing
 //?Főoldal:
@@ -135,6 +128,20 @@ router.get('/Keszites', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Új Koktél/NewCocktail.html'));
 });
 
+//Kijelentkezes
+//TODO POST-ra atirni
+router.get("/Kijelentkezes", AuthMiddleware, (req,res)=>{
+    res.clearCookie("auth_token",{
+        httpOnly:"true",
+        secure: process.env.COOKIE_SECURE === "true",
+        sameSite: process.env.COOKIE_SECURE
+    })
+
+    res.status(200).json({
+        message: "Sikeresen kijelentkezve"
+    })
+})
+
 //Adatok - Dinamikus
 router.get('/Adatlap', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Adatlap/Adatlap.html'));
@@ -143,11 +150,24 @@ router.get('/Adatlap', (req, res) => {
 });
 //AdminPanel - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/AdminPanel - Dinamikus')));
-router.get("/AdminPanel", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "Frontend", "Dinamikus Weboldalak", "AdminPanel - Dinamikus", "index.html"))
-})
-
-
+router.get(
+  "/AdminPanel",
+  AuthMiddleware,
+  AuthorizaitionMiddleware,
+  (req, res) => {
+    res.sendFile(
+      path.join(
+        __dirname,
+        "..",
+        "Frontend",
+        "Dinamikus Weboldalak",
+        "AdminPanel - Dinamikus",
+        "index.html"
+      )
+    );
+  }
+);
+    
 
 //KoktelParam
 let KoktelID;
@@ -162,6 +182,7 @@ router.get('/Koktel/:koktelID', (req, res) => {
 //!API endpoints
 app.use('/', router);
 const endpoints = require('./api/api.js');
+const cookieParser = require('cookie-parser');
 app.use('/api', endpoints);
 
 //!Szerver futtatása
