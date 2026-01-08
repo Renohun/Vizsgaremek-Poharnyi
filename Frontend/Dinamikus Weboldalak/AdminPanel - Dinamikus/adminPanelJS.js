@@ -22,6 +22,10 @@ document.addEventListener("DOMContentLoaded", () =>
 
         jelentesekDocument.addEventListener("click", () => 
             {
-                
+                (async() => 
+                    {
+                        const rows = await POSTfetch("http://127.0.0.1:3000/api/AdminPanel/jelentesek")
+                        console.log(rows)
+                    })()
             })
     })

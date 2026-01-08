@@ -132,8 +132,7 @@ router.post("/jelentesek", (req,res) =>
             authenticationMiddleware
             authorizationMiddelware
 
-            const query = "SELECT * FROM jelentesek"
-            DBconnetion.query(query, async(err,rows) => 
+            DBconnetion.query(query + kommentjel + felhjel + kokteljel, async(err,rows) => 
                 {
                     if(err)
                         {
