@@ -70,8 +70,8 @@ console.log(process.env)
 const express = require('express'); //?npm install express
 const path = require('path');
 const cookie_parser = require("cookie-parser")
-const AuthMiddleware = require("./api/authentication_Util.js")
-const AuthorizaitionMiddleware = require("./api/authorizationUtil.js")
+const authenticationMiddleware = require("./api/authenticationMiddleware.js")
+const authorizationMiddelware = require("./api/authorizationMiddelware.js")
 
 //!Beállítások
 const app = express();
@@ -130,7 +130,7 @@ router.get('/Keszites', (req, res) => {
 
 //Kijelentkezes
 //TODO POST-ra atirni
-router.get("/Kijelentkezes", AuthMiddleware, (req,res)=>{
+router.get("/Kijelentkezes", authenticationMiddleware, (req,res)=>{
     res.clearCookie("auth_token",{
         httpOnly:"true",
         secure: process.env.COOKIE_SECURE === "true",
@@ -150,25 +150,11 @@ router.get('/Adatlap', (req, res) => {
 });
 //AdminPanel - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/AdminPanel - Dinamikus')));
-router.get(
-  "/AdminPanel",
-  AuthMiddleware,
-  AuthorizaitionMiddleware,
-  (req, res) => {
-    res.sendFile(
-      path.join(
-        __dirname,
-        "..",
-        "Frontend",
-        "Dinamikus Weboldalak",
-        "AdminPanel - Dinamikus",
-        "index.html"
-      )
-    );
+router.get("/AdminPanel", authenticationMiddleware, authorizationMiddelware, (req, res) => {
+    res.sendFile(path.join(__dirname,"..","Frontend","Dinamikus Weboldalak","AdminPanel - Dinamikus","index.html"));
   }
 );
     
-
 //KoktelParam
 let KoktelID;
 

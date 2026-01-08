@@ -3,6 +3,8 @@ const DBconnetion = require('../database.js');
 const argon = require('argon2');
 const router = express.Router();
 const JWT = require("jsonwebtoken")
+const authenticationMiddleware = require("./authenticationMiddleware.js")
+const authorizationMiddelware = require("./authorizationMiddelware.js")
 
 router.get('/test', (req, res) => {
     DBconnetion.query('SELECT * FROM felhasználó', (err, rows) => {
@@ -121,6 +123,36 @@ router.post('/belepes', async (request, response) => {
         console.log('Valami egyeb hiba tortent: ' + err);
     }
 });
+
+//jelentesek endpoint
+router.post("/jelentesek", (req,res) => 
+    {
+        try
+        {
+            authenticationMiddleware
+            authorizationMiddelware
+
+            const query = "SELECT * FROM jelentesek"
+            DBconnetion.query(query, async(err,rows) => 
+                {
+                    if(err)
+                        {
+                            res.status(500).json(
+                                {
+                                    message: "Adatbazios hiba",
+                                    error: err
+                                })
+                        }
+                })
+        }
+        catch(err)
+        {
+            res.status(500).json({
+                message: "Hibas vegpont eleres",
+                error: err
+            })
+        }
+    })
 
 //
 //
