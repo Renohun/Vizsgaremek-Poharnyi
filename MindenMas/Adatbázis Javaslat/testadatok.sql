@@ -89,7 +89,6 @@ VALUES
 
 --Jelentésnél
 -- 0: Feljegyezve
--- 1: Vizsgálat alatt
 -- 2: Elfogadva
 -- 3: Elutasítva
 

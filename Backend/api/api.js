@@ -125,24 +125,50 @@ router.post('/belepes', async (request, response) => {
 });
 
 //jelentesek endpoint
-router.post("/jelentesek", (req,res) => 
+router.post("/jelentesek",authenticationMiddleware, authorizationMiddelware, async(req,res) => 
     {
         try
         {
-            authenticationMiddleware
-            authorizationMiddelware
+            let query="SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota, JelentoID, JelentettID FROM jelentesek WHERE JelentesAllapota LIKE 0"
+            let kommentjel="SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?"
+            let felhjel="SELECT FelhID, Felhasználónév FROM felhasználó WHERE FelhID LIKE ?"
+            let kokteljel="SELECT * FROM koktél WHERE KoktélID LIKE ?"
+            //Adattárolók
+            let jelentesek=[]
+            let komment=[]
+            let koktel=[]
+            let ember=[]
 
-            DBconnetion.query(query + kommentjel + felhjel + kokteljel, async(err,rows) => 
-                {
-                    if(err)
-                        {
-                            res.status(500).json(
-                                {
-                                    message: "Adatbazios hiba",
-                                    error: err
-                                })
-                        }
-                })
+
+            await DBconnetion.promise().query(query).then(([rows]) => {
+            jelentesek.push(rows)
+            })
+
+            console.log(jelentesek[0]);
+            for (let i = 0; i < jelentesek[0].length; i++) 
+            {
+                if (jelentesek[0][i].JelentesTipusa=="Koktél") {
+                    await DBconnetion.promise().query(kokteljel,jelentesek[0][i].JelentettTartalomID).then(([rows]) => {
+                        koktel.push(rows)
+                    })
+                }
+                else if(jelentesek[0][i].JelentesTipusa=="Felhasználó"){
+                    await DBconnetion.promise().query(felhjel,jelentesek[0][i].JelentettTartalomID).then(([rows]) => {
+                        ember.push(rows)
+                    })
+                }
+                else{
+                    await DBconnetion.promise().query(kommentjel,jelentesek[0][i].JelentettTartalomID).then(([rows]) => {
+                        komment.push(rows)
+                    })
+                }
+            } 
+
+            res.status(200).json({
+                kommentek: komment,
+                koktelok: koktel,
+                felhasznalok: ember
+            })
         }
         catch(err)
         {
