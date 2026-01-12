@@ -101,7 +101,7 @@ async function KedvencekLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/"+1)
     let kulsoertek=0
     let sorszam=Math.round((valasz.adat.length/4)+0.5)
-    let hova=document.getElementById("kedvencoldal")
+    let hova=document.getElementById("IdeKedvenc")
     hova.innerHTML=""
     for (let i = 0; i < sorszam; i++) 
     {
@@ -197,7 +197,7 @@ async function KoktelokLekeres() {
     console.log(valasz);
     let kulsoertek=0
     let sorszam=Math.round((valasz.adat.length/4)+0.5)
-    let hova=document.getElementById("kokteloldal")
+    let hova=document.getElementById("IdeSaját")
     hova.innerHTML=""
     for (let i = 0; i < sorszam; i++) 
     {
@@ -277,7 +277,7 @@ async function JelentesekLekeres() {
 async function KosarLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/"+1)
     console.log(valasz.kosár);
-    let hova=document.getElementById("kosároldal")
+    let hova=document.getElementById("IdeKosár")
     hova.innerHTML=""
     let összár=0
     for (let i = 0; i < valasz.kosár.length; i++) {
@@ -299,9 +299,10 @@ function betoltes(oldal){
 }
 function undo(){
     try {
+        AdatlapLekeres()
         alert("Sikeres Törlés")
     } 
     catch (error) {
-        
+        alert("Hiba történt!")
     }
 }
