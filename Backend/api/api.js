@@ -254,8 +254,8 @@ router.get("/AdatlapLekeres/Koktelok/:id",async(request,response)=>{
 
     //A Lekérés definiálása
     let query1="SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?"
-    let query2="SELECT AVG(Ertekeles) from ertekeles where HovaIrták like ?"
-    let query3="SELECT Count(HovaIrták) from komment where HovaIrták like ?"
+    let query2="SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ?"
+    let query3="SELECT Count(HovaIrták) as KommNum from komment where HovaIrták like ?"
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     let felhaszanalo = request.params.id
     let kokteladatok

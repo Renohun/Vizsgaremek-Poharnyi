@@ -99,15 +99,10 @@ async function AdatlapLekeres(){
 }
 async function KedvencekLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/"+1)
-    //Ideiglenes Számolás a soroknak. További adatok kellenek a tényleges "Stressz Teszthez"
-    console.log(valasz.adat.length);
-    console.log(valasz.adat.length/4);
-    console.log(valasz.adat.length/4+0.5);
-    console.log(Math.round(valasz.adat.length/4));
-    console.log(Math.round((valasz.adat.length/4)+0.5));
     let kulsoertek=0
     let sorszam=Math.round((valasz.adat.length/4)+0.5)
     let hova=document.getElementById("kedvencoldal")
+    hova.innerHTML=""
     for (let i = 0; i < sorszam; i++) 
     {
         let sor=document.createElement("div")
@@ -148,7 +143,7 @@ async function KedvencekLekeres() {
                 //Van-e értékelés
                 if (valasz.ertek[kulsoertek][0].Osszert!=null) 
                 {
-                    koktelErtekeles.innerHTML=`Értékelés:${valasz.ertek[kulsoertek][0].Osszert}/5`
+                    koktelErtekeles.innerHTML=`Értékelés:${Math.round(valasz.ertek[kulsoertek][0].Osszert * 10) / 10}/5`
                 }
                 else
                 {
@@ -188,27 +183,113 @@ async function KedvencekLekeres() {
             }
             else
             {
-
+                let koktelDiv=document.createElement("div")
+                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                sor.appendChild(koktelDiv)
+            }
+            hova.appendChild(sor)
+        }
+    }
+}
+async function KoktelokLekeres() {
+    console.log("Koktél");
+    const valasz=await AdatGet("/api/AdatlapLekeres/Koktelok/"+2)
+    console.log(valasz);
+    let kulsoertek=0
+    let sorszam=Math.round((valasz.adat.length/4)+0.5)
+    let hova=document.getElementById("kokteloldal")
+    hova.innerHTML=""
+    for (let i = 0; i < sorszam; i++) 
+    {
+        let sor=document.createElement("div")
+        sor.classList.add("row","justify-content-center")
+        let maxertek=4+i*4
+        for (kulsoertek; kulsoertek < maxertek; kulsoertek++) 
+        {
+            if (valasz.adat[kulsoertek]!=null) {
+                //elemek létrehozása
+                let koktelDiv=document.createElement("div")
+                let koktelCard=document.createElement("div")
+                let koktelKep=document.createElement("img") //Pathinget ki kell még találni
+                let koktelTartalom=document.createElement("div")
+                let koktelNev=document.createElement("h4")
+                let koktelErtekeles=document.createElement("div")
+                let koktelKomment=document.createElement("div")
+                let koktelOldal=document.createElement("input")
+                //bootstrap és css elemek megadása
+                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                koktelCard.classList.add("card","h-100")
+                koktelKep.classList.add("card-img-top","kep")
+                koktelTartalom.classList.add("card-body")
+                koktelNev.classList.add("card-title")
+                koktelOldal.classList.add("btn","btn-secondary")
+                //értékek megadása
+                koktelKep.setAttribute("src",valasz.adat[kulsoertek].BoritoKepUtvonal)
+                koktelKep.setAttribute("alt","Itt a koktélnak kéne megjelennie teljes gyönyörében.. de nincs itt.")
+                koktelKep.setAttribute("title",`így néz ki egy ${valasz.adat[kulsoertek].KoktelCim}`)
+                koktelNev.innerHTML=valasz.adat[kulsoertek].KoktelCim
+                koktelOldal.setAttribute("type","button")
+                koktelOldal.setAttribute("value","Tovább a Receptre")
+                //Van-e értékelés
+                if (valasz.ertek[kulsoertek][0].Osszert!=null) 
+                {
+                    koktelErtekeles.innerHTML=`Értékelés:${Math.round(valasz.ertek[kulsoertek][0].Osszert * 10) / 10}/5`
+                }
+                else
+                {
+                     koktelErtekeles.innerHTML="Nincs még értékelés!"
+                }
+                //Van-e komment
+                if (valasz.kommnum[kulsoertek][0].Kommnum!=0) 
+                {
+                    koktelKomment.innerHTML=`Kommentek Száma:${valasz.kommnum[kulsoertek][0].KommNum}`
+                }
+                else
+                {
+                    koktelKomment.innerHTML="Nincs még komment!"
+                }
+                //feltöltés
+                koktelCard.appendChild(koktelKep)
+                koktelTartalom.appendChild(koktelNev)
+                koktelTartalom.appendChild(koktelErtekeles)
+                koktelTartalom.appendChild(koktelKomment)
+                koktelTartalom.appendChild(koktelOldal)
+                koktelCard.appendChild(koktelTartalom)
+                koktelDiv.appendChild(koktelCard)
+                sor.appendChild(koktelDiv)
+            }
+            else
+            {
+                let koktelDiv=document.createElement("div")
+                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                sor.appendChild(koktelDiv)
             }
             hova.appendChild(sor)
         }
     }
     
 }
-async function KoktelokLekeres() {
-    console.log("Koktél");
-    const valasz=await AdatGet("/api/AdatlapLekeres/Koktelok/"+2)
-    
-}
 async function JelentesekLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Jelentesek/"+2)
-    console.log("Jelentés");
+    console.log(valasz);
     
 }
 async function KosarLekeres() {
-    const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/"+2)
-    console.log("Kosár");
-    
+    const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/"+1)
+    console.log(valasz.kosár);
+    let hova=document.getElementById("kosároldal")
+    hova.innerHTML=""
+    let összár=0
+    for (let i = 0; i < valasz.kosár.length; i++) {
+        let kosárDiv=document.createElement("div")
+        kosárDiv.classList.add("card")
+        kosárDiv.innerHTML=`${valasz.termekek[i].TermekCim} ${valasz.termekek[i].TermekLeiras} Mennyiség:${valasz.kosár[i].Darabszam} Egységár:${valasz.kosár[i].EgysegAr} Összár:${valasz.kosár[i].EgysegAr*valasz.kosár[i].Darabszam}`
+        összár+=parseInt(valasz.kosár[i].EgysegAr*valasz.kosár[i].Darabszam)
+        hova.appendChild(kosárDiv)
+    }
+    let kosárÖsszeg=document.createElement("div")
+    kosárÖsszeg.innerHTML="Összesen:"+összár
+    hova.appendChild(kosárÖsszeg)
 }
 
 function betoltes(oldal){
