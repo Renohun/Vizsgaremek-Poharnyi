@@ -294,19 +294,17 @@ router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
     }
 });
 
-router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
+router.get("/AdatlapLekeres/Jelentesek/:id",async(request,response)=>{
+
     //A Lekérések definiálása
-    let query =
-        'SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentoID LIKE ?';
-    let kommentjel = 'SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?';
-    let felhjel = 'SELECT Felhasználónév FROM felhasználó WHERE FelhID LIKE ?';
-    let kokteljel = 'SELECT KoktelCim,Keszito FROM koktél WHERE KoktélID LIKE ?';
+    let query="SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentoID LIKE ?"
+    let kommentjel="SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?"
+    let felhjel="SELECT Felhasználónév FROM felhasználó WHERE FelhID LIKE ?"
+    let kokteljel="SELECT KoktelCim,Keszito FROM koktél WHERE KoktélID LIKE ?"
     //Adattárolók
-    let felhaszanalo = request.params.id;
-    let jelentesek = [];
-    let komment = [];
-    let koktel = [];
-    let ember = [];
+    let felhaszanalo=request.params.id
+    let jelentesek=[]
+    let jelentTar=[]
     //Lekérdezés
     try {
         await DBconnetion.promise()
@@ -315,34 +313,38 @@ router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
                 jelentesek.push(rows);
             });
         console.log(jelentesek[0]);
-        for (let i = 0; i < jelentesek[0].length; i++) {
-            if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
-                await DBconnetion.promise()
-                    .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
-                    .then(([rows]) => {
-                        koktel.push(rows);
-                    });
-            } else if (jelentesek[0][i].JelentesTipusa == 'Felhasználó') {
-                await DBconnetion.promise()
-                    .query(felhjel, jelentesek[0][i].JelentettTartalomID)
-                    .then(([rows]) => {
-                        ember.push(rows);
-                    });
-            } else {
-                await DBconnetion.promise()
-                    .query(kommentjel, jelentesek[0][i].JelentettTartalomID)
-                    .then(([rows]) => {
-                        komment.push(rows);
-                    });
+        for (let i = 0; i < jelentesek[0].length; i++) 
+        {
+            //Ideiglenesen üresen létrehozzuk a helyét a jelentésnek a sorrend megtartása érdekében
+            jelentTar.push("")
+            if (jelentesek[0][i].JelentesTipusa=="Koktél") {
+                await DBconnetion.promise().query(kokteljel,jelentesek[0][i].JelentettTartalomID).then(([rows]) => {
+                    //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                    jelentTar[i]=rows
+                })
+            }
+            else if(jelentesek[0][i].JelentesTipusa=="Felhasználó"){
+                await DBconnetion.promise().query(felhjel,jelentesek[0][i].JelentettTartalomID).then(([rows]) => {
+                    //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                    jelentTar[i]=rows
+                })
+            }
+            else{
+                await DBconnetion.promise().query(kommentjel,jelentesek[0][i].JelentettTartalomID).then(([rows]) => {
+                    //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                    jelentTar[i]=rows
+                })
             }
         }
 
         //sorrendbe rendezve..
         response.status(200).json({
-            message: 'siker!',
-            adat: jelentesek
-        });
-    } catch (error) {
+            message:"siker!",
+            adat:jelentesek,
+            rep:jelentTar
+        })
+    } 
+    catch (error) {
         response.status(500).json({
             message: 'Hiba',
             hiba: error
