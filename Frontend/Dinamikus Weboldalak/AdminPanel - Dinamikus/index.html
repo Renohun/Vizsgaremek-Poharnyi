@@ -97,21 +97,30 @@
                         <a class="link-dark fs-5" name="koktelokKezelese">Koktelok feltoltese</a>
                     </div>
                 </div>
-                <div
-                    name="jelentesekKezelese"
-                    class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5 d-flex flex-column align-items-center"
-                >
-                    <div class="row d-flex flex-row" id="jelentesekSora">
-                        <input type="button" value="Felhasznalok" class="btn btn-success text-white p-3" />
-                        <input type="button" value="Koktelok" class="btn btn-success text-white p-3" />
-                        <input type="button" value="Kommentek" class="btn btn-success text-white p-3" />
+                <div name="jelentesekKezelese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5">
+                    <div class="row d-flex justify-content-around flex-row">
+                        <input
+                            type="button"
+                            id="felhasznalokJelentesei"
+                            value="Felhasznalok"
+                            class="btn btn-success text-white p-3 col-3"
+                        />
+                        <input
+                            type="button"
+                            id="koktelokJelentesei"
+                            value="Koktelok"
+                            class="btn btn-success text-white p-3 col-3"
+                        />
+                        <input
+                            type="button"
+                            id="kommentekJelentesei"
+                            value="Kommentek"
+                            class="btn btn-success text-white p-3 col-3"
+                        />
                     </div>
+                    <div class="row justify-content-center" id="jelentesekCard"></div>
                 </div>
-                <div
-                    hidden="true"
-                    name="koktelokKezelese"
-                    class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5 d-none d-flex flex-column align-items-center"
-                >
+                <div hidden="true" name="koktelokKezelese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5">
                     <p>asd</p>
                 </div>
             </div>

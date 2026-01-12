@@ -123,11 +123,11 @@ router.post('/belepes', async (request, response) => {
     }
 });
 
-//jelentesek endpoint
+//AdminPanel - jelentesek endpoint
 router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
         let query =
-            'SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota, JelentoID, JelentettID FROM jelentesek WHERE JelentesAllapota LIKE 0';
+            'SELECT JelentesID, JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota, JelentoID, JelentettID FROM jelentesek WHERE JelentesAllapota LIKE 0';
         let kommentjel = 'SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?';
         let felhjel = 'SELECT FelhID, Felhasználónév FROM felhasználó WHERE FelhID LIKE ?';
         let kokteljel = 'SELECT * FROM koktél WHERE KoktélID LIKE ?';
@@ -143,24 +143,26 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
                 jelentesek.push(rows);
             });
 
-        console.log(jelentesek[0]);
         for (let i = 0; i < jelentesek[0].length; i++) {
             if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
                 await DBconnetion.promise()
                     .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
                     .then(([rows]) => {
+                        koktel.push(jelentesek[0][i].JelentesID);
                         koktel.push(rows);
                     });
             } else if (jelentesek[0][i].JelentesTipusa == 'Felhasználó') {
                 await DBconnetion.promise()
                     .query(felhjel, jelentesek[0][i].JelentettTartalomID)
                     .then(([rows]) => {
+                        ember.push(jelentesek[0][i].JelentesID);
                         ember.push(rows);
                     });
             } else {
                 await DBconnetion.promise()
                     .query(kommentjel, jelentesek[0][i].JelentettTartalomID)
                     .then(([rows]) => {
+                        komment.push(jelentesek[0][i].JelentesID);
                         komment.push(rows);
                     });
             }
@@ -178,7 +180,85 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
         });
     }
 });
+//AdnminPanel - jelentesek - elfogadas
+router.post(
+    '/AdminPanel/jelentesek/elfogadas/:jelentesID',
+    authenticationMiddleware,
+    authorizationMiddelware,
+    (req, res) => {
+        try {
+            const { jelentesID } = req.params;
 
+            const tipusQuery = 'SELECT JelentesTipusa FROM jelentesek WHERE JelentesID LIKE ?';
+
+            DBconnetion.query(tipusQuery, [jelentesID], (err, rowsTipus) => {
+                if (err) {
+                    res.status(500).json({ message: 'Nincs ilyen felhasznalo', error: err });
+                } else {
+                    const query = 'UPDATE Jelentesek SET JelentesAllapota = 2 WHERE JelentesID LIKE ?';
+                    DBconnetion.query(query, [jelentesID], (err) => {
+                        if (err) {
+                            res.status(500).json({
+                                error: err,
+                                message: 'Adatbazissal kapcsolatos hiba tortent!'
+                            });
+                        } else {
+                            res.status(200).json({
+                                message: 'Adat megvaltoztatva sikeresen',
+                                tipus: rowsTipus,
+                                bool: true
+                            });
+                        }
+                    });
+                }
+            });
+        } catch (err) {
+            res.status(500).json({
+                error: err
+            });
+        }
+    }
+);
+//AdminPanel - Jelentesek - elutasitasa
+router.post(
+    '/AdminPanel/jelentesek/elutasitas/:jelentesID',
+    authenticationMiddleware,
+    authorizationMiddelware,
+    (req, res) => {
+        try {
+            const { jelentesID } = req.params;
+
+            const tipusQuery = 'SELECT JelentesTipusa FROM jelentesek WHERE JelentesID LIKE ?';
+
+            DBconnetion.query(tipusQuery, [jelentesID], (err, rowsTipus) => {
+                if (err) {
+                    res.status(500).json({ message: 'Nincs ilyen felhasznalo', error: err });
+                } else {
+                    const query = 'UPDATE Jelentesek SET JelentesAllapota = 3 WHERE JelentesID LIKE ?';
+                    DBconnetion.query(query, [jelentesID], (err) => {
+                        if (err) {
+                            res.status(500).json({
+                                error: err,
+                                message: 'Adatbazissal kapcsolatos hiba tortent!'
+                            });
+                        } else {
+                            res.status(200).json({
+                                message: 'Adat megvaltoztatva sikeresen',
+                                tipus: rowsTipus,
+                                bool: true
+                            });
+                        }
+                    });
+                }
+            });
+            //Imadom amikor elirok 1 darab betut, amit nem veszek eszre egy jo 30percig es megy a hajtovadaszat
+        } catch (err) {
+            res.status(500).json({
+                error: err
+            });
+        }
+    }
+);
 //
 //
 //

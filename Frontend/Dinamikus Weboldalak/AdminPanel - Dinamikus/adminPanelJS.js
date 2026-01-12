@@ -15,46 +15,200 @@ async function POSTfetch(url, obj) {
     }
 }
 
+async function elutasitasGombFv() {
+    const result = await POSTfetch(
+        'http://127.0.0.1:3000/api/AdminPanel/jelentesek/elutasitas/' + this.dataset.jelentesID
+    );
+    //console.log(result);
+    if (result.bool == true) {
+        console.log(result.tipus[0].JelentesTipusa);
+        if (result.tipus[0].JelentesTipusa == 'Koktél') {
+            document.getElementById('koktelokJelentesei').click();
+        } else if (result.tipus[0].JelentesTipusa == 'Komment') {
+            document.getElementById('kommentekJelentesei').click();
+        } else if (result.tipus[0].JelentesTipusa == 'Felhasználó') {
+            document.getElementById('felhasznalokJelentesei').click();
+        }
+    } else {
+        alert('Valami tortent az adat megvaltoztatasaval');
+    }
+}
+async function elfogadasGombFv() {
+    const result = await POSTfetch(
+        'http://127.0.0.1:3000/api/AdminPanel/jelentesek/elfogadas/' + this.dataset.jelentesID
+    );
+    //console.log(result);
+    if (result.bool == true) {
+        console.log(result.tipus[0].JelentesTipusa);
+        if (result.tipus[0].JelentesTipusa == 'Koktél') {
+            document.getElementById('koktelokJelentesei').click();
+        } else if (result.tipus[0].JelentesTipusa == 'Komment') {
+            document.getElementById('kommentekJelentesei').click();
+        } else if (result.tipus[0].JelentesTipusa == 'Felhasználó') {
+            document.getElementById('felhasznalokJelentesei').click();
+        }
+    } else {
+        alert('Valami tortent az adat megvaltoztatasaval');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const jelentesekDocument = document.getElementsByName('jelentesekKezelese');
     const koktelDocument = document.getElementsByName('koktelokKezelese');
 
     jelentesekDocument[0].addEventListener('click', () => {
-        jelentesekDocument[1].removeAttribute('hidden', 'hidden');
-        koktelDocument[1].setAttribute('hidden', 'hidden');
-        /*(async () => {
+        jelentesekDocument[1].removeAttribute('hidden', 'true');
+        koktelDocument[1].setAttribute('hidden', 'true');
+    });
+    koktelDocument[0].addEventListener('click', () => {
+        jelentesekDocument[1].setAttribute('hidden', 'true');
+        koktelDocument[1].removeAttribute('hidden', 'true');
+    });
+
+    const felhasznalosJelentesGomb = document.getElementById('felhasznalokJelentesei');
+    const koktelosJelentesGomb = document.getElementById('koktelokJelentesei');
+    const kommentesJelentesGomb = document.getElementById('kommentekJelentesei');
+
+    felhasznalosJelentesGomb.addEventListener('click', () => {
+        const jelentesekSor = document.getElementById('jelentesekCard');
+        jelentesekSor.innerHTML = '';
+        (async () => {
             try {
                 const rows = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/jelentesek');
-                console.log(rows);
+                const jelentesekSor = document.getElementById('jelentesekCard');
+                //Tudtatok hogy a 0 es a 2 az paros szam? mert en nem
+                for (let i = 0; i < rows.felhasznalok.length; i++) {
+                    if (i % 2 != 0) {
+                        let ujOszlop = document.createElement('div');
+                        ujOszlop.classList.add(
+                            'col-8',
+                            'col-sm-7',
+                            'col-md-6',
+                            'col-lg-6',
+                            'col-xl-3',
+                            'col-xxl-3',
+                            'mb-1'
+                        );
+                        jelentesekSor.appendChild(ujOszlop);
 
-                const jelentesSor = document.getElementById('jelentesekSora');
+                        let elutasitasGomb = document.createElement('input');
+                        elutasitasGomb.setAttribute('type', 'button');
+                        elutasitasGomb.classList.add('btn');
+                        elutasitasGomb.classList.add('btn-danger');
+                        elutasitasGomb.setAttribute('value', 'Elutasitas');
+                        elutasitasGomb.dataset.jelentesID = rows.felhasznalok[i - 1];
+                        ujOszlop.appendChild(elutasitasGomb);
+                        elutasitasGomb.addEventListener('click', elutasitasGombFv);
 
-                for (let i = 0; i < rows.koktelok.length; i++) {
-                    let ujOszlop = document.createElement('div');
-                    ujOszlop.classList.add('col-3');
-                    jelentesSor.appendChild(ujOszlop);
-
-                    let elutasitasGomb = document.createElement('input');
-                    elutasitasGomb.setAttribute('type', 'button');
-                    elutasitasGomb.classList.add('btn');
-                    elutasitasGomb.classList.add('btn-danger');
-                    elutasitasGomb.innerText = 'Elutasitas';
-                    ujOszlop.appendChild(elutasitasGomb);
-
-                    let elfogadasGomb = document.createElement('input');
-                    elfogadasGomb.setAttribute('type', 'button');
-                    elfogadasGomb.classList.add('btn');
-                    elfogadasGomb.classList.add('btn-success');
-                    elfogadasGomb.innerText = 'Elfogadas';
-                    ujOszlop.appendChild(elfogadasGomb);
+                        let elfogadasGomb = document.createElement('input');
+                        elfogadasGomb.setAttribute('type', 'button');
+                        elfogadasGomb.classList.add('btn');
+                        elfogadasGomb.classList.add('btn-success');
+                        elfogadasGomb.setAttribute('value', 'Elfogadas');
+                        elfogadasGomb.dataset.jelentesID = rows.felhasznalok[i - 1];
+                        ujOszlop.appendChild(elfogadasGomb);
+                        elfogadasGomb.addEventListener('click', elfogadasGombFv);
+                    }
                 }
             } catch (err) {
                 console.error(err);
             }
-        })();*/
+        })();
     });
-    koktelDocument[0].addEventListener('click', () => {
-        jelentesekDocument[1].setAttribute('hidden', 'hidden');
-        koktelDocument[1].removeAttribute('hidden', 'hidden');
+
+    koktelosJelentesGomb.addEventListener('click', () => {
+        const jelentesekSor = document.getElementById('jelentesekCard');
+        jelentesekSor.innerHTML = '';
+        (async () => {
+            try {
+                const rows = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/jelentesek');
+
+                const jelentesekSor = document.getElementById('jelentesekCard');
+                //Tudtatok hogy a 0 es a 2 az paros szam? mert en nem
+                for (let i = 0; i < rows.koktelok.length; i++) {
+                    if (i % 2 != 0) {
+                        let ujOszlop = document.createElement('div');
+                        ujOszlop.classList.add(
+                            'col-8',
+                            'col-sm-7',
+                            'col-md-6',
+                            'col-lg-6',
+                            'col-xl-3',
+                            'col-xxl-3',
+                            'mb-1'
+                        );
+                        jelentesekSor.appendChild(ujOszlop);
+
+                        let elutasitasGomb = document.createElement('input');
+                        elutasitasGomb.setAttribute('type', 'button');
+                        elutasitasGomb.classList.add('btn');
+                        elutasitasGomb.classList.add('btn-danger');
+                        elutasitasGomb.setAttribute('value', 'Elutasitas');
+                        elutasitasGomb.dataset.jelentesID = rows.koktelok[i - 1];
+                        ujOszlop.appendChild(elutasitasGomb);
+                        elutasitasGomb.addEventListener('click', elutasitasGombFv);
+
+                        let elfogadasGomb = document.createElement('input');
+                        elfogadasGomb.setAttribute('type', 'button');
+                        elfogadasGomb.classList.add('btn');
+                        elfogadasGomb.classList.add('btn-success');
+                        elfogadasGomb.setAttribute('value', 'Elfogadas');
+                        elfogadasGomb.dataset.jelentesID = rows.koktelok[i - 1];
+                        ujOszlop.appendChild(elfogadasGomb);
+                        elfogadasGomb.addEventListener('click', elfogadasGombFv);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        })();
+    });
+
+    kommentesJelentesGomb.addEventListener('click', () => {
+        const jelentesekSor = document.getElementById('jelentesekCard');
+        jelentesekSor.innerHTML = '';
+        (async () => {
+            try {
+                const rows = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/jelentesek');
+
+                const jelentesekSor = document.getElementById('jelentesekCard');
+                //Tudtatok hogy a 0 es a 2 az paros szam? mert en nem
+                for (let i = 0; i < rows.kommentek.length; i++) {
+                    if (i % 2 != 0) {
+                        let ujOszlop = document.createElement('div');
+                        ujOszlop.classList.add(
+                            'col-8',
+                            'col-sm-7',
+                            'col-md-6',
+                            'col-lg-6',
+                            'col-xl-3',
+                            'col-xxl-3',
+                            'mb-1'
+                        );
+                        jelentesekSor.appendChild(ujOszlop);
+
+                        let elutasitasGomb = document.createElement('input');
+                        elutasitasGomb.setAttribute('type', 'button');
+                        elutasitasGomb.classList.add('btn');
+                        elutasitasGomb.classList.add('btn-danger');
+                        elutasitasGomb.setAttribute('value', 'Elutasitas');
+                        elutasitasGomb.dataset.jelentesID = rows.kommentek[i - 1];
+                        ujOszlop.appendChild(elutasitasGomb);
+                        elutasitasGomb.addEventListener('click', elutasitasGombFv);
+
+                        let elfogadasGomb = document.createElement('input');
+                        elfogadasGomb.setAttribute('type', 'button');
+                        elfogadasGomb.classList.add('btn');
+                        elfogadasGomb.classList.add('btn-success');
+                        elfogadasGomb.setAttribute('value', 'Elfogadas');
+                        elfogadasGomb.dataset.jelentesID = rows.kommentek[i - 1];
+                        ujOszlop.appendChild(elfogadasGomb);
+                        elfogadasGomb.addEventListener('click', elfogadasGombFv);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        })();
     });
 });

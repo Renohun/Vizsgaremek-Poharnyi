@@ -34,5 +34,5 @@ GET http://127.0.0.1:3000/api/AdatlapLekeres/Kosar/1
 Content-Type: application/json
 
 ###
-POST http://127.0.0.1:3000/api/jelentesek
+POST http://127.0.0.1:3000/api/AdminPanel/jelentesek
 Content-Type: application/json
