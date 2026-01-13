@@ -128,13 +128,13 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
     try {
         let query =
             'SELECT JelentesID, JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota, JelentoID, JelentettID FROM jelentesek WHERE JelentesAllapota LIKE 0';
-        let kommentjel = 'SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?';
+        let kommentjel =
+            'SELECT Keszito,Tartalom FROM komment INNER JOIN felhasználó ON felhasználó.FelhID = komment.Keszito WHERE KommentID LIKE ?';
         let felhjel = 'SELECT FelhID, Felhasználónév FROM felhasználó WHERE FelhID LIKE ?';
-        let kokteljel = 'SELECT * FROM koktél WHERE KoktélID LIKE ?';
-        let koktelOsszetevok = "SELECT * FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+        let kokteljel =
+            'SELECT koktél.KoktélID, koktél.Keszito, koktél.KeszitesDatuma, koktél.KoktelCim, koktél.Alap, koktél.Recept, koktelokosszetevoi.Osszetevő, felhasználó.FelhasználóNév FROM koktél INNER JOIN koktelokosszetevoi ON koktél.KoktélID = koktelokosszetevoi.KoktélID INNER JOIN felhasználó ON felhasználó.FelhID = koktél.Keszito WHERE koktél.KoktélID LIKE ?';
         //Adattárolók
         let jelentesek = [];
-        let koktelOsszetevokListaja = []
         let komment = [];
         let koktel = [];
         let ember = [];
@@ -147,7 +147,6 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
 
         for (let i = 0; i < jelentesek[0].length; i++) {
             if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
-
                 await DBconnetion.promise()
                     .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
                     .then(([rows]) => {
@@ -377,17 +376,17 @@ router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
     }
 });
 
-router.get("/AdatlapLekeres/Jelentesek/:id",async(request,response)=>{
-
+router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
     //A Lekérések definiálása
-    let query="SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentoID LIKE ?"
-    let kommentjel="SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?"
-    let felhjel="SELECT Felhasználónév FROM felhasználó WHERE FelhID LIKE ?"
-    let kokteljel="SELECT KoktelCim,Keszito FROM koktél WHERE KoktélID LIKE ?"
+    let query =
+        'SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentoID LIKE ?';
+    let kommentjel = 'SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?';
+    let felhjel = 'SELECT Felhasználónév FROM felhasználó WHERE FelhID LIKE ?';
+    let kokteljel = 'SELECT KoktelCim,Keszito FROM koktél WHERE KoktélID LIKE ?';
     //Adattárolók
-    let felhaszanalo=request.params.id
-    let jelentesek=[]
-    let jelentTar=[]
+    let felhaszanalo = request.params.id;
+    let jelentesek = [];
+    let jelentTar = [];
     //Lekérdezés
     try {
         await DBconnetion.promise()
@@ -396,38 +395,40 @@ router.get("/AdatlapLekeres/Jelentesek/:id",async(request,response)=>{
                 jelentesek.push(rows);
             });
         console.log(jelentesek[0]);
-        for (let i = 0; i < jelentesek[0].length; i++) 
-        {
+        for (let i = 0; i < jelentesek[0].length; i++) {
             //Ideiglenesen üresen létrehozzuk a helyét a jelentésnek a sorrend megtartása érdekében
-            jelentTar.push("")
-            if (jelentesek[0][i].JelentesTipusa=="Koktél") {
-                await DBconnetion.promise().query(kokteljel,jelentesek[0][i].JelentettTartalomID).then(([rows]) => {
-                    //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                    jelentTar[i]=rows
-                })
-            }
-            else if(jelentesek[0][i].JelentesTipusa=="Felhasználó"){
-                await DBconnetion.promise().query(felhjel,jelentesek[0][i].JelentettTartalomID).then(([rows]) => {
-                    //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                    jelentTar[i]=rows
-                })
-            }
-            else{
-                await DBconnetion.promise().query(kommentjel,jelentesek[0][i].JelentettTartalomID).then(([rows]) => {
-                    //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                    jelentTar[i]=rows
-                })
+            jelentTar.push('');
+            if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
+                await DBconnetion.promise()
+                    .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
+                    .then(([rows]) => {
+                        //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                        jelentTar[i] = rows;
+                    });
+            } else if (jelentesek[0][i].JelentesTipusa == 'Felhasználó') {
+                await DBconnetion.promise()
+                    .query(felhjel, jelentesek[0][i].JelentettTartalomID)
+                    .then(([rows]) => {
+                        //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                        jelentTar[i] = rows;
+                    });
+            } else {
+                await DBconnetion.promise()
+                    .query(kommentjel, jelentesek[0][i].JelentettTartalomID)
+                    .then(([rows]) => {
+                        //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                        jelentTar[i] = rows;
+                    });
             }
         }
 
         //sorrendbe rendezve..
         response.status(200).json({
-            message:"siker!",
-            adat:jelentesek,
-            rep:jelentTar
-        })
-    } 
-    catch (error) {
+            message: 'siker!',
+            adat: jelentesek,
+            rep: jelentTar
+        });
+    } catch (error) {
         response.status(500).json({
             message: 'Hiba',
             hiba: error
