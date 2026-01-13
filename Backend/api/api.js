@@ -478,6 +478,31 @@ router.get('/AdatlapLekeres/Kosar/:id', async (request, response) => {
         });
     }
 });
+
+router.post('/AdatlapLekeres/Kosarurites',async(request,response)=>{
+    let mit=request.body.tartalom
+    let MelyikKosár="SELECT SessionID FROM kosár WHERE UserID LIKE ?"
+    let MelyikKosárAz
+    let KosárÜrítés="DELETE FROM KosárTermék WHERE KosarID LIKE ?"
+    try {
+        await DBconnetion.promise()
+            .query(MelyikKosár, mit)
+            .then(([rows]) => {
+                MelyikKosárAz = rows[0].SessionID;
+            });
+        await DBconnetion.promise()
+            .query(KosárÜrítés, MelyikKosárAz)
+        response.status(200).json({
+            message: 'Sikeres Törlés!'
+        });
+    } 
+    catch (error) {
+        response.status(500).json({
+            message: 'Hiba Történt!',
+            hiba: error
+        });
+    }
+})
 //
 //
 //

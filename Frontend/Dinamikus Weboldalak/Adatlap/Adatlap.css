@@ -37,3 +37,9 @@ a{
 .paros,.paratlan{
     padding: 20px;
 }
+
+.kosárkép{
+    align-content: center;
+    width: 145px;
+    height: 100px;
+}

@@ -282,14 +282,51 @@ async function KosarLekeres() {
     let összár=0
     for (let i = 0; i < valasz.kosár.length; i++) {
         let kosárDiv=document.createElement("div")
+        let kosárKép=document.createElement("img")
+        let kosárNév=document.createElement("div")
+        let kosárText=document.createElement("div")
+        let kosárDBÁr=document.createElement("div")
+        let kosárÖssz=document.createElement("div")
+
         kosárDiv.classList.add("card")
-        kosárDiv.innerHTML=`${valasz.termekek[i].TermekCim} ${valasz.termekek[i].TermekLeiras} Mennyiség:${valasz.kosár[i].Darabszam} Egységár:${valasz.kosár[i].EgysegAr} Összár:${valasz.kosár[i].EgysegAr*valasz.kosár[i].Darabszam}`
+        kosárDiv.classList.add("col-6","col-sm-7","col-md-3","col-lg-3","col-xl-1","col-xxl-1","mb-1")
+        kosárNév.classList.add("card-title")
+        kosárKép.classList.add("card-img-top","kosárkép")
+        //kosárText.classList.add("card-body")
+
+        kosárNév.innerHTML=`${valasz.termekek[i].TermekCim}`
+        kosárText.innerHTML=`${valasz.termekek[i].TermekLeiras}`
+        kosárDBÁr.innerHTML=`Mennyiség:${valasz.kosár[i].Darabszam}db Egységár:${valasz.kosár[i].EgysegAr}Ft`
+        kosárÖssz.innerHTML=`Összár:${valasz.kosár[i].EgysegAr*valasz.kosár[i].Darabszam}Ft`
+
+        kosárDiv.appendChild(kosárKép)
+        kosárDiv.appendChild(kosárNév)
+        kosárDiv.appendChild(kosárText)
+        kosárDiv.appendChild(kosárDBÁr)
+        kosárDiv.appendChild(kosárÖssz)
+
         összár+=parseInt(valasz.kosár[i].EgysegAr*valasz.kosár[i].Darabszam)
         hova.appendChild(kosárDiv)
     }
     let kosárÖsszeg=document.createElement("div")
     kosárÖsszeg.innerHTML="Összesen:"+összár
     hova.appendChild(kosárÖsszeg)
+    //Kosár kiürítése
+    let ürít=document.getElementById("KosárDelete")
+    ürít.addEventListener("click",()=>{
+        try {
+            //dinamikusan kell a FelhID-t odaadni
+            let mitürít={
+                tartalom:1
+            }
+            AdatPost("/api/AdatlapLekeres/Kosarurites/",mitürít)
+            hova.innerHTML=""
+            alert("Siker!")
+            
+        } catch (error) {
+            alert("Hiba Történt!")
+        }
+    })
 }
 
 function betoltes(oldal){
