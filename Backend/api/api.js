@@ -127,12 +127,14 @@ router.post('/belepes', async (request, response) => {
 router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
         let query =
-            'SELECT JelentesID, JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota, JelentoID, JelentettID FROM jelentesek WHERE JelentesAllapota LIKE 0';
+            'SELECT JelentesID, JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesAllapota LIKE 0';
         let kommentjel =
             'SELECT Keszito,Tartalom FROM komment INNER JOIN felhasználó ON felhasználó.FelhID = komment.Keszito WHERE KommentID LIKE ?';
         let felhjel = 'SELECT FelhID, Felhasználónév FROM felhasználó WHERE FelhID LIKE ?';
         let kokteljel =
-            'SELECT koktél.KoktélID, koktél.Keszito, koktél.KeszitesDatuma, koktél.KoktelCim, koktél.Alap, koktél.Recept, koktelokosszetevoi.Osszetevő, felhasználó.FelhasználóNév FROM koktél INNER JOIN koktelokosszetevoi ON koktél.KoktélID = koktelokosszetevoi.KoktélID INNER JOIN felhasználó ON felhasználó.FelhID = koktél.Keszito WHERE koktél.KoktélID LIKE ?';
+            'SELECT koktél.KoktélID, koktél.Keszito, koktél.KeszitesDatuma, koktél.KoktelCim, koktél.Alap, koktél.Recept, felhasználó.FelhasználóNév FROM koktél INNER JOIN felhasználó ON felhasználó.FelhID = koktél.Keszito WHERE koktél.KoktélID LIKE ?';
+        let koktelOsszeetevokQuery =
+            'SELECT koktelokosszetevoi.Osszetevő FROM koktelokosszetevoi INNER JOIN koktél ON koktél.KoktélID = koktelokosszetevoi.KoktélID WHERE koktél.KoktélID LIKE ?';
         //Adattárolók
         let jelentesek = [];
         let komment = [];
@@ -145,12 +147,27 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
                 jelentesek.push(rows);
             });
 
+        //Tombon beluli tombrol van szo
+        //console.log(jelentesek[0]);
+
         for (let i = 0; i < jelentesek[0].length; i++) {
             if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
+                let koktelOsszevtokTomb = [];
+
+                await DBconnetion.promise()
+                    .query(koktelOsszeetevokQuery, jelentesek[0][i].JelentettTartalomID)
+                    .then(([rows]) => {
+                        //console.log(rowsOsszetecok);
+                        koktelOsszevtokTomb.push(rows);
+                    });
+
                 await DBconnetion.promise()
                     .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
                     .then(([rows]) => {
+                        console.log(rows[0]);
                         koktel.push(jelentesek[0][i].JelentesID);
+                        console.log(koktelOsszevtokTomb);
+                        rows[0].osszetevok = koktelOsszevtokTomb;
                         koktel.push(rows);
                     });
             } else if (jelentesek[0][i].JelentesTipusa == 'Felhasználó') {
@@ -479,30 +496,28 @@ router.get('/AdatlapLekeres/Kosar/:id', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Kosarurites',async(request,response)=>{
-    let mit=request.body.tartalom
-    let MelyikKosár="SELECT SessionID FROM kosár WHERE UserID LIKE ?"
-    let MelyikKosárAz
-    let KosárÜrítés="DELETE FROM KosárTermék WHERE KosarID LIKE ?"
+router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
+    let mit = request.body.tartalom;
+    let MelyikKosár = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
+    let MelyikKosárAz;
+    let KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
     try {
         await DBconnetion.promise()
             .query(MelyikKosár, mit)
             .then(([rows]) => {
                 MelyikKosárAz = rows[0].SessionID;
             });
-        await DBconnetion.promise()
-            .query(KosárÜrítés, MelyikKosárAz)
+        await DBconnetion.promise().query(KosárÜrítés, MelyikKosárAz);
         response.status(200).json({
             message: 'Sikeres Törlés!'
         });
-    } 
-    catch (error) {
+    } catch (error) {
         response.status(500).json({
             message: 'Hiba Történt!',
             hiba: error
         });
     }
-})
+});
 //
 //
 //
