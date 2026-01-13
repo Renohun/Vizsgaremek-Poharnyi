@@ -131,8 +131,10 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
         let kommentjel = 'SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?';
         let felhjel = 'SELECT FelhID, Felhasználónév FROM felhasználó WHERE FelhID LIKE ?';
         let kokteljel = 'SELECT * FROM koktél WHERE KoktélID LIKE ?';
+        let koktelOsszetevok = "SELECT * FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
         //Adattárolók
         let jelentesek = [];
+        let koktelOsszetevokListaja = []
         let komment = [];
         let koktel = [];
         let ember = [];
@@ -145,6 +147,7 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
 
         for (let i = 0; i < jelentesek[0].length; i++) {
             if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
+
                 await DBconnetion.promise()
                     .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
                     .then(([rows]) => {
