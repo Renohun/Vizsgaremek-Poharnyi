@@ -327,24 +327,32 @@ router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
             .then(([rows]) => {
                 kokteladatok = rows;
             });
-        for (let i = 0; i < kokteladatok.length; i++) {
-            await DBconnetion.promise()
-                .query(query2, kokteladatok[i].KoktélID)
-                .then(([rows]) => {
-                    ertekelesek.push(rows);
-                });
-            await DBconnetion.promise()
-                .query(query3, kokteladatok[i].KoktélID)
-                .then(([rows]) => {
-                    osszetevok.push(rows);
-                });
+        if (kokteladatok.length==0) {
+            response.status(200).json({
+                message: 'Nincs Kedvenc!'
+            });
         }
-        response.status(200).json({
-            message: 'siker!',
-            adat: kokteladatok,
-            ertek: ertekelesek,
-            ossztev: osszetevok
-        });
+        else{
+            for (let i = 0; i < kokteladatok.length; i++) {
+                await DBconnetion.promise()
+                    .query(query2, kokteladatok[i].KoktélID)
+                    .then(([rows]) => {
+                        ertekelesek.push(rows);
+                    });
+                await DBconnetion.promise()
+                    .query(query3, kokteladatok[i].KoktélID)
+                    .then(([rows]) => {
+                        osszetevok.push(rows);
+                    });
+            }
+            response.status(200).json({
+                message: 'siker!',
+                adat: kokteladatok,
+                ertek: ertekelesek,
+                ossztev: osszetevok
+            });
+        }
+
     } catch (error) {
         response.status(500).json({
             message: 'Hiba'
@@ -368,24 +376,32 @@ router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
             .then(([rows]) => {
                 kokteladatok = rows;
             });
-        for (let i = 0; i < kokteladatok.length; i++) {
-            await DBconnetion.promise()
-                .query(query2, kokteladatok[i].KoktélID)
-                .then(([rows]) => {
-                    ertekelesek.push(rows);
+            if (kokteladatok.length==0) {
+                response.status(200).json({
+                    message:"Nincs Koktélod!"
+                })
+            }
+            else{
+                for (let i = 0; i < kokteladatok.length; i++) {
+                    await DBconnetion.promise()
+                        .query(query2, kokteladatok[i].KoktélID)
+                        .then(([rows]) => {
+                            ertekelesek.push(rows);
+                        });
+                    await DBconnetion.promise()
+                        .query(query3, kokteladatok[i].KoktélID)
+                        .then(([rows]) => {
+                            kommentek.push(rows);
+                        });
+                }
+                response.status(200).json({
+                    message: 'siker!',
+                    adat: kokteladatok,
+                    ertek: ertekelesek,
+                    kommnum: kommentek
                 });
-            await DBconnetion.promise()
-                .query(query3, kokteladatok[i].KoktélID)
-                .then(([rows]) => {
-                    kommentek.push(rows);
-                });
-        }
-        response.status(200).json({
-            message: 'siker!',
-            adat: kokteladatok,
-            ertek: ertekelesek,
-            kommnum: kommentek
-        });
+            }
+        
     } catch (error) {
         response.status(500).json({
             message: 'Hiba'
@@ -395,23 +411,38 @@ router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
 
 router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
     //A Lekérések definiálása
-    let query =
-        'SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentoID LIKE ?';
+    let mitjelentetto="SELECT JelentésID FROM Jelentők WHERE JelentőID LIKE ?"
+    let query ='SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesID LIKE ?';
     let kommentjel = 'SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?';
     let felhjel = 'SELECT Felhasználónév FROM felhasználó WHERE FelhID LIKE ?';
     let kokteljel = 'SELECT KoktelCim,Keszito FROM koktél WHERE KoktélID LIKE ?';
     //Adattárolók
     let felhaszanalo = request.params.id;
-    let jelentesek = [];
+    let oJelentette;
+    let jelentesek=[];
     let jelentTar = [];
     //Lekérdezés
     try {
         await DBconnetion.promise()
-            .query(query, felhaszanalo)
+            .query(mitjelentetto, felhaszanalo)
             .then(([rows]) => {
-                jelentesek.push(rows);
+                oJelentette=rows;
+        });
+        if (oJelentette.length==0) {
+            response.status(200).json({
+                message:"Nincs Jelentésed!"
+            })
+            
+        }
+        else{
+             for (let i = 0; i < oJelentette.length; i++) {
+            await DBconnetion.promise()
+                .query(query, oJelentette[i].JelentésID)
+                .then(([rows]) => {
+                    jelentesek.push(rows);
             });
-        console.log(jelentesek[0]);
+        }
+
         for (let i = 0; i < jelentesek[0].length; i++) {
             //Ideiglenesen üresen létrehozzuk a helyét a jelentésnek a sorrend megtartása érdekében
             jelentTar.push('');
@@ -445,6 +476,8 @@ router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
             adat: jelentesek,
             rep: jelentTar
         });
+        }
+       
     } catch (error) {
         response.status(500).json({
             message: 'Hiba',

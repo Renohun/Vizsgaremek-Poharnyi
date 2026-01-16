@@ -135,7 +135,7 @@ async function KedvencekLekeres() {
                 //értékek megadása
                 koktelKep.setAttribute("src",valasz.adat[kulsoertek].BoritoKepUtvonal)
                 koktelKep.setAttribute("alt","Itt a koktélnak kéne megjelennie teljes gyönyörében.. de nincs itt.")
-                koktelKep.setAttribute("title",`így néz ki egy ${valasz.adat[kulsoertek].KoktelCim}`)
+                koktelKep.setAttribute("title",`Így néz ki egy ${valasz.adat[kulsoertek].KoktelCim}`)
                 koktelNev.innerHTML=valasz.adat[kulsoertek].KoktelCim
                 koktelOsszetevok.innerHTML="Összetevők:"
                 koktelOldal.setAttribute("type","button")
@@ -271,6 +271,13 @@ async function KoktelokLekeres() {
 }
 async function JelentesekLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Jelentesek/"+2)
+    let hova=document.getElementById("IdeReport")
+    if (valasz.message=="Nincs Jelentésed!") {
+        hova.innerHTML="Nem jelentettél semmit."
+    }
+    else{
+        
+    }
     console.log(valasz);
     
 }
