@@ -1,2 +1,0 @@
-A kommentek és értékelések kapcsolódását a Kommentek és Értékelések táblába rakjuk, ne a Koktélba
-A koktélok összetevőinek egy külön táblát csinálunk.
