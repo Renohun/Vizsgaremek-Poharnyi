@@ -65,13 +65,13 @@ server.listen(port, ip, () => {
     console.log(`http://${ip}:${port}`);
 });*/
 //!Module-ok importálása
-require("dotenv").config()
-console.log(process.env)
+require('dotenv').config();
+//console.log(process.env)
 const express = require('express'); //?npm install express
 const path = require('path');
-const cookie_parser = require("cookie-parser")
-const authenticationMiddleware = require("./api/authenticationMiddleware.js")
-const authorizationMiddelware = require("./api/authorizationMiddelware.js")
+const cookie_parser = require('cookie-parser');
+const authenticationMiddleware = require('./api/authenticationMiddleware.js');
+const authorizationMiddelware = require('./api/authorizationMiddelware.js');
 
 //!Beállítások
 const app = express();
@@ -82,7 +82,7 @@ const port = 3000;
 
 app.use(express.json()); //?Middleware JSON
 app.set('trust proxy', 1); //?Middleware Proxy
-app.use(cookie_parser())
+app.use(cookie_parser());
 
 //!Routing
 //?Főoldal:
@@ -90,7 +90,6 @@ app.use(cookie_parser())
 //A DINAMIKUS MAPPA NEM MŰKÖDIK HA EZ NEM EGY KOMMENT
 //app.use(express.static(path.join(__dirname, '..', 'Frontend', 'templateHTML')));
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/')));
-
 
 router.get('/', (request, response) => {
     response.sendFile(path.join(__dirname, '..', 'Frontend', 'templateHTML', 'Landing Page', 'Landing Page.html'));
@@ -130,17 +129,17 @@ router.get('/Keszites', (req, res) => {
 
 //Kijelentkezes
 //TODO POST-ra atirni
-router.get("/Kijelentkezes", authenticationMiddleware, (req,res)=>{
-    res.clearCookie("auth_token",{
-        httpOnly:"true",
-        secure: process.env.COOKIE_SECURE === "true",
+router.get('/Kijelentkezes', authenticationMiddleware, (req, res) => {
+    res.clearCookie('auth_token', {
+        httpOnly: 'true',
+        secure: process.env.COOKIE_SECURE === 'true',
         sameSite: process.env.COOKIE_SECURE
-    })
+    });
 
     res.status(200).json({
-        message: "Sikeresen kijelentkezve"
-    })
-})
+        message: 'Sikeresen kijelentkezve'
+    });
+});
 
 //Adatok - Dinamikus
 router.get('/Adatlap', (req, res) => {
@@ -150,11 +149,12 @@ router.get('/Adatlap', (req, res) => {
 });
 //AdminPanel - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/AdminPanel - Dinamikus')));
-router.get("/AdminPanel", authenticationMiddleware, authorizationMiddelware, (req, res) => {
-    res.sendFile(path.join(__dirname,"..","Frontend","Dinamikus Weboldalak","AdminPanel - Dinamikus","index.html"));
-  }
-);
-    
+router.get('/AdminPanel', authenticationMiddleware, authorizationMiddelware, (req, res) => {
+    res.sendFile(
+        path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'AdminPanel - Dinamikus', 'index.html')
+    );
+});
+
 //KoktelParam
 let KoktelID;
 

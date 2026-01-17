@@ -128,13 +128,17 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
     try {
         let query =
             'SELECT JelentesID, JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesAllapota LIKE 0 ORDER BY JelentesMennyisege DESC';
+
+        let jelentesIndokaQuery = 'SELECT JelentesIndoka FROM jelentők WHERE JelentésID LIKE ?';
+
         let kommentjel =
-            'SELECT Keszito,Tartalom FROM komment INNER JOIN felhasználó ON felhasználó.FelhID = komment.Keszito WHERE KommentID LIKE ?';
+            'SELECT felhasználó.Felhasználónév, Tartalom FROM komment INNER JOIN felhasználó ON felhasználó.FelhID = komment.Keszito WHERE KommentID LIKE ?';
         let felhjel = 'SELECT FelhID, Felhasználónév, Email, RegisztracioDatuma FROM felhasználó WHERE FelhID LIKE ?';
         let kokteljel =
             'SELECT koktél.KoktélID, koktél.Keszito, koktél.KeszitesDatuma, koktél.KoktelCim, koktél.Alap, koktél.Recept, felhasználó.FelhasználóNév FROM koktél INNER JOIN felhasználó ON felhasználó.FelhID = koktél.Keszito WHERE koktél.KoktélID LIKE ?';
         let koktelOsszeetevokQuery =
             'SELECT koktelokosszetevoi.Osszetevő FROM koktelokosszetevoi INNER JOIN koktél ON koktél.KoktélID = koktelokosszetevoi.KoktélID WHERE koktél.KoktélID LIKE ?';
+        let ErtekelesQuery = 'SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ?';
         //Adattárolók
         let jelentesek = [];
         let komment = [];
@@ -153,6 +157,24 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
         for (let i = 0; i < jelentesek[0].length; i++) {
             if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
                 let koktelOsszevtokTomb = [];
+                let jelentesIndokaTomb = [];
+                let eretekelTomb = [];
+
+                //console.log(jelentesek[0][i].JelentesID);
+
+                await DBconnetion.promise()
+                    .query(ErtekelesQuery, jelentesek[0][i].JelentettTartalomID)
+                    .then(([rows]) => {
+                        //jelentesek[0][i].push(rows);
+                        eretekelTomb.push(rows);
+                    });
+
+                await DBconnetion.promise()
+                    .query(jelentesIndokaQuery, jelentesek[0][i].JelentesID)
+                    .then(([rows]) => {
+                        //console.log(rows);
+                        jelentesIndokaTomb.push(rows);
+                    });
 
                 await DBconnetion.promise()
                     .query(koktelOsszeetevokQuery, jelentesek[0][i].JelentettTartalomID)
@@ -164,24 +186,46 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
                 await DBconnetion.promise()
                     .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
                     .then(([rows]) => {
-                        console.log(rows[0]);
+                        //console.log(rows[0]);
                         koktel.push(jelentesek[0][i].JelentesID);
-                        console.log(koktelOsszevtokTomb);
+                        //console.log(koktelOsszevtokTomb);
+                        rows[0].ertekeles = eretekelTomb;
+                        rows[0].jelentesIndokok = jelentesIndokaTomb;
                         rows[0].osszetevok = koktelOsszevtokTomb;
                         koktel.push(rows);
                     });
             } else if (jelentesek[0][i].JelentesTipusa == 'Felhasználó') {
+                let jelentesIndokaTomb = [];
+
+                await DBconnetion.promise()
+                    .query(jelentesIndokaQuery, jelentesek[0][i].JelentesID)
+                    .then(([rows]) => {
+                        //console.log(rows);
+                        jelentesIndokaTomb.push(rows);
+                    });
+
                 await DBconnetion.promise()
                     .query(felhjel, jelentesek[0][i].JelentettTartalomID)
                     .then(([rows]) => {
                         ember.push(jelentesek[0][i].JelentesID);
+                        rows[0].jelentesIndokok = jelentesIndokaTomb;
                         ember.push(rows);
                     });
             } else {
+                let jelentesIndokaTomb = [];
+
+                await DBconnetion.promise()
+                    .query(jelentesIndokaQuery, jelentesek[0][i].JelentesID)
+                    .then(([rows]) => {
+                        //console.log(rows);
+                        jelentesIndokaTomb.push(rows);
+                    });
+
                 await DBconnetion.promise()
                     .query(kommentjel, jelentesek[0][i].JelentettTartalomID)
                     .then(([rows]) => {
                         komment.push(jelentesek[0][i].JelentesID);
+                        rows[0].jelentesIndokok = jelentesIndokaTomb;
                         komment.push(rows);
                     });
             }
@@ -327,12 +371,11 @@ router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
             .then(([rows]) => {
                 kokteladatok = rows;
             });
-        if (kokteladatok.length==0) {
+        if (kokteladatok.length == 0) {
             response.status(200).json({
                 message: 'Nincs Kedvenc!'
             });
-        }
-        else{
+        } else {
             for (let i = 0; i < kokteladatok.length; i++) {
                 await DBconnetion.promise()
                     .query(query2, kokteladatok[i].KoktélID)
@@ -352,7 +395,6 @@ router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
                 ossztev: osszetevok
             });
         }
-
     } catch (error) {
         response.status(500).json({
             message: 'Hiba'
@@ -376,32 +418,30 @@ router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
             .then(([rows]) => {
                 kokteladatok = rows;
             });
-            if (kokteladatok.length==0) {
-                response.status(200).json({
-                    message:"Nincs Koktélod!"
-                })
+        if (kokteladatok.length == 0) {
+            response.status(200).json({
+                message: 'Nincs Koktélod!'
+            });
+        } else {
+            for (let i = 0; i < kokteladatok.length; i++) {
+                await DBconnetion.promise()
+                    .query(query2, kokteladatok[i].KoktélID)
+                    .then(([rows]) => {
+                        ertekelesek.push(rows);
+                    });
+                await DBconnetion.promise()
+                    .query(query3, kokteladatok[i].KoktélID)
+                    .then(([rows]) => {
+                        kommentek.push(rows);
+                    });
             }
-            else{
-                for (let i = 0; i < kokteladatok.length; i++) {
-                    await DBconnetion.promise()
-                        .query(query2, kokteladatok[i].KoktélID)
-                        .then(([rows]) => {
-                            ertekelesek.push(rows);
-                        });
-                    await DBconnetion.promise()
-                        .query(query3, kokteladatok[i].KoktélID)
-                        .then(([rows]) => {
-                            kommentek.push(rows);
-                        });
-                }
-                response.status(200).json({
-                    message: 'siker!',
-                    adat: kokteladatok,
-                    ertek: ertekelesek,
-                    kommnum: kommentek
-                });
-            }
-        
+            response.status(200).json({
+                message: 'siker!',
+                adat: kokteladatok,
+                ertek: ertekelesek,
+                kommnum: kommentek
+            });
+        }
     } catch (error) {
         response.status(500).json({
             message: 'Hiba'
@@ -411,73 +451,71 @@ router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
 
 router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
     //A Lekérések definiálása
-    let mitjelentetto="SELECT JelentésID FROM Jelentők WHERE JelentőID LIKE ?"
-    let query ='SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesID LIKE ?';
+    let mitjelentetto = 'SELECT JelentésID FROM Jelentők WHERE JelentőID LIKE ?';
+    let query =
+        'SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesID LIKE ?';
     let kommentjel = 'SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?';
     let felhjel = 'SELECT Felhasználónév FROM felhasználó WHERE FelhID LIKE ?';
     let kokteljel = 'SELECT KoktelCim,Keszito FROM koktél WHERE KoktélID LIKE ?';
     //Adattárolók
     let felhaszanalo = request.params.id;
     let oJelentette;
-    let jelentesek=[];
+    let jelentesek = [];
     let jelentTar = [];
     //Lekérdezés
     try {
         await DBconnetion.promise()
             .query(mitjelentetto, felhaszanalo)
             .then(([rows]) => {
-                oJelentette=rows;
-        });
-        if (oJelentette.length==0) {
-            response.status(200).json({
-                message:"Nincs Jelentésed!"
-            })
-            
-        }
-        else{
-             for (let i = 0; i < oJelentette.length; i++) {
-            await DBconnetion.promise()
-                .query(query, oJelentette[i].JelentésID)
-                .then(([rows]) => {
-                    jelentesek.push(rows);
+                oJelentette = rows;
             });
-        }
-
-        for (let i = 0; i < jelentesek[0].length; i++) {
-            //Ideiglenesen üresen létrehozzuk a helyét a jelentésnek a sorrend megtartása érdekében
-            jelentTar.push('');
-            if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
+        if (oJelentette.length == 0) {
+            response.status(200).json({
+                message: 'Nincs Jelentésed!'
+            });
+        } else {
+            for (let i = 0; i < oJelentette.length; i++) {
                 await DBconnetion.promise()
-                    .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
+                    .query(query, oJelentette[i].JelentésID)
                     .then(([rows]) => {
-                        //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                        jelentTar[i] = rows;
-                    });
-            } else if (jelentesek[0][i].JelentesTipusa == 'Felhasználó') {
-                await DBconnetion.promise()
-                    .query(felhjel, jelentesek[0][i].JelentettTartalomID)
-                    .then(([rows]) => {
-                        //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                        jelentTar[i] = rows;
-                    });
-            } else {
-                await DBconnetion.promise()
-                    .query(kommentjel, jelentesek[0][i].JelentettTartalomID)
-                    .then(([rows]) => {
-                        //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                        jelentTar[i] = rows;
+                        jelentesek.push(rows);
                     });
             }
-        }
 
-        //sorrendbe rendezve..
-        response.status(200).json({
-            message: 'siker!',
-            adat: jelentesek,
-            rep: jelentTar
-        });
+            for (let i = 0; i < jelentesek[0].length; i++) {
+                //Ideiglenesen üresen létrehozzuk a helyét a jelentésnek a sorrend megtartása érdekében
+                jelentTar.push('');
+                if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
+                    await DBconnetion.promise()
+                        .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
+                        .then(([rows]) => {
+                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                            jelentTar[i] = rows;
+                        });
+                } else if (jelentesek[0][i].JelentesTipusa == 'Felhasználó') {
+                    await DBconnetion.promise()
+                        .query(felhjel, jelentesek[0][i].JelentettTartalomID)
+                        .then(([rows]) => {
+                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                            jelentTar[i] = rows;
+                        });
+                } else {
+                    await DBconnetion.promise()
+                        .query(kommentjel, jelentesek[0][i].JelentettTartalomID)
+                        .then(([rows]) => {
+                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                            jelentTar[i] = rows;
+                        });
+                }
+            }
+
+            //sorrendbe rendezve..
+            response.status(200).json({
+                message: 'siker!',
+                adat: jelentesek,
+                rep: jelentTar
+            });
         }
-       
     } catch (error) {
         response.status(500).json({
             message: 'Hiba',
