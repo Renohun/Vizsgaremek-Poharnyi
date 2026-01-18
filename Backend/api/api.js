@@ -5,6 +5,7 @@ const router = express.Router();
 const JWT = require('jsonwebtoken');
 const authenticationMiddleware = require('./authenticationMiddleware.js');
 const authorizationMiddelware = require('./authorizationMiddelware.js');
+const jwt = require('jsonwebtoken');
 
 router.get('/test', (req, res) => {
     DBconnetion.query('SELECT * FROM felhasználó', (err, rows) => {
@@ -122,8 +123,15 @@ router.post('/belepes', async (request, response) => {
         console.log('Valami egyeb hiba tortent: ' + err);
     }
 });
-
+//
+//
+//
+//
 //AdminPanel - jelentesek endpoint
+//
+//
+//
+//
 router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
         let query =
@@ -323,6 +331,60 @@ router.post(
         }
     }
 );
+//
+//
+//
+//
+//AdminPnael - koktelhozzadasa vegpont
+//
+//
+//
+//
+
+router.post('/AdminPanel/JelvenyekLetoltese', authenticationMiddleware, authorizationMiddelware, (req, res) => {
+    let erossegTomb = [];
+    let izTomb = [];
+    let allergenTomb = [];
+
+    const jelvenyQuery = 'SELECT JelvényNeve, FROM jelvények';
+
+    DBconnetion.query(jelvenyQuery, (err, rows) => {
+        if (err) {
+            res.status(500).json({
+                message: 'Hiba tortent az adatbazis lekeressel'
+            });
+        } else {
+            /*
+            rows.forEach((row) => 
+                {
+                    if(rows. == ""){
+                        erossegTomb.push(row)
+                    }
+                    else if(rows. == ""){
+                        izTomb.push(row)
+                    }
+                    else if(){
+                        allergenTomb.push(row)
+                    }
+                });*/
+
+            res.status(200).json({
+                erossegek: erossegTomb,
+                izek: izTomb,
+                allergenek: allergenTomb
+            });
+        }
+    });
+});
+
+router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, (req, res) => {
+    const payload = jwt.decode(req.cookies.auth_token);
+
+    const { nev } = req.body;
+    const { alap } = req.body;
+    const { recept } = req.body;
+});
+
 //
 //
 //

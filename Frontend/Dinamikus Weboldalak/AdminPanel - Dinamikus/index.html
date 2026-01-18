@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -90,11 +90,11 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-1 col-3 vh-100" id="Sidebar">
-                    <div class="mb-auto mt-auto" id="textHover">
-                        <a class="link-dark jelenlegi fs-5" name="jelentesekKezelese">Jelenetesek Kezelese</a>
+                    <div class="mb-auto mt-auto">
+                        <p class="text-dark fs-5 sideBarGomb" name="jelentesekKezelese">Jelenetesek Kezelese</p>
                     </div>
-                    <div class="mb-auto mt-auto" id="textHover">
-                        <a class="link-dark fs-5" name="koktelokKezelese">Koktelok feltoltese</a>
+                    <div class="mb-auto mt-auto">
+                        <p class="text-dark fs-5 sideBarGomb" name="koktelokKezelese">Koktelok feltoltese</p>
                     </div>
                 </div>
                 <div name="jelentesekKezelese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5">
@@ -121,11 +121,98 @@
                     <div class="row justify-content-center" id="jelentesekCard"></div>
                 </div>
                 <div hidden="true" name="koktelokKezelese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5">
-                    <p>asd</p>
+                    <div class="d-flex row flex-column">
+                        <form class="d-flex flex-column needs-validation">
+                            <label for="koktelNeve">Koktel neve: </label>
+                            <input
+                                type="text"
+                                name="koktelNeve"
+                                id="koktelNeve"
+                                class="form-control mb-3"
+                                max="50"
+                                tabindex="1"
+                                required
+                            />
+
+                            <div>
+                                <label for="alkoholosE" class="form-label">Alkoholos?</label>
+                                <input type="checkbox" name="alkoholosE" id="alkoholosE" tabindex="2" />
+                            </div>
+
+                            <label for="koktelAlapja">Koktel alapja: </label>
+                            <input
+                                type="text"
+                                name="koktelAlapja"
+                                id="koktelAlapja"
+                                class="form-control mb-3"
+                                max="50"
+                                tabindex="3"
+                                required
+                            />
+                            <!--
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex flex-column">
+                                    <label for="koktelErosseg">Erosseg:</label>
+                                    <select
+                                        name="koktelErosseg"
+                                        class="form-control"
+                                        id="koktelErosseg"
+                                        style="width: 150px"
+                                        tabindex="4"
+                                        required
+                                    ></select>
+                                </div>
+
+                                <div class="d-flex flex-column">
+                                    <label for="koktelIze">Iz:</label>
+                                    <select
+                                        name="koktelIze"
+                                        class="form-control"
+                                        id="koktelIze"
+                                        required
+                                        style="width: 150px"
+                                        tabindex="5"
+                                    ></select>
+                                </div>
+
+                                <div class="d-flex flex-column">
+                                    <label for="koktelAllergenek">Allergenek</label>
+                                    <select
+                                        name="koktelAllergenek"
+                                        class="form-control"
+                                        id="koktelAllergenek"
+                                        style="width: 150px"
+                                        tabindex="6"
+                                        required
+                                    ></select>
+                                </div>
+                            </div>-->
+
+                            <label for="koktelRecept">Koktel receptje: </label>
+                            <textarea
+                                type="text"
+                                name="koktelRecept"
+                                id="koktelRecept"
+                                style="height: 300px; resize: none"
+                                class="form-control"
+                                tabindex="7"
+                                required
+                            ></textarea>
+
+                            <input
+                                type="submit"
+                                value="Feltoltes"
+                                id="koktelFeltoltes"
+                                tabindex="8"
+                                class="btn btn-success mt-5"
+                            />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-        <script src="../AdminPanel - Dinamikus/adminPanelJS.js"></script>
+        <script src="../AdminPanel - Dinamikus/adminPanelJS_Jelentes.js"></script>
+        <script src="../AdminPanel - Dinamikus/adminPanelJS_koktelHozzadas.js"></script>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
     </body>
