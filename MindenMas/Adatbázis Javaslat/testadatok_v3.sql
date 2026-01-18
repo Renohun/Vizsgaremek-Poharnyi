@@ -77,9 +77,21 @@ VALUES
 (3,"Jack Daniels",0.5),
 (4,"Almalé",1),
 (4,"Szodaviz",2),
-(5,"Meggyszörp",0.2),
-(5,"Grapefruitlé",0.05),
-(5,"Meggy",1)
+(5,"Meggyszörp",20),
+(5,"Grapefruitlé",15),
+(5,"Meggy",1),
+(6,"Szentelt Víz",200),
+(6,"Isten Vére bor",50),
+(6,"Almalé",80),
+(7,"Rum",30),
+(7,"Narancslé",150),
+(7,"Ananászlé",75),
+(7,"Vörösáfonya szirup",75),
+(11,"Everclear",20),
+(11,"Speed",20),
+(12,"Tequilla",20),
+(12,"Sör",5),
+(12,"Csípős",2.5)
 ;
 INSERT INTO WebshopTermek(TermekCim,TermekLeiras,TermekKiszereles,Ar)
 VALUES
