@@ -357,7 +357,7 @@ router.get('/AdatlapLekeres/FelhAdatok/:id', async (request, response) => {
 router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
     //A Lekérés definiálása
     let query1 = 'SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?';
-    let query2 = 'SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ?';
+    let query2 = 'SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
     let query3 = 'SELECT Osszetevő from koktelokosszetevoi where KoktélID like ?';
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     let felhaszanalo = request.params.id;
@@ -404,8 +404,8 @@ router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
 router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
     //A Lekérés definiálása
     let query1 = 'SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?';
-    let query2 = 'SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ?';
-    let query3 = 'SELECT Count(HovaIrták) as KommNum from komment where HovaIrták like ?';
+    let query2 = 'SELECT AVG(Ertekeles) as Osszert from ertekeles WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
+    let query3 = 'SELECT Count(HovaIrták) as KommNum from komment WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     let felhaszanalo = request.params.id;
     let kokteladatok;
