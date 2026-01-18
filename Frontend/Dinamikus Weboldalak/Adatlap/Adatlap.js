@@ -341,8 +341,8 @@ async function JelentesekLekeres() {
             JelentesVisszavonasa.addEventListener("click",()=>{
                 let mit={
                     tettes:valasz.adat[i][1].JelentésID,
-                    id:6
-                    //tipus:valasz.adat[i][0].JelentesTipusa
+                    id:6,
+                    tipus:valasz.adat[i][0].JelentesTipusa
                 }
                 
                 
