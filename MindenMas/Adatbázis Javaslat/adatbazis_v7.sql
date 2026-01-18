@@ -3,6 +3,7 @@ CREATE TABLE Felhasználó(
 	Felhasználónév TEXT NOT NULL,
 	Email TEXT NOT NULL,
 	Jelszó TEXT NOT NULL,
+	JelszóHossza INT NOT NULL,
 	ProfilkepUtvonal TEXT,
 	RegisztracioDatuma DATE DEFAULT NOW(),
 	Admin BOOLEAN NOT NULL DEFAULT FALSE
@@ -15,6 +16,7 @@ CREATE TABLE Koktél(
 	Alkoholos BOOLEAN,
 	Közösségi BOOLEAN,
 	KoktelCim TEXT NOT NULL,
+	KoktelNepszeruseg INT DEFAULT 0,
 	BoritoKepUtvonal TEXT,
 	Alap TEXT,
 	Recept TEXT NOT NULL,
@@ -23,7 +25,8 @@ CREATE TABLE Koktél(
 
 CREATE TABLE Jelvények(
 	JelvényID INT AUTO_INCREMENT PRIMARY KEY,
-	JelvényNeve TEXT
+	JelvényNeve TEXT,
+	JelvenyKategoria TEXT
 );
 CREATE TABLE KoktélokJelvényei(
 	KoktélID INT,
@@ -61,7 +64,16 @@ CREATE TABLE WebshopTermek (
 	TermekID INT AUTO_INCREMENT,
 	TermekCim VARCHAR(255)  NOT NULL,
 	TermekLeiras TEXT  NOT NULL,
-	TermekKiszereles DOUBLE,
+	TermekKiszereles DOUBLE NOT NULL,
+	TermekKeszlet INT NOT NULL,
+	TermekKepUtvonal TEXT,
+	TermekKategoria TEXT NOT NULL,
+	TermekMarka TEXT NOT NULL,
+	TermekHanyanVettekMeg INT DEFAULT 0,
+	TermekSzarmazas TEXT NOT NULL,
+	TermekAlkoholSzazalek DOUBLE NOT NULL,
+	TermekKora INT NOT NULL,
+	TermekDiscount DOUBLE,
 	Ar INT  NOT NULL,
 	PRIMARY KEY Termek (TermekID,Ar)
 );
@@ -102,6 +114,7 @@ CREATE TABLE Jelentesek(
 CREATE TABLE Jelentők(
 	JelentőID INT,
 	JelentésID INT,
+	JelentesTipusa TEXT,
 	JelentesIndoka TEXT,
 	FOREIGN KEY(JelentőID) REFERENCES Felhasználó(FelhID),
 	FOREIGN KEY(JelentésID) REFERENCES Jelentesek(JelentesID)

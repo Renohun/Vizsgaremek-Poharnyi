@@ -12,7 +12,9 @@ VALUES
 ("Deutch Tamás","deutchtamas@kormany.hu","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
 ("Walton Goggins","waltongoggingshollywood@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o")
 ;
-
+INSERT INTO Felhasználó(Felhasználónév,Email,Jelszó,ProfilKepUtvonal)
+VALUES
+("Balu a Fotomaniakus","imadomafurryket@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o","dog.png")
 INSERT INTO Koktél(Keszito,KoktelCim,Recept,Alkoholos,Alap,Közösségi)
 VALUES
 (1,"Citrom Húzó","Egy felespohárt töltsünk félig Ouzo-val, majd facsarjunk bele egy kis citromot",true,"Ouzou",false),
@@ -131,14 +133,14 @@ VALUES
 (5,5,"Nem a koktélhoz kötődik"),
 (1,6,"Mi az hogy nem elég halas?????????");
 
-INSERT INTO Jelvények(JelvényNeve)
+INSERT INTO Jelvények(JelvényNeve,JelvenyKategoria)
 VALUES
-("Savanyú"),
-("Csípős"),
-("Keserű"),
-("Glutén"),
-("Erős"),
-("Gyenge");
+("Savanyú","ízek"),
+("Csípős","ízek"),
+("Keserű","ízek"),
+("Glutén","Allergének"),
+("Erős","Erősség"),
+("Gyenge","Erősség");
 
 INSERT INTO KoktélokJelvényei(KoktélID,JelvényID)
 VALUES
