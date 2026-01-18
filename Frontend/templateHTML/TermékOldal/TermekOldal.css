@@ -19,7 +19,7 @@
 #MegrendelesDiv{
     display: flex;
     flex-direction: column;
-    background-color: aqua;
+    background-color:rgb(238, 238, 210);
     width: 30%;
     height: auto;
 }
@@ -42,7 +42,7 @@
    height: auto;
    display: flex;
    justify-content: center;
-     padding-bottom:80%;
+     
     
     overflow:hidden;
     position:relative;
@@ -83,26 +83,27 @@
     margin-top: 5px;
     width: 100px;
     height: 25px;
-    background-color: rgb(255, 255, 255);
     color: rgb(31, 31, 31);
-    border: 1px gray solid;
+    border: none;
     text-align: center;
+     background-color: lightgoldenrodyellow
     
 }
 .active, .TovGomb:hover{
-    border: solid rgb(53, 53, 53) 1px;
-    background-color: aliceblue;
+    
+    background-color: rgb(254, 255, 195);
 }
 table,.lol {
-  border: 1px solid black;
+  border: 1px solid rgb(180, 180, 180);
 }
 .tablazat {
-  border: 1px solid black;
+  border: 1px solid rgb(165, 165, 165);
 }
 #TulGomb{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    
 }
 #TulContent{
     margin-top: 15px;
@@ -118,6 +119,60 @@ table,.lol {
     right:18px;
     z-index: -1;
 }
+#VanePolcon{
+    height: 30px;
+    width: 100px;
+    background-color: rgb(5, 228, 5);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-items: flex-end;
+    color: aliceblue;
+    margin-top: 15px;
+    padding: 3px;
+}
+#ar{
+    margin-left: 25px;
+    margin-top: 25px;
+}
+#LiterAr{
+    margin-top: 0;
+    font-size: x-small;
+    position: relative;
+    bottom: 10px;
+    color: gray;
+
+}
+#KosarDiv{
+    display: flex;
+    flex-direction: row;
+
+}
+#mennyiseg{
+    margin-left: 10px;
+    width:20%;
+}
+#kosarba
+{
+    width: 70%;
+    border: 1px  rgb(255, 186, 83) solid;
+    background-color: rgb(255, 186, 83);
+    border-radius: 3px;
+    margin-left: 10px;
+      margin-right: 10px;
+    text-align: center;
+}
+#KosarbaSzoveg{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+#kosarba:hover{
+    background-color: rgb(250, 175, 62) ;
+}
+#Ertekeles{
+    margin-left: 10px;
+      margin-right: 10px;
+}
 @media only screen and (max-width: 768px){
     #main
     {
@@ -129,13 +184,35 @@ table,.lol {
     }
     #TermekAdatok
     {
-        width: 90%;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
     }
     #MegrendelesDiv
     {
    
-    width: 90%;
+    width: 100%;
     height: auto;
     }
+    #TermekAdatokMainContent{
+    display: flex ;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+   }
+   #TermekKep{
+   width: 100%;
+   height: auto;
+   display: flex;
+   justify-content: center;
+   overflow:hidden;
+   position:relative;
+    }
+    #TermekLeiras{
+        width: 100%;
+    }
+  #Tulajdonsagok{
+    margin-bottom: 15px;
+  }
 
 }
