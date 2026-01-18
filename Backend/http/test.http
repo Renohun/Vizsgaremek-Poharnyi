@@ -30,7 +30,7 @@ Content-Type: application/json
 GET http://127.0.0.1:3000/api/AdatlapLekeres/Jelentesek/6
 Content-Type: application/json
 ###
-GET http://127.0.0.1:3000/api/AdatlapLekeres/Kosar/1
+GET http://127.0.0.1:3000/api/AdatlapLekeres/Kosar/3
 Content-Type: application/json
 ###
 POST http://127.0.0.1:3000/api/AdatlapLekeres/Kosarurites
@@ -39,7 +39,23 @@ Content-Type: application/json
 {
     "tartalom":"1"
 }
+###
+POST http://127.0.0.1:3000/api/AdatlapLekeres/TermekUrites
+Content-Type: application/json
 
+{
+    "kosár":"1",
+    "termék":"3"
+}
+###
+POST http://127.0.0.1:3000/api/AdatlapLekeres/TermekFrissites
+Content-Type: application/json
+
+{
+    "kosár":"3",
+    "termék":"1",
+    "count":"8"
+}
 
 ###
 POST http://127.0.0.1:3000/api/AdminPanel/jelentesek

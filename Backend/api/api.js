@@ -110,7 +110,8 @@ router.post('/belepes', async (request, response) => {
                         response.status(200).json({
                             message: 'Sikeres bejelentkezes'
                         });
-                    } else {
+                    } 
+                    else {
                         response.status(200).json({
                             message: 'Hibas jelszo'
                         });
@@ -329,6 +330,15 @@ router.post(
 //
 //
 //
+const test = require("fs/promises");
+const path = require("path");
+router.get('/AdatlapLekeres/FelhAdatok/kutya', async (request, response) => {
+        let temp=await test.readFile(path.join(__dirname,"../images/dog.png"),"utf8")
+        response.status(200).json({
+            message: 'Sikeres Lekérés!',
+            kutya:temp
+        });
+})
 router.get('/AdatlapLekeres/FelhAdatok/:id', async (request, response) => {
     //A Lekérés definiálása
     let query =
@@ -338,6 +348,7 @@ router.get('/AdatlapLekeres/FelhAdatok/:id', async (request, response) => {
     for (let i = 0; i < 5; i++) {
         ertekek.push(request.params.id);
     }
+    
     //Lekérdezés
     DBconnetion.query(query, ertekek, async (err, rows) => {
         if (err) {
@@ -348,7 +359,7 @@ router.get('/AdatlapLekeres/FelhAdatok/:id', async (request, response) => {
         } else {
             response.status(200).json({
                 message: 'Sikeres Lekérés!',
-                tartalom: rows
+                tartalom: rows,
             });
         }
     });
@@ -491,7 +502,7 @@ router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
             jelentTar.push('');
             
             if (jelentesek[i][0].JelentesTipusa == 'Koktél') {
-                let temp=[]
+                let temp=[]    
                 await DBconnetion.promise()
                     .query(kokteljel, jelentesek[i][0].JelentettTartalomID)
                     .then(([rows]) => {
@@ -534,35 +545,6 @@ router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
                 jelentTar[i]=temp
             }
         }
-                
-
-            for (let i = 0; i < jelentesek[0].length; i++) {
-                //Ideiglenesen üresen létrehozzuk a helyét a jelentésnek a sorrend megtartása érdekében
-                jelentTar.push('');
-                if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
-                    await DBconnetion.promise()
-                        .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
-                        .then(([rows]) => {
-                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                            jelentTar[i] = rows;
-                        });
-                } else if (jelentesek[0][i].JelentesTipusa == 'Felhasználó') {
-                    await DBconnetion.promise()
-                        .query(felhjel, jelentesek[0][i].JelentettTartalomID)
-                        .then(([rows]) => {
-                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                            jelentTar[i] = rows;
-                        });
-                } else {
-                    await DBconnetion.promise()
-                        .query(kommentjel, jelentesek[0][i].JelentettTartalomID)
-                        .then(([rows]) => {
-                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                            jelentTar[i] = rows;
-                        });
-                }
-            }
-
             //sorrendbe rendezve..
             response.status(200).json({
                 message: 'siker!',
@@ -636,6 +618,69 @@ router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
         await DBconnetion.promise().query(KosárÜrítés, MelyikKosárAz);
         response.status(200).json({
             message: 'Sikeres Törlés!'
+        });
+    } catch (error) {
+        response.status(500).json({
+            message: 'Hiba Történt!',
+            hiba: error
+        });
+    }
+});
+router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
+    let mit = request.body.termék;
+    let honnan=request.body.kosár
+    let TermékTörlés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ? AND TermekID LIKE ?';
+    console.log(mit);
+    console.log(honnan);
+    
+    
+    try {
+        await DBconnetion.promise().query(TermékTörlés,[honnan,mit]);
+        response.status(200).json({
+            message: 'Sikeres Törlés!'
+        });
+    } catch (error) {
+        response.status(500).json({
+            message: 'Hiba Történt!',
+            hiba: error
+        });
+    }
+});
+router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
+    let mit = request.body.termék;
+    let honnan=request.body.kosár
+    let mennyit=request.body.count
+    let TermékTöltés = 'UPDATE KosárTermék SET Darabszam = ? WHERE KosarID LIKE ? AND TermekID LIKE ?';
+    console.log(mit);
+    console.log(honnan);
+    
+    
+    try {
+        await DBconnetion.promise().query(TermékTöltés,[mennyit,honnan,mit]);
+        response.status(200).json({
+            message: 'Sikeres Frissítés!'
+        });
+    } catch (error) {
+        response.status(500).json({
+            message: 'Hiba Történt!',
+            hiba: error
+        });
+    }
+});
+router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
+    let ki=request.body.id
+    let mit = request.body.tettes;
+    let milyen=request.body.tipus
+    let JelentésTörlés = 'DELETE FROM Jelentők WHERE JelentőID LIKE ? AND JelentésID LIKE ?';
+    console.log(ki);
+    console.log(mit);
+    
+    
+    
+    try {
+        await DBconnetion.promise().query(JelentésTörlés,[ki,mit,milyen]);
+        response.status(200).json({
+            message: 'Sikeres Frissítés!'
         });
     } catch (error) {
         response.status(500).json({
