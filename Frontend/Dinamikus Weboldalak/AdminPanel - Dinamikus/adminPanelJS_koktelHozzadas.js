@@ -20,6 +20,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     (async () => {
         const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/JelvenyekLetoltese');
+
+        const koktelErossegeSelect = document.getElementById('koktelErosseg');
+        const koktelIzeSelect = document.getElementById('koktelIze');
+        const koktelAllergenekSelect = document.getElementById('koktelAllergenek');
+        for (let i = 0; i < data.allergenek.length; i++) {
+            let optTag = document.createElement('option');
+            optTag.innerText = data.allergenek[i].JelvényNeve;
+            koktelAllergenekSelect.appendChild(optTag);
+        }
+        for (let i = 0; i < data.erossegek.length; i++) {
+            let optTag = document.createElement('option');
+            optTag.innerText = data.erossegek[i].JelvényNeve;
+            koktelErossegeSelect.appendChild(optTag);
+        }
+        for (let i = 0; i < data.izek.length; i++) {
+            let optTag = document.createElement('option');
+            optTag.innerText = data.izek[i].JelvényNeve;
+            koktelIzeSelect.appendChild(optTag);
+        }
     })();
 
     document.getElementById('koktelFeltoltes').addEventListener('click', () => {
@@ -44,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             koktelAlap.classList.add('hibasForm');
             hibasFrom = true;
         }
-        /*
+
         const koktelErosseg = document.getElementById('koktelErosseg');
         if (koktelErosseg.value.length > 0) {
             koktelErosseg.classList.add('helyesForm');
@@ -73,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             koktelAllergenek.classList.remove('helyesForm');
             koktelAllergenek.classList.add('hibasForm');
             hibasFrom = true;
-        }*/
+        }
 
         const koktelRecept = document.getElementById('koktelRecept');
         if (koktelRecept.value.length > 0) {
@@ -86,10 +105,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!hibasFrom) {
+            let alkoholosEBool = false;
+            const alkoholosE = document.getElementById('alkoholosE');
+            if (alkoholosE.checked) {
+                alkoholosEBool = true;
+            }
+
             (async () => {
                 const POSTobj = {
                     nev: koktelNev.value,
                     alap: koktelAlap.value,
+                    erosseg: koktelErosseg.value,
+                    iz: koktelIz.value,
+                    allergenek: koktelAllergenek.value,
+                    alkoholos: alkoholosEBool ? '1' : '0',
                     recept: koktelRecept.value
                 };
 
