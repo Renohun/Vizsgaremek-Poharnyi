@@ -270,13 +270,72 @@ async function KoktelokLekeres() {
     
 }
 async function JelentesekLekeres() {
-    const valasz=await AdatGet("/api/AdatlapLekeres/Jelentesek/"+2)
+    const valasz=await AdatGet("/api/AdatlapLekeres/Jelentesek/"+6)
     let hova=document.getElementById("IdeReport")
+    console.log(valasz);
+    
+    hova.innerHTML=""
     if (valasz.message=="Nincs Jelentésed!") {
         hova.innerHTML="Nem jelentettél semmit."
     }
     else{
-        
+        for (let i = 0; i < valasz.adat.length; i++) {
+            let JelentesDiv=document.createElement("div")
+            let sortör=document.createElement("hr")
+            let sortör2=document.createElement("hr")
+            let JelentesNev=document.createElement("div")
+            let JelentesText=document.createElement("div")
+            let JelentesAllapota=document.createElement("div")
+            let JelentesVisszavonasa=document.createElement("input")
+            JelentesDiv.classList.add("card","m-1")
+            JelentesDiv.classList.add("col-6","col-sm-7","col-md-3","col-lg-3","col-xl-2","col-xxl-2","mb-1")
+            JelentesNev.classList.add("card-title","fs-4","text-center")
+            //sortör.classList.add("border-bottom","border-black","row","mt-3","mb-3")
+            //sortör2.classList.add("border-bottom","border-black","row","mt-3","mb-2")
+            JelentesVisszavonasa.classList.add("btn","btn-danger","mb-2","mt-2")
+            JelentesVisszavonasa.setAttribute("type","button")
+            JelentesVisszavonasa.setAttribute("value","Jelentés Visszavonása")
+            JelentesAllapota.classList.add("text-center")
+            //JelentesText.classList.add("card-body")
+            console.log(valasz.adat[i][0].JelentesTipusa);
+            
+            if (valasz.adat[i][0].JelentesTipusa=="Koktél") {
+                JelentesNev.innerHTML="Jelentett Koktél"
+                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][1].Felhasználónév} "${valasz.rep[i][0].KoktelCim}" című koktélját.<br>Indok:${valasz.adat[i][1].JelentesIndoka}`
+                JelentesDiv.appendChild(JelentesNev)
+                JelentesNev.appendChild(sortör)
+                JelentesDiv.appendChild(JelentesText)
+                
+                
+            }
+            else if(valasz.adat[i][0].JelentesTipusa=="Komment"){
+                JelentesNev.innerHTML="Jelentett Komment"
+                console.log(valasz.rep[i][1]);
+                
+                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][1].Felhasználónév} "${valasz.rep[i][0].Tartalom}" Kommentjét.<br>Indok:${valasz.adat[i][1].JelentesIndoka}`
+                JelentesDiv.appendChild(JelentesNev)
+                JelentesNev.appendChild(sortör)
+                JelentesDiv.appendChild(JelentesText)
+            }
+            else{
+                JelentesNev.innerHTML="Jelentett Felhasználó"
+                console.log(valasz.rep[i][1]);
+                
+                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][0].Felhasználónév} Felhasználót.<br>Indok:${valasz.adat[i][1].JelentesIndoka}`
+                JelentesDiv.appendChild(JelentesNev)
+                JelentesNev.appendChild(sortör)
+                JelentesDiv.appendChild(JelentesText)
+            }
+
+
+            if (valasz.adat[i][0].JelentesAllapota=="0") {
+                JelentesAllapota.innerHTML="Jelenlegi Állapota: Elküldve"
+            }
+            JelentesText.appendChild(sortör2)
+            JelentesText.appendChild(JelentesAllapota)
+            JelentesDiv.appendChild(JelentesVisszavonasa)
+            hova.appendChild(JelentesDiv)
+        }
     }
     console.log(valasz);
     
@@ -296,7 +355,7 @@ async function KosarLekeres() {
         let kosárÖssz=document.createElement("div")
 
         kosárDiv.classList.add("card")
-        kosárDiv.classList.add("col-6","col-sm-7","col-md-3","col-lg-3","col-xl-1","col-xxl-1","mb-1")
+        kosárDiv.classList.add("col-7","col-sm-7","col-md-4","col-lg-4","col-xl-2","col-xxl-2","mb-1")
         kosárNév.classList.add("card-title")
         kosárKép.classList.add("card-img-top","kosárkép")
         //kosárText.classList.add("card-body")
@@ -316,7 +375,7 @@ async function KosarLekeres() {
         hova.appendChild(kosárDiv)
     }
     let kosárÖsszeg=document.createElement("div")
-    kosárÖsszeg.innerHTML="Összesen:"+összár
+    kosárÖsszeg.innerHTML=`Összesen: ${összár} Ft`
     hova.appendChild(kosárÖsszeg)
     //Kosár kiürítése
     let ürít=document.getElementById("KosárDelete")
