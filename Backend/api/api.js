@@ -382,6 +382,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
     const { iz } = req.body;
     const { allergenek } = req.body;
     const { alkoholos } = req.body;
+    const { osszetevok } = req.body;
     const { recept } = req.body;
 
     const jelvenyReq = [erosseg, iz, allergenek];
@@ -391,6 +392,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
     const query = 'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,Alap,Recept) VALUES(?,?,?,?,?,?)';
     const queryKoktel = 'SELECT KoktélID FROM koktél ORDER BY KoktélID DESC LIMIT 1';
     const queryJelvenyek = 'SELECT JelvényID FROM `jelvények` WHERE JelvényNeve LIKE ?';
+    const queryKoktelOsszetevok = 'INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség) VALUES(?,?,?)';
 
     DBconnetion.query(query, [payload.userID, alkoholos, 0, nev, alap, recept], (err) => {
         if (err) {
@@ -401,20 +403,34 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
                 res.status(500).json({ message: 'Sikertelen adat feltoltes' });
             }
             let feltoltottKoktelID = rows[0].KoktélID;
-            console.log(feltoltottKoktelID);
+
+            for (let i = 0; i < osszetevok.length; i++) {
+                DBconnetion.query(
+                    queryKoktelOsszetevok,
+                    [feltoltottKoktelID, osszetevok[i].osszetevo, osszetevok[i].mennyiseg],
+                    (err) => {
+                        if (err) {
+                            res.status(500).json({ message: 'Sikertelen adat feltoltes' });
+                        }
+                    }
+                );
+            }
+
+            //console.log(feltoltottKoktelID);
             let jelvenyID = [];
             //aszinkronos pokol
-            for (let i = 0; i < jelvenyReq.length; i++) {
-                //console.log(jelvenyReq[i]);
-                DBconnetion.query(queryJelvenyek, [jelvenyReq[i]], (err, rows) => {
-                    if (err) {
-                        res.status(500).json({ message: 'Sikertelen adat feltoltes' });
-                    }
-                    console.log(rows[0].JelvényID);
-                    jelvenyID.push(rows[0].JelvényID);
-                });
-            }
-            //console.log(jelvenyID);
+
+            (async () => {
+                for (let i = 0; i < jelvenyReq.length; i++) {
+                    await DBconnetion.promise()
+                        .query(queryJelvenyek, [jelvenyReq[i]])
+                        .then(([rows]) => {
+                            jelvenyID.push(rows[0].JelvényID);
+                        });
+                }
+            })();
+
+            console.log(jelvenyID);
         });
     });
 });
