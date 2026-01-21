@@ -248,6 +248,11 @@ async function KoktelokLekeres() {
                 {
                     koktelKomment.innerHTML="Nincs még komment!"
                 }
+                //Badgek 
+                for (let i = 0; i < valasz.length; i++) {
+                    
+                    
+                }
                 //feltöltés
                 koktelCard.appendChild(koktelKep)
                 koktelTartalom.appendChild(koktelNev)
@@ -270,7 +275,7 @@ async function KoktelokLekeres() {
     
 }
 async function JelentesekLekeres() {
-    const valasz=await AdatGet("/api/AdatlapLekeres/Jelentesek/"+6)
+    const valasz=await AdatGet("/api/AdatlapLekeres/Jelentesek/"+4)
     let hova=document.getElementById("IdeReport")
     console.log(valasz);
     
@@ -290,13 +295,10 @@ async function JelentesekLekeres() {
             JelentesDiv.classList.add("card","m-1")
             JelentesDiv.classList.add("col-6","col-sm-7","col-md-3","col-lg-3","col-xl-2","col-xxl-2","mb-1")
             JelentesNev.classList.add("card-title","fs-4","text-center")
-            //sortör.classList.add("border-bottom","border-black","row","mt-3","mb-3")
-            //sortör2.classList.add("border-bottom","border-black","row","mt-3","mb-2")
             JelentesVisszavonasa.classList.add("btn","btn-danger","mb-2","mt-2")
             JelentesVisszavonasa.setAttribute("type","button")
             JelentesVisszavonasa.setAttribute("value","Jelentés Visszavonása")
             JelentesAllapota.classList.add("text-center")
-            //JelentesText.classList.add("card-body")
             console.log(valasz.adat[i][0].JelentesTipusa);
             
             if (valasz.adat[i][0].JelentesTipusa=="Koktél") {
@@ -339,14 +341,18 @@ async function JelentesekLekeres() {
             }
 
             JelentesVisszavonasa.addEventListener("click",()=>{
+                console.log(valasz.adat[i][1].JelentésID);
+                console.log(valasz.adat[i][0].JelentesTipusa);
+                
                 let mit={
                     tettes:valasz.adat[i][1].JelentésID,
-                    id:6,
+                    id:4,
                     tipus:valasz.adat[i][0].JelentesTipusa
                 }
                 
                 
                 AdatPost("/api/AdatlapLekeres/JelentesTorles",mit)
+                JelentesekLekeres()
             })
 
             JelentesText.appendChild(sortör2)
@@ -355,11 +361,9 @@ async function JelentesekLekeres() {
             hova.appendChild(JelentesDiv)
         }
     }
-    console.log(valasz);
-    
 }
 async function KosarLekeres() {
-    const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/"+3)
+    const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/"+1)
     console.log(valasz.kosár);
     let hova=document.getElementById("IdeKosár")
     hova.innerHTML=""
@@ -375,7 +379,7 @@ async function KosarLekeres() {
         let kosárEgységÁr=document.createElement("span")
         let kosárÖssz=document.createElement("div")
 
-        kosárDiv.classList.add("card")
+        kosárDiv.classList.add("card","p-0","ms-2")
         kosárDiv.classList.add("col-9","col-sm-9","col-md-4","col-lg-4","col-xl-2","col-xxl-2","mb-1")
         kosárNév.classList.add("card-title","fs-4","border-bottom","border-black")
         kosárKép.classList.add("card-img-top")
@@ -432,6 +436,7 @@ async function KosarLekeres() {
             koktelKuka.classList.add("btn","text-black","fs-4","align-top","float-end","kuka")
             koktelKuka.setAttribute("value","🗑︎")
             koktelKuka.addEventListener("click",()=>{
+                console.log(valasz.kosár[i].TermekID);
                 let mitürít={
                     kosár:1,
                     termék:valasz.kosár[i].TermekID
@@ -458,23 +463,22 @@ async function KosarLekeres() {
                 }
                 AdatPost("/api/AdatlapLekeres/TermekFrissites",mitürít)
                 tisztitas()
-                KosarLekeres()
-
             })
             kosárModMégse.addEventListener("click",()=>{
                 hova.children[i].childNodes[3].childNodes[1].innerHTML=kosárTartalék
-
                 tisztitas()
 
             })
-            function tisztitas(){
+            function tisztitas(){   
                 hova.children[i].childNodes[0].removeChild(koktelKuka)
                 kosárGombok.removeChild(kosárModIgen)
                 kosárGombok.removeChild(kosárModMégse)
+                kosárModIgen="";
+                kosárModMégse="";
                 kosárMódosít.removeAttribute("disabled","true")
                 kosárFizet.removeAttribute("disabled","true")
                 kosárÜrít.removeAttribute("disabled","true")
-                //KosarLekeres()
+                KosarLekeres()
             }
         }
     })

@@ -24,13 +24,13 @@ Content-Type: application/json
 GET http://127.0.0.1:3000/api/AdatlapLekeres/FelhAdatok/2
 Content-Type: application/json
 ###
-GET http://127.0.0.1:3000/api/AdatlapLekeres/Koktelok/2
+GET http://127.0.0.1:3000/api/AdatlapLekeres/Koktelok/9
 Content-Type: application/json
 ###
-GET http://127.0.0.1:3000/api/AdatlapLekeres/Jelentesek/3
+GET http://127.0.0.1:3000/api/AdatlapLekeres/Jelentesek/4
 Content-Type: application/json
 ###
-GET http://127.0.0.1:3000/api/AdatlapLekeres/Kosar/3
+GET http://127.0.0.1:3000/api/AdatlapLekeres/Kosar/1
 Content-Type: application/json
 ###
 POST http://127.0.0.1:3000/api/AdatlapLekeres/Kosarurites

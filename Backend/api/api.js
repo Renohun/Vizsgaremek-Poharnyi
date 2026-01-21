@@ -434,7 +434,6 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
         });
     });
 });
-
 //
 //
 //
@@ -442,8 +441,15 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
 //
 //
 //
-const test = require('fs/promises');
-const path = require('path');
+async function lekeres(query,param) {
+    let result
+    await DBconnetion.promise()
+        .query(query, param)
+        .then(([rows]) => {
+            result=rows;
+        });
+    return result
+}
 router.get('/AdatlapLekeres/FelhAdatok/kutya', async (request, response) => {
     let temp = await test.readFile(path.join(__dirname, '../images/dog.png'), 'utf8');
     response.status(200).json({
@@ -479,10 +485,11 @@ router.get('/AdatlapLekeres/FelhAdatok/:id', async (request, response) => {
 
 router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
     //A Lekérés definiálása
-    let query1 = 'SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?';
-    let query2 =
-        'SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
-    let query3 = 'SELECT Osszetevő from koktelokosszetevoi where KoktélID like ?';
+    let koktelLekeres = 'SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?';
+    let ertekelesAtlagLekeres ='SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
+    let osszetevokLekerese = 'SELECT Osszetevő from koktelokosszetevoi where KoktélID like ?';
+    let koktélbadgek="SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?"
+    let badgek="SELECT JelvényNeve FROM jelvények WHERE JelvényID LIKE ?"
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     let felhaszanalo = request.params.id;
     let kokteladatok;
@@ -490,27 +497,21 @@ router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
     let osszetevok = [];
     //Lekérdezés
     try {
-        await DBconnetion.promise()
-            .query(query1, felhaszanalo)
-            .then(([rows]) => {
-                kokteladatok = rows;
-            });
+        kokteladatok=await lekeres(koktelLekeres,felhaszanalo)
         if (kokteladatok.length == 0) {
             response.status(200).json({
                 message: 'Nincs Kedvenc!'
             });
         } else {
             for (let i = 0; i < kokteladatok.length; i++) {
-                await DBconnetion.promise()
-                    .query(query2, kokteladatok[i].KoktélID)
-                    .then(([rows]) => {
-                        ertekelesek.push(rows);
-                    });
-                await DBconnetion.promise()
-                    .query(query3, kokteladatok[i].KoktélID)
-                    .then(([rows]) => {
-                        osszetevok.push(rows);
-                    });
+                console.log(kokteladatok[i].KoktélIDawait );
+                
+                ertekelesek.push(await lekeres(ertekelesAtlagLekeres,kokteladatok[i].KoktélID))
+                osszetevok.push(await lekeres(osszetevokLekerese,kokteladatok[i].KoktélID))
+                jelvenyadatok=await lekeres(koktélbadgek,kokteladatok[i].KoktélID)
+                for (let j = 0; j < jelvenyadatok.length; j++) {
+                    jelvenyek.push(await lekeres(badgek,jelvenyadatok[j].JelvényID))
+                }
             }
             response.status(200).json({
                 message: 'siker!',
@@ -525,47 +526,45 @@ router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
         });
     }
 });
+
 router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
     //A Lekérés definiálása
-    let query1 = 'SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?';
-    let query2 =
-        'SELECT AVG(Ertekeles) as Osszert from ertekeles WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
-    let query3 =
-        'SELECT Count(HovaIrták) as KommNum from komment WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
+    let koktelLekeres = 'SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?';
+    let ertekelesLekeres ='SELECT AVG(Ertekeles) as Osszert from ertekeles WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
+    let kommentLekeres ='SELECT Count(HovaIrták) as KommNum from komment WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
+    let koktélbadgek="SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?"
+    let badgek="SELECT JelvényNeve FROM jelvények WHERE JelvényID LIKE ?"
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     let felhaszanalo = request.params.id;
     let kokteladatok;
+    let jelvenyadatok;
     let ertekelesek = [];
     let kommentek = [];
+    let jelvenyek=[]
     //Lekérdezés
     try {
-        await DBconnetion.promise()
-            .query(query1, felhaszanalo)
-            .then(([rows]) => {
-                kokteladatok = rows;
-            });
+        
+        kokteladatok=await lekeres(koktelLekeres,felhaszanalo)
         if (kokteladatok.length == 0) {
             response.status(200).json({
                 message: 'Nincs Koktélod!'
             });
         } else {
             for (let i = 0; i < kokteladatok.length; i++) {
-                await DBconnetion.promise()
-                    .query(query2, kokteladatok[i].KoktélID)
-                    .then(([rows]) => {
-                        ertekelesek.push(rows);
-                    });
-                await DBconnetion.promise()
-                    .query(query3, kokteladatok[i].KoktélID)
-                    .then(([rows]) => {
-                        kommentek.push(rows);
-                    });
+                ertekelesek.push(await lekeres(ertekelesLekeres,kokteladatok[i].KoktélID));
+                kommentek.push(await lekeres(kommentLekeres,kokteladatok[i].KoktélID))
+                jelvenyadatok=await lekeres(koktélbadgek,kokteladatok[i].KoktélID)
+                for (let j = 0; j < jelvenyadatok.length; j++) {
+                    jelvenyek.push(await lekeres(badgek,jelvenyadatok[j].JelvényID))
+                }
+                
             }
             response.status(200).json({
                 message: 'siker!',
                 adat: kokteladatok,
                 ertek: ertekelesek,
-                kommnum: kommentek
+                kommnum: kommentek,
+                badgek:jelvenyek
             });
         }
     } catch (error) {
@@ -578,8 +577,7 @@ router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
 router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
     //A Lekérések definiálása
     let mitjelentetto = 'SELECT JelentésID,JelentesIndoka FROM Jelentők WHERE JelentőID LIKE ?';
-    let query =
-        'SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesID LIKE ?';
+    let jelentesAdat = 'SELECT JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesID LIKE ?';
     let kommentjel = 'SELECT Keszito,Tartalom FROM komment WHERE KommentID LIKE ?';
     let felhjel = 'SELECT Felhasználónév FROM Felhasználó WHERE FelhID LIKE ?';
     let kokteljel = 'SELECT KoktelCim,Keszito FROM koktél WHERE KoktélID LIKE ?';
@@ -590,107 +588,42 @@ router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
     let jelentTar = [];
     //Lekérdezés
     try {
-        await DBconnetion.promise()
-            .query(mitjelentetto, felhaszanalo)
-            .then(([rows]) => {
-                oJelentette = rows;
-            });
+        oJelentette=await lekeres(mitjelentetto,felhaszanalo)
         if (oJelentette.length == 0) {
             response.status(200).json({
                 message: 'Nincs Jelentésed!'
             });
-        } else {
+        } 
+        else {
             for (let i = 0; i < oJelentette.length; i++) {
-                await DBconnetion.promise()
-                    .query(query, oJelentette[i].JelentésID)
-                    .then(([rows]) => {
-                        let temp = rows;
-                        temp.push(oJelentette[i]);
-                        jelentesek.push(temp);
-                    });
-            }
-
+                let temp=await lekeres(jelentesAdat,oJelentette[i].JelentésID)
+                temp.push(oJelentette[i])
+                jelentesek.push(temp);
+            }     
             for (let i = 0; i < jelentesek.length; i++) {
                 //Ideiglenesen üresen létrehozzuk a helyét a jelentésnek a sorrend megtartása érdekében
                 jelentTar.push('');
-
+                let temp = [];
                 if (jelentesek[i][0].JelentesTipusa == 'Koktél') {
-                    let temp = [];
-                    await DBconnetion.promise()
-                        .query(kokteljel, jelentesek[i][0].JelentettTartalomID)
-                        .then(([rows]) => {
-                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                            temp.push(rows[0]);
-                        });
-                    await DBconnetion.promise()
-                        .query(felhjel, temp[0].Keszito)
-                        .then(([rows]) => {
-                            temp.push(rows[0]);
-                        });
-                    //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                    temp.push(await lekeres(kokteljel, jelentesek[i][0].JelentettTartalomID))
+                    temp.push(await lekeres(felhjel, temp[0][0].Keszito))
                     jelentTar[i] = temp;
                 } else if (jelentesek[i][0].JelentesTipusa == 'Felhasználó') {
-                    await DBconnetion.promise()
-                        .query(felhjel, jelentesek[i][0].JelentettTartalomID)
-                        .then(([rows]) => {
-                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                            jelentTar[i] = rows;
-                        });
-                } else {
-                    let temp = [];
-                    await DBconnetion.promise()
-                        .query(kommentjel, jelentesek[i][0].JelentettTartalomID)
-                        .then(([rows]) => {
-                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                            temp.push(rows[0]);
-                        });
-                    await DBconnetion.promise()
-                        .query(felhjel, temp[0].Keszito)
-                        .then(([rows]) => {
-                            temp.push(rows[0]);
-                        });
-
-                    //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
+                    jelentTar[i]=await(lekeres(felhjel, jelentesek[i][0].JelentettTartalomID))
+                } else if(jelentesek[i][0].JelentesTipusa == 'Komment') {
+                    temp.push(await lekeres(kommentjel, jelentesek[i][0].JelentettTartalomID))
+                    temp.push(await lekeres(felhjel, temp[0][0].Keszito))
                     jelentTar[i] = temp;
                 }
             }
-
-            for (let i = 0; i < jelentesek[0].length; i++) {
-                //Ideiglenesen üresen létrehozzuk a helyét a jelentésnek a sorrend megtartása érdekében
-                jelentTar.push('');
-                if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
-                    await DBconnetion.promise()
-                        .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
-                        .then(([rows]) => {
-                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                            jelentTar[i] = rows;
-                        });
-                } else if (jelentesek[0][i].JelentesTipusa == 'Felhasználó') {
-                    await DBconnetion.promise()
-                        .query(felhjel, jelentesek[0][i].JelentettTartalomID)
-                        .then(([rows]) => {
-                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                            jelentTar[i] = rows;
-                        });
-                } else {
-                    await DBconnetion.promise()
-                        .query(kommentjel, jelentesek[0][i].JelentettTartalomID)
-                        .then(([rows]) => {
-                            //amikor megtudjuk mi van ott, kicseréljük az üreset a tényleges jelentésre
-                            jelentTar[i] = rows;
-                        });
-                }
-            }
-
-            //sorrendbe rendezve..
             response.status(200).json({
                 message: 'siker!',
                 adat: jelentesek,
                 rep: jelentTar
             });
         }
-    } catch (error) {
-        console.log(error);
+    } 
+    catch (error) {
         response.status(500).json({
             message: 'Hiba',
             hiba: error
@@ -708,25 +641,14 @@ router.get('/AdatlapLekeres/Kosar/:id', async (request, response) => {
     let kosartermekek;
     let termekek = [];
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
-
     //Lekérdezés
     try {
-        await DBconnetion.promise()
-            .query(KosarLekeres, vasarlo)
-            .then(([rows]) => {
-                kosar = rows[0].SessionID;
-            });
-        await DBconnetion.promise()
-            .query(KosarTermekLekeres, kosar)
-            .then(([rows]) => {
-                kosartermekek = rows;
-            });
+        kosar=await lekeres(KosarLekeres,vasarlo)
+        kosartermekek=await lekeres(KosarTermekLekeres,kosar[0].SessionID)
+
         for (let i = 0; i < kosartermekek.length; i++) {
-            await DBconnetion.promise()
-                .query(TermekLekeres, kosartermekek[i].TermekID)
-                .then(([rows]) => {
-                    termekek.push(rows[0]);
-                });
+            let temp=await lekeres(TermekLekeres,kosartermekek[i].TermekID)
+            termekek.push(temp[0])
         }
         response.status(200).json({
             message: 'Sikeres Lekérés!',
@@ -807,9 +729,6 @@ router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     let mit = request.body.tettes;
     let milyen = request.body.tipus;
     let JelentésTörlés = 'DELETE FROM Jelentők WHERE JelentőID LIKE ? AND JelentésID LIKE ?';
-    console.log(ki);
-    console.log(mit);
-
     try {
         await DBconnetion.promise().query(JelentésTörlés, [ki, mit, milyen]);
         response.status(200).json({
