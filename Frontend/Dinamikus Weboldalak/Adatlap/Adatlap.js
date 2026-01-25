@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     let kep=document.getElementById("profilkep")
     fajl.addEventListener("change",()=>{
         kep.setAttribute("src",URL.createObjectURL(fajl.files[0]))
-        console.log(URL.createObjectURL(fajl.files[0]));
-        
     })
     let NavProfil=document.getElementById("Profile")
     let mentes=document.getElementById("Mentés")
@@ -80,12 +78,34 @@ const AdatPost=async(url,data)=>{
         console.error(error)
     }
 }
+
+const AdatPostKep=async(url,data)=>{
+    try {
+      const ertek=await fetch(url,{
+        method:"POST",
+        body:data
+      })  
+      if (ertek.ok) {
+        return ertek.json()
+      }
+      else{
+        console.error(ertek.statusText);
+        
+      }
+    } 
+    catch (error) {
+        console.error(error)
+    }
+}
 async function AdatlapLekeres(){
     
     let celpontok=[document.getElementById("Felhasználónév"),document.getElementById("Email-cím"),document.getElementById("Jelszó"),document.getElementById("profilkep"),document.getElementById("RegDate")]
     let valtozok=["Felhasználónév","Email","Jelszó","ProfilkepUtvonal","RegisztracioDatuma"]
     const valasz=await AdatGet("/api/AdatlapLekeres/FelhAdatok/"+2)
     let ertek=valasz.tartalom[0][0];
+    let keptarolas=new FormData()
+    keptarolas.append("fajl",celpontok[celpontok.length-2].getAttribute("src"))
+    await AdatPost("/api/AdatlapLekeres/keptest",keptarolas)
     
     for (let index = 0; index < celpontok.length-1; index++) {
         celpontok[index].value=ertek[valtozok[index]]
@@ -514,4 +534,9 @@ function undo(){
     catch (error) {
         alert("Hiba történt!")
     }
+}
+async function adatvaltas(){
+    const data=new FormData()
+    data.append("file",document.getElementById("input").files[0])
+    await AdatPostKep("/api/AdatlapLekeres/keptest",data)
 }

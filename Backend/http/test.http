@@ -56,8 +56,8 @@ Content-Type: application/json
     "termék":"1",
     "count":"8"
 }
-
 ###
 POST http://127.0.0.1:3000/api/AdminPanel/jelentesek
 Content-Type: application/json
+
 

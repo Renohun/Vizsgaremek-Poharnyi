@@ -76,7 +76,7 @@
             </div>
         </nav>
         <div class="container-fluid">
-            <div class="row">
+            <div class="row ">
                 <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-2 col-xxl-1 col-3 vh-100" id="Sidebar">
                     <div class="mb-auto mt-auto">
                         <input type="button" value="Adatlap" class="gomb jelenlegi" id="Adatlap" />
@@ -104,22 +104,19 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-9 col-sm-9 col-md-5 col-lg-5 col-xl-5">
-                            <div class="flex-column align-items-center">
+                            <div class="flex-column d-flex">
                                 <p>Profilképed:</p>
                                 <label>
-                                    <input type="file" hidden  id="input"/>
-                                    <img src="../UnversalCSS/whatever.png" class="profil-big" alt="A Profilképednek kéne itt lennie... valami nem sikerült." title="A Profilképed!" id="profilkep"/>
+                                        <input type="file" hidden  id="input" name="file"/>
+                                        <img src="" class="profil-big" alt="A Profilképednek kéne itt lennie... valami nem sikerült." title="A Profilképed!" id="profilkep"/>
                                 </label>
-                            </div>
-                            <div class="flex-column d-flex">
+                                
                                 <label for="Felhasználónév">Felhasználónév:</label>
                                 <input type="text" disabled id="Felhasználónév" />
-                            </div>
-                            <div class="flex-column d-flex">
+
                                 <label for="Email-cím">Email-cím:</label>
                                 <input type="email" disabled id="Email-cím" />
-                            </div>
-                            <div class="flex-column d-flex">
+
                                 <label for="Jelszó">Jelszó:</label>
                                 <input type="password" disabled id="Jelszó" />
                             </div>
