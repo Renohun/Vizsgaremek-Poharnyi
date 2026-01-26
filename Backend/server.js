@@ -18,11 +18,6 @@ app.use(express.json()); //?Middleware JSON
 app.set('trust proxy', 1); //?Middleware Proxy
 app.use(cookie_parser());
 
-//!Routing
-//?Főoldal:
-
-//A DINAMIKUS MAPPA NEM MŰKÖDIK HA EZ NEM EGY KOMMENT
-//app.use(express.static(path.join(__dirname, '..', 'Frontend', 'templateHTML')));
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/')));
 
 router.get('/', (request, response) => {
@@ -36,11 +31,6 @@ router.get('/', (req, res) => {
 //Landing Page
 router.get('/Fooldal', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Landing Page/Landing Page.html'));
-});
-//PohAlc
-router.use(express.static(path.join(__dirname, '../Frontend/templateHTML/Pohárnyi Alkoholos')));
-router.get('/PoharnyiAlkoholosKoktelok', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Pohárnyi Alkoholos/PohAlc.html'));
 });
 
 //Regisztracio - Dinamikus
@@ -87,6 +77,11 @@ router.get('/AdminPanel', authenticationMiddleware, authorizationMiddelware, (re
     res.sendFile(
         path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'AdminPanel - Dinamikus', 'index.html')
     );
+});
+//Koktelok
+router.use(express.static(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'Pohárnyi - Dinamikus')));
+router.get('/Koktelok', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'Pohárnyi - Dinamikus', 'PohAlc.html'));
 });
 
 //KoktelParam

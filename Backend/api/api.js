@@ -21,12 +21,120 @@ router.get('/test', (req, res) => {
         }
     });
 });
-
+//Koktelok vegpontok
 router.post('/sutiJelenlete', (req, res) => {
     if (!req.cookies.auth_token) {
         res.status(200).json({ message: false });
     }
     res.status(200).json({ message: true });
+});
+
+router.get('/Koktelok/Jelvenyek', async (req, res) => {
+    try {
+        let jelvenyObj = {};
+
+        const queryIzek = 'SELECT JelvényNeve FROM jelvények WHERE JelvenyKategoria LIKE "ízek"';
+        const queryAllergenek = 'SELECT JelvényNeve FROM jelvények WHERE JelvenyKategoria LIKE "Allergének"';
+        const queryErosseg = 'SELECT JelvényNeve FROM jelvények WHERE JelvenyKategoria LIKE "Erősség"';
+
+        DBconnetion.query(queryIzek, (err, rows) => {
+            if (err) {
+                res.status(500).json({ message: 'Sikeretelen adatbazisbol valo lekeres' });
+            }
+            //console.log(rows);
+
+            jelvenyObj.izek = rows;
+
+            //console.log(jelvenyObj);
+
+            DBconnetion.query(queryAllergenek, (err, rows) => {
+                if (err) {
+                    res.status(500).json({ message: 'Sikeretelen adatbazisbol valo lekeres' });
+                }
+                jelvenyObj.allergenek = rows;
+
+                DBconnetion.query(queryErosseg, (err, rows) => {
+                    if (err) {
+                        res.status(500).json({ message: 'Sikeretelen adatbazisbol valo lekeres' });
+                    }
+                    jelvenyObj.erosseg = rows;
+                    res.status(200).json({ data: jelvenyObj });
+                });
+            });
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Hiba vegpont eleres', error: err });
+    }
+});
+
+router.get('/Koktelok/lekeres', (req, res) => {
+    try {
+        const queryKoktelok = 'SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC';
+        const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
+        const queryKoktelJelvenyek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
+        const queryJelvenyek = 'SELECT JelvényNeve, JelvenyKategoria FROM jelvények WHERE JelvényID IN (?)';
+        const queryErtekelesek =
+            'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz LIKE "Koktél" AND HovaIrták LIKE ? GROUP BY HovaIrták';
+
+        DBconnetion.query(queryKoktelok, async (err, rows) => {
+            if (err) {
+                res.status(500).json({ message: 'Hibas koktel lekeres' });
+            }
+
+            let koktelok = rows;
+            let returnKoktelok = [];
+
+            //console.log(koktelok);
+
+            (() => {
+                koktelok.forEach((koktel) => {
+                    DBconnetion.query(queryKoktelOsszetevok, [koktel.KoktélID], (err, rows) => {
+                        if (err) {
+                            res.status(500).json({ message: 'Hibas koktel osszetevok lekeres' });
+                        }
+                        koktel.osszetevok = rows;
+                        //console.log(row);
+                    });
+
+                    DBconnetion.query(queryKoktelJelvenyek, [koktel.KoktélID], (err, rows) => {
+                        if (err) {
+                            res.status(500).json({ message: 'Hibas koktel jelvenyek lekeres' });
+                        }
+                        //console.log(rows[0]);
+                        const jelvenyID = rows.map((r) => r.JelvényID);
+                        //console.log(jelvenyID);
+
+                        if (jelvenyID.length > 0) {
+                            DBconnetion.query(queryJelvenyek, [jelvenyID], (err, rows) => {
+                                if (err) {
+                                    res.status(500).json({ message: 'Hibas jelvenyek lekeres' });
+                                }
+                                koktel.jelvenyek = rows;
+
+                                DBconnetion.query(queryErtekelesek, [koktel.KoktélID], (err, rows) => {
+                                    if (err) {
+                                        res.status(500).json({ message: 'Hibas ertekeles lekeres' });
+                                    }
+                                    //console.log(rows);
+
+                                    if (rows.length == 0) {
+                                        koktel.ertekeles = 'Meg nincs ertekelve';
+                                    } else {
+                                        koktel.ertekeles = Math.round(rows[0].Osszert * 10) / 10;
+                                    }
+
+                                    returnKoktelok.push(koktel);
+                                });
+                            });
+                        }
+                    });
+                });
+            })();
+            console.log(returnKoktelok);
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Sikertelen vegpont eleres' });
+    }
 });
 
 //Regisztracio oldalrol hoz ide majd tolti fel az adatokat az adatbazisba

@@ -1,32 +1,25 @@
-const GetMethodFetch = (url) =>{
-    return fetch(url).then((response)=>{
-        if(!response.ok){
-            throw Error("Hiba")
+async function GETfetch(url) {
+    try {
+        const data = await fetch(url);
+
+        if (data.ok) {
+            return await data.json();
+        } else {
+            throw new err('Hiba tortent a fetch-el');
         }
-        return Response.json()
-    })
-    .catch((error)=>{
-        throw new Error(error.message)
-    })
+    } catch (err) {
+        throw new Error(err);
+    }
 }
 
-document.addEventListener("DOMContentLoaded",()=>{
-const gomb1 = document.getElementById("elso").addEventListener("click",()=>{
-   console.log("f")
+document.addEventListener('DOMContentLoaded', () => {
+    (async () => {
+        //Jelvenyek avagy rendezesek lekerese
+        const jelvenyek = await GETfetch('http://127.0.0.1:3000/api/Koktelok/Jelvenyek');
+        console.log(jelvenyek);
 
-let url =`/Koktelok/${1}`
-        const fetchMeghiv = async()=>{
-            try {
-                const data =   await GetMethodFetch(`/Koktelok/${id}`)
-               
-                console.log(data)
-            } catch (error) {
-                    console.log("hiba",error)
-            }
-            GetMethodFetch(`/Koktelok/${id}`)
-        }
-
-    })
-})  
-
-
+        //koktelok lekeredezese
+        const koktelok = await GETfetch('http://127.0.0.1:3000/api/Koktelok/lekeres');
+        console.log(koktelok);
+    })();
+});

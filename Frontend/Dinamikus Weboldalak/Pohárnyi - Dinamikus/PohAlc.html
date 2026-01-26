@@ -1,18 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
-        <link rel="stylesheet" href="../bootstrap-5.2.3-dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="../Navbar/NavBar.css" />
-        <link rel="stylesheet" href="../UnversalCSS/universalCSS.css" />
-        <link rel="stylesheet" href="../UnversalCSS/lightTheme.css" />
+        <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../kellékek/NavBar.css" />
+        <link rel="stylesheet" href="../kellékek/universalCSS.css" />
+        <link rel="stylesheet" href="../kellékek/lightTheme.css" />
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
-        <link rel="stylesheet" href="../Pohárnyi Alkoholos/PohAlc.css" />
+        <link rel="stylesheet" href="../Pohárnyi - Dinamikus/PohAlc.css" />
     </head>
     <body>
         <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
@@ -29,39 +29,8 @@
                         <li class="nav-item">
                             <a class="nav-link active jelenlegi" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                                aria-expanded="false"
-                                >Poháryni koktélok</a
-                            >
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="/PoharnyiAlkoholosKoktelok">Alkoholos Koktélok</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                                aria-expanded="false"
-                                >Ti koktéljaitok</a
-                            >
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Alkoholos Koktélok</a></li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
-                                </li>
-                            </ul>
+                        <li class="nav-item">
+                            <a href="/Koktelok" class="nav-link">Koktelok</a>
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link">Mi van a polcon?</a>
@@ -70,10 +39,15 @@
                     <div>
                         <input type="button" value="" id="ThemeSwitcher" />
                         <a href="/Regisztralj">
-                            <input type="button" class="btn btn-secondary nav-item" value="Regisztárció" id="" />
+                            <input
+                                type="button"
+                                class="btn btn-secondary nav-item"
+                                value="Regisztárció"
+                                id="regisztracio"
+                            />
                         </a>
                         <a href="/LepjBe">
-                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="" />
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="belepes" />
                         </a>
 
                         <a href="/Keszites">
@@ -82,7 +56,7 @@
                                 class="nav-item btn btn-warning"
                                 hidden
                                 value="Saját koktél létrehozása"
-                                id=""
+                                id="sajatKoktelKeszites"
                             />
                         </a>
                         <a href="/Adatlap">
@@ -94,7 +68,7 @@
         </nav>
         <div class="container" id="keresofelulet">
             <div class="row text-center">
-                <p class="fs-1">Pohárnyi Alkoholos Koktélok</p>
+                <p class="fs-1">Koktélok</p>
             </div>
             <label for="Koktelnev">Keresés</label>
             <div class="row">
@@ -119,243 +93,31 @@
                         <div class="row">
                             <div class="col-md">
                                 <label for="Erősség">A koktél erőssége</label>
-                                <select name="" id="Erősség" class="col-3 form-select">
-                                    <option value="" hidden selected></option>
-                                    <option value="">Erős</option>
-                                    <option value="">Közepes</option>
-                                    <option value="">Gyenge</option>
-                                </select>
+                                <select name="" id="Erősség" class="col-3 form-select"></select>
                             </div>
                             <div class="col-md">
                                 <label for="Alap">A koktél alapja</label>
-                                <select name="" id="Alap" class="col-3 form-select">
-                                    <option value="" hidden selected></option>
-                                    <option value="">Whisky</option>
-                                    <option value="">Rum</option>
-                                    <option value="">Brandy</option>
-                                    <option value="">Bourbon</option>
-                                </select>
+                                <select name="" id="Alap" class="col-3 form-select"></select>
                             </div>
                             <div class="col-md">
                                 <label for="Allergének">Allergének</label>
-                                <select name="" id="Allergének" class="col-3 form-select">
-                                    <option value="" hidden selected></option>
-                                    <option value="">Whisky</option>
-                                    <option value="">Rum</option>
-                                    <option value="">Brandy</option>
-                                    <option value="">Bourbon</option>
-                                </select>
+                                <select name="" id="Allergének" class="col-3 form-select"></select>
                             </div>
                             <div class="col-md">
                                 <label for="Rendezés">Rendezés</label>
-                                <select name="" id="Rendezés" class="col-3 form-select">
-                                    <option value="" hidden selected></option>
-                                    <option value="">Legtöbb értékelés</option>
-                                    <option value="">Legjobb értékelés elöl</option>
-                                    <option value="">Legjobb értékelés hátul</option>
-                                </select>
+                                <select name="" id="Rendezés" class="col-3 form-select"></select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="row row-cols-md-2 row-cols-sm-1 row-cols-1 row-cols-lg-4 justify-content-center mt-1">
-                <div class="mb-1">
-                    <div class="card h-100">
-                        <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top" alt="" />
-                        <div class="card-body">
-                            <h4 class="card-title">Sidecar</h4>
-                            <span id="ertekeles"> Értékelés: <span id="ertekelesszam">4.9/5</span> </span>
-                            <div class="card-text">
-                                <div>
-                                    <span class="badge text-bg-info"> Konyak</span>
-                                    <span class="badge text-bg-danger"> Erős</span>
-                                    <span class="badge text-bg-success"> Savanyú</span>
-                                </div>
-                                <span>Összetevők:</span>
-                                <ul>
-                                    <li>Konyak</li>
-                                    <li>Triple Sec</li>
-                                    <li>Citromlé</li>
-                                    <li>és 5 további..</li>
-                                </ul>
-                            </div>
-                            <input
-                                type="button"
-                                data-KoktelId="1"
-                                id="elso"
-                                class="btn btn-secondary w-100"
-                                value="Tovább a Receptre"
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <div class="card h-100">
-                        <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="" />
-                        <div class="card-body">
-                            <h4 class="card-title">Mojito</h4>
-                            <span id="ertekeles"> Értékelés: <span id="ertekelesszam">4.9/5</span> </span>
-                            <div class="card-text">
-                                <div>
-                                    <span class="badge text-bg-info"> Whiskey</span>
-                                </div>
-                                <span>Összetevők:</span>
-                                <ul>
-                                    <li>Konyak</li>
-                                    <li>Triple Sec</li>
-                                    <li>Citromlé</li>
-                                    <li>és 5 további..</li>
-                                </ul>
-                            </div>
-                            <input type="button" class="btn btn-secondary w-100" value="Tovább a Receptre" />
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <div class="card h-100">
-                        <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="" />
-                        <div class="card-body">
-                            <h4 class="card-title">Hurricane</h4>
-                            <span id="ertekeles"> Értékelés: <span id="ertekelesszam">4.9/5</span> </span>
-                            <div class="card-text">
-                                <div>
-                                    <span class="badge text-bg-info"> Whiskey</span>
-                                </div>
-                                <span>Összetevők:</span>
-                                <ul>
-                                    <li>Konyak</li>
-                                    <li>Triple Sec</li>
-                                    <li>Citromlé</li>
-                                    <li>és 5 további..</li>
-                                </ul>
-                            </div>
-                            <input type="button" class="btn btn-secondary w-100" value="Tovább a Receptre" />
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <div class="card h-100">
-                        <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="" />
-                        <div class="card-body">
-                            <h4 class="card-title">Manhattan</h4>
-                            <span id="ertekeles"> Értékelés: <span id="ertekelesszam">4.9/5</span> </span>
-                            <div class="card-text">
-                                <div>
-                                    <span class="badge text-bg-info"> Whiskey</span>
-                                </div>
-                                <span>Összetevők:</span>
-                                <ul>
-                                    <li>Konyak</li>
-                                    <li>Triple Sec</li>
-                                    <li>Citromlé</li>
-                                    <li>és 5 további..</li>
-                                </ul>
-                            </div>
-                            <input type="button" class="btn btn-secondary w-100" value="Tovább a Receptre" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row row-cols-md-2 row-cols-sm-1 row-cols-1 row-cols-lg-4 justify-content-center mt-1">
-                <div class="mb-1">
-                    <div class="card h-100">
-                        <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top" alt="" />
-                        <div class="card-body">
-                            <h4 class="card-title">Sidecar</h4>
-                            <span id="ertekeles"> Értékelés: <span id="ertekelesszam">4.9/5</span> </span>
-                            <div class="card-text">
-                                <div>
-                                    <span class="badge text-bg-info"> Konyak</span>
-                                    <span class="badge text-bg-danger"> Erős</span>
-                                    <span class="badge text-bg-success"> Savanyú</span>
-                                </div>
-                                <span>Összetevők:</span>
-                                <ul>
-                                    <li>Konyak</li>
-                                    <li>Triple Sec</li>
-                                    <li>Citromlé</li>
-                                    <li>és 5 további..</li>
-                                </ul>
-                            </div>
-                            <input type="button" class="btn btn-secondary w-100" value="Tovább a Receptre" />
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <div class="card h-100">
-                        <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="" />
-                        <div class="card-body">
-                            <h4 class="card-title">Mojito</h4>
-                            <span id="ertekeles"> Értékelés: <span id="ertekelesszam">4.9/5</span> </span>
-                            <div class="card-text">
-                                <div>
-                                    <span class="badge text-bg-info"> Whiskey</span>
-                                </div>
-                                <span>Összetevők:</span>
-                                <ul>
-                                    <li>Konyak</li>
-                                    <li>Triple Sec</li>
-                                    <li>Citromlé</li>
-                                    <li>és 5 további..</li>
-                                </ul>
-                            </div>
-                            <input type="button" class="btn btn-secondary w-100" value="Tovább a Receptre" />
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <div class="card h-100">
-                        <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="" />
-                        <div class="card-body">
-                            <h4 class="card-title">Hurricane</h4>
-                            <span id="ertekeles"> Értékelés: <span id="ertekelesszam">4.9/5</span> </span>
-                            <div class="card-text">
-                                <div>
-                                    <span class="badge text-bg-info"> Whiskey</span>
-                                </div>
-                                <span>Összetevők:</span>
-                                <ul>
-                                    <li>Konyak</li>
-                                    <li>Triple Sec</li>
-                                    <li>Citromlé</li>
-                                    <li>és 5 további..</li>
-                                </ul>
-                            </div>
-                            <input type="button" class="btn btn-secondary w-100" value="Tovább a Receptre" />
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <div class="card h-100">
-                        <img src="SpicyMargaritas-9fcdbe2.webp" class="card-img-top img-fluid" alt="" />
-                        <div class="card-body">
-                            <h4 class="card-title">Manhattan</h4>
-                            <span id="ertekeles"> Értékelés: <span id="ertekelesszam">4.9/5</span> </span>
-                            <div class="card-text">
-                                <div>
-                                    <span class="badge text-bg-info"> Whiskey</span>
-                                </div>
-                                <span>Összetevők:</span>
-                                <ul>
-                                    <li>Konyak</li>
-                                    <li>Triple Sec</li>
-                                    <li>Citromlé</li>
-                                    <li>és 5 további..</li>
-                                </ul>
-                            </div>
-                            <input type="button" class="btn btn-secondary w-100" value="Tovább a Receptre" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="container"></div>
 
-        <script src="../bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../Theme Switcher/themeSwitcher.js"></script>
-        <script src="../Navbar/NavBar.js"></script>
-        <script src="../Pohárnyi Alkoholos/PohAlc.js"></script>
+        <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../kellékek/themeSwitcher.js"></script>
+        <script src="../kellékek/NavBar.js"></script>
+        <script src="../Pohárnyi - Dinamikus/PohAlc.js"></script>
+        <script src="../kellékek/navBar.js"></script>
     </body>
 </html>
