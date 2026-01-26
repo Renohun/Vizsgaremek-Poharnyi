@@ -6,7 +6,7 @@ const JWT = require('jsonwebtoken');
 const authenticationMiddleware = require('./authenticationMiddleware.js');
 const authorizationMiddelware = require('./authorizationMiddelware.js');
 const jwt = require('jsonwebtoken');
-const multer=require("multer")
+const multer = require('multer');
 
 router.get('/test', (req, res) => {
     DBconnetion.query('SELECT * FROM felhasználó', (err, rows) => {
@@ -21,6 +21,14 @@ router.get('/test', (req, res) => {
         }
     });
 });
+
+router.post('/sutiJelenlete', (req, res) => {
+    if (!req.cookies.auth_token) {
+        res.status(200).json({ message: false });
+    }
+    res.status(200).json({ message: true });
+});
+
 //Regisztracio oldalrol hoz ide majd tolti fel az adatokat az adatbazisba
 router.post('/regisztracio', async (request, response) => {
     try {
@@ -751,33 +759,29 @@ router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     }
 });
 
-let path=require("path")
-const storage=multer.diskStorage({
-    destination:(req,file,callback)=>{
-        callback(null,path.join(__dirname,"../images/"))
-        
+let path = require('path');
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, path.join(__dirname, '../images/'));
     },
-    filename:(req,file,callback)=>{
-        callback(null,file.originalname)
-        
+    filename: (req, file, callback) => {
+        callback(null, file.originalname);
     }
-})
-let test=multer({storage:storage})
-router.post('/AdatlapLekeres/keptest',test.array("file"), async (request, response) => {
-    console.log("hello!");
-    
+});
+let test = multer({ storage: storage });
+router.post('/AdatlapLekeres/keptest', test.array('file'), async (request, response) => {
+    console.log('hello!');
+
     try {
         response.status(200).json({
-            message: "yay"
+            message: 'yay'
         });
-    } 
-    catch (error) {
-        console.log("aww!");
+    } catch (error) {
+        console.log('aww!');
         response.status(500).json({
-            message:error
-        })
+            message: error
+        });
     }
-    
 });
 
 //
