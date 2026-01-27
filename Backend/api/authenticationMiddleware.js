@@ -22,4 +22,4 @@ function AuthMiddleware(req,res,next){
        res.redirect("/LepjBe")
     }
 }
-module.exports = AuthMiddleware
+module.exports = AuthMiddleware 

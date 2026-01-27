@@ -67,76 +67,52 @@ router.get('/Koktelok/Jelvenyek', async (req, res) => {
     }
 });
 
-router.get('/Koktelok/lekeres', (req, res) => {
+router.get('/Koktelok/lekeres', async (req, res) => {
     try {
         const queryKoktelok = 'SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC';
-        const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
-        const queryKoktelJelvenyek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
+        const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID = ?';
+        const queryKoktelJelvenyek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID = ?';
         const queryJelvenyek = 'SELECT JelvényNeve, JelvenyKategoria FROM jelvények WHERE JelvényID IN (?)';
         const queryErtekelesek =
-            'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz LIKE "Koktél" AND HovaIrták LIKE ? GROUP BY HovaIrták';
+            'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz = "Koktél" AND HovaIrták = ?';
+        //promise().igeret amit esku hogy megcsinalok - MIERT NEM MUKODOTT ALAPBOL: mert a query callback alapu igy egy CALLBACK HELL-t csinaltam es azt nem lehet await-elni
+        //promise() egy igeretet tesz es csak ezt lehet await-ni callbacket nem, ezert kellett promise() igy az atalakitja callbackbol promise-ba
+        const [koktelok] = await DBconnetion.promise().query(queryKoktelok);
+        //Promise.all: akkor adja vissza ha az erteke ha az osszes belso promise beteljesul
+        const eredmeny = await Promise.all(
+            koktelok.map(async (koktel) => {
+                //promiseolja a query-t: megvarjuk az igeretet ami a query? a [] az azert kell mert ha nem tesszuk oda akkor mast is vissaz ad (a visszadott tartalom nevet es adattipusat SQL)
+                //a [] egy destruktor, barmi is legyen az, nem feltetlenul tudom hogy de igy annak a segitesgevel a helyes adat kerul bele a valtozoba
+                const [osszetevok] = await DBconnetion.promise().query(queryKoktelOsszetevok, [koktel.KoktélID]);
+                koktel.osszetevok = osszetevok;
 
-        DBconnetion.query(queryKoktelok, async (err, rows) => {
-            if (err) {
-                res.status(500).json({ message: 'Hibas koktel lekeres' });
-            }
+                // Jelvények
+                const [jelvenyIds] = await DBconnetion.promise().query(queryKoktelJelvenyek, [koktel.KoktélID]);
 
-            let koktelok = rows;
-            let returnKoktelok = [];
+                if (jelvenyIds.length > 0) {
+                    const ids = jelvenyIds.map((j) => j.JelvényID);
+                    const [jelvenyek] = await DBconnetion.promise().query(queryJelvenyek, [ids]);
+                    koktel.jelvenyek = jelvenyek;
+                } else {
+                    koktel.jelvenyek = [];
+                }
 
-            //console.log(koktelok);
+                // Értékelés
+                const [ertekeles] = await DBconnetion.promise().query(queryErtekelesek, [koktel.KoktélID]);
 
-            (() => {
-                koktelok.forEach((koktel) => {
-                    DBconnetion.query(queryKoktelOsszetevok, [koktel.KoktélID], (err, rows) => {
-                        if (err) {
-                            res.status(500).json({ message: 'Hibas koktel osszetevok lekeres' });
-                        }
-                        koktel.osszetevok = rows;
-                        //console.log(row);
-                    });
+                koktel.ertekeles =
+                    ertekeles.length === 0 ? 'Még nincs értékelve' : Math.round(ertekeles[0].Osszert * 10) / 10;
+                //itt a visszaadja a map tartalmait, melyek egy tombbe lesznak fuzve a ugye a map() miatt
+                return koktel;
+            })
+        );
 
-                    DBconnetion.query(queryKoktelJelvenyek, [koktel.KoktélID], (err, rows) => {
-                        if (err) {
-                            res.status(500).json({ message: 'Hibas koktel jelvenyek lekeres' });
-                        }
-                        //console.log(rows[0]);
-                        const jelvenyID = rows.map((r) => r.JelvényID);
-                        //console.log(jelvenyID);
-
-                        if (jelvenyID.length > 0) {
-                            DBconnetion.query(queryJelvenyek, [jelvenyID], (err, rows) => {
-                                if (err) {
-                                    res.status(500).json({ message: 'Hibas jelvenyek lekeres' });
-                                }
-                                koktel.jelvenyek = rows;
-
-                                DBconnetion.query(queryErtekelesek, [koktel.KoktélID], (err, rows) => {
-                                    if (err) {
-                                        res.status(500).json({ message: 'Hibas ertekeles lekeres' });
-                                    }
-                                    //console.log(rows);
-
-                                    if (rows.length == 0) {
-                                        koktel.ertekeles = 'Meg nincs ertekelve';
-                                    } else {
-                                        koktel.ertekeles = Math.round(rows[0].Osszert * 10) / 10;
-                                    }
-
-                                    returnKoktelok.push(koktel);
-                                });
-                            });
-                        }
-                    });
-                });
-            })();
-            console.log(returnKoktelok);
-        });
+        res.status(200).json({ koktelokAdat: eredmeny });
     } catch (err) {
-        res.status(500).json({ message: 'Sikertelen vegpont eleres' });
+        console.error(err);
+        res.status(500).json({ message: 'Sikertelen végpont elérés' });
     }
 });
-
 //Regisztracio oldalrol hoz ide majd tolti fel az adatokat az adatbazisba
 router.post('/regisztracio', async (request, response) => {
     try {
