@@ -50,7 +50,7 @@
 #TermekImg{
     width:100%;
 
-    height: auto;
+    height: 100%;
 }
 #TermekLeiras{
     width: 50%;
@@ -89,7 +89,7 @@
      background-color: lightgoldenrodyellow
     
 }
-.active, .TovGomb:hover{
+.TovGomb:hover{
     
     background-color: rgb(254, 255, 195);
 }
@@ -173,7 +173,7 @@ table,.lol {
     margin-left: 10px;
       margin-right: 10px;
 }
-@media only screen and (max-width: 768px){
+@media only screen and (max-width: 1000px){
     #main
     {
     display: flex;
@@ -192,7 +192,7 @@ table,.lol {
     {
    
     width: 100%;
-    height: auto;
+    height: 100%;
     }
     #TermekAdatokMainContent{
     display: flex ;
