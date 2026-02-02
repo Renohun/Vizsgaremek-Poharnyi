@@ -849,18 +849,18 @@ router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
 });
 
 let path=require("path");
-const asd=require("fs/promises")
-const c=new Date()
+const fajlkezelo=require("fs/promises")
+const datum=new Date()
 const storage=multer.diskStorage({
     destination:(req,file,callback)=>{
         callback(null,path.join(__dirname,"../images/"))
         
     },
     filename:async(req,file,callback)=>{
-        let mappa=await asd.readdir(path.join(__dirname,"../images/"))
+        let mappa=await fajlkezelo.readdir(path.join(__dirname,"../images/"))
         
         const fajlformatum=file.originalname.split(".")
-        callback(null,`${c.getFullYear()}.${c.getMonth()+1}.${c.getDate()}-${fajlformatum[0]}-${mappa.length}.${fajlformatum[fajlformatum.length-1]}`)
+        callback(null,`${datum.getFullYear()}.${datum.getMonth()+1}.${datum.getDate()}-${fajlformatum[0]}-${mappa.length}.${fajlformatum[fajlformatum.length-1]}`)
        
     }
 })
@@ -871,7 +871,6 @@ router.post('/AdatlapLekeres/KepFeltoltes',fileStorage.array("profilkep"), async
             message: request.files[0].filename
         });
     } catch (error) {
-        console.log('aww!');
         response.status(500).json({
             message: error
         });
