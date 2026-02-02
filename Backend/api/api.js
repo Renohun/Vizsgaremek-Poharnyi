@@ -6,7 +6,7 @@ const JWT = require('jsonwebtoken');
 const authenticationMiddleware = require('./authenticationMiddleware.js');
 const authorizationMiddelware = require('./authorizationMiddelware.js');
 const jwt = require('jsonwebtoken');
-const multer=require("multer")
+const multer = require('multer');
 
 router.get('/test', (req, res) => {
     DBconnetion.query('SELECT * FROM felhasználó', (err, rows) => {
@@ -20,6 +20,98 @@ router.get('/test', (req, res) => {
             });
         }
     });
+});
+//Koktelok vegpontok
+router.post('/sutiJelenlete', (req, res) => {
+    if (!req.cookies.auth_token) {
+        res.status(200).json({ message: false });
+    }
+    res.status(200).json({ message: true });
+});
+
+router.get('/Koktelok/Jelvenyek', async (req, res) => {
+    try {
+        let jelvenyObj = {};
+
+        const queryIzek = 'SELECT JelvényNeve FROM jelvények WHERE JelvenyKategoria LIKE "ízek"';
+        const queryAllergenek = 'SELECT JelvényNeve FROM jelvények WHERE JelvenyKategoria LIKE "Allergének"';
+        const queryErosseg = 'SELECT JelvényNeve FROM jelvények WHERE JelvenyKategoria LIKE "Erősség"';
+
+        DBconnetion.query(queryIzek, (err, rows) => {
+            if (err) {
+                res.status(500).json({ message: 'Sikeretelen adatbazisbol valo lekeres' });
+            }
+            //console.log(rows);
+
+            jelvenyObj.izek = rows;
+
+            //console.log(jelvenyObj);
+
+            DBconnetion.query(queryAllergenek, (err, rows) => {
+                if (err) {
+                    res.status(500).json({ message: 'Sikeretelen adatbazisbol valo lekeres' });
+                }
+                jelvenyObj.allergenek = rows;
+
+                DBconnetion.query(queryErosseg, (err, rows) => {
+                    if (err) {
+                        res.status(500).json({ message: 'Sikeretelen adatbazisbol valo lekeres' });
+                    }
+                    jelvenyObj.erosseg = rows;
+                    res.status(200).json({ data: jelvenyObj });
+                });
+            });
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Hiba vegpont eleres', error: err });
+    }
+});
+
+router.get('/Koktelok/lekeres', async (req, res) => {
+    try {
+        const queryKoktelok = 'SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC';
+        const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID = ?';
+        const queryKoktelJelvenyek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID = ?';
+        const queryJelvenyek = 'SELECT JelvényNeve, JelvenyKategoria FROM jelvények WHERE JelvényID IN (?)';
+        const queryErtekelesek =
+            'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz = "Koktél" AND HovaIrták = ?';
+        //promise().igeret amit esku hogy megcsinalok - MIERT NEM MUKODOTT ALAPBOL: mert a query callback alapu igy egy CALLBACK HELL-t csinaltam es azt nem lehet await-elni
+        //promise() egy igeretet tesz es csak ezt lehet await-ni callbacket nem, ezert kellett promise() igy az atalakitja callbackbol promise-ba
+        const [koktelok] = await DBconnetion.promise().query(queryKoktelok);
+        //Promise.all: akkor adja vissza ha az erteke ha az osszes belso promise beteljesul
+        const eredmeny = await Promise.all(
+            koktelok.map(async (koktel) => {
+                //promiseolja a query-t: megvarjuk az igeretet ami a query? a [] az azert kell mert ha nem tesszuk oda akkor mast is vissaz ad (a visszadott tartalom nevet es adattipusat SQL)
+                //a [] egy destruktor, barmi is legyen az, nem feltetlenul tudom hogy de igy annak a segitesgevel a helyes adat kerul bele a valtozoba
+                const [osszetevok] = await DBconnetion.promise().query(queryKoktelOsszetevok, [koktel.KoktélID]);
+                koktel.osszetevok = osszetevok;
+
+                // Jelvények
+                const [jelvenyIds] = await DBconnetion.promise().query(queryKoktelJelvenyek, [koktel.KoktélID]);
+
+                if (jelvenyIds.length > 0) {
+                    const ids = jelvenyIds.map((j) => j.JelvényID);
+                    const [jelvenyek] = await DBconnetion.promise().query(queryJelvenyek, [ids]);
+                    koktel.jelvenyek = jelvenyek;
+                } else {
+                    koktel.jelvenyek = [];
+                }
+
+                // Értékelés
+                const [ertekeles] = await DBconnetion.promise().query(queryErtekelesek, [koktel.KoktélID]);
+
+                koktel.ertekeles =
+                    ertekeles.length === 0 ? 'Még nincs értékelve' : Math.round(ertekeles[0].Osszert * 10) / 10;
+                //itt a visszaadja a map tartalmait, melyek egy tombbe lesznak fuzve a ugye a map() miatt
+                return koktel;
+            })
+        );
+
+        res.status(200).json({ koktelokAdat: eredmeny });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Sikertelen végpont elérés' });
+    }
 });
 //Regisztracio oldalrol hoz ide majd tolti fel az adatokat az adatbazisba
 router.post('/regisztracio', async (request, response) => {
@@ -778,14 +870,12 @@ router.post('/AdatlapLekeres/KepFeltoltes',fileStorage.array("profilkep"), async
         response.status(200).json({
             message: request.files[0].filename
         });
-    } 
-    catch (error) {
-        console.log("aww!");
+    } catch (error) {
+        console.log('aww!');
         response.status(500).json({
-            message:error
-        })
+            message: error
+        });
     }
-    
 });
 
 router.post('/AdatlapLekeres/KepLekeres/', async(request, response) => {

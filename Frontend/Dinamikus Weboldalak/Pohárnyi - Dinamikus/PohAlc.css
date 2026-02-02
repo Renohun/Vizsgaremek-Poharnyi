@@ -1,0 +1,24 @@
+#Searchbtn {
+    width: 10%;
+    margin-left: 0cap;
+    border: 1px solid grey;
+    border-left: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 17px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+#Searchbtn:hover {
+    background-color: #b4b4b4;
+}
+#searchBar {
+    padding: 5px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 90%;
+    background: #f1f1f1;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
