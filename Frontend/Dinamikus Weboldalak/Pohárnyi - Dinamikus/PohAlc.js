@@ -12,6 +12,11 @@ async function GETfetch(url) {
     }
 }
 
+//Strat: ket function les
+//Egyik: az api lekerest intezi, apinak odaadjuk a szuresi paramatereket - ez a vegpont egy teljesen uj lesz - a func vegen fogjuk meghivni a masik functiot
+//Masik: ez parameterul kapja az elozo function visszateresi erteket - ami a szurt kokteleok lesznek - majd ez alapjan fogja oket rendeleni, de ezzel mar nem lesz gond
+//Hetvege a hataridom, addigra illene vegeznem, nem kene ezt mar tovabb huznom
+
 document.addEventListener('DOMContentLoaded', () => {
     (async () => {
         //Jelvenyek avagy rendezesek lekerese
