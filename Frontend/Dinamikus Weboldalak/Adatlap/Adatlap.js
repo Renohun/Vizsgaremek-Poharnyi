@@ -10,16 +10,9 @@ document.addEventListener("DOMContentLoaded",()=>{
     let fajl=document.getElementById("input")
     let kep=document.getElementById("profilkep")
     fajl.addEventListener("change",()=>{
+        console.log(fajl.files);
+        
         kep.setAttribute("src",URL.createObjectURL(fajl.files[0]))
-    })
-    let NavProfil=document.getElementById("Profile")
-    let mentes=document.getElementById("Mentés")
-    let mégse=document.getElementById("Mégse")
-    mentes.addEventListener("click",()=>{
-        adatvaltas()
-    })
-    mégse.addEventListener("click",()=>{
-        undo()
     })
     AdatlapLekeres()
 })
@@ -49,6 +42,24 @@ const AdatGet=async(url)=>{
       })  
       if (ertek.ok) {
         return ertek.json()
+      }
+      else{
+        console.log("hiba");
+        
+      }
+    } 
+    catch (error) {
+        console.error(error)
+    }
+}
+const AdatGetKep=async(url)=>{
+    try {
+      const ertek=await fetch(url,{
+        method: "POST",
+        headers: {"Content-Type":"image/jpeg"}
+      })  
+      if (ertek.ok) {
+        return ertek.blob()
       }
       else{
         console.log("hiba");
@@ -97,28 +108,146 @@ const AdatPostKep=async(url,data)=>{
         console.error(error)
     }
 }
+
+//Bünti Sarok a Gomboknak Mert Folyamatosan Osztódnak
+let kosárModMégse=document.createElement("input")
+let kosárModIgen=document.createElement("input")
+let AdatMentes=document.createElement("input")
+let AdatMégse=document.createElement("input")
+
+
+
+
 async function AdatlapLekeres(){
-    
-    let celpontok=[document.getElementById("Felhasználónév"),document.getElementById("Email-cím"),document.getElementById("Jelszó"),document.getElementById("profilkep"),document.getElementById("RegDate")]
-    let valtozok=["Felhasználónév","Email","Jelszó","ProfilkepUtvonal","RegisztracioDatuma"]
-    const valasz=await AdatGet("/api/AdatlapLekeres/FelhAdatok/"+2)
+    //Adatok Lekérése
+    const valasz=await AdatGet("/api/AdatlapLekeres/FelhAdatok/")
+    const kep=await AdatGetKep("/api/AdatlapLekeres/KepLekeres/")
+    //A Felhasználó Azon Adatai, amelyeket tud majd módosítani betöltése
     let ertek=valasz.tartalom[0][0];
-    let keptarolas=new FormData()
-    keptarolas.append("fajl",celpontok[celpontok.length-2].getAttribute("src"))
-    await AdatPost("/api/AdatlapLekeres/keptest",keptarolas)
-    
-    for (let index = 0; index < celpontok.length-1; index++) {
-        celpontok[index].value=ertek[valtozok[index]]
+    let kapottkep=URL.createObjectURL(kep)
+    let AdatlapFelh=document.getElementById("Felhasználónév")
+    let AdatlapEmail=document.getElementById("Email-cím")
+    let AdatlapJelszo=document.getElementById("Jelszó")
+    let AdatlapKep=document.getElementById("profilkep")
+    AdatlapFelh.value=ertek.Felhasználónév
+    AdatlapEmail.value=ertek.Email
+    AdatlapJelszo.value=ertek.Jelszó
+    AdatlapKep.setAttribute("src",kapottkep)
+
+
+
+    //A Módosítás Gomb Következményei
+    let modosit=document.getElementById("Módosítás")
+    let hovaGombok=document.getElementById("AdatlapGombok")
+    let eredmény=document.getElementById("result")
+    let titkos=document.getElementById("input")
+    eredmény.innerHTML=""
+    modosit.addEventListener("click",()=>{
+        eredmény.innerHTML=""
+        AdatMentes.setAttribute("type","button")
+        AdatMentes.setAttribute("value","Mentés")
+        AdatMentes.classList.add("btn","btn-success","me-1")
+
+        AdatMégse.setAttribute("type","button")
+        AdatMégse.setAttribute("value","Mégse")
+        AdatMégse.classList.add("btn","btn-danger")
+
+        let tempFelh=AdatlapFelh.value
+        let tempMail=AdatlapEmail.value
+        let tempJelszo=AdatlapJelszo.value
+        let tempKep=kapottkep
+        AdatlapFelh.removeAttribute("disabled","true")
+        AdatlapEmail.removeAttribute("disabled","true")
+        AdatlapJelszo.removeAttribute("disabled","true")
+        titkos.removeAttribute("disabled","true")
+        modosit.setAttribute("disabled","true")
+
+        hovaGombok.appendChild(AdatMentes)
+        hovaGombok.appendChild(AdatMégse)
+        console.log(hovaGombok.children);
+        AdatMentes.addEventListener("click",()=>{
+        adatvaltas()
+        GombOles()
+
+        })
+        AdatMégse.addEventListener("click",()=>{
+                undo()
+                GombOles()
         
+        })
+        function undo(){
+            try {
+                AdatlapFelh.value=tempFelh
+                AdatlapEmail.value=tempMail
+                AdatlapJelszo.value=tempJelszo
+                AdatlapKep.setAttribute("src",tempKep)
+                eredmény.innerHTML="Sikeres Törlés!"
+            } 
+            catch (error) {
+                //redirect?
+                eredmény.innerHTML="Hiba történt!"
+            }
+        }
+
+        async function adatvaltas(){
+            try {
+                    const data=new FormData()
+                    data.append("profilkep",titkos.files[0])
+                    //A Kép Eltárolása. Visszakapjuk a kép új nevét, amit továbbadunk az adatbázisnak
+                    const kepUtvonal=await AdatPostKep("/api/AdatlapLekeres/KepFeltoltes",data)
+                    let FelhAdatok={
+                        Felhasználónév:AdatlapFelh.value,
+                        Email:AdatlapEmail.value,
+                        Jelszó:AdatlapJelszo.value,
+                        KépÚtvonal:kepUtvonal.message
+                    }
+                    console.log( await AdatPost("/api/AdatlapLekeres/Adatmodositas/",FelhAdatok));
+                    
+                    eredmény.innerHTML="Sikeres Mentés!"
+            } 
+            catch (error) {
+                //redirect?
+                eredmény.innerHTML="Hiba történt!"
+            }
+
+        }
+    })
+    function GombOles(){
+        
+        let mit=[]
+        for (let i = 1; i < hovaGombok.children.length; i++) {
+            mit.push(hovaGombok.children[i])
+            
+        }
+        for (let i = 0; i < mit.length; i++) {
+            hovaGombok.removeChild(mit[i])
+            
+        }
+        AdatlapFelh.setAttribute("disabled","true")
+        AdatlapEmail.setAttribute("disabled","true")
+        AdatlapJelszo.setAttribute("disabled","true")
+        modosit.removeAttribute("disabled","true")
+        titkos.setAttribute("disabled","true")
     }
-    celpontok[4].innerHTML=ertek[valtozok[4]]
+
+
+
+    //A Dátum Formázása
+    let reg=ertek.RegisztracioDatuma.split('T')
+    let regDate=reg[0]
+    let regTime=(reg[1].split('.'))[0]
+
+    document.getElementById("RegDate").innerHTML=`${regDate} ${regTime}`
     document.getElementById("KeszitKoktelNum").innerHTML=(valasz.tartalom[4][0]).MAKEID
     document.getElementById("KedveltKoktelNum").innerHTML=(valasz.tartalom[1][0]).KEDVID
     document.getElementById("KommentNum").innerHTML=(valasz.tartalom[2][0]).KOMMID
     document.getElementById("ErtekNum").innerHTML=(valasz.tartalom[3][0]).RATEID
+
+    
 }
 async function KedvencekLekeres() {
-    const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/"+1)
+    const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/")
+    
     let kulsoertek=0
     let sorszam=Math.round((valasz.adat.length/4)+0.5)
     let hova=document.getElementById("IdeKedvenc")
@@ -131,7 +260,6 @@ async function KedvencekLekeres() {
         for (kulsoertek; kulsoertek < maxertek; kulsoertek++) 
         {
             if (valasz.adat[kulsoertek]!=null) {
-                console.log(valasz.adat[kulsoertek]);
                 //elemek létrehozása
                 let koktelDiv=document.createElement("div")
                 let koktelCard=document.createElement("div")
@@ -212,9 +340,7 @@ async function KedvencekLekeres() {
     }
 }
 async function KoktelokLekeres() {
-    console.log("Koktél");
-    const valasz=await AdatGet("/api/AdatlapLekeres/Koktelok/"+2)
-    console.log(valasz);
+    const valasz=await AdatGet("/api/AdatlapLekeres/Koktelok/")
     let kulsoertek=0
     let sorszam=Math.round((valasz.adat.length/4)+0.5)
     let hova=document.getElementById("IdeSaját")
@@ -295,7 +421,7 @@ async function KoktelokLekeres() {
     
 }
 async function JelentesekLekeres() {
-    const valasz=await AdatGet("/api/AdatlapLekeres/Jelentesek/"+4)
+    const valasz=await AdatGet("/api/AdatlapLekeres/Jelentesek/")
     let hova=document.getElementById("IdeReport")
     console.log(valasz);
     
@@ -382,66 +508,73 @@ async function JelentesekLekeres() {
         }
     }
 }
+
+
+
 async function KosarLekeres() {
-    const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/"+1)
-    console.log(valasz.kosár);
-    let hova=document.getElementById("IdeKosár")
-    hova.innerHTML=""
-    let összár=0
-    for (let i = 0; i < valasz.kosár.length; i++) {
-        let kosárDiv=document.createElement("div")
-        let kosárKépDiv=document.createElement("div")
-        let kosárKép=document.createElement("img")
-        let kosárNév=document.createElement("div")
-        let kosárText=document.createElement("div")
-        let kosárDBÁr=document.createElement("div")
-        let kosárMennyiség=document.createElement("span")
-        let kosárEgységÁr=document.createElement("span")
-        let kosárÖssz=document.createElement("div")
-
-        kosárDiv.classList.add("card","p-0","ms-2")
-        kosárDiv.classList.add("col-9","col-sm-9","col-md-4","col-lg-4","col-xl-2","col-xxl-2","mb-1")
-        kosárNév.classList.add("card-title","fs-4","border-bottom","border-black")
-        kosárKép.classList.add("card-img-top")
-        kosárKépDiv.classList.add("justify-content-space-between")
-        kosárText.classList.add("border-bottom","border-black")
-
-        kosárNév.innerHTML=`${valasz.termekek[i].TermekCim}`
-        kosárText.innerHTML=`${valasz.termekek[i].TermekLeiras}`
-        kosárDBÁr.innerHTML=`Mennyiség:`
-        kosárMennyiség.innerHTML=`${valasz.kosár[i].Darabszam}`
-        kosárEgységÁr.innerHTML=`db Egységár:${valasz.kosár[i].EgysegAr}Ft`
-        kosárÖssz.innerHTML=`Összár:${valasz.kosár[i].EgysegAr*valasz.kosár[i].Darabszam}Ft`
-        kosárKép.setAttribute("src","hurricane.jpg")
-
-        kosárDBÁr.appendChild(kosárMennyiség)
-        kosárDBÁr.appendChild(kosárEgységÁr)
-        kosárKépDiv.appendChild(kosárKép)
-        kosárDiv.appendChild(kosárKépDiv)
-        kosárDiv.appendChild(kosárNév)
-        kosárDiv.appendChild(kosárText)
-        kosárDiv.appendChild(kosárDBÁr)
-        kosárDiv.appendChild(kosárÖssz)
-
-        összár+=parseInt(valasz.kosár[i].EgysegAr*valasz.kosár[i].Darabszam)
-        hova.appendChild(kosárDiv)
+    const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/")
+    console.log(valasz);
+    if (valasz.message=="Üres Lekérés!") {
+        document.getElementById("KosárGombok").innerHTML="Üres A Kosarad!"
     }
-    let hovaÖsszeg=document.getElementById("KosárFizetésGomb")
-    hovaÖsszeg.innerHTML=""
-    let kosárÖsszeg=document.createElement("div")
-    kosárÖsszeg.innerHTML=`Összesen: ${összár} Ft`
-    hovaÖsszeg.appendChild(kosárÖsszeg)
-    
-    let kosárMódosít=document.getElementById("KosárEdit")
-    let kosárFizet=document.getElementById("KosárFizet")
-    let kosárÜrít=document.getElementById("KosárDelete")
-    //Kosár termékek módosítása
-    kosárMódosít.addEventListener("click",()=>{
-        kosárMódosít.setAttribute("disabled","true")
-        kosárFizet.setAttribute("disabled","true")
-        kosárÜrít.setAttribute("disabled","true")
-        let kosárGombok=document.getElementById("KosárGombok")
-        for (let i = 0; i < hova.children.length; i++) {
+    else{    
+        let hova=document.getElementById("IdeKosár")
+        hova.innerHTML=""
+        let összár=0
+        for (let i = 0; i < valasz.kosár.length; i++) {
+            let kosárDiv=document.createElement("div")
+            let kosárKépDiv=document.createElement("div")
+            let kosárKép=document.createElement("img")
+            let kosárNév=document.createElement("div")
+            let kosárText=document.createElement("div")
+            let kosárDBÁr=document.createElement("div")
+            let kosárMennyiség=document.createElement("span")
+            let kosárEgységÁr=document.createElement("span")
+            let kosárÖssz=document.createElement("div")
+
+            kosárDiv.classList.add("card","p-0","ms-2")
+            kosárDiv.classList.add("col-9","col-sm-9","col-md-4","col-lg-4","col-xl-2","col-xxl-2","mb-1")
+            kosárNév.classList.add("card-title","fs-4","border-bottom","border-black")
+            kosárKép.classList.add("card-img-top")
+            kosárKépDiv.classList.add("justify-content-space-between")
+            kosárText.classList.add("border-bottom","border-black")
+
+            kosárNév.innerHTML=`${valasz.termekek[i].TermekCim}`
+            kosárText.innerHTML=`${valasz.termekek[i].TermekLeiras}`
+            kosárDBÁr.innerHTML=`Mennyiség:`
+            kosárMennyiség.innerHTML=`${valasz.kosár[i].Darabszam}`
+            kosárEgységÁr.innerHTML=`db Egységár:${valasz.kosár[i].EgysegAr}Ft`
+            kosárÖssz.innerHTML=`Összár:${valasz.kosár[i].EgysegAr*valasz.kosár[i].Darabszam}Ft`
+            kosárKép.setAttribute("src","hurricane.jpg")
+
+            kosárDBÁr.appendChild(kosárMennyiség)
+            kosárDBÁr.appendChild(kosárEgységÁr)
+            kosárKépDiv.appendChild(kosárKép)
+            kosárDiv.appendChild(kosárKépDiv)
+            kosárDiv.appendChild(kosárNév)
+            kosárDiv.appendChild(kosárText)
+            kosárDiv.appendChild(kosárDBÁr)
+            kosárDiv.appendChild(kosárÖssz)
+
+            összár+=parseInt(valasz.kosár[i].EgysegAr*valasz.kosár[i].Darabszam)
+            hova.appendChild(kosárDiv)
+        }
+        let hovaÖsszeg=document.getElementById("KosárFizetésGomb")
+        hovaÖsszeg.innerHTML=""
+        let kosárÖsszeg=document.createElement("div")
+        kosárÖsszeg.innerHTML=`Összesen: ${összár} Ft`
+        hovaÖsszeg.appendChild(kosárÖsszeg)
+        let kosárMódosít=document.getElementById("KosárEdit")
+        let kosárFizet=document.getElementById("KosárFizet")
+        let kosárÜrít=document.getElementById("KosárDelete")
+
+        //Kosár termékek módosítása
+        kosárMódosít.addEventListener("click",()=>{
+            kosárMódosít.setAttribute("disabled","true")
+            kosárFizet.setAttribute("disabled","true")
+            kosárÜrít.setAttribute("disabled","true")
+            let kosárGombok=document.getElementById("KosárGombok")
+            for (let i = 0; i < hova.children.length; i++) {
             let kosárDbMod=document.createElement("input")
             kosárDbMod.setAttribute("type","number")
             kosárDbMod.setAttribute("min","1")
@@ -464,8 +597,7 @@ async function KosarLekeres() {
                 AdatPost("/api/AdatlapLekeres/TermekUrites/",mitürít)
             })
             hova.children[i].childNodes[0].appendChild(koktelKuka)
-            let kosárModMégse=document.createElement("input")
-            let kosárModIgen=document.createElement("input")
+
             kosárModMégse.setAttribute("type","button")
             kosárModIgen.setAttribute("type","button")
             kosárModMégse.setAttribute("value","Mégse")
@@ -489,54 +621,42 @@ async function KosarLekeres() {
                 tisztitas()
 
             })
-            function tisztitas(){   
-                hova.children[i].childNodes[0].removeChild(koktelKuka)
-                kosárGombok.removeChild(kosárModIgen)
-                kosárGombok.removeChild(kosárModMégse)
-                kosárModIgen="";
-                kosárModMégse="";
-                kosárMódosít.removeAttribute("disabled","true")
-                kosárFizet.removeAttribute("disabled","true")
-                kosárÜrít.removeAttribute("disabled","true")
-                KosarLekeres()
-            }
-        }
-    })
-    //Kosár kiürítése
-
-    kosárÜrít.addEventListener("click",()=>{
-        try {
-            //dinamikusan kell a FelhID-t odaadni
-            let mitürít={
-                tartalom:1
-            }
-            AdatPost("/api/AdatlapLekeres/Kosarurites/",mitürít)
+        function tisztitas(){   
+            hova.children[i].childNodes[0].removeChild(koktelKuka)
+            kosárGombok.removeChild(kosárModIgen)
+            kosárGombok.removeChild(kosárModMégse)
+            kosárMódosít.removeAttribute("disabled","true")
+            kosárFizet.removeAttribute("disabled","true")
+            kosárÜrít.removeAttribute("disabled","true")
             KosarLekeres()
-            alert("Siker!")
-            
-        } 
-        catch (error) {
-            alert("Hiba Történt!")
-        }
-    })
+            }}
+
+        })
+        //Kosár kiürítése
+        kosárÜrít.addEventListener("click",()=>{
+            try {
+                //dinamikusan kell a FelhID-t odaadni
+                let mitürít={
+                    tartalom:1
+                }
+                AdatPost("/api/AdatlapLekeres/Kosarurites/",mitürít)
+                KosarLekeres()
+                alert("Siker!")
+
+            } 
+            catch (error) {
+                alert("Hiba Történt!")
+            }
+        })
+    }
+    
+    
+
+    
 }
 
 function betoltes(oldal){
     let oldalak=[AdatlapLekeres,KedvencekLekeres,KoktelokLekeres,JelentesekLekeres,KosarLekeres]
     oldalak[oldal]()
     
-}
-function undo(){
-    try {
-        AdatlapLekeres()
-        alert("Sikeres Törlés")
-    } 
-    catch (error) {
-        alert("Hiba történt!")
-    }
-}
-async function adatvaltas(){
-    const data=new FormData()
-    data.append("file",document.getElementById("input").files[0])
-    await AdatPostKep("/api/AdatlapLekeres/keptest",data)
 }

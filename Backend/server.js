@@ -143,9 +143,12 @@ router.get('/Kijelentkezes', authenticationMiddleware, (req, res) => {
 
 //Adatok - Dinamikus
 router.get('/Adatlap', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Adatlap/Adatlap.html'));
-    //A Kozeljovoben ha valaki erre hivatkozik, akkor gonosz es nincs bejelentkezve, ezert szamuzzunk oda
-    //res.redirect('/LepjBe')
+    if (req.cookies.auth_token==null) {
+        res.redirect('/LepjBe')
+    }
+    else{
+        res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Adatlap/Adatlap.html'));
+    }
 });
 //AdminPanel - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/AdminPanel - Dinamikus')));

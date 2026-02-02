@@ -459,23 +459,16 @@ async function lekeres(query, param) {
         });
     return result;
 }
-router.get('/AdatlapLekeres/FelhAdatok/kutya', async (request, response) => {
-    let temp = await test.readFile(path.join(__dirname, '../images/dog.png'), 'utf8');
-    response.status(200).json({
-        message: 'Sikeres Lekérés!',
-        kutya: temp
-    });
-});
-router.get('/AdatlapLekeres/FelhAdatok/:id', async (request, response) => {
+router.get('/AdatlapLekeres/FelhAdatok/', async (request, response) => {
     //A Lekérés definiálása
     let query =
-        'SELECT Felhasználónév,Email,Jelszó,ProfilkepUtvonal,RegisztracioDatuma from felhasználó WHERE FelhID LIKE ?;SELECT COUNT(KiKedvelteID) AS KEDVID from kedvencek where KiKedvelteID like ? ;SELECT COUNT(Keszito) AS KOMMID from komment where Keszito like ?;SELECT COUNT(Keszito) AS RATEID from ertekeles where Keszito like ?;SELECT COUNT(Keszito) AS MAKEID from koktél where Keszito like ?;';
+        'SELECT Felhasználónév,Email,JelszóHossza,RegisztracioDatuma from felhasználó WHERE FelhID LIKE ?;SELECT COUNT(KiKedvelteID) AS KEDVID from kedvencek where KiKedvelteID like ? ;SELECT COUNT(Keszito) AS KOMMID from komment where Keszito like ?;SELECT COUNT(Keszito) AS RATEID from ertekeles where Keszito like ?;SELECT COUNT(Keszito) AS MAKEID from koktél where Keszito like ?;';
     let ertekek = [];
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
+    
     for (let i = 0; i < 5; i++) {
-        ertekek.push(request.params.id);
+        ertekek.push(jwt.decode(request.cookies.auth_token).userID);
     }
-
     //Lekérdezés
     DBconnetion.query(query, ertekek, async (err, rows) => {
         if (err) {
@@ -492,7 +485,7 @@ router.get('/AdatlapLekeres/FelhAdatok/:id', async (request, response) => {
     });
 });
 
-router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
+router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
     //A Lekérés definiálása
     let koktelLekeres = 'SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?';
     let ertekelesAtlagLekeres =
@@ -501,10 +494,11 @@ router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
     let koktélbadgek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
     let badgek = 'SELECT JelvényNeve FROM jelvények WHERE JelvényID LIKE ?';
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
-    let felhaszanalo = request.params.id;
+    let felhaszanalo = jwt.decode(request.cookies.auth_token).userID;
     let kokteladatok;
     let ertekelesek = [];
     let osszetevok = [];
+    let jelvenyek=[]
     //Lekérdezés
     try {
         kokteladatok = await lekeres(koktelLekeres, felhaszanalo);
@@ -514,8 +508,6 @@ router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
             });
         } else {
             for (let i = 0; i < kokteladatok.length; i++) {
-                console.log(kokteladatok[i].KoktélIDawait);
-
                 ertekelesek.push(await lekeres(ertekelesAtlagLekeres, kokteladatok[i].KoktélID));
                 osszetevok.push(await lekeres(osszetevokLekerese, kokteladatok[i].KoktélID));
                 jelvenyadatok = await lekeres(koktélbadgek, kokteladatok[i].KoktélID);
@@ -531,13 +523,15 @@ router.get('/AdatlapLekeres/Kedvencek/:id', async (request, response) => {
             });
         }
     } catch (error) {
+        console.log(error);
+        
         response.status(500).json({
             message: 'Hiba'
         });
     }
 });
 
-router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
+router.get('/AdatlapLekeres/Koktelok/', async (request, response) => {
     //A Lekérés definiálása
     let koktelLekeres = 'SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?';
     let ertekelesLekeres =
@@ -547,7 +541,7 @@ router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
     let koktélbadgek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
     let badgek = 'SELECT JelvényNeve FROM jelvények WHERE JelvényID LIKE ?';
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
-    let felhaszanalo = request.params.id;
+    let felhaszanalo = jwt.decode(request.cookies.auth_token).userID;
     let kokteladatok;
     let jelvenyadatok;
     let ertekelesek = [];
@@ -584,7 +578,7 @@ router.get('/AdatlapLekeres/Koktelok/:id', async (request, response) => {
     }
 });
 
-router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
+router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
     //A Lekérések definiálása
     let mitjelentetto = 'SELECT JelentésID,JelentesIndoka FROM Jelentők WHERE JelentőID LIKE ?';
     let jelentesAdat =
@@ -593,7 +587,7 @@ router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
     let felhjel = 'SELECT Felhasználónév FROM Felhasználó WHERE FelhID LIKE ?';
     let kokteljel = 'SELECT KoktelCim,Keszito FROM koktél WHERE KoktélID LIKE ?';
     //Adattárolók
-    let felhaszanalo = request.params.id;
+    let felhaszanalo = jwt.decode(request.cookies.auth_token).userID;
     let oJelentette;
     let jelentesek = [];
     let jelentTar = [];
@@ -639,32 +633,43 @@ router.get('/AdatlapLekeres/Jelentesek/:id', async (request, response) => {
         });
     }
 });
-router.get('/AdatlapLekeres/Kosar/:id', async (request, response) => {
+router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     //Lekérések
     let KosarLekeres = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
     let KosarTermekLekeres = 'SELECT TermekID,Darabszam,EgysegAr FROM kosártermék WHERE KosarID LIKE ?';
     let TermekLekeres = 'SELECT TermekCim,TermekLeiras FROM webshoptermek WHERE TermekID LIKE ?';
     //Adattárolók
-    let vasarlo = request.params.id;
+    let vasarlo = jwt.decode(request.cookies.auth_token).userID;
     let kosar;
     let kosartermekek;
     let termekek = [];
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     //Lekérdezés
     try {
+        console.log(vasarlo);
+        
         kosar = await lekeres(KosarLekeres, vasarlo);
-        kosartermekek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
-
-        for (let i = 0; i < kosartermekek.length; i++) {
-            let temp = await lekeres(TermekLekeres, kosartermekek[i].TermekID);
-            termekek.push(temp[0]);
+        if (kosar.length==0) {
+            response.status(200).json({
+                message: 'Üres Lekérés!'
+            });
         }
-        response.status(200).json({
-            message: 'Sikeres Lekérés!',
-            kosár: kosartermekek,
-            termekek: termekek
-        });
+        else{
+            kosartermekek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
+
+            for (let i = 0; i < kosartermekek.length; i++) {
+                let temp = await lekeres(TermekLekeres, kosartermekek[i].TermekID);
+                termekek.push(temp[0]);
+            }
+            response.status(200).json({
+                message: 'Sikeres Lekérés!',
+                kosár: kosartermekek,
+                termekek: termekek
+            });
+        }
     } catch (error) {
+        console.log(error);
+        
         response.status(500).json({
             message: 'Hiba Történt!',
             hiba: error
@@ -673,7 +678,7 @@ router.get('/AdatlapLekeres/Kosar/:id', async (request, response) => {
 });
 
 router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
-    let mit = request.body.tartalom;
+    let mit = jwt.decode(request.cookies.auth_token).userID;
     let MelyikKosár = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
     let MelyikKosárAz;
     let KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
@@ -735,7 +740,7 @@ router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
 });
 router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     let ki = request.body.id;
-    let mit = request.body.tettes;
+    let mit = jwt.decode(request.cookies.auth_token).userID;
     let milyen = request.body.tipus;
     let JelentésTörlés = 'DELETE FROM Jelentők WHERE JelentőID LIKE ? AND JelentésID LIKE ?';
     try {
@@ -751,24 +756,27 @@ router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     }
 });
 
-let path=require("path")
+let path=require("path");
+const asd=require("fs/promises")
+const c=new Date()
 const storage=multer.diskStorage({
     destination:(req,file,callback)=>{
         callback(null,path.join(__dirname,"../images/"))
         
     },
-    filename:(req,file,callback)=>{
-        callback(null,file.originalname)
+    filename:async(req,file,callback)=>{
+        let mappa=await asd.readdir(path.join(__dirname,"../images/"))
         
+        const fajlformatum=file.originalname.split(".")
+        callback(null,`${c.getFullYear()}.${c.getMonth()+1}.${c.getDate()}-${fajlformatum[0]}-${mappa.length}.${fajlformatum[fajlformatum.length-1]}`)
+       
     }
 })
-let test=multer({storage:storage})
-router.post('/AdatlapLekeres/keptest',test.array("file"), async (request, response) => {
-    console.log("hello!");
-    
+let fileStorage=multer({storage:storage})
+router.post('/AdatlapLekeres/KepFeltoltes',fileStorage.array("profilkep"), async (request, response) => {
     try {
         response.status(200).json({
-            message: "yay"
+            message: request.files[0].filename
         });
     } 
     catch (error) {
@@ -780,6 +788,42 @@ router.post('/AdatlapLekeres/keptest',test.array("file"), async (request, respon
     
 });
 
+router.post('/AdatlapLekeres/KepLekeres/', async(request, response) => {
+
+    try {
+        let profil=jwt.decode(request.cookies.auth_token).userID
+        let kepkereses="SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?"
+        let kinek=await lekeres(kepkereses,profil)
+        response.sendFile(path.join(__dirname, "..", "images",kinek[0].ProfilkepUtvonal))
+    } 
+    catch (error) {
+        console.log(error);
+        
+    }
+});
+
+router.post('/AdatlapLekeres/Adatmodositas/', async(request, response) => {
+
+    try {
+        let profil=jwt.decode(request.cookies.auth_token).userID
+        //Ha
+        let jelszo=await argon.hash(request.body.Jelszó, { type: argon.argon2id })
+        let felhaszanalo=request.body.Felhasználónév
+        let email=request.body.Email
+        let utvonal=request.body.KépÚtvonal
+        let adatmodositas="UPDATE felhasználó SET Felhasználónév=?,Email=?,Jelszó=?,ProfilKepUtvonal=? WHERE FelhID LIKE ?"
+        await lekeres(adatmodositas,[felhaszanalo,email,jelszo,utvonal,profil])
+        response.status(200).json({
+            message:"Siker!"
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message:"Hiba!"
+        })
+    }
+});
 //
 //
 //

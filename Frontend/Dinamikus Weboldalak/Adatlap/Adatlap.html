@@ -105,12 +105,12 @@
                     <div class="row justify-content-center">
                         <div class="col-9 col-sm-9 col-md-5 col-lg-5 col-xl-5">
                             <div class="flex-column d-flex">
+                                <p id="result"></p>
                                 <p>Profilképed:</p>
                                 <label>
-                                        <input type="file" hidden  id="input" name="file"/>
+                                        <input type="file" hidden disabled  id="input" name="file"/>
                                         <img src="" class="profil-big" alt="A Profilképednek kéne itt lennie... valami nem sikerült." title="A Profilképed!" id="profilkep"/>
                                 </label>
-                                
                                 <label for="Felhasználónév">Felhasználónév:</label>
                                 <input type="text" disabled id="Felhasználónév" />
 
@@ -120,9 +120,8 @@
                                 <label for="Jelszó">Jelszó:</label>
                                 <input type="password" disabled id="Jelszó" />
                             </div>
-                            <div class="mt-1">
-                                <input type="submit" class="btn btn-success" value="Mentés" id="Mentés"/>
-                                <input type="reset" class="btn btn-danger" value="Mégse" id="Mégse"/>
+                            <div class="mt-1" id="AdatlapGombok">
+                                <input type="button" class="btn btn-primary mt-1" value="Adatok Módosítása" id="Módosítás">
                             </div>
                         </div>
                         <div class="col-8 col-sm-9 col-md-4 col-lg-4 col-xl-4">

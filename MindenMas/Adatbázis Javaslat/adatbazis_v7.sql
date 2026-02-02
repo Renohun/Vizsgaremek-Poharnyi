@@ -4,8 +4,8 @@ CREATE TABLE Felhasználó(
 	Email TEXT NOT NULL,
 	Jelszó TEXT NOT NULL,
 	JelszóHossza INT NOT NULL,
-	ProfilkepUtvonal TEXT,
-	RegisztracioDatuma DATE DEFAULT NOW(),
+	ProfilkepUtvonal TEXT DEFAULT("whatever.png"),
+	RegisztracioDatuma DATETIME DEFAULT NOW(),
 	Admin BOOLEAN NOT NULL DEFAULT FALSE
 );
 
