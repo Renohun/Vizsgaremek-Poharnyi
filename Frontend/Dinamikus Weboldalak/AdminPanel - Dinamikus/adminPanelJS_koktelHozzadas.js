@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             osszetevokTomb.push(osszetevoObj);
         }
 
-        console.log(osszetevokTomb);
+        //console.log(osszetevokTomb);
 
         const koktelRecept = document.getElementById('koktelRecept');
         if (koktelRecept.value.length > 0) {
@@ -167,6 +167,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (alkoholosE.checked) {
                 alkoholosEBool = true;
             }
+            console.log(document.getElementById('koktelKepFeltoltes'));
+
+            let kepTarolas = new FormData();
+            kepTarolas.append('fajl', document.getElementById('koktelKepFeltoltes').files[0]);
+            console.log(kepTarolas);
 
             (async () => {
                 const POSTobj = {
@@ -177,10 +182,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     allergenek: koktelAllergenek.value,
                     alkoholos: alkoholosEBool ? '1' : '0',
                     osszetevok: osszetevokTomb,
-                    recept: koktelRecept.value
+                    recept: koktelRecept.value,
+                    kep: kepTarolas
                 };
 
                 const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
+                console.log(data);
             })();
         }
     });
