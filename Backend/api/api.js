@@ -10,7 +10,6 @@ const multer = require('multer');
 
 const path = require('path');
 const fajlkezelo = require('fs/promises');
-const { log } = require('console');
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -188,17 +187,95 @@ router.get('/Koktelok/lekeres/:koktelNev', async (req, res) => {
     }
 });
 
-router.get('/Koktelok/lekeres/parameteres', (req, res) => {
+router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
     try {
-        const queryKoktelok = 'SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC';
+        //console.log(koktelNev);
+
+        const { erosseg } = req.body;
+        const { ize } = req.body;
+        const { allergenek } = req.body;
+        const { rendezes } = req.body;
+
+        //console.log(szuresTomb);
+
+        let queryKoktelok;
+
+        if (rendezes == 'Nepszeruseg novekvo') {
+            queryKoktelok = 'SELECT * FROM koktél lORDER BY KoktelNepszeruseg ASC';
+        } else if (rendezes == 'Nepszeruseg csokkeno') {
+            queryKoktelok = 'SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC';
+        } else if (rendezes == 'Legkorabban keszitett') {
+            queryKoktelok = 'SELECT * FROM koktél ORDER BY KeszitesDatuma ASC';
+        } else if (rendezes == 'Legkesobb keszitett') {
+            queryKoktelok = 'SELECT * FROM koktél ORDER BY KeszitesDatuma DESC';
+        } else {
+            queryKoktelok = 'SELECT * FROM koktél';
+        }
+
+        //const querySzuresID = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve IN (?)';
+
+        //itt most at lett alakitva a kapott jelvenyek ID-kra
+
         const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID = ?';
         //Majd ide kell tennem a szuroket, de viszont elotte viszont at kell alakitani a kapott szueresi felteteleket id-kra
-        const queryKoktelJelvenyek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID = ?';
+        const querySzuresID = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve IN (?)';
         const queryJelvenyek = 'SELECT JelvényNeve, JelvenyKategoria FROM jelvények WHERE JelvényID IN (?)';
         const queryErtekelesek =
             'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz = "Koktél" AND HovaIrták = ?';
+        //promise().igeret amit esku hogy megcsinalok - MIERT NEM MUKODOTT ALAPBOL: mert a query callback alapu igy egy CALLBACK HELL-t csinaltam es azt nem lehet await-elni
+        //promise() egy igeretet tesz es csak ezt lehet await-ni callbacket nem, ezert kellett promise() igy az atalakitja callbackbol promise-ba
+        const [koktelok] = await DBconnetion.promise().query(queryKoktelok, [koktelNev]);
+        //Promise.all: akkor adja vissza ha az erteke ha az osszes belso promise beteljesul
+        const eredmeny = await Promise.all(
+            koktelok.map(async (koktel) => {
+                //promiseolja a query-t: megvarjuk az igeretet ami a query? a [] az azert kell mert ha nem tesszuk oda akkor mast is vissaz ad (a visszadott tartalom nevet es adattipusat SQL)
+                //a [] egy destruktor, barmi is legyen az, nem feltetlenul tudom hogy de igy annak a segitesgevel a helyes adat kerul bele a valtozoba
+                const [osszetevok] = await DBconnetion.promise().query(queryKoktelOsszetevok, [koktel.KoktélID]);
+                koktel.osszetevok = osszetevok;
+
+                // Jelvények - itt a koktel jelvenyeit lekeri, de ugye csak ID-kat ad, ezert kell a kovetkezo lekeres
+                //const [jelvenyIds] = await DBconnetion.promise().query(queryKoktelJelvenyek, [koktel.KoktélID]);
+
+                let szuresTomb = [];
+                //itt egy tombe teszi a kapott parametereket
+                if (erosseg != '') {
+                    szuresTomb.push(erosseg);
+                }
+                if (ize != '') {
+                    szuresTomb.push(ize);
+                }
+                if (allergenek != '') {
+                    szuresTomb.push(allergenek);
+                }
+                console.log(szuresTomb);
+                //a parametereket at kene alakitania ID-ka, hogy azt majd hasznalhassam hogy melyik koktel melyik jelveny tartalmazza, igy melyik koktel felel meg a parametereknek
+                const [szuresID] = await DBconnetion.promise().query(querySzuresID, [szuresTomb]);
+
+                console.log(szuresID);
+
+                if (szuresID.length > 0) {
+                    //itt kiszedi az ID-kat es egy tombbe teszi, hogy a lekeresben mukodjon
+                    const ids = szuresID.map((j) => j.JelvényID);
+                    const [jelvenyek] = await DBconnetion.promise().query(queryJelvenyek, [ids]);
+                    koktel.jelvenyek = jelvenyek;
+                } else {
+                    //ha nincsenek a koktelnak jelvenyei
+                    koktel.jelvenyek = [];
+                }
+
+                // Értékelés
+                const [ertekeles] = await DBconnetion.promise().query(queryErtekelesek, [koktel.KoktélID]);
+
+                koktel.ertekeles =
+                    ertekeles.length === 0 ? 'Még nincs értékelve' : Math.round(ertekeles[0].Osszert * 10) / 10;
+                //itt a visszaadja a map tartalmait, melyek egy tombbe lesznak fuzve a ugye a map() miatt
+                return koktel;
+            })
+        );
+
+        res.status(200).json({ koktelokAdat: eredmeny });
     } catch (err) {
-        res.status(500).json({ message: 'Hiba tortent', error: err });
+        res.status(500).json({ message: 'Hibas koktel lekeres', error: err });
     }
 });
 //Regisztracio oldalrol hoz ide majd tolti fel az adatokat az adatbazisba
