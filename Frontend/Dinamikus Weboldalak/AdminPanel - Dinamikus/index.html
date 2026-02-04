@@ -25,39 +25,8 @@
                         <li class="nav-item">
                             <a class="nav-link active jelenlegi" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                                aria-expanded="false"
-                                >Poháryni koktélok</a
-                            >
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="/PoharnyiAlkoholosKoktelok">Alkoholos Koktélok</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                                aria-expanded="false"
-                                >Ti koktéljaitok</a
-                            >
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Alkoholos Koktélok</a></li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
-                                </li>
-                            </ul>
+                        <li class="nav-item">
+                            <a href="/Koktelok" class="nav-link">Koktelok</a>
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link">Mi van a polcon?</a>
@@ -81,12 +50,13 @@
                             <input
                                 type="button"
                                 class="nav-item btn btn-warning"
+                                hidden
                                 value="Saját koktél létrehozása"
                                 id="sajatKoktelKeszites"
                             />
                         </a>
                         <a href="/Adatlap">
-                            <input type="button" class="nav-item profil" value="     " id="Profile" />
+                            <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
                         </a>
                     </div>
                 </div>
@@ -200,7 +170,7 @@
                                 <div class="d-flex">
                                     <input type="text" class="form-control w-50 me-5" required />
                                     <input
-                                        type="text"
+                                        type="number"
                                         class="form-control w-50"
                                         placeholder="Mennyiseg (ml)"
                                         required

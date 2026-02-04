@@ -27,4 +27,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const koktelok = await GETfetch('http://127.0.0.1:3000/api/Koktelok/lekeres');
         console.log(koktelok);
     })();
+
+    document.getElementById('Searchbtn').addEventListener('click', async () => {
+        try {
+            const keresettKoktelNeve = document.getElementById('searchBar').value;
+            if (keresettKoktelNeve.length > 0) {
+                const koktelok = await GETfetch(`http://127.0.0.1:3000/api/Koktelok/lekeres/${keresettKoktelNeve}`);
+                console.log(koktelok);
+            } else {
+                alert('Nem adott meg nevet!');
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    });
 });

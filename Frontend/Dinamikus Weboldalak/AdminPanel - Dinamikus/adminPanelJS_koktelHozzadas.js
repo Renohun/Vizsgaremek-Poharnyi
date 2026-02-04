@@ -167,10 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (alkoholosE.checked) {
                 alkoholosEBool = true;
             }
-            console.log(document.getElementById('koktelKepFeltoltes'));
+            console.log(document.getElementById('koktelKepFeltoltes').files[0]);
 
-            let kepTarolas = new FormData();
-            kepTarolas.append('fajl', document.getElementById('koktelKepFeltoltes').files[0]);
+            let kepTarolas = {};
+            kepTarolas.fajl = document.getElementById('koktelKepFeltoltes').files[0];
             console.log(kepTarolas);
 
             (async () => {
