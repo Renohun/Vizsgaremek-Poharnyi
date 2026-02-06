@@ -15,6 +15,22 @@ async function POSTfetch(url, obj) {
     }
 }
 
+async function POSTKepLekeres(url) {
+    try {
+        const ertek = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'image/jpeg' }
+        });
+        if (ertek.ok) {
+            return ertek.blob();
+        } else {
+            console.log('hiba');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 async function elutasitasGombFv() {
     const result = await POSTfetch(
         'http://127.0.0.1:3000/api/AdminPanel/jelentesek/elutasitas/' + this.dataset.jelentesID
@@ -243,6 +259,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             cardDiv.classList.add('card', 'h-100');
                             margoDiv.appendChild(cardDiv);
 
+                            //console.log(rows.koktelok[i][0].KoktélID);
+
+                            const obj = { id: 15 };
+
+                            const koktelKep = await POSTKepLekeres(
+                                'http://127.0.0.1:3000/api/AdminlPanel/KepLekeres' + obj.id
+                            );
+                            //onsole.log(koktelKep);
+                            //hivatkozas kepre: URL.createObjectURL(koktelKep)
                             let imgTag = document.createElement('img');
                             imgTag.classList.add('card-img-top', 'img-fluid');
                             imgTag.setAttribute('alt', rows.koktelok[i][0].KoktelCim);

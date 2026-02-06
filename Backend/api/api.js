@@ -422,7 +422,7 @@ router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMid
             'SELECT felhasználó.Felhasználónév, Tartalom FROM komment INNER JOIN felhasználó ON felhasználó.FelhID = komment.Keszito WHERE KommentID LIKE ? AND MilyenDologhoz LIKE "Koktél"';
         let felhjel = 'SELECT FelhID, Felhasználónév, Email, RegisztracioDatuma FROM felhasználó WHERE FelhID LIKE ?';
         let kokteljel =
-            'SELECT koktél.KoktélID, koktél.Keszito, koktél.KeszitesDatuma, koktél.KoktelCim, koktél.Alap, koktél.Recept, felhasználó.FelhasználóNév FROM koktél INNER JOIN felhasználó ON felhasználó.FelhID = koktél.Keszito WHERE koktél.KoktélID LIKE ?';
+            'SELECT koktél.KoktélID, koktél.Keszito, BoritoKepUtvonal, koktél.KeszitesDatuma, koktél.KoktelCim, koktél.Alap, koktél.Recept, felhasználó.FelhasználóNév FROM koktél INNER JOIN felhasználó ON felhasználó.FelhID = koktél.Keszito WHERE koktél.KoktélID LIKE ?';
         let koktelOsszeetevokQuery =
             'SELECT koktelokosszetevoi.Osszetevő FROM koktelokosszetevoi INNER JOIN koktél ON koktél.KoktélID = koktelokosszetevoi.KoktélID WHERE koktél.KoktélID LIKE ?';
         let ErtekelesQuery =
@@ -1058,6 +1058,18 @@ router.post('/AdatlapLekeres/KepLekeres/', async (request, response) => {
         let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
         let kinek = await lekeres(kepkereses, profil);
         response.sendFile(path.join(__dirname, '..', 'images', kinek[0].ProfilkepUtvonal));
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+router.post('/AdminlPanel/KepLekeres/:id', async (request, response) => {
+    try {
+        //console.log(request.body);
+        let { id } = request.params;
+        let kepkereses = 'SELECT BoritoKepUtvonal FROM koktél WHERE KoktélID LIKE ?';
+        let kinek = await lekeres(kepkereses, id);
+        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].BoritoKepUtvonal));
     } catch (error) {
         console.log(error);
     }
