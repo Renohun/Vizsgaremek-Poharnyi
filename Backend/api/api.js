@@ -10,6 +10,7 @@ const multer = require('multer');
 
 const path = require('path');
 const fajlkezelo = require('fs/promises');
+const { log } = require('console');
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -217,14 +218,15 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
         //itt most at lett alakitva a kapott jelvenyek ID-kra
 
         const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID = ?';
-        //Majd ide kell tennem a szuroket, de viszont elotte viszont at kell alakitani a kapott szueresi felteteleket id-kra
-        const querySzuresID = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve IN (?)';
+        //Majd ide kell tennem a szuroket, de viszont elotte viszont at kell alakitani viszont a kapott szueresi felteteleket id-kra
+        //const querySzuresID = 'SELECT JelvényID, JelvenyKategoria FROM jelvények WHERE JelvényNeve IN (?)';
         const queryJelvenyek = 'SELECT JelvényNeve, JelvenyKategoria FROM jelvények WHERE JelvényID IN (?)';
+        const queryKoktelJelvenyek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID = ?';
         const queryErtekelesek =
             'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz = "Koktél" AND HovaIrták = ?';
         //promise().igeret amit esku hogy megcsinalok - MIERT NEM MUKODOTT ALAPBOL: mert a query callback alapu igy egy CALLBACK HELL-t csinaltam es azt nem lehet await-elni
         //promise() egy igeretet tesz es csak ezt lehet await-ni callbacket nem, ezert kellett promise() igy az atalakitja callbackbol promise-ba
-        const [koktelok] = await DBconnetion.promise().query(queryKoktelok, [koktelNev]);
+        const [koktelok] = await DBconnetion.promise().query(queryKoktelok);
         //Promise.all: akkor adja vissza ha az erteke ha az osszes belso promise beteljesul
         const eredmeny = await Promise.all(
             koktelok.map(async (koktel) => {
@@ -247,35 +249,54 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
                 if (allergenek != '') {
                     szuresTomb.push(allergenek);
                 }
-                console.log(szuresTomb);
+                //console.log('szuresTomb');
+
+                //console.log(szuresTomb);
                 //a parametereket at kene alakitania ID-ka, hogy azt majd hasznalhassam hogy melyik koktel melyik jelveny tartalmazza, igy melyik koktel felel meg a parametereknek
-                const [szuresID] = await DBconnetion.promise().query(querySzuresID, [szuresTomb]);
-
-                console.log(szuresID);
-
-                if (szuresID.length > 0) {
+                //const [szuresID] = await DBconnetion.promise().query(querySzuresID, [szuresTomb]);
+                const [jelvenyIds] = await DBconnetion.promise().query(queryKoktelJelvenyek, [koktel.KoktélID]);
+                //itt kiszedi az ID-kat es egy tombbe teszi, hogy a lekeresben mukodjon
+                if (jelvenyIds.length > 0) {
                     //itt kiszedi az ID-kat es egy tombbe teszi, hogy a lekeresben mukodjon
-                    const ids = szuresID.map((j) => j.JelvényID);
+                    const ids = jelvenyIds.map((j) => j.JelvényID);
                     const [jelvenyek] = await DBconnetion.promise().query(queryJelvenyek, [ids]);
-                    koktel.jelvenyek = jelvenyek;
+                    //console.log('jelvenyek');
+
+                    //ellenorizni kell hogy a ellenorizendo tomb es a szuresTomb megegyezik e
+                    let ellenorizendoTomb = jelvenyek.map((jelveny) => jelveny.JelvényNeve);
+
+                    //ABC sorrend
+                    szuresTomb.sort();
+                    ellenorizendoTomb.sort();
+
+                    const tombOsszehasonlitas = (a, b) => {
+                        return JSON.stringify(a) === JSON.stringify(b);
+                    };
+
+                    if (tombOsszehasonlitas(szuresTomb, ellenorizendoTomb)) {
+                        koktel.jelvenyek = jelvenyek;
+
+                        const [ertekeles] = await DBconnetion.promise().query(queryErtekelesek, [koktel.KoktélID]);
+
+                        koktel.ertekeles =
+                            ertekeles.length === 0 ? 'Még nincs értékelve' : Math.round(ertekeles[0].Osszert * 10) / 10;
+                        //itt a visszaadja a map tartalmait, melyek egy tombbe lesznak fuzve a ugye a map() miatt
+
+                        console.log(koktel);
+
+                        return koktel;
+                    }
                 } else {
-                    //ha nincsenek a koktelnak jelvenyei
                     koktel.jelvenyek = [];
                 }
-
-                // Értékelés
-                const [ertekeles] = await DBconnetion.promise().query(queryErtekelesek, [koktel.KoktélID]);
-
-                koktel.ertekeles =
-                    ertekeles.length === 0 ? 'Még nincs értékelve' : Math.round(ertekeles[0].Osszert * 10) / 10;
-                //itt a visszaadja a map tartalmait, melyek egy tombbe lesznak fuzve a ugye a map() miatt
-                return koktel;
             })
         );
 
         res.status(200).json({ koktelokAdat: eredmeny });
     } catch (err) {
-        res.status(500).json({ message: 'Hibas koktel lekeres', error: err });
+        console.log(err);
+
+        res.status(400).json({ message: 'Hibas koktel lekeres', error: err });
     }
 });
 //Regisztracio oldalrol hoz ide majd tolti fel az adatokat az adatbazisba
@@ -631,89 +652,82 @@ router.post('/AdminPanel/JelvenyekLetoltese', authenticationMiddleware, authoriz
     });
 });
 
-router.post(
-    '/AdminPanel/KoktelFeltoltes',
-    authenticationMiddleware,
-    authorizationMiddelware,
-    fileStorage.array('fajl'),
-    (req, res) => {
-        try {
-            const payload = jwt.decode(req.cookies.auth_token);
+router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, (req, res) => {
+    try {
+        const payload = jwt.decode(req.cookies.auth_token);
+        //console.log(req.body);
 
-            const { nev } = req.body;
-            const { alap } = req.body;
-            const { erosseg } = req.body;
-            const { iz } = req.body;
-            const { allergenek } = req.body;
-            const { alkoholos } = req.body;
-            const { osszetevok } = req.body;
-            const { recept } = req.body;
+        const { nev } = req.body;
+        const { alap } = req.body;
+        const { erosseg } = req.body;
+        const { iz } = req.body;
+        const { allergenek } = req.body;
+        const { alkoholos } = req.body;
+        const { osszetevok } = req.body;
+        const { recept } = req.body;
+        const { fajlNeve } = req.body;
 
-            const jelvenyReq = [erosseg, iz, allergenek];
+        const jelvenyReq = [erosseg, iz, allergenek];
 
-            const fajlNeve = req.files[0].filename;
-            console.log(fajlNeve);
+        const query =
+            'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept) VALUES(?,?,?,?,?,?,?)';
+        const queryKoktel = 'SELECT KoktélID FROM koktél ORDER BY KoktélID DESC LIMIT 1';
+        const queryJelvenyek = 'SELECT JelvényID FROM `jelvények` WHERE JelvényNeve IN (?)';
+        const queryKoktelOsszetevok = 'INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség) VALUES(?,?,?)';
+        const queryKoktelJelvenyInsert = 'INSERT INTO koktélokjelvényei(KoktélID, JelvényID) VALUES(?,?)';
 
-            const query =
-                'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept) VALUES(?,?,?,?,?,?,?)';
-            const queryKoktel = 'SELECT KoktélID FROM koktél ORDER BY KoktélID DESC LIMIT 1';
-            const queryJelvenyek = 'SELECT JelvényID FROM `jelvények` WHERE JelvényNeve IN (?)';
-            const queryKoktelOsszetevok = 'INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség) VALUES(?,?,?)';
-            const queryKoktelJelvenyInsert = 'INSERT INTO koktélokjelvényei(KoktélID, JelvényID) VALUES(?,?)';
-
-            DBconnetion.query(query, [payload.userID, alkoholos, 0, nev, fajlNeve, alap, recept], (err) => {
+        DBconnetion.query(query, [payload.userID, alkoholos, 0, nev, fajlNeve, alap, recept], (err) => {
+            if (err) {
+                res.status(500).json({ message: 'Sikertelen adat feltoltes' });
+            }
+            DBconnetion.query(queryKoktel, (err, rows) => {
                 if (err) {
                     res.status(500).json({ message: 'Sikertelen adat feltoltes' });
                 }
-                DBconnetion.query(queryKoktel, (err, rows) => {
-                    if (err) {
-                        res.status(500).json({ message: 'Sikertelen adat feltoltes' });
-                    }
-                    let feltoltottKoktelID = rows[0].KoktélID;
+                let feltoltottKoktelID = rows[0].KoktélID;
 
-                    for (let i = 0; i < osszetevok.length; i++) {
-                        DBconnetion.query(
-                            queryKoktelOsszetevok,
-                            [feltoltottKoktelID, osszetevok[i].osszetevo, osszetevok[i].mennyiseg],
-                            (err) => {
-                                if (err) {
-                                    res.status(500).json({ message: 'Sikertelen adat feltoltes' });
-                                }
+                for (let i = 0; i < osszetevok.length; i++) {
+                    DBconnetion.query(
+                        queryKoktelOsszetevok,
+                        [feltoltottKoktelID, osszetevok[i].osszetevo, osszetevok[i].mennyiseg],
+                        (err) => {
+                            if (err) {
+                                res.status(500).json({ message: 'Sikertelen adat feltoltes' });
                             }
-                        );
+                        }
+                    );
+                }
+
+                //console.log(feltoltottKoktelID);
+                let jelvenyID = [];
+                //console.log(jelvenyReq);
+                //aszinkronos pokol
+                DBconnetion.query(queryJelvenyek, [jelvenyReq], (err, rows) => {
+                    if (err) {
+                        res.status(500).json({ message: 'gatya van' });
+                    }
+                    //console.log(feltoltottKoktelID);
+
+                    jelvenyID.push(rows[0].JelvényID);
+                    jelvenyID.push(rows[1].JelvényID);
+                    jelvenyID.push(rows[2].JelvényID);
+
+                    for (let i = 0; i < jelvenyID.length; i++) {
+                        DBconnetion.query(queryKoktelJelvenyInsert, [feltoltottKoktelID, jelvenyID[i]], (err) => {
+                            if (err) {
+                                res.status(500).json({ message: 'Sikertelen adata feltoltes' });
+                            }
+                        });
                     }
 
-                    //console.log(feltoltottKoktelID);
-                    let jelvenyID = [];
-                    //console.log(jelvenyReq);
-                    //aszinkronos pokol
-                    DBconnetion.query(queryJelvenyek, [jelvenyReq], (err, rows) => {
-                        if (err) {
-                            res.status(500).json({ message: 'gatya van' });
-                        }
-                        console.log(feltoltottKoktelID);
-
-                        jelvenyID.push(rows[0].JelvényID);
-                        jelvenyID.push(rows[1].JelvényID);
-                        jelvenyID.push(rows[2].JelvényID);
-
-                        for (let i = 0; i < jelvenyID.length; i++) {
-                            DBconnetion.query(queryKoktelJelvenyInsert, [feltoltottKoktelID, jelvenyID[i]], (err) => {
-                                if (err) {
-                                    res.status(500).json({ message: 'Sikertelen adata feltoltes' });
-                                }
-                            });
-                        }
-
-                        //console.log(jelvenyID);
-                    });
+                    //console.log(jelvenyID);
                 });
             });
-        } catch (err) {
-            console.log(err);
-        }
+        });
+    } catch (err) {
+        console.log(err);
     }
-);
+});
 //
 //
 //

@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const allergenSelect = document.getElementById('Allergének');
         for (let i = 0; i < jelvenyek.data.allergenek.length; i++) {
             let optionTag = document.createElement('option');
-            optionTag.innerText = jelvenyek.data.izek[i].JelvényNeve;
+            optionTag.innerText = jelvenyek.data.allergenek[i].JelvényNeve;
             allergenSelect.appendChild(optionTag);
         }
 
