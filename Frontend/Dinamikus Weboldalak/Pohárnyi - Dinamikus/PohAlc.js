@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 erosseg: document.getElementById('Erősség').value,
                 ize: document.getElementById('Alap').value,
                 allergenek: document.getElementById('Allergének').value,
+                alkoholosE: document.getElementById('AlkoholosE').value,
                 rendezes: document.getElementById('Rendezés').value
             };
 
