@@ -68,15 +68,13 @@ VALUES
 (1,10),
 (1,11);
 
-
-
 INSERT INTO KoktelokOsszetevoi(KoktélID,Osszetevő,Mennyiség)
 VALUES
-(1,"Ouzou",0.05),
-(1,"Citromlé",0.05),
-(2,"Martini",0.25),
-(2,"Vermouth",0.25),
-(3,"Jack Daniels",0.5),
+(1,"Ouzou",5),
+(1,"Citromlé",5),
+(2,"Martini",25),
+(2,"Vermouth",25),
+(3,"Jack Daniels",500),
 (4,"Almalé",1),
 (4,"Szodaviz",2),
 (5,"Meggyszörp",20),
@@ -89,11 +87,22 @@ VALUES
 (7,"Narancslé",150),
 (7,"Ananászlé",75),
 (7,"Vörösáfonya szirup",75),
+(8,"Everclear",15),
+(8,"Kék Curacao",15),
+(8,"Ouzou",5),
+(9,"Sake",20),
+(9,"Gin",40),
+(9,"Halsűrítmény",1),
+(10,"Uborkalé",20),
+(10,"Monster",80),
 (11,"Everclear",20),
 (11,"Speed",20),
 (12,"Tequilla",20),
 (12,"Sör",5),
-(12,"Csípős",2.5)
+(12,"Csípős",2.5),
+(13,"Csokilikőr",15),
+(13,"Fahéjas Jack Daniels",15),
+(13,"Fehér Monster",100)
 ;
 INSERT INTO WebshopTermek(TermekCim,TermekLeiras,TermekKiszereles,Ar)
 VALUES
@@ -140,11 +149,28 @@ VALUES
 ("Keserű","ízek"),
 ("Glutén","Allergének"),
 ("Erős","Erősség"),
-("Gyenge","Erősség");
+("Gyenge","Erősség"),
+("Mogyorók","Allergének"),
+("Tojás","Allergének"),
+("Tej","Allergének"),
+("Édes","ízek");
 
 INSERT INTO KoktélokJelvényei(KoktélID,JelvényID)
 VALUES
+(1,1),
+(1,3),
+(2,3),
+(3,5),
+(3,3),
+(4,1),
+(5,1),
+(6,6),
+(7,1),
+(7,5),
+(8,5),
+(9,5),
+(10,1),
 (11,3),
-(12,2),
 (11,5),
-(10,1);
+(12,2),
+(13,10);

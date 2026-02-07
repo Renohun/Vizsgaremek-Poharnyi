@@ -17,7 +17,7 @@ CREATE TABLE Koktél(
 	Közösségi BOOLEAN,
 	KoktelCim TEXT NOT NULL,
 	KoktelNepszeruseg INT DEFAULT 0,
-	BoritoKepUtvonal TEXT,
+	BoritoKepUtvonal TEXT DEFAULT ("cup.webp"),
 	Alap TEXT,
 	Recept TEXT NOT NULL,
     FOREIGN KEY(Keszito) REFERENCES Felhasználó(FelhID)
@@ -66,7 +66,7 @@ CREATE TABLE WebshopTermek (
 	TermekLeiras TEXT  NOT NULL,
 	TermekKiszereles DOUBLE NOT NULL,
 	TermekKeszlet INT NOT NULL,
-	TermekKepUtvonal TEXT,
+	TermekKepUtvonal TEXT DEFAULT("what.webp"),
 	TermekKategoria TEXT NOT NULL,
 	TermekMarka TEXT NOT NULL,
 	TermekHanyanVettekMeg INT DEFAULT 0,
