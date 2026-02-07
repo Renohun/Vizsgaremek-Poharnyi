@@ -14,6 +14,21 @@ async function POSTfetch(url, obj) {
         throw new Error('Hiba tortent: ' + err);
     }
 }
+async function POSTkepFeltoltes(url, obj) {
+    try {
+        const req = await fetch(url, {
+            method: 'POST',
+            body: obj
+        });
+        if (req.ok) {
+            return await req.json();
+        } else {
+            throw new Error('Hiba tortent: ' + req.status);
+        }
+    } catch (err) {
+        throw new Error('Hiba tortent: ' + err);
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     //jelvenyek feltoltese a selectekbe
@@ -167,13 +182,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (alkoholosE.checked) {
                 alkoholosEBool = true;
             }
-            console.log(document.getElementById('koktelKepFeltoltes').files[0]);
+            //onsole.log(document.getElementById('koktelKepFeltoltes').files[0]);
 
-            let kepTarolas = {};
-            kepTarolas.fajl = document.getElementById('koktelKepFeltoltes').files[0];
-            console.log(kepTarolas);
+            let kepTarolas = new FormData();
+            kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
+            //console.log(kepTarolas);
 
             (async () => {
+                const kapottFajlNev = await POSTkepFeltoltes(
+                    'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
+                    kepTarolas
+                );
+
                 const POSTobj = {
                     nev: koktelNev.value,
                     alap: koktelAlap.value,
@@ -183,11 +203,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     alkoholos: alkoholosEBool ? '1' : '0',
                     osszetevok: osszetevokTomb,
                     recept: koktelRecept.value,
-                    kep: kepTarolas
+                    fajlNeve: kapottFajlNev.message
                 };
 
-                const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
-                console.log(data);
+                //console.log(POSTobj.kep);
+
+                await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
+                //console.log(data);
             })();
         }
     });
