@@ -10,8 +10,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     let fajl=document.getElementById("input")
     let kep=document.getElementById("profilkep")
     fajl.addEventListener("change",()=>{
-        console.log(fajl.files);
-        
         kep.setAttribute("src",URL.createObjectURL(fajl.files[0]))
     })
     AdatlapLekeres()
@@ -78,7 +76,7 @@ const AdatPost=async(url,data)=>{
         body:JSON.stringify(data)
       })  
       if (ertek.ok) {
-        return ertek.json()
+        return ertek.json(),ertek.status
       }
       else{
         console.log("hiba");
@@ -115,9 +113,6 @@ let kosárModIgen=document.createElement("input")
 let AdatMentes=document.createElement("input")
 let AdatMégse=document.createElement("input")
 
-
-
-
 async function AdatlapLekeres(){
     //Adatok Lekérése
     const valasz=await AdatGet("/api/AdatlapLekeres/FelhAdatok/")
@@ -128,6 +123,12 @@ async function AdatlapLekeres(){
     let AdatlapFelh=document.getElementById("Felhasználónév")
     let AdatlapEmail=document.getElementById("Email-cím")
     let AdatlapJelszo=document.getElementById("Jelszó")
+    let AdatlapJelszo2=document.getElementById("Jelszó2")
+    let AdatlapJelszoLabel2=document.getElementById("labelJelszo2")
+
+    let AdatlapJelszoValtozatas=document.getElementById("pwChange")
+    let AdatlapJelszoValtozatasLabel=document.getElementById("pwChangeLabel")
+
     let AdatlapKep=document.getElementById("profilkep")
     AdatlapFelh.value=ertek.Felhasználónév
     AdatlapEmail.value=ertek.Email
@@ -158,16 +159,39 @@ async function AdatlapLekeres(){
         let tempKep=kapottkep
         AdatlapFelh.removeAttribute("disabled","true")
         AdatlapEmail.removeAttribute("disabled","true")
-        AdatlapJelszo.removeAttribute("disabled","true")
         titkos.removeAttribute("disabled","true")
         modosit.setAttribute("disabled","true")
-
+        AdatlapJelszoValtozatas.removeAttribute("hidden","true")
+        AdatlapJelszoValtozatasLabel.removeAttribute("hidden","true")
+        AdatlapJelszoValtozatas.addEventListener("click",()=>{
+            if (AdatlapJelszoValtozatas.checked) {
+                AdatlapJelszo.value=""
+                AdatlapJelszo.removeAttribute("disabled","true")
+                AdatlapJelszo2.removeAttribute("disabled","true")
+                AdatlapJelszo2.removeAttribute("hidden","true")
+                AdatlapJelszoLabel2.removeAttribute("hidden","true")
+            }
+            else{
+                AdatlapJelszo.value=tempJelszo
+                AdatlapJelszo.setAttribute("disabled","true")
+                AdatlapJelszo2.setAttribute("disabled","true")
+                AdatlapJelszo2.setAttribute("hidden","true")
+                AdatlapJelszoLabel2.setAttribute("hidden","true")
+            }
+        })
         hovaGombok.appendChild(AdatMentes)
         hovaGombok.appendChild(AdatMégse)
-        console.log(hovaGombok.children);
-        AdatMentes.addEventListener("click",()=>{
-        adatvaltas()
-        GombOles()
+        AdatMentes.addEventListener("click",async()=>{
+        let valto=await adatvaltas()
+        if (valto==true) 
+        {
+            eredmény.innerHTML="Sikeres Mentés!"
+            GombOles()
+        }
+        else{
+            eredmény.innerHTML="Hibás Adat!"
+        }
+
 
         })
         AdatMégse.addEventListener("click",()=>{
@@ -191,27 +215,45 @@ async function AdatlapLekeres(){
 
         async function adatvaltas(){
             try {
-                    const data=new FormData()
-                    data.append("profilkep",titkos.files[0])
-                    //A Kép Eltárolása. Visszakapjuk a kép új nevét, amit továbbadunk az adatbázisnak
-                    const kepUtvonal=await AdatPostKep("/api/AdatlapLekeres/KepFeltoltes",data)
                     let FelhAdatok={
                         Felhasználónév:AdatlapFelh.value,
                         Email:AdatlapEmail.value,
-                        Jelszó:AdatlapJelszo.value,
-                        KépÚtvonal:kepUtvonal.message
                     }
-                    console.log( await AdatPost("/api/AdatlapLekeres/Adatmodositas/",FelhAdatok));
+                    const data=new FormData()
+                    //A Kép Eltárolása. Visszakapjuk a kép új nevét, amit továbbadunk az adatbázisnak   
+                    if(titkos.files.length!=0){
+                        if (titkos.files[0].type!="image/jpeg"&&titkos.files[0].type!="image/png"&&titkos.files[0].type!="image/bmp"&&titkos.files[0].type!="image/webp") {
+                            return false
+                        }
+                        else{        
+                            data.append("profilkep",titkos.files[0])
+                            const kepUtvonal=await AdatPostKep("/api/AdatlapLekeres/KepFeltoltes",data)
+                            FelhAdatok.KépÚtvonal=kepUtvonal.message
+                        }
+                    }
+                    if(AdatlapJelszo2.value!=AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true){
+                        return false
+                    }
+                    else{
+                        FelhAdatok.Jelszó=AdatlapJelszo.value
+                        
+                        await AdatPost("/api/AdatlapLekeres/Adatmodositas/",FelhAdatok)
+                        return true
+                    }
                     
-                    eredmény.innerHTML="Sikeres Mentés!"
             } 
             catch (error) {
                 //redirect?
+                console.log(error);
+                
                 eredmény.innerHTML="Hiba történt!"
+                return false
             }
 
         }
     })
+
+
     function GombOles(){
         
         let mit=[]
@@ -223,20 +265,26 @@ async function AdatlapLekeres(){
             hovaGombok.removeChild(mit[i])
             
         }
+        AdatlapJelszoValtozatas.setAttribute("hidden","true")
+        AdatlapJelszoValtozatasLabel.setAttribute("hidden","true")
         AdatlapFelh.setAttribute("disabled","true")
         AdatlapEmail.setAttribute("disabled","true")
-        AdatlapJelszo.setAttribute("disabled","true")
         modosit.removeAttribute("disabled","true")
         titkos.setAttribute("disabled","true")
+        AdatlapJelszo.setAttribute("disabled","true")
+        AdatlapJelszo2.setAttribute("disabled","true")
+        AdatlapJelszo2.setAttribute("hidden","true")
+        AdatlapJelszoLabel2.setAttribute("hidden","true")
     }
 
 
+    //Statisztikák
 
     //A Dátum Formázása
     let reg=ertek.RegisztracioDatuma.split('T')
     let regDate=reg[0]
     let regTime=(reg[1].split('.'))[0]
-
+    //Feltöltés
     document.getElementById("RegDate").innerHTML=`${regDate} ${regTime}`
     document.getElementById("KeszitKoktelNum").innerHTML=(valasz.tartalom[4][0]).MAKEID
     document.getElementById("KedveltKoktelNum").innerHTML=(valasz.tartalom[1][0]).KEDVID
@@ -247,12 +295,12 @@ async function AdatlapLekeres(){
 }
 async function KedvencekLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/")
-    
-    let kulsoertek=0
-    let sorszam=Math.round((valasz.adat.length/4)+0.5)
     let hova=document.getElementById("IdeKedvenc")
-    hova.innerHTML=""
-    for (let i = 0; i < sorszam; i++) 
+    if (valasz.message!="Üres Lekérés!") {
+        let kulsoertek=0
+        let sorszam=Math.round((valasz.adat.length/4)+0.5)
+        hova.innerHTML=""
+        for (let i = 0; i < sorszam; i++) 
     {
         let sor=document.createElement("div")
         sor.classList.add("row","justify-content-center")
@@ -280,41 +328,74 @@ async function KedvencekLekeres() {
                 koktelNev.classList.add("card-title")
                 koktelSzoveg.classList.add("card-text")
                 koktelOldal.classList.add("btn","btn-secondary")
-                //értékek megadása
-                koktelKep.setAttribute("src",valasz.adat[kulsoertek].BoritoKepUtvonal)
+                //értékek megadása             
+                let koktelkep=await AdatGetKep("/api/AdatlapLekeres/KoktelKepLekeres/"+valasz.adat[kulsoertek].kokteladatok[0].KoktélID)
+                koktelKep.setAttribute("src",URL.createObjectURL(koktelkep))
                 koktelKep.setAttribute("alt","Itt a koktélnak kéne megjelennie teljes gyönyörében.. de nincs itt.")
-                koktelKep.setAttribute("title",`Így néz ki egy ${valasz.adat[kulsoertek].KoktelCim}`)
-                koktelNev.innerHTML=valasz.adat[kulsoertek].KoktelCim
+                koktelKep.setAttribute("title",`Így néz ki egy ${valasz.adat[kulsoertek].kokteladatok[0].KoktelCim}`)
+                koktelNev.innerHTML=valasz.adat[kulsoertek].kokteladatok[0].KoktelCim
                 koktelOsszetevok.innerHTML="Összetevők:"
                 koktelOldal.setAttribute("type","button")
                 koktelOldal.setAttribute("value","Tovább a Receptre")
                 //Van-e értékelés
-                if (valasz.ertek[kulsoertek][0].Osszert!=null) 
+                if (valasz.adat[kulsoertek].ertekeles[0].Osszert!=null) 
                 {
-                    koktelErtekeles.innerHTML=`Értékelés:${Math.round(valasz.ertek[kulsoertek][0].Osszert * 10) / 10}/5`
+                    koktelErtekeles.innerHTML=`Értékelés:${Math.round(valasz.adat[kulsoertek].ertekeles[0].Osszert * 10) / 10}/5`
                 }
                 else
                 {
                      koktelErtekeles.innerHTML="Nincs még értékelés!"
                 }
                 //Összevetők kijelzése
-                for (let i = 0; i < 2; i++)
-                {   
-                    let Osszetevo=document.createElement("li")
-                    Osszetevo.innerHTML=valasz.ossztev[kulsoertek][i].Osszetevő
-                    koktelOsszetevoLista.appendChild(Osszetevo)
+                if (valasz.adat[kulsoertek].osszetevok.length>1) {
+                    for (let i = 0; i < 2; i++)
+                    {   
+                        let Osszetevo=document.createElement("li")
+                        Osszetevo.innerHTML=valasz.adat[kulsoertek].osszetevok[i].Osszetevő
+                        koktelOsszetevoLista.appendChild(Osszetevo)
+                    }
+                    if (valasz.adat[kulsoertek].length==3)
+                    {
+                         let VegsoOsszetevo=document.createElement("li")
+                         VegsoOsszetevo.innerHTML=valasz.adat[kulsoertek].osszetevok[2].Osszetevő
+                         koktelOsszetevoLista.appendChild(VegsoOsszetevo)
+                    }
+                    else if (valasz.adat[kulsoertek].length>3)
+                    {
+                         let VegsoOsszetevo=document.createElement("li")
+                         VegsoOsszetevo.innerHTML=`és ${(valasz.adat[kulsoertek].length)-2}`
+                         koktelOsszetevoLista.appendChild(VegsoOsszetevo)
+                    }
                 }
-                if (valasz.ossztev[kulsoertek].length==3) //nincs 1 elemű koktél(Ami legális) szoval nem kell azzal szenvedni
-                {
-                     let VegsoOsszetevo=document.createElement("li")
-                     VegsoOsszetevo.innerHTML=valasz.ossztev[kulsoertek][2].Osszetevő
-                     koktelOsszetevoLista.appendChild(VegsoOsszetevo)
+                //Gonosz emberek illegális koktéljai
+                else{
+                        let VegsoOsszetevo=document.createElement("li")
+                        VegsoOsszetevo.innerHTML=valasz.adat[kulsoertek].osszetevok[0].Osszetevő
+                        koktelOsszetevoLista.appendChild(VegsoOsszetevo)
                 }
-                else if (valasz.ossztev[kulsoertek].length>3) //nincs 1 elemű koktél(Ami legális) szoval nem kell azzal szenvedni
-                {
-                     let VegsoOsszetevo=document.createElement("li")
-                     VegsoOsszetevo.innerHTML=`és ${(valasz.ossztev[kulsoertek].length)-2}`
-                     koktelOsszetevoLista.appendChild(VegsoOsszetevo)
+                //Badgek Készítése
+                //Color Scheme:
+                //Piros Erősség
+                //Sárga Allergén
+                //Zöld íz
+                for (let j = 0; j < valasz.adat[kulsoertek].koktelbadgek.length; j++) {
+                    let jelveny=document.createElement("span")
+                    jelveny.innerHTML=valasz.adat[kulsoertek].koktelbadgek[j][0].JelvényNeve
+                    jelveny.classList.add("badge","me-1","text-dark","rounded-pill")
+                    switch (valasz.adat[kulsoertek].koktelbadgek[j][0].JelvenyKategoria) {
+                        case "ízek":
+                            jelveny.classList.add("bg-success")
+                        break;
+
+                        case "Allergének":
+                            jelveny.classList.add("bg-warning")
+                        break;
+
+                        case "Erősség":
+                            jelveny.classList.add("bg-danger")
+                        break;
+                    }
+                    koktelBadge.appendChild(jelveny)
                 }
                 //feltöltés
                 koktelCard.appendChild(koktelKep)
@@ -337,10 +418,16 @@ async function KedvencekLekeres() {
             }
             hova.appendChild(sor)
         }
+        }
+        }
+    else{
+        hova.innerHTML="Nincs Kedvenc Koktélod!"
     }
+    
 }
 async function KoktelokLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Koktelok/")
+    
     let kulsoertek=0
     let sorszam=Math.round((valasz.adat.length/4)+0.5)
     let hova=document.getElementById("IdeSaját")
@@ -370,7 +457,8 @@ async function KoktelokLekeres() {
                 koktelNev.classList.add("card-title")
                 koktelOldal.classList.add("btn","btn-secondary")
                 //értékek megadása
-                koktelKep.setAttribute("src",valasz.adat[kulsoertek].BoritoKepUtvonal)
+                let koktelkep=await AdatGetKep("/api/AdatlapLekeres/KoktelKepLekeres/"+valasz.adat[kulsoertek].KoktélID)
+                koktelKep.setAttribute("src",URL.createObjectURL(koktelkep))
                 koktelKep.setAttribute("alt","Itt a koktélnak kéne megjelennie teljes gyönyörében.. de nincs itt.")
                 koktelKep.setAttribute("title",`így néz ki egy ${valasz.adat[kulsoertek].KoktelCim}`)
                 koktelNev.innerHTML=valasz.adat[kulsoertek].KoktelCim
@@ -513,7 +601,6 @@ async function JelentesekLekeres() {
 
 async function KosarLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/")
-    console.log(valasz);
     if (valasz.message=="Üres Lekérés!") {
         document.getElementById("KosárGombok").innerHTML="Üres A Kosarad!"
     }
@@ -545,8 +632,9 @@ async function KosarLekeres() {
             kosárMennyiség.innerHTML=`${valasz.kosár[i].Darabszam}`
             kosárEgységÁr.innerHTML=`db Egységár:${valasz.kosár[i].EgysegAr}Ft`
             kosárÖssz.innerHTML=`Összár:${valasz.kosár[i].EgysegAr*valasz.kosár[i].Darabszam}Ft`
-            kosárKép.setAttribute("src","hurricane.jpg")
 
+            let kosárkep=await AdatGetKep("/api/AdatlapLekeres/TermekKepLekeres/"+valasz.kosár[i].TermekID)
+            kosárKép.setAttribute("src",URL.createObjectURL(kosárkep))
             kosárDBÁr.appendChild(kosárMennyiség)
             kosárDBÁr.appendChild(kosárEgységÁr)
             kosárKépDiv.appendChild(kosárKép)

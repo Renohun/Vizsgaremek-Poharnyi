@@ -112,13 +112,23 @@
                                         <img src="" class="profil-big" alt="A Profilképednek kéne itt lennie... valami nem sikerült." title="A Profilképed!" id="profilkep"/>
                                 </label>
                                 <label for="Felhasználónév">Felhasználónév:</label>
-                                <input type="text" disabled id="Felhasználónév" />
+                                <input type="text" disabled id="Felhasználónév" class="form-control"/>
 
                                 <label for="Email-cím">Email-cím:</label>
-                                <input type="email" disabled id="Email-cím" />
+                                <input type="email" disabled id="Email-cím" class="form-control"/>
+
+                                
+                                
+                                <div class="float-start">
+                                    <label for="pwChange" hidden id="pwChangeLabel" class="form-check-label align-content-center">Szeretne Jelszót Változtatni?</label>
+                                    <input type="checkbox" class="form-check-input" hidden id="pwChange">
+                                </div>
 
                                 <label for="Jelszó">Jelszó:</label>
-                                <input type="password" disabled id="Jelszó" />
+                                <input type="password" disabled id="Jelszó" class="form-control"/>
+
+                                <label for="Jelszó2" hidden id="labelJelszo2">Jelszó Újra:</label>
+                                <input type="password" disabled hidden id="Jelszó2" class="form-control"/>
                             </div>
                             <div class="mt-1" id="AdatlapGombok">
                                 <input type="button" class="btn btn-primary mt-1" value="Adatok Módosítása" id="Módosítás">
