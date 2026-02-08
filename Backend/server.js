@@ -88,11 +88,9 @@ router.get('/Koktelok', (req, res) => {
 });
 
 //KoktelParam
-let KoktelID;
-
+router.use(express.static(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'KoktélLap')));
 router.get('/Koktel/:koktelID', (req, res) => {
-    KoktelID = parseInt(req.params.koktelID);
-    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/KoktelAdatlap/KoktelAdatlap.html'));
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/koktellap.html'));
 });
 
 //server.post('Koktel/:koktelID');
