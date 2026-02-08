@@ -195,23 +195,30 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
         const { erosseg } = req.body;
         const { ize } = req.body;
         const { allergenek } = req.body;
+        const { alkoholosE } = req.body;
         const { rendezes } = req.body;
 
         //console.log(szuresTomb);
 
-        let queryKoktelok;
+        let queryKoktelok = 'SELECT * FROM koktél';
+
+        if (alkoholosE == 'Alkoholos') {
+            queryKoktelok += ' WHERE Alkoholos LIKE TRUE';
+        } else if (alkoholosE == 'Alkoholmentes') {
+            queryKoktelok += ' WHERE Alkoholos LIKE FALSE';
+        }
 
         if (rendezes == 'Nepszeruseg novekvo') {
-            queryKoktelok = 'SELECT * FROM koktél lORDER BY KoktelNepszeruseg ASC';
+            queryKoktelok += ' ORDER BY KoktelNepszeruseg ASC';
         } else if (rendezes == 'Nepszeruseg csokkeno') {
-            queryKoktelok = 'SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC';
+            queryKoktelok += ' ORDER BY KoktelNepszeruseg DESC';
         } else if (rendezes == 'Legkorabban keszitett') {
-            queryKoktelok = 'SELECT * FROM koktél ORDER BY KeszitesDatuma ASC';
+            queryKoktelok += ' ORDER BY KeszitesDatuma ASC';
         } else if (rendezes == 'Legkesobb keszitett') {
-            queryKoktelok = 'SELECT * FROM koktél ORDER BY KeszitesDatuma DESC';
-        } else {
-            queryKoktelok = 'SELECT * FROM koktél';
+            queryKoktelok += ' ORDER BY KeszitesDatuma DESC';
         }
+
+        console.log(queryKoktelok);
 
         //const querySzuresID = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve IN (?)';
 
@@ -256,7 +263,7 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
                 //const [szuresID] = await DBconnetion.promise().query(querySzuresID, [szuresTomb]);
                 const [jelvenyIds] = await DBconnetion.promise().query(queryKoktelJelvenyek, [koktel.KoktélID]);
                 //itt kiszedi az ID-kat es egy tombbe teszi, hogy a lekeresben mukodjon
-                if (jelvenyIds.length > 0) {
+                if (szuresTomb.length > 0) {
                     //itt kiszedi az ID-kat es egy tombbe teszi, hogy a lekeresben mukodjon
                     const ids = jelvenyIds.map((j) => j.JelvényID);
                     const [jelvenyek] = await DBconnetion.promise().query(queryJelvenyek, [ids]);
@@ -287,7 +294,19 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
                         return koktel;
                     }
                 } else {
-                    koktel.jelvenyek = [];
+                    if (jelvenyIds.length > 0) {
+                        const ids = jelvenyIds.map((j) => j.JelvényID);
+                        const [jelvenyek] = await DBconnetion.promise().query(queryJelvenyek, [ids]);
+                        koktel.jelvenyek = jelvenyek;
+                    } else {
+                        koktel.jelvenyek = [];
+                    }
+                    const [ertekeles] = await DBconnetion.promise().query(queryErtekelesek, [koktel.KoktélID]);
+
+                    koktel.ertekeles =
+                        ertekeles.length === 0 ? 'Még nincs értékelve' : Math.round(ertekeles[0].Osszert * 10) / 10;
+
+                    return koktel;
                 }
             })
         );
