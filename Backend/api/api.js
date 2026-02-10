@@ -139,8 +139,9 @@ router.get('/Koktelok/lekeres', async (req, res) => {
 
 router.get('/Koktelok/lekeres/:koktelNev', async (req, res) => {
     try {
-        const { koktelNev } = req.params;
+        let { koktelNev } = req.params;
         //console.log(koktelNev);
+        koktelNev = '%' + koktelNev + '%';
 
         const queryKoktelok = 'SELECT * FROM koktél WHERE KoktelCim LIKE ?';
         const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID = ?';
@@ -797,10 +798,9 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
         'SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
     let osszetevokLekerese = 'SELECT Osszetevő from koktelokosszetevoi where KoktélID like ?';
     let koktélbadgek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
-    let badgek = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?';
+    let badgek = 'SELECT JelvényNeve FROM jelvények WHERE JelvényID LIKE ?';
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     let felhaszanalo = jwt.decode(request.cookies.auth_token).userID;
-    let kedvencek;
     let kokteladatok;
     let ertekeles;
     let osszetevok;
@@ -831,7 +831,9 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
             }
             response.status(200).json({
                 message: 'siker!',
-                adat: koktel
+                adat: kokteladatok,
+                ertek: ertekelesek,
+                ossztev: osszetevok
             });
         }
     } catch (error) {
@@ -845,7 +847,7 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
 
 router.get('/AdatlapLekeres/Koktelok/', async (request, response) => {
     //A Lekérés definiálása
-    let koktelLekeres = 'SELECT KoktélID,KoktelCim from koktél where Keszito like ?';
+    let koktelLekeres = 'SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?';
     let ertekelesLekeres =
         'SELECT AVG(Ertekeles) as Osszert from ertekeles WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
     let kommentLekeres =
