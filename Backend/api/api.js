@@ -791,7 +791,7 @@ router.get('/AdatlapLekeres/FelhAdatok/', async (request, response) => {
 
 router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
     //A Lekérés definiálása
-    let KedvencekLekeres ="SELECT MitKedveltID from kedvencek WHERE KikedvelteID LIKE ?"
+    let KedvencekLekeres = 'SELECT MitKedveltID from kedvencek WHERE KikedvelteID LIKE ?';
     let koktelLekeres = 'SELECT KoktélID,KoktelCim from koktél where KoktélID like ?';
     let ertekelesAtlagLekeres =
         'SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
@@ -805,30 +805,29 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
     let ertekeles;
     let osszetevok;
     let jelvenyadatok;
-    
+
     //Lekérdezés
     try {
-        kedvencek=await lekeres(KedvencekLekeres,felhaszanalo)
+        kedvencek = await lekeres(KedvencekLekeres, felhaszanalo);
         console.log(kedvencek);
-        
+
         if (kedvencek.length == 0) {
             response.status(203).json({
-                message:"Üres Lekérés!"
-            })
-        } 
-        else {
-            let koktel=[]
+                message: 'Üres Lekérés!'
+            });
+        } else {
+            let koktel = [];
             for (let i = 0; i < kedvencek.length; i++) {
-                let koktelbadgek=[]
+                let koktelbadgek = [];
                 kokteladatok = await lekeres(koktelLekeres, kedvencek[i].MitKedveltID);
-                ertekeles=await lekeres(ertekelesAtlagLekeres, kedvencek[i].MitKedveltID);
-                osszetevok=await lekeres(osszetevokLekerese, kedvencek[i].MitKedveltID);
+                ertekeles = await lekeres(ertekelesAtlagLekeres, kedvencek[i].MitKedveltID);
+                osszetevok = await lekeres(osszetevokLekerese, kedvencek[i].MitKedveltID);
                 jelvenyadatok = await lekeres(koktélbadgek, kedvencek[i].MitKedveltID);
-                
+
                 for (let j = 0; j < jelvenyadatok.length; j++) {
-                    koktelbadgek.push(await lekeres(badgek,jelvenyadatok[j].JelvényID))
+                    koktelbadgek.push(await lekeres(badgek, jelvenyadatok[j].JelvényID));
                 }
-                koktel.push({kokteladatok,ertekeles,osszetevok,koktelbadgek})
+                koktel.push({ kokteladatok, ertekeles, osszetevok, koktelbadgek });
             }
             response.status(200).json({
                 message: 'siker!',
@@ -864,7 +863,7 @@ router.get('/AdatlapLekeres/Koktelok/', async (request, response) => {
     try {
         kokteladatok = await lekeres(koktelLekeres, felhaszanalo);
         if (kokteladatok.length == 0) {
-            response.status(204)
+            response.status(204);
         } else {
             for (let i = 0; i < kokteladatok.length; i++) {
                 ertekelesek.push(await lekeres(ertekelesLekeres, kokteladatok[i].KoktélID));
@@ -906,7 +905,7 @@ router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
     try {
         oJelentette = await lekeres(mitjelentetto, felhaszanalo);
         if (oJelentette.length == 0) {
-            response.status(204)
+            response.status(204);
         } else {
             for (let i = 0; i < oJelentette.length; i++) {
                 let temp = await lekeres(jelentesAdat, oJelentette[i].JelentésID);
@@ -959,7 +958,7 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
 
         kosar = await lekeres(KosarLekeres, vasarlo);
         if (kosar.length == 0) {
-            response.status(204)
+            response.status(204);
         } else {
             kosartermekek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
 
@@ -1075,9 +1074,9 @@ router.post('/AdatlapLekeres/KepFeltoltes', fileStorage.array('profilkep'), asyn
 });
 router.post('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response) => {
     try {
-        let melyik =request.params.melyik;
+        let melyik = request.params.melyik;
         console.log(melyik);
-        
+
         let kepkereses = 'SELECT BoritoKepUtvonal FROM Koktél WHERE KoktélID LIKE ?';
         let kinek = await lekeres(kepkereses, melyik);
         response.sendFile(path.join(__dirname, '..', 'images', kinek[0].BoritoKepUtvonal));
@@ -1088,9 +1087,9 @@ router.post('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response
 
 router.post('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response) => {
     try {
-        let melyik =request.params.melyik;
+        let melyik = request.params.melyik;
         console.log(melyik);
-        
+
         let kepkereses = 'SELECT TermekKepUtvonal FROM WebshopTermek WHERE TermekID LIKE ?';
         let kinek = await lekeres(kepkereses, melyik);
         response.sendFile(path.join(__dirname, '..', 'images', kinek[0].TermekKepUtvonal));
@@ -1110,7 +1109,7 @@ router.post('/AdatlapLekeres/KepLekeres/', async (request, response) => {
     }
 });
 
-router.post('/AdminlPanel/KepLekeres/:id', async (request, response) => {
+router.post('/AdminPanel/KepLekeres/:id', async (request, response) => {
     try {
         //console.log(request.body);
         let { id } = request.params;
@@ -1124,19 +1123,19 @@ router.post('/AdminlPanel/KepLekeres/:id', async (request, response) => {
 
 router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     try {
-        let adatmodositas="UPDATE felhasználó SET Felhasználónév=?,Email=?"
-        let tomb=`${request.body.Felhasználónév},${request.body.Email}`
-        let profil=jwt.decode(request.cookies.auth_token).userID
-        if (request.body.Jelszó!="undefined") {
-           adatmodositas+=",Jelszó=?"
-           tomb+=`,${await argon.hash(request.body.Jelszó, { type: argon.argon2id }) }`
+        let adatmodositas = 'UPDATE felhasználó SET Felhasználónév=?,Email=?';
+        let tomb = `${request.body.Felhasználónév},${request.body.Email}`;
+        let profil = jwt.decode(request.cookies.auth_token).userID;
+        if (request.body.Jelszó != 'undefined') {
+            adatmodositas += ',Jelszó=?';
+            tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
         }
-        if (request.body.KépÚtvonal!=undefined) {
-            adatmodositas+=",ProfilKepUtvonal=?"
-            tomb+=`,${request.body.KépÚtvonal }`
+        if (request.body.KépÚtvonal != undefined) {
+            adatmodositas += ',ProfilKepUtvonal=?';
+            tomb += `,${request.body.KépÚtvonal}`;
         }
-        adatmodositas+=` WHERE FelhID LIKE ${profil}`
-        await lekeres(adatmodositas,tomb.split(','))
+        adatmodositas += ` WHERE FelhID LIKE ${profil}`;
+        await lekeres(adatmodositas, tomb.split(','));
         response.status(200).json({
             message: 'Siker!'
         });
@@ -1154,67 +1153,78 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
 //
 //
 //
-router.get("/Koktel/:id",async(request,response)=>{
-    const KoktelLekeres="SELECT Felhasználónév,KeszitesDatuma,KoktelCim,Alap,Recept FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?"
-    const KommentLekeres="SELECT Felhasználónév,Tartalom FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
-    let koktel=await lekeres(KoktelLekeres,request.params.id);
-    let komment=await lekeres(KommentLekeres,[request.params.id,"Koktél"])
+router.get('/Koktel/:id', async (request, response) => {
+    const KoktelLekeres =
+        'SELECT Felhasználónév,KeszitesDatuma,KoktelCim,Alap,Recept FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?';
+    const KommentLekeres =
+        'SELECT Felhasználónév,Tartalom FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+    let koktel = await lekeres(KoktelLekeres, request.params.id);
+    let komment = await lekeres(KommentLekeres, [request.params.id, 'Koktél']);
     response.status(200).json({
-        message:koktel,
-        komment:komment
-    })
-      
-})
-router.post("/Koktel/SendErtekeles",async(request,response)=>{
-    const ErtekelesKuldes="INSERT INTO Ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)"
-    await lekeres(ErtekelesKuldes,[jwt.decode(request.cookies.auth_token).userID,request.body.Koktél,"Koktél",request.body.Tartalom])
+        message: koktel,
+        komment: komment
+    });
+});
+router.post('/Koktel/SendErtekeles', async (request, response) => {
+    const ErtekelesKuldes = 'INSERT INTO Ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
+    await lekeres(ErtekelesKuldes, [
+        jwt.decode(request.cookies.auth_token).userID,
+        request.body.Koktél,
+        'Koktél',
+        request.body.Tartalom
+    ]);
     response.status(200).json({
-        message:"Sikeres Küldés"
-    })
-      
-})
-router.post("/Koktel/SendKomment",async(request,response)=>{
-    const KommentKuldes="INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)"
-    await lekeres(KommentKuldes,[jwt.decode(request.cookies.auth_token).userID,request.body.Koktél,"Koktél",request.body.Tartalom])
+        message: 'Sikeres Küldés'
+    });
+});
+router.post('/Koktel/SendKomment', async (request, response) => {
+    const KommentKuldes = 'INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)';
+    await lekeres(KommentKuldes, [
+        jwt.decode(request.cookies.auth_token).userID,
+        request.body.Koktél,
+        'Koktél',
+        request.body.Tartalom
+    ]);
     response.status(200).json({
-        message:"Sikeres Küldés"
-    })
-      
-      
-})
-router.post("/Koktel/DeleteKomment",async(request,response)=>{
-    const KommentTorles="DELETE FROM komment WHERE KommentID LIKE ?"
-    await lekeres(KommentTorles,[request.body.id])
+        message: 'Sikeres Küldés'
+    });
+});
+router.post('/Koktel/DeleteKomment', async (request, response) => {
+    const KommentTorles = 'DELETE FROM komment WHERE KommentID LIKE ?';
+    await lekeres(KommentTorles, [request.body.id]);
     response.status(200).json({
-        message:"Sikeres Törlés"
-    })
-      
-})
+        message: 'Sikeres Törlés'
+    });
+});
 
-router.post("/Koktel/SendJelentes",async(request,response)=>{
-    const Jelentesek="SELECT * FROM jelentesek"
-    const JelentesekLista=await lekeres(Jelentesek)
-    let VanEMarIlyen=false
-    let MelyikAz
+router.post('/Koktel/SendJelentes', async (request, response) => {
+    const Jelentesek = 'SELECT * FROM jelentesek';
+    const JelentesekLista = await lekeres(Jelentesek);
+    let VanEMarIlyen = false;
+    let MelyikAz;
     for (let i = 0; i < JelentesekLista.length; i++) {
-        if (request.body.JelentettID==JelentesekLista[i].JelentettID&&request.body.JelentettTartalomID==JelentesekLista[i].JelentettTartalomID&&request.body.JelentesTipusa==JelentesekLista[i].JelentesTipusa) {
-            VanEMarIlyen=true
-            MelyikAz=JelentesekLista[i].JelentesID
+        if (
+            request.body.JelentettID == JelentesekLista[i].JelentettID &&
+            request.body.JelentettTartalomID == JelentesekLista[i].JelentettTartalomID &&
+            request.body.JelentesTipusa == JelentesekLista[i].JelentesTipusa
+        ) {
+            VanEMarIlyen = true;
+            MelyikAz = JelentesekLista[i].JelentesID;
         }
     }
-    if (VanEMarIlyen==false) {
-        const JelentesKuldes="INSERT INTO jelentesek (JelentettID,JelentettTartalomID,JelentesTipusa,Tartalom) VALUES (?,?,?,?)"
-        await lekeres(JelentesKuldes)
+    if (VanEMarIlyen == false) {
+        const JelentesKuldes =
+            'INSERT INTO jelentesek (JelentettID,JelentettTartalomID,JelentesTipusa,Tartalom) VALUES (?,?,?,?)';
+        await lekeres(JelentesKuldes);
+    } else {
+        const JelentesModositas =
+            'UPDATE TABLE jelentesek SET JelentesMennyisege =JelentesMennyisege+1 WHERE JelentesID LIKE ?';
+        await lekeres(JelentesModositas);
     }
-    else{
-        const JelentesModositas="UPDATE TABLE jelentesek SET JelentesMennyisege =JelentesMennyisege+1 WHERE JelentesID LIKE ?"
-        await lekeres(JelentesModositas)
-    }
-    const JelentoKuldes="INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)"
-    await lekeres(JelentoKuldes,[jwt.decode(request.cookies.auth_token).userID])
+    const JelentoKuldes = 'INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)';
+    await lekeres(JelentoKuldes, [jwt.decode(request.cookies.auth_token).userID]);
     response.status(200).json({
-        message:JelentesekLista
-    })
-      
-})
+        message: JelentesekLista
+    });
+});
 module.exports = router;

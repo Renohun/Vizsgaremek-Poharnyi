@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             //console.log(rows.koktelok[i][0].KoktélID);
 
-                            const obj = { id: 15 };
+                            const obj = { id: rows.koktelok[i][0].KoktélID };
 
                             const koktelKep = await POSTKepLekeres(
                                 'http://127.0.0.1:3000/api/AdminlPanel/KepLekeres' + obj.id
