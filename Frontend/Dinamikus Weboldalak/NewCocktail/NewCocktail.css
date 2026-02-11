@@ -1,0 +1,141 @@
+body{
+    background: rgb(255, 255, 255);
+}
+
+/*Főcím és Háttérkép*/
+#cimdiv
+{
+    
+    padding: 60px;
+    background-image: url(img/test2.jpg);
+    background-size:cover;
+    background-repeat:repeat-y;
+    background-attachment:scroll;/*FIXED?*/
+    background-position: center;
+    position: -1px;
+    height:300px;
+    width: 100%;
+}
+
+#bg{
+    height: 60px;
+    width: 100%;
+    background-color: black;
+    opacity: 60%;
+}
+#cimszoveg{
+    text-align: center;
+    color: rgb(255, 255, 255);
+    position: relative;
+    top: -53px;
+}
+/*input resz*/
+
+#urlapcim
+{
+    display: flex;
+    width: 700px;
+    background-color: rgb(179, 179, 179) ;
+    margin-right: auto;
+    margin-left: auto;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    padding-top: 3px ;
+    border-radius: 5px ;
+    
+}
+
+
+#koktelurlap
+{
+   
+    padding:50px;
+    margin: 5px;
+    margin-left:auto ;
+    margin-right: auto;
+   
+    background-color: #d1d1d1;
+}
+/* Kép input mező stilusolása*/
+#drop-area
+{
+    width: 280px;
+    height: 280px;
+   background-color: #919191;
+   padding: 10px;
+    text-align: center;
+    border-radius: 10px ;
+    display: flex;
+    justify-content   : center;
+    flex-direction: column;
+    
+}
+#img-view
+{
+    width: 100%;
+    height: 100%;
+    
+    border: 3px dashed black;
+    background: rgb(233, 233, 233);
+      align-content: center;
+    justify-items: center;
+    background-position: center;
+    background-size: cover;
+     font-size: 20px;
+}
+.ujHatter{
+      background: rgb(233, 233, 233);
+      background-image: none;
+}
+#img-view p
+{
+    font-size: 20px;
+  
+}
+.icon{
+    width: 120px;
+    height: 120px;
+}
+#radiobtn{
+    display: flex;
+    justify-content: space-between;
+}
+
+.Osszetevobtn
+{
+    width: 3.5%;
+    margin-left: 0cap;
+     border: 1px solid grey;
+    border-left: none; 
+  cursor: pointer;
+ background: #f8f8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  height: 42px;
+  text-align: center;
+  padding:15px;
+}
+.Osszetevobtn:hover
+{
+    background-color: #b4b4b4;
+}
+.OsszetevoBar
+{
+   
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  height: 100%;
+  background: #f8f8f8;
+  
+     
+}
+/*#leiras
+{
+    height: 100px;
+@media only screen and (max-width: 600px) {
+}
+*/
