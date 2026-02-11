@@ -87,12 +87,14 @@ router.get('/Koktelok', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'Pohárnyi - Dinamikus', 'PohAlc.html'));
 });
 
-//KoktelParam
+//Koktel
 router.use(express.static(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'KoktélLap')));
 router.get('/Koktel/:koktelID', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/koktellap.html'));
 });
-
+router.get('/KoktelHiba', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/nincsilyen.html'));
+});
 //server.post('Koktel/:koktelID');
 
 //!API endpoints

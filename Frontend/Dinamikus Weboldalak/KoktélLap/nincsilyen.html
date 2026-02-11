@@ -75,71 +75,22 @@
                 </div>
             </div>
             </nav>
-            <div  class="container">
-                <div class="border-bottom border-2 border-dark text-center">
-                    <h1 id="Cimsor"></h1>
-                    <div id="badgek">
-
-                    </div>
+            <div class="container">
+                <div class="row fs-1 text-center">
+                    <p>
+                        Sajnos nincs ilyen koktélunk
+                    </p>
                 </div>
                 <div class="row">
-                    <p class="fs-4">Készítette: <span id="Madeby"></span> <span id="Tagsag" class="text-primary"></span><input type="button" class="btn text-danger" value="!"></p>
-                    <div class="col-7 col-md-12 col-lg-5 d-flex">
-                            <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid col-6">
-                            <div class="ps-4 flex-column">
-                                <label for="rate">Értékelje a Koktélt</label>
-                                <div class="d-flex">
-                                    <select name="" id="rate" class="form-control w-50">
-                                        <option value="">1</option>
-                                        <option value="">1.5</option>
-                                        <option value="">2</option>
-                                        <option value="">2.5</option>
-                                        <option value="">3</option>
-                                        <option value="">3.5</option>
-                                        <option value="">4</option>
-                                        <option value="">4.5</option>
-                                        <option value="">5</option>
-                                    </select>
-                                    <input type="button" value="Küldés" class="btn btn-success">
-                                </div>
-                                <span class="fs-4">Összetevők</span>
-                                <ul id="Ossztev">
-
-                                </ul>
-                            </div>
-
-
-                    </div>
-                    <div class="col-5 col-md-12 col-lg-7">
-                        <div class="text-break" id="recept">
-                           
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 border rounded d-flex w-100 py-2 px-2 row mt-4    " style="background-color: rgb(149, 149, 149)">
-                    <label for="komment" class="ps-1">Írj Kommentet! <span class="float-end"> <span id="szam">0</span>/300</span></label>
-                    <textarea class="w-100 border rounded form-control" style="resize: none; text-align: left; box-sizing: border-box" rows="3" id="komment" maxlength="300" placeholder="Írd ide a véleményed!"></textarea>
-                    <div class="p-0">
-                        <input class="btn btn-success mt-1 float-end" type="button" value="Küldés">
-                    </div>
-                </div>
-                <div>
-                    <div class="row mt-2">
-                        <h1 class="border-bottom border-2 border-dark text-center">Kommentek</h1>
-                    </div>
-                    <div id="Kommentek">
-
-                    </div>
-                    <div id="kommentNUM" class="mt-4">
-                        <label for="komment" class="ps-1">Jancsi3<span class="text-primary"> 3 éve span</span></label>
-                        <textarea class="w-100 border rounded form-control" style="resize: none; text-align: left; box-sizing: border-box" rows="3" id="komment" maxlength="300" disabled> nemtom teso remenytelen vagyok</textarea>
-                    </div>
+                    <input type="button" value="Vissza a főoldalra" class="btn" id="vissza">
                 </div>
             </div>
-            
-
-            <script src="../koktellap.js"></script>
             <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                document.getElementById("vissza").addEventListener("click",()=>{
+                    window.location.href="/"
+                })
+            </script>
             <script src="../kellékek/themeSwitcher.js"></script>
     </body>
 </html>
