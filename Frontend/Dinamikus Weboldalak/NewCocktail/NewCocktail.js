@@ -17,8 +17,23 @@ let osszetevoform;
 let torlesgomb
 let DeleteOsszetevo;
 let osszetevo;
+
+const Getfetch =  async(url)=>{
+    return await fetch(url).then((Response)=>{
+        if(!Response.ok){
+            throw Error("Hiba")
+
+        }
+        return Response.json()
+    })
+    .catch((error)=>{
+        throw new Error(error.message)
+    })
+}
+
 document.addEventListener("DOMContentLoaded", () => 
 {
+console.log("aqd")
 //új összetevő meghívására szolgáló gomb értékadása
 osszetevogomb = document.getElementById("osszetevogomb")
 //addeventlistener hozzáaadása
@@ -92,7 +107,7 @@ function osszetevohozzaadas()
     osszetevoform.appendChild(input)
     osszetevoform.appendChild(torlesgomb)
     osszetevodiv.appendChild(col)
-
+    
    
     //torles
     torlesgomb.addEventListener("click",()=>{
@@ -101,7 +116,18 @@ function osszetevohozzaadas()
     })
 
 }
+//Jelvények feltöltése
+const erossegSelect = document.getElementById("erosseg")
+const izSelect = document.getElementById("iz")
+const AllergenSelect = document.getElementById("allergen")
 
+/*const Izlekeres = async ()=>{
+    const data = await Getfetch("/api/Keszites/iz")
+    
+    console.log(data)
+}
+Izlekeres()
+*/
 //megse gomb törlés függvény
 
 function megsefugv()

@@ -19,6 +19,7 @@ let DeleteOsszetevo;
 let osszetevo;
 document.addEventListener("DOMContentLoaded", () => 
 {
+    
 //új összetevő meghívására szolgáló gomb értékadása
 osszetevogomb = document.getElementById("osszetevogomb")
 //addeventlistener hozzáaadása

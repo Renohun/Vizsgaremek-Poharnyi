@@ -46,7 +46,7 @@ router.get('/LepjBe', (req, res) => {
 });
 
 //KoktelKeszites
-router.use(express.static(path.join(__dirname, '../Frontend/templateHTML/Új Koktél/')));
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/')));
 router.get('/Keszites', (req, res) => {
      if (req.cookies.auth_token==null) {
         res.redirect('/LepjBe')

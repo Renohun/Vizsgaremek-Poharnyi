@@ -133,6 +133,17 @@ body{
   
      
 }
+/*
+    jelvenyek
+*/
+#jelvenyek
+{
+    display: flex;
+    flex-direction: column;
+}
+#selectek{
+    display: flex;
+}
 /*#leiras
 {
     height: 100px;

@@ -1229,4 +1229,29 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
         message: JelentesekLista
     });
 });
+
+//
+//
+//
+//  NewCocktail
+//
+//
+//
+//
+router.get("/Keszites/iz", async (req, res)=>{
+    const izLekeres = "SELECT JelvényNeve FROM jelvények WHERE JelvenyKategoria LIKE ?"
+     DBconnetion.query(izLekeres, 'ízek', async (err, rows) => {
+        if (err) {
+            res.status(500).json({
+                message: 'Hiba lekeres kozben!',
+                hiba: err
+            });
+        } else {
+            res.status(200).json({
+                message: 'Siker',
+                tartalom: rows
+            });
+        }
+    });
+})
 module.exports = router;

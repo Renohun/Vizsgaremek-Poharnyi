@@ -13,7 +13,7 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
-        <link rel="stylesheet" href="../Pohárnyi - Dinamikus/PohAlc.css" />
+       
     </head>
     <body>
         <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
@@ -143,6 +143,25 @@
                         <textarea class="form-control" id="leiras"></textarea>
                     </div>
                 </div>
+                <div id="jelvenyek">
+
+                    <label class="form-label">Válaszd ki a koktélhoz illő jelvényeket: </label>
+                    <div id="selectek"> 
+                        <div id="select1">
+                                <label for="erosseg" class="form-label">erősség: </label>
+                                <select name="erosseg" id="erosseg"></select>
+                        </div>
+                         <div id="select2">
+                                <label for="iz" class="form-label">íz: </label>
+                                <select name="iz" id="iz"></select>
+                        </div>
+                         <div id="select3">
+                                <label for="allergen" class="form-label">allergének: </label>
+                                <select name="allergen" id="allergen"></select>
+                        </div>
+
+                    </div>
+                </div>
                 <!--Küldés és mégse gomb-->
                 <div class="row" id="kuldes_Megse">
                     <div class="col-sm-12 text-end mt-3" id="kuldes_Megse_col">
@@ -191,7 +210,7 @@
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/NavBar.js"></script>
-        <script src="NewCocktail.js"></script>
+        <script src="../NewCocktail/NewCocktail.js"></script>
         <script src="../kellékek/navBar.js"></script>
     </body>
 </html>
