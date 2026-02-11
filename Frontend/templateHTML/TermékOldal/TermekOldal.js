@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded",()=>{
 
     var coll = document.getElementsByClassName("TovGomb");
-    var i;
+    var i;    
 
 
     

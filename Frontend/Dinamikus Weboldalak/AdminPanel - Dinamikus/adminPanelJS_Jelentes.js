@@ -71,14 +71,21 @@ async function elfogadasGombFv() {
 document.addEventListener('DOMContentLoaded', () => {
     const jelentesekDocument = document.getElementsByName('jelentesekKezelese');
     const koktelDocument = document.getElementsByName('koktelokKezelese');
-
+    const termekDocument = document.getElementsByName('termekFeltoltes');
     jelentesekDocument[0].addEventListener('click', () => {
         jelentesekDocument[1].removeAttribute('hidden', 'true');
         koktelDocument[1].setAttribute('hidden', 'true');
+        termekDocument[1].setAttribute('hidden', 'true');
     });
     koktelDocument[0].addEventListener('click', () => {
         jelentesekDocument[1].setAttribute('hidden', 'true');
         koktelDocument[1].removeAttribute('hidden', 'true');
+        termekDocument[1].setAttribute('hidden', 'true');
+    });
+    termekDocument[0].addEventListener('click', () => {
+        termekDocument[1].removeAttribute('hidden', 'true');
+        jelentesekDocument[1].setAttribute('hidden', 'true');
+        koktelDocument[1].setAttribute('hidden', 'true');
     });
 
     const felhasznalosJelentesGomb = document.getElementById('felhasznalokJelentesei');
@@ -260,15 +267,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             margoDiv.appendChild(cardDiv);
 
                             //console.log(rows.koktelok[i][0].KoktélID);
+                            let imgTag = document.createElement('img');
+                            (async () => {
+                                const koktelKep = await POSTKepLekeres(
+                                    `http://127.0.0.1:3000/api/AdminPanel/KepLekeres/${rows.koktelok[i][0].KoktélID}`
+                                );
+                                imgTag.setAttribute('src', URL.createObjectURL(koktelKep));
+                            })();
 
-                            const obj = { id: rows.koktelok[i][0].KoktélID };
-
-                            const koktelKep = await POSTKepLekeres(
-                                'http://127.0.0.1:3000/api/AdminlPanel/KepLekeres' + obj.id
-                            );
                             //onsole.log(koktelKep);
                             //hivatkozas kepre: URL.createObjectURL(koktelKep)
-                            let imgTag = document.createElement('img');
+
                             imgTag.classList.add('card-img-top', 'img-fluid');
                             imgTag.setAttribute('alt', rows.koktelok[i][0].KoktelCim);
                             cardDiv.appendChild(imgTag);
