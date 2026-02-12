@@ -81,16 +81,24 @@ async function Betoltes() {
         let KommentIroTagsag=document.createElement("span")
         let KommentIroReport=document.createElement("input")
         let KommentTartalom=document.createElement("textarea")
-        Komment.classList.add("p-0")
-        KommentTartalom.setAttribute("rows","3")
-        KommentIro.classList.add("p-0")
-        KommentIroTagsag.classList.add("text-primary")
-        KommentIroReport.setAttribute("type","button")
-        KommentIroReport.setAttribute("value","!")
-        KommentIroReport.classList.add("btn","text-danger")
-        KommentTartalom.classList.add("w-100","p-0")
+        
+        
+
+        KommentIro.classList.add("ps-2","col-12")
         KommentIro.innerHTML=kommentAdat[i].Felhasználónév
+        
+        KommentIroTagsag.classList.add("text-primary")
+        
+        KommentIroReport.setAttribute("type","button")
+        KommentIroReport.setAttribute("value","Jelentés")
+        KommentIroReport.classList.add("btn","text-danger","float-end")
+        
+        KommentTartalom.setAttribute("rows","3")
+        KommentTartalom.setAttribute("style","resize: none; text-align: left; box-sizing: border-box")
+        KommentTartalom.setAttribute("disabled","true")
+        KommentTartalom.classList.add("w-100","komment")
         KommentTartalom.innerHTML=kommentAdat[i].Tartalom
+
         if (jelenDate.getFullYear()!=KommIroRegDate[0]) {
             KommentIroTagsag.innerText+=` - ${KommIroRegDate[0]-jelenDate.getFullYear()} Éve Tag`
         }
@@ -100,7 +108,6 @@ async function Betoltes() {
         else{
             KommentIroTagsag.innerText+=` - ${KommIroRegDate[2]-jelenDate.getDay()} Napja Tag`
         }
-        KommentTartalom.setAttribute("disabled","true")
         KommentIro.appendChild(KommentIroTagsag)
         KommentIro.appendChild(KommentIroReport)
         Komment.appendChild(KommentIro)
@@ -111,4 +118,8 @@ async function Betoltes() {
     document.getElementById("Cimsor").innerHTML=koktélAdat.KoktelCim
     document.getElementById("Madeby").innerHTML=koktélAdat.Felhasználónév + " -"
     document.getElementById("recept").innerHTML=koktélAdat.Recept
+}
+
+async function jelentes(id,tipus) {
+    
 }
