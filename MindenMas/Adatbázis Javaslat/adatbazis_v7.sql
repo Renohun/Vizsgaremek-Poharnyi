@@ -1,6 +1,3 @@
-DROP DATABASE IF EXISTS pohárnyi
-
-
 CREATE TABLE Felhasználó(
 	FelhID INT AUTO_INCREMENT PRIMARY KEY,
 	Felhasználónév TEXT NOT NULL,

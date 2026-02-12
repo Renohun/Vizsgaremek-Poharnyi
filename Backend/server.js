@@ -101,12 +101,18 @@ router.get('/Koktel/:koktelID', (req, res) => {
 router.get('/KoktelHiba', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/nincsilyen.html'));
 });
-//server.post('Koktel/:koktelID');
+
+//ÁLTALÁNOS SZŰRÉS
+//ha olyan endpointra hivatkozunk ami nincs, akkor száműzzük, jelenleg a koktélos hibaoldalra
+router.use((req,res)=>{
+    res.status(404).redirect("/KoktelHiba")
+})
 
 //!API endpoints
 app.use('/', router);
 const endpoints = require('./api/api.js');
 const cookieParser = require('cookie-parser');
+const { request } = require('http');
 app.use('/api', endpoints);
 
 //!Szerver futtatása
