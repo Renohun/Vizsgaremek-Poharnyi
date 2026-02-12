@@ -275,7 +275,7 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
                     //ABC sorrend
                     szuresTomb.sort();
                     ellenorizendoTomb.sort();
-
+                    //At kell irni includos megoldasra
                     const tombOsszehasonlitas = (a, b) => {
                         return JSON.stringify(a) === JSON.stringify(b);
                     };
@@ -747,6 +747,84 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
         console.log(err);
     }
 });
+//
+//
+//AdminPanel - koktelTorles
+
+router.get("/koktelNevek", (req, res) => 
+    {   
+        try
+        {
+            const nevQuery = "SELECT KoktelCim FROM koktél"
+            DBconnetion.query(nevQuery, (err,rows)=> 
+                {
+                    if(err){throw new Error("Hiba van a lekeresben")}
+                    res.status(200).json({lekertAdat: rows})
+                })
+        }
+        catch(err)
+        {
+            res.status(400).json({message: "Hiba tortent a vegpontban"})
+        }
+    })
+router.post("/koktelTorles/:nev", (req,res) => 
+    {
+        try
+        {
+            const {nev} = req.params
+
+            const idLekeres = "SELECT KoktélID FROM koktél WHERE KoktelCim LIKE ?"
+            const torlesQuery = "DELETE FROM koktél WHERE KoktélID LIKE ?"
+            const jelvenyTorlesQuery  = "DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?"
+            const osszetevoTorlesQuery = "DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+            const ertekelesTorlesQuery = "DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+            const jelentesTorlesQuery = "DELETE FROM jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?"
+            const jeletnesIDQuery = "SELECT JelentesID FROM jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?"
+            const jelentokTorles = "DELETE FROM jelentők WHERE JelentésID LIKE ?"
+
+            DBconnetion.query(idLekeres, [nev], (err,rows) => 
+                {
+                    if(err){throw new Error(err)}
+
+                    const koktelID = rows[0].KoktélID
+                    DBconnetion.query(jelvenyTorlesQuery, [koktelID], (err,rows) =>
+                        {
+                            if(err){throw new Error(err)}
+                        })
+                    DBconnetion.query(osszetevoTorlesQuery, [koktelID], (err,rows) =>
+                        {
+                            if(err){throw new Error(err)}
+                        })
+                    DBconnetion.query(ertekelesTorlesQuery, [koktelID, "Koktél"], (err,rows) =>
+                        {
+                            if(err){throw new Error(err)}
+                        })
+
+                    DBconnetion.query(jeletnesIDQuery, [koktelID, "Koktél"], (err,rows) => 
+                        {
+                            if(err){throw new Error(err)}
+                            console.log(rows);
+                            
+                            const kapottJelentesID = rows[0].JelentesID
+
+                            DBconnetion.query(jelentokTorles, [kapottJelentesID], (err,rows) => 
+                                {
+                                    if(err){throw new Error(err)}
+                                })
+                        })
+                    DBconnetion.query(jelentesTorlesQuery, [koktelID, "Koktél"], (err,rows) =>
+                        {
+                            if(err){throw new Error(err)}
+                        })
+                    DBconnetion.query(torlesQuery, [koktelID], (err,rows) =>
+                        {
+                            if(err){throw new Error(err)}
+                        })
+                })
+            res.status(200).json({message: "Sikeres adatbazis torlesek", result: true})
+        }
+        catch(err){ res.status(400).json({message: "Sikertelen koktel torles", result: false})}
+    })
 //
 //
 //
