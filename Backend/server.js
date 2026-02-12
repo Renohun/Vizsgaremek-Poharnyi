@@ -94,7 +94,7 @@ router.get('/Koktelok', (req, res) => {
 });
 
 //Koktel
-router.use(express.static(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'KoktélLap')));
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap')));
 router.get('/Koktel/:koktelID', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/koktellap.html'));
 });
@@ -102,19 +102,20 @@ router.get('/KoktelHiba', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/nincsilyen.html'));
 });
 
-//ÁLTALÁNOS SZŰRÉS
-//ha olyan endpointra hivatkozunk ami nincs, akkor száműzzük, jelenleg a koktélos hibaoldalra
-router.use((req,res)=>{
-    res.status(404).redirect("/KoktelHiba")
-})
+
+
 
 //!API endpoints
 app.use('/', router);
 const endpoints = require('./api/api.js');
 const cookieParser = require('cookie-parser');
-const { request } = require('http');
 app.use('/api', endpoints);
 
+//ÁLTALÁNOS SZŰRÉS
+//ha olyan endpointra hivatkozunk ami nincs, akkor száműzzük, jelenleg a koktélos hibaoldalra
+app.use((req,res)=>{
+    res.redirect("/KoktelHiba")
+})
 //!Szerver futtatása
 app.listen(port, ip, () => {
     console.log(`Szerver elérhetősége: http://${ip}:${port}`);
