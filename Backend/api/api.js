@@ -1238,20 +1238,38 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
 //
 //
 //
-router.get("/Keszites/iz", async (req, res)=>{
-    const izLekeres = "SELECT JelvényNeve FROM jelvények WHERE JelvenyKategoria LIKE ?"
-     DBconnetion.query(izLekeres, 'ízek', async (err, rows) => {
-        if (err) {
-            res.status(500).json({
-                message: 'Hiba lekeres kozben!',
-                hiba: err
+router.get('/Keszites/JelvenyLekeres', async (req, res) => {
+    try {
+        const Jelvenylekeres = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények';
+
+        let iz = [];
+        let ero = [];
+        let allergen = [];
+
+        DBconnetion.query(Jelvenylekeres, (err, rows) => {
+            if (err) {
+                throw new Error(err);
+            }
+            rows.forEach((row) => {
+                if (row.JelvenyKategoria == 'ízek') {
+                    iz.push(row);
+                } else if (row.JelvenyKategoria == 'Erősség') {
+                    ero.push(row);
+                } else if (row.JelvenyKategoria == 'Allergének') {
+                    allergen.push(row);
+                }
             });
-        } else {
             res.status(200).json({
-                message: 'Siker',
-                tartalom: rows
+                iz: iz,
+                erosseg: ero,
+                allergen: allergen
             });
-        }
-    });
-})
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Hiba',
+            err: error
+        });
+    }
+});
 module.exports = router;

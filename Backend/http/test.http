@@ -24,3 +24,6 @@ GET http://127.0.0.1:3000/api/Koktel/13
 ###
 POST http://127.0.0.1:3000/api/Koktel/SendJelentes
 Content-Type: application/json
+###
+GET http://127.0.0.1:3000/api/Keszites/JelvenyLekeres
+
