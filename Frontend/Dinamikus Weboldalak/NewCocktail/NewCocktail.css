@@ -145,6 +145,17 @@ body {
 .collapseButton:hover {
     padding: 8px;
 }
+.sajatBadge{
+    font-size:medium;
+    margin-bottom: 5px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #d1d1d1;
+    background-color: aqua;
+    
+}
 
 /*#leiras
 {
