@@ -250,7 +250,8 @@ Izlekeres();
 //megse gomb törlés függvény
 
 function megsefugv() {
-    alert('sikeres törlés!');
+    alert('sikeres törlés!'); 
+    window.location.reload()
 }
 
 //Egy badge választási lehetoseg eseten: 
