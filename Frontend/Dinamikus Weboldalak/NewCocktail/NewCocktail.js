@@ -144,8 +144,7 @@ let Izlekeres = async () => {
 
     //Badge kiválasztás:
     const erossegBadgek = [];
-    const EroeventFunctions = [];
-    let KivalasztottErosseg = [];
+    let KivalasztottErosseg;
     
     //
     //Erősség
@@ -156,25 +155,22 @@ let Izlekeres = async () => {
         erossegBadgek.push(document.getElementById(`eroBadge${i}`));
     }
 
-    //bejárom a tömböt amiben a badg-ek vannak és rájuk rakom a click eseményfigylőt
+    //bejárom a tömböt amiben a badge-ek vannak és rájuk rakom a click eseményfiegylőt
   for (let i = 0; i < erossegBadgek.length; i++) {
     const Erobadge = erossegBadgek[i];
 
-    const Eroclick =  () => {
-      KivalasztottErosseg.push(Erobadge.innerHTML);
-            console.log(EroeventFunctions)
+    const Eroclick =() => {
+    
+    let KivalasztottEro =Erobadge;
+      KivalasztottErosseg = KivalasztottEro.innerHTML
             console.log(KivalasztottErosseg)
-        Erobadge.classList.add("text-bg-dark")
-      // leveszem a listenereket, végigmegyek a badge-eket tartalmaó tömbön,
-      //  és párosítom őket az eventFunctions-ben tárolt Függvényükkel(click), majd törlöm a listenert
-      
-      for (let j = 0; j < erossegBadgek.length; j++)
-      {
-        erossegBadgek[j].removeEventListener("click", EroeventFunctions[j]);
-      }
-
+            for (let j = 0; j < erossegBadgek.length; j++) 
+            {
+                erossegBadgek[j].classList.remove("text-bg-dark")
+            } 
+            KivalasztottEro.classList.add("text-bg-dark")  
     };
-    EroeventFunctions.push(Eroclick);
+    
     Erobadge.addEventListener("click", Eroclick);
   }
 
@@ -185,8 +181,7 @@ let Izlekeres = async () => {
   //
 
     const izBadgek = [];
-    const IzeventFunctions = [];
-    let KivalasztottIz = [];
+    let KivalasztottIz;
 
      for (let i = 0; i < data.iz.length; i++) 
     {
@@ -198,20 +193,19 @@ let Izlekeres = async () => {
     const Izbadge = izBadgek[i];
 
     const Izclick =  () => {
-      KivalasztottIz.push(Izbadge.innerHTML);
-            console.log(IzeventFunctions)
+      let valasztottIz =Izbadge;
+      KivalasztottIz = Izbadge.innerHTML
             console.log(KivalasztottIz)
         Izbadge.classList.add("text-bg-dark")
-      // leveszem a listenereket, végigmegyek a badge-eket tartalmaó tömbön,
-      //  és párosítom őket az eventFunctions-ben tárolt Függvényükkel(click), majd törlöm a listenert
+       for (let j = 0; j < izBadgek.length; j++) 
+            {
+                izBadgek[j].classList.remove("text-bg-dark")
+            } 
+            valasztottIz.classList.add("text-bg-dark")  
       
-      for (let j = 0; j < izBadgek.length; j++)
-      {
-        izBadgek[j].removeEventListener("click", IzeventFunctions[j]);
-      }
-
+     
     };
-    IzeventFunctions.push(Izclick);
+    
     Izbadge.addEventListener("click", Izclick);
   }
 
@@ -221,9 +215,8 @@ let Izlekeres = async () => {
   //
   //
 
-  const allergenBadgek = [];
-    const allergeneventFunctions = [];
-    let KivalasztottAllergen = [];
+    const allergenBadgek = [];
+    let KivalasztottAllergen;
 
       for (let i = 0; i < data.iz.length; i++) 
     {
@@ -235,20 +228,19 @@ let Izlekeres = async () => {
     const allergenbadge = allergenBadgek[i];
 
     const Allergenclick =  () => {
-      KivalasztottAllergen.push(allergenbadge.innerHTML);
-            console.log(allergeneventFunctions)
+     let valasztottAllergen = allergenbadge;
+     KivalasztottAllergen = valasztottAllergen.innerHTML
+          
             console.log(KivalasztottAllergen)
         allergenbadge.classList.add("text-bg-dark")
-      // leveszem a listenereket, végigmegyek a badge-eket tartalmaó tömbön,
-      //  és párosítom őket az eventFunctions-ben tárolt Függvényükkel(click), majd törlöm a listenert
-      
-      for (let j = 0; j < allergenBadgek.length; j++)
-      {
-        allergenBadgek[j].removeEventListener("click", allergeneventFunctions[j]);
-      }
+         for (let j = 0; j < allergenBadgek.length; j++) 
+            {
+                allergenBadgek[j].classList.remove("text-bg-dark")
+            } 
+            valasztottAllergen.classList.add("text-bg-dark")  
 
     };
-    allergeneventFunctions.push(Allergenclick);
+    
     allergenbadge.addEventListener("click", Allergenclick);
   }
 };
@@ -260,3 +252,9 @@ Izlekeres();
 function megsefugv() {
     alert('sikeres törlés!');
 }
+
+//Egy badge választási lehetoseg eseten: 
+ /* if (KivalasztottEro.classList.contains("text-bg-dark")) {
+             KivalasztottEro.classList.remove("text-bg-dark")
+        }
+        else{KivalasztottEro.classList.add("text-bg-dark")}*/
