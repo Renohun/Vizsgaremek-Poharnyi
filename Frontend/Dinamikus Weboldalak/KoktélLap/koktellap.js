@@ -62,13 +62,13 @@ async function Betoltes() {
     let jelenDate=new Date()
     let TagOta=document.getElementById("Tagsag")
     if (jelenDate.getFullYear()!=keszitesDate[0]) {
-        TagOta.innerText=`${keszitesDate[0]-jelenDate.getFullYear()} Éve Tag`
+        TagOta.innerText=`${jelenDate.getFullYear()-keszitesDate[0]} Éve Tag`
     }
     else if(jelenDate.getMonth()+1!=keszitesDate[1]){
-        TagOta.innerText=`${keszitesDate[1]-jelenDate.getMonth()} Hónapja Tag`
+        TagOta.innerText=`${jelenDate.getMonth()+1-keszitesDate[1]} Hónapja Tag`
     }
     else{
-        TagOta.innerText=`${keszitesDate[2]-jelenDate.getDay()} Napja Tag`
+        TagOta.innerText=`${jelenDate.getDate()-keszitesDate[2]} Napja Tag`
     }
     
     let KommentekHelye=document.getElementById("Kommentek")
@@ -100,13 +100,13 @@ async function Betoltes() {
         KommentTartalom.innerHTML=kommentAdat[i].Tartalom
 
         if (jelenDate.getFullYear()!=KommIroRegDate[0]) {
-            KommentIroTagsag.innerText+=` - ${KommIroRegDate[0]-jelenDate.getFullYear()} Éve Tag`
+            KommentIroTagsag.innerText+=` - ${jelenDate.getFullYear()-KommIroRegDate[0]} Éve Tag`
         }
         else if(jelenDate.getMonth()+1!=KommIroRegDate[1]){
-            KommentIroTagsag.innerText+=` - ${KommIroRegDate[1]-jelenDate.getMonth()} Hónapja Tag`
+            KommentIroTagsag.innerText+=` - ${jelenDate.getMonth()-KommIroRegDate[1]} Hónapja Tag`
         }
         else{
-            KommentIroTagsag.innerText+=` - ${KommIroRegDate[2]-jelenDate.getDay()} Napja Tag`
+            KommentIroTagsag.innerText+=` - ${jelenDate.getDate()-KommIroRegDate[2]} Napja Tag`
         }
         KommentIro.appendChild(KommentIroTagsag)
         KommentIro.appendChild(KommentIroReport)
