@@ -20,7 +20,7 @@ VALUES
 (1,"Citrom Húzó","Egy felespohárt töltsünk félig Ouzo-val, majd facsarjunk bele egy kis citromot",true,"Ouzou",false,50),
 (2,"Martini","nem fogom leírni kézzel a receptet",true,"Gin",false,50),
 (2,"A Bánat Eloszlatója","Tötsünk egy 0.5L-es poharat a tetejéig Jack Danielsel",true,"Jack Daniels",false,50),
-(3,"Sommersby Light","Almalevet keverjunk ossze ketszer annyi szodavizzel",true,"Almalé",fase,45),
+(3,"Sommersby Light","Almalevet keverjunk ossze ketszer annyi szodavizzel",true,"Almalé",false,45),
 (1,"Diétás Drakula","Tötsünk egy 0.5L-es pohárba tetszőleges mennyiségű szörpot, majd facsarjunk bele egy kis grapefruitot. Tálaljuk egy meggyel a tetején.",true,"Meggyszörp",false,50),
 (6,"Mennyei Elixir","200ml Szentelt vízhez adjunk hozzá 80mlnyi almalevet a jó és a rossz tudás fájáról és 100mlnyi Isten Vére bort és tálaljuk 3 kocka jéggel. Kivállóan illik egy szelet kovásztalan kenyérhez és szárított halhoz.",false,"Szentelt Víz",true,50),
 (4,"Daredevil","30ml rumot töltsünk egy pohárba amiben jég van, majd töltsünk rá 150ml narancslevet,75ml ananász és vörösáfonya lét, majd keverjük el és tálaljuk mentalevéllel.",true,"Rum",true,50),
@@ -75,8 +75,8 @@ VALUES
 (2,"Martini",25,"Ml"),
 (2,"Vermouth",25,"Ml"),
 (3,"Jack Daniels",500,"Ml"),
-(4,"Almalé",15),
-(4,"Szodaviz",30),
+(4,"Almalé",15, "Ml"),
+(4,"Szodaviz",30, "Ml"),
 (5,"Meggyszörp",20,"Ml"),
 (5,"Grapefruitlé",15,"Ml"),
 (5,"Meggy",1,"Darab"),
@@ -132,7 +132,7 @@ VALUES
 (2,6,"Komment"),
 (8,7,"Komment");
 
-INSERT INTO Jelentők(JelentőID,JelentésID,JelentesIndoka)
+INSERT INTO Jelentők(JelentőID,JelentésID)
 VALUES
 (3,1),
 (4,1),
