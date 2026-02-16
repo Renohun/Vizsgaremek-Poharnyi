@@ -191,11 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
             (async () => {
                 alert(koktelNev.value);
                 const nevObj = { nev: koktelNev.value };
+                alert(JSON.stringify(nevObj));
                 const ellenorzes = await POSTfetch(
                     'http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes/NevEllenorzes',
                     nevObj
                 );
-                alert(ellenorzes);
+                alert(JSON.stringify(ellenorzes));
 
                 const kapottFajlNev = await POSTkepFeltoltes(
                     'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',

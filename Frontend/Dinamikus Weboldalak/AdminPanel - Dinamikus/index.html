@@ -222,14 +222,66 @@
                 <div name="termekFeltoltes" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5" hidden="true">
                     <!--nev, leiras, kiszereles, keszlet, kep, kategoria, marka,  szarmazas(orszag), alkohol szazalek, kora?, ar-->
                     <!--learazashoz egy extra resz ahol nev alapu kereses alapjan lehet allitani a learazas osszeget-->
+                    <h4>Termek feltoltes</h4>
                     <input type="file" id="termekKepFeltoltes" class="form-control" required />
+                    <label for="termekNev" class="form-label mt-2">Termek neve:</label>
+                    <input type="text" id="termekNev" class="form-control" name="termekNev" required />
+
+                    <label for="termekLeiras" class="form-label">Termek leirasa:</label>
+                    <textarea
+                        name="termekLeiras"
+                        id="termekLeiras"
+                        class="w-100 border rounded form-control"
+                        style="resize: none; text-align: left; box-sizing: border-box"
+                        rows="3"
+                        maxlength="300"
+                        required
+                    ></textarea>
+
+                    <label for="termekKiszereles" class="form-label">Termek kiszerelese:</label>
+                    <input type="number" id="termekKiszereles" class="form-control" name="termekKiszereles" required />
+
+                    <label for="termekKeszlet" class="form-label">Termek keszlete:</label>
+                    <input type="number" class="form-control" id="termekKeszlet" name="termekKeszlet" required />
+
+                    <label for="termekKategoria" class="form-label">Termek kategoria:</label>
+                    <select name="termekKategoria" id="termekKategoria" class="form-control" required>
+                        <option value="Eszkozok" selected>Eszkozok</option>
+                        <option value="Alkholok">Alkoholok</option>
+                        <option value="Merch">Merch</option>
+                    </select>
+
+                    <label for="termekMarka" class="form-label">Termek marka:</label>
+                    <input type="text" name="termekMarka" id="termekMarka" class="form-control" required />
+
+                    <label for="termekSzarmazas" class="form-label">Termek szarmazasa (orszag):</label>
+                    <input type="text" name="termekSzarmazas" id="termekSzarmazas" class="form-control" required />
+
+                    <label for="termekAlkoholLabel" id="termekAlkoholLabel" class="form-label" hidden
+                        >Termek alkholol %-ka:</label
+                    >
+                    <input type="number" name="termekAlkohol" id="termekAlkohol" class="form-control" hidden required />
+
+                    <label for="termekKoraLabel" id="termekKoraLabel" class="form-label" hidden>Termek kora: </label>
+                    <input type="number" class="form-control" id="termekKora" name="termekKora" hidden required />
+
+                    <label for="termekAra" class="form-label">Termek ara: </label>
+                    <input type="number" class="form-control" id="termekAra" name="termekAra" required />
+
+                    <input
+                        type="button"
+                        id="termekFeltoltesGomd"
+                        value="Termek feltoltese"
+                        class="btn btn-success mt-5 w-100"
+                        required
+                    />
                 </div>
                 <div name="koktelTorlese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5" hidden>
                     <h4>Koktél törlése</h4>
                     <select name="torlesSelect" id="koktelSelect" class="form-control">
                         <option value="" selected></option>
                     </select>
-                    <input type="button" value="Koktél törlése" id="torlesGomb" class="btn btn-danger w-100 mt-3">
+                    <input type="button" value="Koktél törlése" id="torlesGomb" class="btn btn-danger w-100 mt-3" />
                 </div>
             </div>
         </div>
@@ -239,5 +291,6 @@
         <script src="../kellékek/navBar.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../AdminPanel - Dinamikus/adminPanel_torles.js"></script>
+        <script src="../AdminPanel - Dinamikus/adminPanel_termekHozzadas.js"></script>
     </body>
 </html>

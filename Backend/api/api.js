@@ -678,8 +678,7 @@ router.post(
     authorizationMiddelware,
     async (req, res) => {
         try {
-            console.log(req.body);
-
+            console.log(req);
             const { nev } = req.body;
             console.log(nev);
 
@@ -774,6 +773,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
         console.log(err);
     }
 });
+
 //
 //
 //AdminPanel - koktelTorles
@@ -857,6 +857,61 @@ router.post('/koktelTorles/:nev', (req, res) => {
         res.status(400).json({ message: 'Sikertelen koktel torles', result: false });
     }
 });
+
+//adminpanel - termekfeltoltes
+
+router.post('/AdminPanel/TermekFeltoltes', async (req, res) => {
+    try {
+        console.log(req.body);
+
+        const {
+            fajlNeve,
+            termekNev,
+            termekLeiras,
+            termekKiszereles,
+            termekKeszlet,
+            termekMarka,
+            termekSzarmazas,
+            termekAra,
+            termekKategoria
+        } = req.body;
+
+        if (termekKategoria != 'Alkholok') {
+            const termekQuery =
+                'INSERT INTO webshoptermek (TermekCim, TermekLeiras, TermekKiszereles, TermekKeszlet, TermekKepUtvonal, TermekKategoria, TermekMarka, TermekSzarmazas, Ar) VALUES (?,?,?,?,?,?,?,?,?)';
+            await DBconnetion.promise().query(termekQuery, [
+                termekNev,
+                termekLeiras,
+                termekKiszereles,
+                termekKeszlet,
+                fajlNeve,
+                termekKategoria,
+                termekMarka,
+                termekSzarmazas,
+                termekAra
+            ]);
+        } else {
+            const termekQuery =
+                'INSERT INTO webshoptermek (TermekCim, TermekLeiras, TermekKiszereles, TermekKeszlet, TermekKepUtvonal, TermekKategoria, TermekMarka, TermekSzarmazas, TermekAlkoholSzazalek, TermekKora, Ar) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+            await DBconnetion.promise().query(termekQuery, [
+                termekNev,
+                termekLeiras,
+                termekKiszereles,
+                termekKeszlet,
+                fajlNeve,
+                termekKategoria,
+                termekMarka,
+                termekSzarmazas,
+                req.body.termekAlkohol,
+                req.body.termekKora,
+                termekAra
+            ]);
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Hiba tortent a vegponton', error: error });
+    }
+});
+
 //
 //
 //
