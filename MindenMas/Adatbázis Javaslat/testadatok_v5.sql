@@ -132,16 +132,15 @@ VALUES
 (2,6,"Komment"),
 (8,7,"Komment");
 
-INSERT INTO Jelentők(JelentőID,JelentésID)
+INSERT INTO Jelentők(JelentőID,JelentésID,JelentesIndoka)
 VALUES
-(3,1),
-(4,1),
-(8,1),
-(4,2),
-(6,3),
-(7,4),
-(5,5),
-(1,6);
+(3,1,"Nem is koktél"),
+(4,1,"Bármennyire is tetszik, csak JD nem számít koktélnak"),
+(4,2,"Ez nem egy kivitelezhető koktél"),
+(6,3,"Vagy személyhamisítás történik vagy csoda mert az emberünk VAK"),
+(7,4,"Elmebetegnek néz ki"),
+(5,5,"Nem a koktélhoz kötődik"),
+(1,6,"Mi az hogy nem elég halas?????????");
 
 INSERT INTO Jelvények(JelvényNeve,JelvenyKategoria)
 VALUES
