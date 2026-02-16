@@ -31,6 +31,25 @@ const Getfetch = async (url) => {
         });
 };
 
+const AdatPostKep=async(url,data)=>{
+    try {
+      const ertek=await fetch(url,{
+        method:"POST",
+        body:data
+      })  
+      if (ertek.ok) {
+        return ertek.json()
+      }
+      else{
+        console.error(ertek.statusText);
+        
+      }
+    } 
+    catch (error) {
+        console.error(error)
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('aqd');
     //új összetevő meghívására szolgáló gomb értékadása
@@ -82,24 +101,131 @@ function osszetevohozzaadas() {
     torlesgomb.classList.add('Osszetevobtn');
     torlesgomb.id = 'osztv' + gombnyomasszam;
     let col = document.createElement('div');
-    col.classList.add('row', 'mt-1');
+    col.classList.add('row', 'mt-1' ,'ujOsszetevo');
     col.id = 'osszetevoCol' + gombnyomasszam;
     let input = document.createElement('input');
     input.classList.add('OsszetevoBar');
     input.type = 'text';
     input.placeholder = 'Összetevő';
     input.id = 'osszetevo' + gombnyomasszam;
+    let mennyiseg = document.createElement("input")
+    let mertekegyseg = document.createElement("select")
+    mennyiseg.type = 'text'
+    mennyiseg.setAttribute("id",`OsszetevoMennyiseg${gombnyomasszam}`)
+    mennyiseg.classList.add("OsszetevoMennyiseg")
+    mennyiseg.setAttribute("placeholder","mennyiség")
+    mertekegyseg.setAttribute("id",`osszetevoMertekegyseg${gombnyomasszam}`)
+    mertekegyseg.classList.add("MertekSelect")
+    let opcioMl = document.createElement("option")
+    let opcioDb = document.createElement("option")
+    let opcioGr = document.createElement("option")
+    opcioMl.value ="ml"
+    opcioDb.value ="db"
+    opcioGr.value ="gr"
+    opcioMl.innerHTML ="ml"
+    opcioDb.innerHTML ="db"
+    opcioGr.innerHTML ="gr"
+    opcioMl.classList.add("Mertekegyseg")
+    opcioDb.classList.add("Mertekegyseg")
+    opcioGr.classList.add("Mertekegyseg")
+    mertekegyseg.appendChild(opcioMl)
+    mertekegyseg.appendChild(opcioDb)
+    mertekegyseg.appendChild(opcioGr)
     //parent-child viszonyok meghatározása
-    col.appendChild(osszetevoform);
-    osszetevoform.appendChild(input);
-    osszetevoform.appendChild(torlesgomb);
-    osszetevodiv.appendChild(col);
-
+    
+    col.appendChild(input);
+    col.appendChild(mennyiseg)
+    col.appendChild(mertekegyseg)
+    col.appendChild(torlesgomb);
+    
+    osszetevodiv.appendChild(col)
+    
     //torles
     torlesgomb.addEventListener('click', () => {
         osszetevodiv.removeChild(col);
     });
 }
+
+
+//
+//
+//
+// ADATFELTÖLTÉS
+//
+//
+//
+
+//képfeltöltés 
+
+
+const dropArea = document.getElementById("drop-area")
+const inputFile = document.getElementById("input-file")
+const ImgView = document.getElementById("img-view")
+
+inputFile.addEventListener("change",KepFeltoltes)
+
+
+
+function KepFeltoltes()
+{
+   let imgLink = URL.createObjectURL( inputFile.files[0]);
+ 
+   ImgView.style.backgroundImage = `url(${imgLink})`;
+    const kep = document.getElementById("iconkep")
+    const szoveg = document.getElementById("szoveg")
+    kep.setAttribute("hidden",'true')
+    szoveg.setAttribute("hidden",'true')
+   ImgView.style.border = "none"
+}
+
+dropArea.addEventListener("dragover",function(e)
+{
+    e.preventDefault();
+})
+dropArea.addEventListener("drop",function(e) 
+{
+    e.preventDefault();//kikapcsolja adott elemt alapvető funkcióját a megadott eseményre
+    inputFile.files = e.dataTransfer.files;
+    KepFeltoltes()
+  
+})
+
+//adatok kiküldése az adatbazisba
+
+const AdatStorage =  async()=>{
+    const kep = new FormData();
+    if (img.files[0].type!="image/jpeg"&&img.files[0].type!="image/png"&&img.files[0].type!="image/bmp"&&img.files[0].type!="image/webp") {
+        return false
+    }
+    else{
+        kep =inputFile.files[0]
+    }
+    //alkoholose
+    let alkoholose;
+    if (radioAlk.checked == true) {
+        alkoholose == true;
+    }
+    else if(radioMentes.checked == true){
+         alkoholose == false;
+    }
+    //összetevők összeszedése
+    let osszetevok = document.getElementById("osszetevoDiv").children
+    for (let i = 0; i < osszetevok.length; i++) {
+       
+        elkuldendo_osszetevok.push(osszetevok[i].value)
+        document.getElementById("osszetevoDiv").children
+    }
+    let KoktelAdatok = {
+        nev: document.getElementById("nev").value,
+        mennyiseg:  document.getElementById("mennyiseg").value,
+        alap:  document.getElementById("alap").value,
+        alkolose : alkoholose,
+        osszetevol: elkuldendo_osszetevok,
+        
+    }
+
+}
+
 //Jelvények feltöltése
 const erossegSelect = document.getElementById('erosseg');
 const izSelect = document.getElementById('iz');

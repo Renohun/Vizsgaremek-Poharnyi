@@ -90,6 +90,11 @@ body {
     justify-content: space-between;
 }
 
+#osszetevoDiv{
+    display: flex;
+    margin-left: 1px;
+}
+
 .Osszetevobtn {
     width: 3.5%;
     margin-left: 0cap;
@@ -111,9 +116,15 @@ body {
     font-size: 17px;
     border: 1px solid grey;
     float: left;
-    width: 80%;
+    width: 60%;
     height: 100%;
     background: #f8f8f8;
+}
+.OsszetevoMennyiseg{
+    width: 13%;
+}
+.MertekSelect{
+    width: 9%;
 }
 /*
     jelvenyek

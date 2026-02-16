@@ -109,16 +109,16 @@
                             </div>
                             <div class="mb-3">
                                 <label for="nev" class="form-label">Koktél neve:</label>
-                                <input type="text" class="form-control" placeholder="név" id="nev" />
+                                <input type="text" maxlength="50" class="form-control" placeholder="név" id="nev" />
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="mennyiseg">Hány ml lesz a kész koktél:</label>
-                                <input type="text" class="form-control" placeholder="10ml" id="mennyiseg" />
+                                <input type="text" maxlength="100" class="form-control" placeholder="10ml" id="mennyiseg" />
                             </div>
 
                             <div class="mb-3" hidden id="alapEltuntet">
                                 <label for="alap" class="form-label">A koktél alkoholos alapja: </label>
-                                <input type="text" class="form-control" id="alap" placeholder="whiskey" />
+                                <input type="text" maxlength="100" class="form-control" id="alap" placeholder="whiskey" />
                             </div>
                         </form>
                     </div>
@@ -126,11 +126,17 @@
                 <label for="osszetevo" class="form-label">Add hozzá az összetevőket: </label>
                 <div class="row mt-1" id="osszetevoDiv">
                     <div class="row" id="elsoOsszetevo">
-                        <form class="searchbarForm">
+                       
                             <input class="OsszetevoBar" type="text" placeholder="Összetevő" name="search" />
+                            <input type="text" id="mennyiseg" placeholder="mennyiség" class="OsszetevoMennyiseg">
+                            <select name="MertekEgyseg" id="MertekEgyseg" class="MertekSelect">
+                                <option value="ml">ml</option>
+                                <option value="db">db</option>
+                                <option value="gr">gr</option>
+                            </select>
                             <button class="Osszetevobtn" type="button" id="osztv1">X</button
                             ><!--utána kell nézni!!!-->
-                        </form>
+                        
                     </div>
                 </div>
                 <!--Létrehozott új összetevők helye-->
@@ -143,7 +149,7 @@
                 <div class="row mt-3" id="leirasDiv">
                     <div class="col-sm-12">
                         <label for="leiras" class="form-label">A recept pontos és részletes leírása: </label>
-                        <textarea class="form-control" id="leiras"></textarea>
+                        <textarea class="form-control" id="leiras" maxlength="1000"></textarea>
                     </div>
                 </div>
                 <div id="jelvenyek">

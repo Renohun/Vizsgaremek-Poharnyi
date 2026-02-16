@@ -1272,4 +1272,15 @@ router.get('/Keszites/JelvenyLekeres', async (req, res) => {
         });
     }
 });
+router.post('/Keszites/KepFeltoltes', fileStorage.array('profilkep'), async (request, response) => {
+    try {
+        response.status(200).json({
+            message: request.files[0].filename
+        });
+    } catch (error) {
+        response.status(500).json({
+            message: error
+        });
+    }
+});
 module.exports = router;
