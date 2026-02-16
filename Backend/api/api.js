@@ -912,6 +912,62 @@ router.post('/AdminPanel/TermekFeltoltes', async (req, res) => {
     }
 });
 
+router.get('/AdminPanel/TermekLekeres', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
+    try {
+        const query = 'SELECT TermekID,TermekCim FROM webshoptermek';
+        const [rows] = await DBconnetion.promise().query(query);
+        res.status(200).json({ result: rows });
+    } catch (err) {
+        res.status(500).json({ message: 'Hiba tortent a vegpontban', error: err });
+    }
+});
+
+router.get(
+    '/AdminPanel/TermekNev/Ellenorzes/:nev',
+    authenticationMiddleware,
+    authorizationMiddelware,
+    async (req, res) => {
+        try {
+            const { nev } = req.params;
+
+            const nevQuery = 'SELECT TermekCim FROM webshoptermek WHERE TermekCim LIKE ?';
+
+            const [rows] = await DBconnetion.promise().query(nevQuery, [nev]);
+
+            if (rows.length > 0) {
+                res.status(200).json({ duplikacio: true });
+            } else {
+                res.status(200).json({ duplikacio: false });
+            }
+        } catch (error) {
+            res.status(500).json({ message: 'Hibas vegpont', error: error });
+        }
+    }
+);
+
+router.get(
+    '/AdminPanel/TermekLearazas/:id/:ertek',
+    authenticationMiddleware,
+    authorizationMiddelware,
+    async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { ertek } = req.params;
+
+            console.log(id);
+            console.log(ertek);
+
+            const frissetesQuery = 'UPDATE webshoptermek SET TermekDiscount = ? WHERE TermekCim LIKE ?';
+
+            await DBconnetion.promise().query(frissetesQuery, [ertek, id]);
+
+            res.status(200).json({ result: 'Learazas sikeresen frissitve' });
+        } catch (error) {
+            res.status(500).json({ message: 'Hiba tortent a vegpontban', error: err });
+        }
+    }
+);
+
 //
 //
 //

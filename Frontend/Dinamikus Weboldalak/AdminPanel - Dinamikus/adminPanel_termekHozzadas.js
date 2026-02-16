@@ -30,6 +30,20 @@ async function POSTkepFeltoltes(url, obj) {
     }
 }
 
+async function GETfetch(url) {
+    try {
+        const data = await fetch(url);
+
+        if (data.ok) {
+            return await data.json();
+        } else {
+            throw new Error('Hiba tortent a fetch-el');
+        }
+    } catch (err) {
+        throw new Error('Hiba tortent:' + err);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     //alkohol valasztas eseten jelenjenek meg a megfelelo input mezok
     const termekKategoriaSelect = document.getElementById('termekKategoria');
@@ -49,6 +63,34 @@ document.addEventListener('DOMContentLoaded', () => {
             termekAlkoholMertekeLabel.setAttribute('hidden', 'true');
             termekAlkoholKora.setAttribute('hidden', 'true');
             termekAlkoholMerteke.setAttribute('hidden', 'true');
+        }
+    });
+
+    //termek nevek es id-k lekerese a selectbe
+
+    const termekSelect = document.getElementById('termekLearazas');
+    (async () => {
+        const data = await GETfetch('http://127.0.0.1:3000/api/AdminPanel/TermekLekeres');
+        data.result.forEach((element) => {
+            const optTag = document.createElement('option');
+            optTag.innerText = element.TermekCim;
+            optTag.dataset.id = element.TermekID;
+            termekSelect.appendChild(optTag);
+        });
+    })();
+
+    document.getElementById('termekLearazasGomb').addEventListener('click', () => {
+        const learazas = document.getElementById('termekLearazasanakErteke').value;
+        const kivalasztottTermek = document.getElementById('termekLearazas').value;
+        if (learazas.length > 0) {
+            (async () => {
+                const data = await GETfetch(
+                    `http://127.0.0.1:3000/api/AdminPanel/TermekLearazas/${kivalasztottTermek}/${learazas}`
+                );
+                console.log(data);
+            })();
+        } else {
+            alert('Hianyzik a learazas erteke');
         }
     });
 
@@ -92,8 +134,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         //ebbe az objektumba gyurjuk ossze a kapott adatokat
-        POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
-        const fetchAdat = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
-        console.log(fetchAdat);
+        const ellResult = await GETfetch(
+            `http://127.0.0.1:3000/api/AdminPanel/TermekNev/Ellenorzes/${POSTobj.termekNev}`
+        );
+
+        console.log(ellResult);
+
+        if (ellResult.duplikacio == 'false') {
+            POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
+            const fetchAdat = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
+            console.log(fetchAdat);
+        } else {
+            alert('Mar letezik ilyen nevu termek');
+        }
     });
 });

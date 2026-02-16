@@ -72,7 +72,7 @@
                         <p class="text-dark fs-5 sideBarGomb" name="koktelokKezelese">Koktelok feltoltese</p>
                     </div>
                     <div class="mb-auto mt-auto">
-                        <p class="text-dark fs-5 sideBarGomb" name="termekFeltoltes">Termek feltoltes</p>
+                        <p class="text-dark fs-5 sideBarGomb" name="termekFeltoltes">Termek Kezeles</p>
                     </div>
                     <div class="mb-auto mt-auto">
                         <p class="text-dark fs-5 sideBarGomb" name="koktelTorlese">Koktél törlése</p>
@@ -222,7 +222,7 @@
                 <div name="termekFeltoltes" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5" hidden="true">
                     <!--nev, leiras, kiszereles, keszlet, kep, kategoria, marka,  szarmazas(orszag), alkohol szazalek, kora?, ar-->
                     <!--learazashoz egy extra resz ahol nev alapu kereses alapjan lehet allitani a learazas osszeget-->
-                    <h4>Termek feltoltes</h4>
+                    <h4>Termek feltoltes / Kezeles</h4>
                     <input type="file" id="termekKepFeltoltes" class="form-control" required />
                     <label for="termekNev" class="form-label mt-2">Termek neve:</label>
                     <input type="text" id="termekNev" class="form-control" name="termekNev" required />
@@ -274,6 +274,26 @@
                         value="Termek feltoltese"
                         class="btn btn-success mt-5 w-100"
                         required
+                    />
+
+                    <hr />
+
+                    <h4>Termek learazas:</h4>
+                    <select name="termekLearazas" id="termekLearazas" class="form-control"></select>
+                    <label for="termekLearazasanakErteke" class="form-label">Learazas erteke:</label>
+                    <input
+                        type="number"
+                        id="termekLearazasanakErteke"
+                        name="termekLearazasanakErteke"
+                        class="form-control"
+                        min="0"
+                        max="100"
+                    />
+                    <input
+                        type="button"
+                        value="Termek learazasa"
+                        id="termekLearazasGomb"
+                        class="btn btn-success w-100 mt-5"
                     />
                 </div>
                 <div name="koktelTorlese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5" hidden>
