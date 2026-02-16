@@ -189,6 +189,14 @@ document.addEventListener('DOMContentLoaded', () => {
             //console.log(kepTarolas);
 
             (async () => {
+                alert(koktelNev.value);
+                const nevObj = { nev: koktelNev.value };
+                const ellenorzes = await POSTfetch(
+                    'http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes/NevEllenorzes',
+                    nevObj
+                );
+                alert(ellenorzes);
+
                 const kapottFajlNev = await POSTkepFeltoltes(
                     'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
                     kepTarolas
@@ -206,9 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     fajlNeve: kapottFajlNev.message
                 };
 
-                //console.log(POSTobj.kep);
-
-                await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
+                //await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
                 //console.log(data);
             })();
         }
