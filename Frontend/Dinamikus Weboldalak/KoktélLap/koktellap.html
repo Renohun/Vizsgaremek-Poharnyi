@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title id="OldalCim">Document</title>
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
@@ -81,14 +81,15 @@
                     <div id="badgek">
 
                     </div>
+                    <input type="button" id="KoktJel" class="btn text-danger" value="Koktél Jelentése">
                 </div>
                 <div class="row border-bottom border-2 border-dark ">
-                    <p class="fs-4">Készítette: <span id="Madeby"></span> <span id="Tagsag" class="text-primary"></span><input type="button" class="btn text-danger" value="!"></p>
+                    <p class="fs-4">Készítette: <span id="Madeby"></span> <span id="Tagsag" class="text-primary"></span><input type="button" id="FelhJel" class="btn text-danger" value="Jelentés"> <span class="float-end" id="kokteldate"></span></p>
                     <div class="col-7 col-md-12 col-lg-5 d-flex">
                             <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid col-6 rounded">
                             <div class="ps-4 flex-column">
                                 <label for="mennyiseg">Hány ml-nyit szeretne készíteni</label>
-                                <input type="number" id="mennyiseg" class="form-control">
+                                <input inputmode="numeric" type="number" id="mennyiseg" class="form-control">
                                 <span class="fs-4">Összetevők</span>
                                 <ul id="Ossztev">
 
@@ -101,7 +102,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 d-flex flex-column mt-4 p-0  text-center fs-4">
+                <div class="col-md-12 d-flex flex-column mt-4 p-0  text-center fs-4" id="Velemeny">
                     <div>
                     <label for="rate">Értékelje a Koktélt</label>
                     <select name="" id="rate" class="form-control">
@@ -121,7 +122,7 @@
                     <label for="komment" class="">Írj Kommentet!</label>
                     <textarea class="w-100 border rounded form-control komment" style="resize: none; text-align: left; box-sizing: border-box" rows="3" id="komment" maxlength="300" placeholder="Írd ide a véleményed!"></textarea>
                     <div class="p-0">
-                        <input class="btn btn-success mt-1 float-end" type="button" value="Küldés">
+                        <input class="btn btn-success mt-1 float-end" type="button" value="Küldés" id="KommSend">
                         <span class="float-end p-2"> <span id="szam">0</span>/300</span>
                     </div>
                 </div>
@@ -134,7 +135,25 @@
                     </div>
                 </div>
             </div>
-            
+
+            <div class="modal" tabindex="-1" id="teszt">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Jelentés Elküldése</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <label for="indok">Adja Meg Az Indokot:</label>
+                    <textarea name="indok" id="indok" class="form-control" rows="4"></textarea>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="JelNvm">Mégse</button>
+                    <button type="button" class="btn btn-primary" id="JelSend">Küldés</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <script src="../koktellap.js"></script>
             <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>

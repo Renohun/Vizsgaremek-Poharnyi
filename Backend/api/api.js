@@ -1151,10 +1151,10 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
 //
 //
 router.get("/Koktel/:id",async(request,response)=>{
-    const KoktelLekeres="SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?"
-    const KommentLekeres="SELECT Felhasználónév,Tartalom,RegisztracioDatuma FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+    const KoktelLekeres="SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?"
+    const KommentLekeres="SELECT KommentID,Felhasználónév,Tartalom,RegisztracioDatuma FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
     const JelvenyLekeres="SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?"
-    const OsszetevőLekeres="SELECT Osszetevő,Mennyiség FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+    const OsszetevőLekeres="SELECT Osszetevő,Mennyiség,Mertekegyseg FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
     const MelyikJelvenyLekeres="SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?"
 
     try {
@@ -1173,7 +1173,8 @@ router.get("/Koktel/:id",async(request,response)=>{
                 adat: koktel,
                 komment: komment,
                 jelvenyek:jelvényinfo,
-                osszetevok:osszetevok
+                osszetevok:osszetevok,
+                belepette: jwt.decode(request.cookies.auth_token)!="" ? true:false
             });
         }
         else{
