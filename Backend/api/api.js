@@ -1152,7 +1152,7 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
 //
 router.get("/Koktel/:id",async(request,response)=>{
     const KoktelLekeres="SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?"
-    const KommentLekeres="SELECT KommentID,Felhasználónév,Tartalom,RegisztracioDatuma FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+    const KommentLekeres="SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
     const JelvenyLekeres="SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?"
     const OsszetevőLekeres="SELECT Osszetevő,Mennyiség,Mertekegyseg FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
     const MelyikJelvenyLekeres="SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?"
@@ -1167,14 +1167,13 @@ router.get("/Koktel/:id",async(request,response)=>{
         }
         let koktel=await lekeres(KoktelLekeres,request.params.id);
         let komment=await lekeres(KommentLekeres,[request.params.id,"Koktél"])
-
         if (koktel.length!=0) {
                 response.status(200).json({
                 adat: koktel,
                 komment: komment,
                 jelvenyek:jelvényinfo,
                 osszetevok:osszetevok,
-                belepette: jwt.decode(request.cookies.auth_token)!="" ? true:false
+                belepette: jwt.decode(request.cookies.auth_token)!=null ? true:false
             });
         }
         else{
@@ -1226,8 +1225,9 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
             MelyikAz = JelentesekLista[i].JelentesID;
         }
     }
+    /*
     if (VanEMarIlyen == false) {
-        const JelentesKuldes ='INSERT INTO jelentesek (JelentettID,JelentettTartalomID,JelentesTipusa,Tartalom) VALUES (?,?,?,?)';
+        const JelentesKuldes ='INSERT INTO jelentesek (JelentettID,JelentettTartalomID,JelentesTipusa) VALUES (?,?,?)';
         await lekeres(JelentesKuldes);
     } 
     else {
@@ -1235,7 +1235,7 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
         await lekeres(JelentesModositas);
     }
     const JelentoKuldes = 'INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)';
-    await lekeres(JelentoKuldes, [jwt.decode(request.cookies.auth_token).userID]);
+    await lekeres(JelentoKuldes, [jwt.decode(request.cookies.auth_token).userID]);*/
     response.status(200).json({
         message: JelentesekLista
     });

@@ -163,7 +163,7 @@ async function Betoltes() {
             KommentIroReport.setAttribute("value","Jelentés")
             KommentIroReport.classList.add("btn","text-danger","float-end")
             KommentIroReport.addEventListener("click",()=>{
-                jelentes(kommentAdat[i].KommentID,"Komment")
+                jelentes(kommentAdat[i].KommentID,"Komment",kommentAdat[i].Keszito)
             })
             KommentIro.appendChild(KommentIroReport)
         }
@@ -177,15 +177,15 @@ async function Betoltes() {
     document.getElementById("recept").innerHTML=koktélAdat.Recept
     document.getElementById("mennyiseg").value=koktélAdat.AlapMennyiseg 
     document.getElementById("mennyiseg").addEventListener("change",()=>{
-        OssztevHely.innerHTML=""
-        for (let i = 0; i < osszetevoAdat.length; i++) {
+    OssztevHely.innerHTML=""
+    for (let i = 0; i < osszetevoAdat.length; i++) {
             let Ossztevo=document.createElement("li")
             Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${osszetevoAdat[i].Mennyiség*(document.getElementById("mennyiseg").value/koktélAdat.AlapMennyiseg)} ${osszetevoAdat[i].Mertekegyseg}`
             OssztevHely.appendChild(Ossztevo)
         }
     })
-    document.getElementById("FelhJel").addEventListener("click",()=>{jelentes(koktélAdat.FelhID,"Felhasználó")})
-    document.getElementById("KoktJel").addEventListener("click",()=>{jelentes(koktélAdat.KoktélID,"Koktél")})
+    document.getElementById("FelhJel").addEventListener("click",()=>{jelentes(koktélAdat.FelhID,"Felhasználó",koktélAdat.FelhID)})
+    document.getElementById("KoktJel").addEventListener("click",()=>{jelentes(koktélAdat.KoktélID,"Koktél",koktélAdat.FelhID)})
     return eredmeny.belepette
 }
 
@@ -205,15 +205,25 @@ async function Tisztitas() {
     document.getElementById("Ossztev").innerHTML=""
     document.getElementById("badgek").innerHTML=""
 }
-async function jelentes(id,tipus) {
+async function jelentes(mit,tipus,kit) {
     var JelIv = new bootstrap.Modal(document.getElementById('teszt'), {})   
     JelIv.show()
-    document.getElementById("JelSend").addEventListener("click",()=>{
+    document.getElementById("JelSend").addEventListener("click",async()=>{
         let adatok={
-            
+            JelentettID:kit,
+            JelentettTartalomID:mit,
+            JelentesTipusa:tipus,
+            Indok:document.getElementById("indok").value
         }
-    })
-    document.getElementById("JelNvm").addEventListener("click",()=>{
+        console.log(adatok);
+        console.log(await AdatKuldes(`/api/Koktel/SendJelentes`,adatok));
+        //await AdatKuldes(`/api/Koktel/SendJelentes`,adatok)
         JelIv.hide()
-    })
+    },{once:true})
+
+    document.getElementById("JelNvm").addEventListener("click",()=>{
+        console.log("a");
+        JelIv.hide()
+    },{once:true})
+
 }
