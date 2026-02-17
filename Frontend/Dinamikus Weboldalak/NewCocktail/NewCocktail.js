@@ -190,41 +190,7 @@ dropArea.addEventListener("drop",function(e)
   
 })
 
-//adatok kiküldése az adatbazisba
 
-const AdatStorage =  async()=>{
-    const kep = new FormData();
-    if (img.files[0].type!="image/jpeg"&&img.files[0].type!="image/png"&&img.files[0].type!="image/bmp"&&img.files[0].type!="image/webp") {
-        return false
-    }
-    else{
-        kep =inputFile.files[0]
-    }
-    //alkoholose
-    let alkoholose;
-    if (radioAlk.checked == true) {
-        alkoholose == true;
-    }
-    else if(radioMentes.checked == true){
-         alkoholose == false;
-    }
-    //összetevők összeszedése
-    let osszetevok = document.getElementById("osszetevoDiv").children
-    for (let i = 0; i < osszetevok.length; i++) {
-       
-        elkuldendo_osszetevok.push(osszetevok[i].value)
-        document.getElementById("osszetevoDiv").children
-    }
-    let KoktelAdatok = {
-        nev: document.getElementById("nev").value,
-        mennyiseg:  document.getElementById("mennyiseg").value,
-        alap:  document.getElementById("alap").value,
-        alkolose : alkoholose,
-        osszetevol: elkuldendo_osszetevok,
-        
-    }
-
-}
 
 //Jelvények feltöltése
 const erossegSelect = document.getElementById('erosseg');
@@ -295,6 +261,7 @@ let Izlekeres = async () => {
                 erossegBadgek[j].classList.remove("text-bg-dark")
             } 
             KivalasztottEro.classList.add("text-bg-dark")  
+            KivalasztottEro.classList.add("kivalasztott","ero")
     };
     
     Erobadge.addEventListener("click", Eroclick);
@@ -328,6 +295,7 @@ let Izlekeres = async () => {
                 izBadgek[j].classList.remove("text-bg-dark")
             } 
             valasztottIz.classList.add("text-bg-dark")  
+            valasztottIz.classList.add("kivalasztott","iz")
       
      
     };
@@ -364,6 +332,7 @@ let Izlekeres = async () => {
                 allergenBadgek[j].classList.remove("text-bg-dark")
             } 
             valasztottAllergen.classList.add("text-bg-dark")  
+            valasztottAllergen.classList.add("kivalasztott","allergen")
 
     };
     
@@ -371,7 +340,80 @@ let Izlekeres = async () => {
   }
 };
 Izlekeres();
-//Jelvény Collapse Js
+
+//adatok kiküldése az adatbazisba
+
+const AdatStorage =  async()=>{
+  /*  const kep = new FormData();
+    if (img.files[0].type!="image/jpeg"&&img.files[0].type!="image/png"&&img.files[0].type!="image/bmp"&&img.files[0].type!="image/webp") {
+        return false
+    }
+    else{
+        kep =inputFile.files[0]
+    }*/
+    //alkoholose
+    let alkoholose;
+    if (radioAlk.checked == true) {
+        alkoholose == true;
+    }
+    else if(radioMentes.checked == true){
+         alkoholose == false;
+    }
+    //összetevők összeszedése
+    let osszetevok = document.getElementById("osszetevoDiv").children
+    
+    
+    let osszetevoLista = []
+    for (let i = 0; i < osszetevok.length; i++) {
+        console.log(osszetevok)
+       let osszetevoAdatok = osszetevok[i].children
+        console.log(osszetevoAdatok)
+        let osszetevo ={}
+       for (let j = 0; j < osszetevoAdatok.length-1; j++) {
+        console.log(j)
+        let kinyertOsszetevo = osszetevoAdatok[j].value
+        console.log(kinyertOsszetevo)
+        let id = osszetevoAdatok[j].tagName
+        osszetevo += {id:kinyertOsszetevo}
+        console.log(osszetevo)
+     
+       }
+        osszetevoLista.push(osszetevo)
+        console.log(osszetevoLista[i])
+    }
+    //leiras kiszedese
+    let leiras = document.getElementById("leiras").value
+    //badgek kiszedése
+    let kinyertEro;
+    let kinyertIz;
+    let kinyertAllergen;
+    let kinyertbadgeList = document.getElementsByClassName("kivalasztott")
+    for (let i = 0; i < kinyertbadgeList.length; i++) {
+        if(kinyertbadgeList[i].classList.contains("ero")){
+             kinyertEro = kinyertbadgeList[i].innerHTML
+        }else if(kinyertbadgeList[i].classList.contains("iz")){
+              kinyertIz = kinyertbadgeList[i].innerHTML   
+        }else if(kinyertbadgeList[i].classList.contains("allergen")){
+              kinyertAllergen = kinyertbadgeList[i].innerHTML   
+        }
+        
+    }
+    let KoktelAdatok = {
+        nev: document.getElementById("nev").value,
+        mennyiseg:  document.getElementById("mennyiseg").value,
+        alap:  document.getElementById("alap").value,
+        alkolose : alkoholose,
+        osszetevok: osszetevoLista,
+        leiras: leiras,
+        erosseg: kinyertEro,
+        iz:kinyertIz,
+        allergen:kinyertAllergen
+        
+    }
+    console.log(KoktelAdatok)
+}
+//elküldés
+document.getElementById("kuldes").addEventListener("click",AdatStorage)
 
 //megse gomb törlés függvény
 
