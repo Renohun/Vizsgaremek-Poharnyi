@@ -119,7 +119,7 @@
                     <input type="button" value="Küldés" class="btn btn-success">
                     </div>
 
-                    <label for="komment" class="">Írj Kommentet!</label>
+                    <label for="komment">Írj Kommentet!</label>
                     <textarea class="w-100 border rounded form-control komment" style="resize: none; text-align: left; box-sizing: border-box" rows="3" id="komment" maxlength="300" placeholder="Írd ide a véleményed!"></textarea>
                     <div class="p-0">
                         <input class="btn btn-success mt-1 float-end" type="button" value="Küldés" id="KommSend">
@@ -141,15 +141,16 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title">Jelentés Elküldése</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
+                    <p id="visszajelzes"></p>
                     <label for="indok">Adja Meg Az Indokot:</label>
                     <textarea name="indok" id="indok" class="form-control" rows="4"></textarea>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="JelNvm">Mégse</button>
+                    <button type="button" class="btn btn-secondary"id="JelNvm">Mégse</button>
                     <button type="button" class="btn btn-primary" id="JelSend">Küldés</button>
+                    <input type="button" value="Ok" class="btn btn-success" id="JelKonf" hidden  data-bs-dismiss="modal" >
                   </div>
                 </div>
               </div>

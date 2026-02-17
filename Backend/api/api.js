@@ -1214,30 +1214,49 @@ router.post('/Koktel/DeleteKomment', async (request, response) => {
 });
 
 router.post('/Koktel/SendJelentes', async (request, response) => {
+
+    try {
     const Jelentesek = 'SELECT * FROM jelentesek';
+    const Jelentők = 'SELECT * FROM jelentők';
     const JelentesekLista = await lekeres(Jelentesek);
+    const JelentőkLista = await lekeres(Jelentők);
     let VanEMarIlyen = false;
+    let JelentetteMar= false;
     let MelyikAz;
     for (let i = 0; i < JelentesekLista.length; i++) {
-        if (request.body.JelentettID == JelentesekLista[i].JelentettID &&request.body.JelentettTartalomID == JelentesekLista[i].JelentettTartalomID &&request.body.JelentesTipusa == JelentesekLista[i].JelentesTipusa
-        ) {
+        if (request.body.JelentettID == JelentesekLista[i].JelentettID &&request.body.JelentettTartalomID == JelentesekLista[i].JelentettTartalomID &&request.body.JelentesTipusa == JelentesekLista[i].JelentesTipusa) 
+        {   
             VanEMarIlyen = true;
             MelyikAz = JelentesekLista[i].JelentesID;
+            for (let j = 0; j < JelentőkLista.length; j++) {
+                if (MelyikAz==JelentőkLista[j].JelentésID&&jwt.decode(request.cookies.auth_token).userID==JelentőkLista[j].JelentőID) {
+                    JelentetteMar=true
+                }
+        
+            }
         }
     }
-    /*
-    if (VanEMarIlyen == false) {
-        const JelentesKuldes ='INSERT INTO jelentesek (JelentettID,JelentettTartalomID,JelentesTipusa) VALUES (?,?,?)';
-        await lekeres(JelentesKuldes);
-    } 
-    else {
-        const JelentesModositas ='UPDATE TABLE jelentesek SET JelentesMennyisege =JelentesMennyisege+1 WHERE JelentesID LIKE ?';
-        await lekeres(JelentesModositas);
+
+    if (JelentetteMar!=true) {
+        const JelentoKuldes = 'INSERT INTO jelentők (JelentőID,JelentésID,JelentesIndoka) VALUES (?,?,?)';
+        if (VanEMarIlyen == false) {
+            const JelentesKuldes ='INSERT INTO jelentesek (JelentettID,JelentettTartalomID,JelentesTipusa) VALUES (?,?,?)';
+            await lekeres(JelentesKuldes,[request.body.JelentettID,request.body.JelentettTartalomID,request.body.JelentesTipusa]);
+            let utolso=await lekeres("SELECT COUNT(*) as Darab FROM jelentesek")
+            await lekeres(JelentoKuldes, [jwt.decode(request.cookies.auth_token).userID,utolso[0].Darab,request.body.Indok]);
+        } 
+        else {
+            const JelentesModositas ='UPDATE jelentesek SET JelentesMennyisege =JelentesMennyisege+1 WHERE JelentesID LIKE ?';
+            await lekeres(JelentesModositas,MelyikAz);
+            await lekeres(JelentoKuldes, [jwt.decode(request.cookies.auth_token).userID,MelyikAz,request.body.Indok]);
+        }
     }
-    const JelentoKuldes = 'INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)';
-    await lekeres(JelentoKuldes, [jwt.decode(request.cookies.auth_token).userID]);*/
     response.status(200).json({
-        message: JelentesekLista
+        message: JelentetteMar
     });
+    } catch (error) {
+        console.log(error);
+        
+    }
 });
 module.exports = router;

@@ -4,14 +4,8 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("KommSend").addEventListener("click",async()=>{
             await Kommentkuldes()
         })
-        let hossz=0
         document.getElementById("komment").addEventListener("keyup",()=>{
-            if (document.getElementById("komment").value.length>hossz) {
                 document.getElementById("szam").innerHTML=document.getElementById("komment").value.length
-            }
-            else{
-                document.getElementById("szam").innerHTML=document.getElementById("komment").value.length
-            }
         })
     }
     else{
@@ -209,6 +203,8 @@ async function jelentes(mit,tipus,kit) {
     var JelIv = new bootstrap.Modal(document.getElementById('teszt'), {})   
     JelIv.show()
     document.getElementById("JelSend").addEventListener("click",async()=>{
+            
+
         let adatok={
             JelentettID:kit,
             JelentettTartalomID:mit,
@@ -216,13 +212,30 @@ async function jelentes(mit,tipus,kit) {
             Indok:document.getElementById("indok").value
         }
         console.log(adatok);
-        console.log(await AdatKuldes(`/api/Koktel/SendJelentes`,adatok));
-        //await AdatKuldes(`/api/Koktel/SendJelentes`,adatok)
-        JelIv.hide()
+        const jelentesSend=await AdatKuldes(`/api/Koktel/SendJelentes`,adatok)
+        console.log(jelentesSend.message);
+        
+        if (jelentesSend.message==false) {
+            document.getElementById("visszajelzes").innerHTML="Sikeres Jelentés"
+        }
+        else{
+            document.getElementById("visszajelzes").innerHTML="Már tett jelentést ez ellen!"
+        }
+        document.getElementById("JelNvm").setAttribute("disabled","true")
+        document.getElementById("JelSend").setAttribute("disabled","true")
+        document.getElementById("JelKonf").removeAttribute("hidden","true")
+        document.getElementById("JelKonf").addEventListener("click",()=>{
+            document.getElementById("JelNvm").removeAttribute("disabled","true")
+            document.getElementById("JelSend").removeAttribute("disabled","true")
+            document.getElementById("JelKonf").setAttribute("hidden","true")
+            document.getElementById("visszajelzes").innerHTML=""
+            document.getElementById("indok").value=""
+            JelIv.hide()
+        },{once:true})
+
     },{once:true})
 
     document.getElementById("JelNvm").addEventListener("click",()=>{
-        console.log("a");
         JelIv.hide()
     },{once:true})
 
