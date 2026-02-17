@@ -353,33 +353,34 @@ const AdatStorage =  async()=>{
     }*/
     //alkoholose
     let alkoholose;
+    radioMentes = document.getElementById('mentes');
+    radioAlk = document.getElementById('alkoholos');
     if (radioAlk.checked == true) {
-        alkoholose == true;
+        alkoholose = true;
+        console.log("nig")
     }
     else if(radioMentes.checked == true){
-         alkoholose == false;
+         alkoholose = false;
     }
     //összetevők összeszedése
     let osszetevok = document.getElementById("osszetevoDiv").children
     
-    
-    let osszetevoLista = []
+    let osszetevoLista = [];
     for (let i = 0; i < osszetevok.length; i++) {
-        console.log(osszetevok)
-       let osszetevoAdatok = osszetevok[i].children
-        console.log(osszetevoAdatok)
-        let osszetevo ={}
-       for (let j = 0; j < osszetevoAdatok.length-1; j++) {
-        console.log(j)
-        let kinyertOsszetevo = osszetevoAdatok[j].value
-        console.log(kinyertOsszetevo)
-        let id = osszetevoAdatok[j].tagName
-        osszetevo += {id:kinyertOsszetevo}
-        console.log(osszetevo)
-     
-       }
-        osszetevoLista.push(osszetevo)
-        console.log(osszetevoLista[i])
+        console.log(i)
+        let osszetevoAdatok = osszetevok[i].children;
+        let osszetevo = {};
+        let lista = [];
+        for (let j = 0; j <osszetevoAdatok.length-1; j++) {
+             
+           let kinyertOsszetevo = osszetevoAdatok[j].value
+           let KinyertId = osszetevoAdatok[j].id
+           lista.push(kinyertOsszetevo)
+            
+           console.log(lista)
+        }
+        osszetevoLista.push(lista)
+        console.log(osszetevoLista)
     }
     //leiras kiszedese
     let leiras = document.getElementById("leiras").value
@@ -402,7 +403,7 @@ const AdatStorage =  async()=>{
         nev: document.getElementById("nev").value,
         mennyiseg:  document.getElementById("mennyiseg").value,
         alap:  document.getElementById("alap").value,
-        alkolose : alkoholose,
+        alkoholose : alkoholose,
         osszetevok: osszetevoLista,
         leiras: leiras,
         erosseg: kinyertEro,

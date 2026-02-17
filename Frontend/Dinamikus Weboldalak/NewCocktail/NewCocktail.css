@@ -121,10 +121,66 @@ body {
     background: #f8f8f8;
 }
 .OsszetevoMennyiseg{
-    width: 13%;
+    width: 18%;
 }
 .MertekSelect{
-    width: 9%;
+    width: 12%;
+}
+@media only screen and (max-width: 768px) 
+{
+#osszetevoDiv{
+    display: flex;
+    margin-left: 1px;
+}
+
+.Osszetevobtn {
+    width: 3.5%;
+}
+.Osszetevobtn:hover {
+    background-color: #b4b4b4;
+}
+.OsszetevoBar {
+    width: 45%;
+}
+.OsszetevoMennyiseg{
+    width: 25%;
+}
+.MertekSelect{
+    width: 15%;
+}}
+@media only screen and (max-width: 550px) 
+{
+#osszetevoDiv{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.row{
+display: flex;
+    flex-direction: column
+}
+
+.Osszetevobtn {
+    width: 100%;
+     height: 50px;
+    }
+.Osszetevobtn:hover {
+    background-color: #b4b4b4;
+}
+.OsszetevoBar {
+    
+    width: 100%;
+    height: 50px;;
+}
+.OsszetevoMennyiseg{
+    width: 100%;
+    height: 50px;
+}
+.MertekSelect{
+    width: 100%;
+    height: 50px;
+}
+
 }
 /*
     jelvenyek
