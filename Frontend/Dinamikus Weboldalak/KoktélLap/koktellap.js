@@ -152,7 +152,7 @@ async function Betoltes() {
         KommentIro.appendChild(KommentIroTagsag)
         Komment.appendChild(KommentIro)
         Komment.appendChild(KommentTartalom)
-        if (eredmeny.belepette) {
+        if (eredmeny.belepette&&kommentAdat[i].UgyanazE==false) {
             KommentIroReport.setAttribute("type","button")
             KommentIroReport.setAttribute("value","Jelentés")
             KommentIroReport.classList.add("btn","text-danger","float-end")
@@ -174,7 +174,7 @@ async function Betoltes() {
     OssztevHely.innerHTML=""
     for (let i = 0; i < osszetevoAdat.length; i++) {
             let Ossztevo=document.createElement("li")
-            Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${osszetevoAdat[i].Mennyiség*(document.getElementById("mennyiseg").value/koktélAdat.AlapMennyiseg)} ${osszetevoAdat[i].Mertekegyseg}`
+            Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round((osszetevoAdat[i].Mennyiség*(document.getElementById("mennyiseg").value/koktélAdat.AlapMennyiseg))*10)/10} ${osszetevoAdat[i].Mertekegyseg}`
             OssztevHely.appendChild(Ossztevo)
         }
     })

@@ -85,18 +85,18 @@
                 </div>
                 <div class="row border-bottom border-2 border-dark ">
                     <p class="fs-4">Készítette: <span id="Madeby"></span> <span id="Tagsag" class="text-primary"></span><input type="button" id="FelhJel" class="btn text-danger" value="Jelentés"> <span class="float-end" id="kokteldate"></span></p>
-                    <div class="col-7 col-md-12 col-lg-5 d-flex">
-                            <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid col-6 rounded">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-5 d-flex">
+                            <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid col-5 rounded">
                             <div class="ps-4 flex-column">
                                 <label for="mennyiseg">Hány ml-nyit szeretne készíteni</label>
-                                <input inputmode="numeric" type="number" id="mennyiseg" class="form-control">
+                                <input type="number" id="mennyiseg" step="10" class="form-control" min="0">
                                 <span class="fs-4">Összetevők</span>
                                 <ul id="Ossztev">
 
                                 </ul>
                             </div>
                     </div>
-                    <div class="col-5 col-md-12 col-lg-7">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-7">
                         <div class="text-break" id="recept">
                            
                         </div>

@@ -1167,6 +1167,15 @@ router.get("/Koktel/:id",async(request,response)=>{
         }
         let koktel=await lekeres(KoktelLekeres,request.params.id);
         let komment=await lekeres(KommentLekeres,[request.params.id,"Koktél"])
+        for (let j = 0; j < komment.length; j++) {
+            
+            if (komment[j].Keszito==jwt.decode(request.cookies.auth_token).userID) {
+                komment[j].UgyanazE=true
+            }
+            else{
+                komment[j].UgyanazE=false
+            }
+        }
         if (koktel.length!=0) {
                 response.status(200).json({
                 adat: koktel,
