@@ -1272,7 +1272,7 @@ router.get('/Keszites/JelvenyLekeres', async (req, res) => {
         });
     }
 });
-router.post('/Keszites/KepFeltoltes', fileStorage.array('profilkep'), async (request, response) => {
+router.post('/Keszites/KepFeltoltes', fileStorage.array('koktélKép'), async (request, response) => {
     try {
         response.status(200).json({
             message: request.files[0].filename
@@ -1283,4 +1283,97 @@ router.post('/Keszites/KepFeltoltes', fileStorage.array('profilkep'), async (req
         });
     }
 });
+router.post('/Keszites/Feltoltes',async(req,res)=>{
+try {
+    const felhaszanalo = jwt.decode(req.cookies.auth_token).userID;
+    const{nev,mennyiseg,alap,alkoholose,osszetevok,leiras,erosseg,iz,allergen,kepUtvonala} = req.body
+    const UjKoktel ='INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?,?)';
+    const UjKoktelId = 'SELECT KoktélID FROM koktél ORDER BY KoktélID DESC LIMIT 1'
+    const UjKoktelJelvenyId = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve LIKE ?'
+    const UjKoktelJelvenyIdFeltoltes = "INSERT INTO koktélokjelvényei(KoktélID,JelvényID) VALUES(?,?)"
+    const UjKoktelOsszetevokFeltoltes = "INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)"
+    DBconnetion.query(UjKoktel,[felhaszanalo,alkoholose,1,nev,kepUtvonala,alap,leiras,mennyiseg],(err)=>{
+        if (err) 
+        {   
+            console.log(err)
+            res.status(500).json({
+                message:'Sikertelen feltöltés',
+                hiba:err
+            })
+            //kérlek ne tedd ezt magaddal, az öngyilkosság mindig opcio
+        }
+        else
+        {
+            res.status(200).json({
+            message:"fasza"
+        })
+        //koktél id lekérése majd összetevők feltöltése
+        DBconnetion.query(UjKoktelId,(err,rows)=>{
+            if (err) {
+                  res.status(500).json({
+                message:'Sikertelen feltöltés',
+                hiba:err
+                })
+            }
+            else
+            {
+                //összetevők
+                let koktelid = rows[0].KoktélID;
+                for (let i = 0; i < osszetevok.length; i++) {
+                    console.log(osszetevok[i][0])
+                    DBconnetion.query(UjKoktelOsszetevokFeltoltes,[koktelid,osszetevok[i][0],osszetevok[i][1],osszetevok[i][2]],(err)=>{
+                              if (err) {
+                                res.status(500).json({
+                                message:'Sikertelen feltöltés',
+                                hiba:err
+                                })
+                            }
+                        })
+                   
+                    
+                }
+                console.log(koktelid)
+                //jelvenyek feltöltése
+                let jelvenyek = [iz,erosseg,allergen]
+                let jelvenyIDk =  []
+                for (let i = 0; i < jelvenyek.length; i++) {
+                    
+                    DBconnetion.query(UjKoktelJelvenyId,[jelvenyek[i]],(err,rows)=>{
+                        if (err) {
+                             res.status(500).json({
+                                message:'Sikertelen feltöltés',
+                                hiba:err
+                                })
+                        }
+                        else
+                        {
+                            jelvenyIDk.push(rows[0].JelvényID)
+                        }
+                        
+                        DBconnetion.query(UjKoktelJelvenyIdFeltoltes,[koktelid,jelvenyIDk[i]],(err)=>{
+                            if(err){
+                                console.log(err)
+                                res.status(500).json({
+                                message:'Sikertelen feltöltés',
+                                hiba:err
+                                })
+                            }
+                            
+                        })
+                    })
+                }
+               
+            }
+
+        })
+            
+        }
+        
+    })
+    } catch (error) {
+         res.status(500).json({message:'Sikertelen feltöltés',
+            hiba:error
+         })
+    }
+})
 module.exports = router;

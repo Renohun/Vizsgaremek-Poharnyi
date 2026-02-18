@@ -82,7 +82,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-lg-4" id="koktelkep">
                         <label for="input-file" id="drop-area" class="mx-auto">
-                            <input type="file" accept="image/*" id="input-file" hidden />
+                            <input type="file" name="koktélKép" accept="image/*" id="input-file" hidden />
                             <div id="img-view">
                                 <img src="img/icon.png" alt="" class="icon" id="iconkep" />
                                 <p id="szoveg">Kattints ide, vagy húzd be a képet a feltöltéshez</p>
@@ -113,7 +113,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="mennyiseg">Hány ml lesz a kész koktél:</label>
-                                <input type="text" maxlength="100" class="form-control" placeholder="350" id="mennyiseg" />
+                                <input type="number" maxlength="100" class="form-control" placeholder="350" id="mennyiseg" />
                             </div>
 
                             <div class="mb-3" hidden id="alapEltuntet">
@@ -128,7 +128,7 @@
                     <div class="row" id="elsoOsszetevo">
                        
                             <input class="OsszetevoBar" type="text" placeholder="Összetevő" name="search" />
-                            <input type="text" id="mennyiseg" placeholder="mennyiség" class="OsszetevoMennyiseg">
+                            <input type="number" id="mennyiseg" placeholder="mennyiség" class="OsszetevoMennyiseg">
                             <select name="MertekEgyseg" id="MertekEgyseg" class="MertekSelect">
                                 <option value="ml">ml</option>
                                 <option value="db">db</option>

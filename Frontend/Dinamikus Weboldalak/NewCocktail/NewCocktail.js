@@ -1,3 +1,5 @@
+
+
 //Globális változók létrehozása
 let kepfeltolt;
 let koktelnev;
@@ -36,6 +38,26 @@ const AdatPostKep=async(url,data)=>{
       const ertek=await fetch(url,{
         method:"POST",
         body:data
+      })  
+      if (ertek.ok) {
+        return ertek.json()
+      }
+      else{
+        console.error(ertek.statusText);
+        
+      }
+    } 
+    catch (error) {
+        console.error(error)
+    }
+}
+
+const AdatPost=async(url,data)=>{
+    try {
+      const ertek=await fetch(url,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify(data)
       })  
       if (ertek.ok) {
         return ertek.json()
@@ -110,7 +132,7 @@ function osszetevohozzaadas() {
     input.id = 'osszetevo' + gombnyomasszam;
     let mennyiseg = document.createElement("input")
     let mertekegyseg = document.createElement("select")
-    mennyiseg.type = 'text'
+    mennyiseg.type = 'number'
     mennyiseg.setAttribute("id",`OsszetevoMennyiseg${gombnyomasszam}`)
     mennyiseg.classList.add("OsszetevoMennyiseg")
     mennyiseg.setAttribute("placeholder","mennyiség")
@@ -296,9 +318,7 @@ let Izlekeres = async () => {
             } 
             valasztottIz.classList.add("text-bg-dark")  
             valasztottIz.classList.add("kivalasztott","iz")
-      
-     
-    };
+        };
     
     Izbadge.addEventListener("click", Izclick);
   }
@@ -344,13 +364,42 @@ Izlekeres();
 //adatok kiküldése az adatbazisba
 
 const AdatStorage =  async()=>{
-  /*  const kep = new FormData();
-    if (img.files[0].type!="image/jpeg"&&img.files[0].type!="image/png"&&img.files[0].type!="image/bmp"&&img.files[0].type!="image/webp") {
-        return false
+     let hiba = true;
+    //alap adatok kitöltésének ellenörzése
+    if (document.getElementById("nev").value == "" ) {
+         hiba = false
+         alert("ne hagyja üresen a koktél nevét!")
     }
-    else{
-        kep =inputFile.files[0]
-    }*/
+    if (document.getElementById("mennyiseg").value == ""  ) {
+         hiba = false
+         alert("ne hagyja üresen a koktél mennyiségét!")
+    }
+   
+   
+   
+   //képfeltöltés
+   
+    let kepUtvonal;
+  
+   console.log(inputFile.files[0])
+   const kep = new FormData();
+   if (inputFile.files.length!=0) 
+    {
+    if (inputFile.files[0].type!="image/jpeg"&&inputFile.files[0].type!="image/png"&&inputFile.files[0].type!="image/bmp"&&inputFile.files[0].type!="image/webp") 
+    {
+        alert("hibás formátum!")
+        hiba = false
+    }
+    else
+    {
+        kep.append("profilkep",inputFile.files[0])
+         kepUtvonal=await AdatPostKep("/api/AdatlapLekeres/KepFeltoltes",kep)
+    }
+   }else{
+        alert("Kérem töltsön fel egy képet!")
+        hiba = false
+   }
+    
     //alkoholose
     let alkoholose;
     radioMentes = document.getElementById('mentes');
@@ -362,34 +411,60 @@ const AdatStorage =  async()=>{
     else if(radioMentes.checked == true){
          alkoholose = false;
     }
+
+     if (alkoholose == true) {
+        if (document.getElementById("alap").value == "") {
+            hiba = false
+            alert("ne hagyja üresen a koktél alapját!")
+        }
+    }
     //összetevők összeszedése
     let osszetevok = document.getElementById("osszetevoDiv").children
-    
-    let osszetevoLista = [];
-    for (let i = 0; i < osszetevok.length; i++) {
+    if (osszetevok.length == 0) {
+        alert("kérem töltsön fel legalább egy összetevőt!")
+        hiba = false
+    }
+        let osszetevoLista = [];
+        for (let i = 0; i < osszetevok.length; i++) 
+        {
         console.log(i)
         let osszetevoAdatok = osszetevok[i].children;
         let osszetevo = {};
         let lista = [];
-        for (let j = 0; j <osszetevoAdatok.length-1; j++) {
-             
-           let kinyertOsszetevo = osszetevoAdatok[j].value
-           let KinyertId = osszetevoAdatok[j].id
-           lista.push(kinyertOsszetevo)
-            
-           console.log(lista)
-        }
+            for (let j = 0; j <osszetevoAdatok.length-1; j++) 
+            {
+                
+            let kinyertOsszetevo = osszetevoAdatok[j].value
+            let KinyertId = osszetevoAdatok[j].id
+            lista.push(kinyertOsszetevo)
+                
+            console.log(lista)
+            }
         osszetevoLista.push(lista)
         console.log(osszetevoLista)
-    }
+        }
+
+    
     //leiras kiszedese
-    let leiras = document.getElementById("leiras").value
+     let leiras = document.getElementById("leiras").value
+    if (leiras == "") 
+    {
+         alert("kérem ne hagyja üresen a recept leírását!")
+        hiba = false
+    }
+    
+       
+    
+    
     //badgek kiszedése
     let kinyertEro;
     let kinyertIz;
     let kinyertAllergen;
     let kinyertbadgeList = document.getElementsByClassName("kivalasztott")
-    for (let i = 0; i < kinyertbadgeList.length; i++) {
+    console.log(kinyertbadgeList.length)
+   
+    
+        for (let i = 0; i < kinyertbadgeList.length; i++) {
         if(kinyertbadgeList[i].classList.contains("ero")){
              kinyertEro = kinyertbadgeList[i].innerHTML
         }else if(kinyertbadgeList[i].classList.contains("iz")){
@@ -398,8 +473,14 @@ const AdatStorage =  async()=>{
               kinyertAllergen = kinyertbadgeList[i].innerHTML   
         }
         
+         }
+    if (kinyertbadgeList.length != 3) 
+        {
+        alert("kérem válasszon cimkét mindhárom kategóriában!")
+        hiba = false
     }
-    let KoktelAdatok = {
+
+     let KoktelAdatok = {
         nev: document.getElementById("nev").value,
         mennyiseg:  document.getElementById("mennyiseg").value,
         alap:  document.getElementById("alap").value,
@@ -408,11 +489,19 @@ const AdatStorage =  async()=>{
         leiras: leiras,
         erosseg: kinyertEro,
         iz:kinyertIz,
-        allergen:kinyertAllergen
+        allergen:kinyertAllergen,
+        kepUtvonala : kepUtvonal.message
         
     }
-    console.log(KoktelAdatok)
+    
+    //hibátlan kitöltés esetén elküldjük az értékeket
+    if (hiba == true) {
+        console.log(KoktelAdatok)
+        const data = await AdatPost("/api/Keszites/Feltoltes",KoktelAdatok)
+    }
+   
 }
+
 //elküldés
 document.getElementById("kuldes").addEventListener("click",AdatStorage)
 
