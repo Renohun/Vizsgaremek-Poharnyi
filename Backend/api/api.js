@@ -1167,6 +1167,12 @@ router.get("/Koktel/:id",async(request,response)=>{
         }
         let koktel=await lekeres(KoktelLekeres,request.params.id);
         let komment=await lekeres(KommentLekeres,[request.params.id,"Koktél"])
+        if (koktel[0].FelhID==jwt.decode(request.cookies.auth_token).userID) {
+            koktel[0].UgyanazE=true
+        }
+        else{
+            koktel[0].UgyanazE=false
+        }
         for (let j = 0; j < komment.length; j++) {
             
             if (komment[j].Keszito==jwt.decode(request.cookies.auth_token).userID) {
@@ -1216,7 +1222,49 @@ router.post('/Koktel/SendKomment', async (request, response) => {
 });
 router.post('/Koktel/DeleteKomment', async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE KommentID LIKE ?';
-    await lekeres(KommentTorles, [request.body.id]);
+    const JelentesLekeres="SELECT JelentesID from jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?"
+    const JelentesTorles = 'DELETE FROM jelentesek WHERE JelentesID LIKE ?';
+    const JelentőTorles = 'DELETE FROM jelentők WHERE JelentésID LIKE ?';
+    
+    let id=request.body.id
+    console.log(id);
+    
+    await lekeres(KommentTorles, [id]);
+    let jelentesek=await lekeres(JelentesLekeres, [id,"Komment"]);
+    console.log(jelentesek);
+    
+    for (let i = 0; i < jelentesek.length; i++) {
+        console.log(jelentesek[i]);
+        await lekeres(JelentőTorles, [jelentesek[i].JelentesID])
+        await lekeres(JelentesTorles, [jelentesek[i].JelentesID])
+    }
+    response.status(200).json({
+        message: 'Sikeres Törlés'
+    });
+});
+
+router.post('/Koktel/DeleteKoktel', async (request, response) => {
+    const KommentTorles = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+    const ErtekelesTorles = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+    const JelentesLekeres="SELECT JelentesID from jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?"
+    const JelentesTorles = 'DELETE FROM jelentesek WHERE JelentesID like ?';
+    const JelentőTorles = 'DELETE FROM jelentők WHERE JelentésID LIKE ?';
+    const KedvencTorles = 'DELETE FROM kedvencek WHERE MitkedveltID LIKE ?';
+    const JelvenyTorles = 'DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?';
+    const OsszetevoTorles = 'DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
+    const KoktelTorles = 'DELETE FROM koktél WHERE KoktélID LIKE ?';
+    let id=request.body.id
+    await lekeres(KommentTorles, [id,"Koktél"]);
+    await lekeres(ErtekelesTorles, [id,"Koktél"]);
+    await lekeres(OsszetevoTorles, [id]);
+    await lekeres(KedvencTorles, [id]);
+    await lekeres(JelvenyTorles, [id]);
+    let jelentesek=await lekeres(JelentesLekeres, [id,"Koktél"]);
+    for (let i = 0; i < jelentesek.length; i++) {
+        await lekeres(JelentőTorles, [jelentesek[i].JelentesID])
+        await lekeres(JelentesTorles, [jelentesek[i].JelentesID])
+    }
+    await lekeres(KoktelTorles,[id])
     response.status(200).json({
         message: 'Sikeres Törlés'
     });

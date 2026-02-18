@@ -10,21 +10,14 @@ document.addEventListener("DOMContentLoaded",async()=>{
     }
     else{
         document.getElementById("Velemeny").innerHTML="Komment írásához és a Koktél Értékeléséhez lépj be!"
-
-
-        //Szétrobbantom ezeket a gombokat nehogy lehessen belekontárkodni bármibe is
-        document.getElementById("FelhJel").setAttribute("type","")
-        document.getElementById("FelhJel").value
-        document.getElementById("FelhJel").classList.remove("btn","text-danger")
-        document.getElementById("FelhJel").setAttribute("hidden","true")
-        document.getElementById("FelhJel").setAttribute("id","")
-
+        Obfuszkacio()
         document.getElementById("KoktJel").setAttribute("type","")
-        document.getElementById("KoktJel").value
         document.getElementById("KoktJel").classList.remove("btn","text-danger")
         document.getElementById("KoktJel").setAttribute("hidden","true")
-        document.getElementById("KoktJel").setAttribute("id","")
 
+        document.getElementById("FelhJel").setAttribute("id","")
+        document.getElementById("KoktJel").setAttribute("id","")
+        
     }
 })
 
@@ -152,13 +145,22 @@ async function Betoltes() {
         KommentIro.appendChild(KommentIroTagsag)
         Komment.appendChild(KommentIro)
         Komment.appendChild(KommentTartalom)
-        if (eredmeny.belepette&&kommentAdat[i].UgyanazE==false) {
+        if (eredmeny.belepette) {
+
             KommentIroReport.setAttribute("type","button")
-            KommentIroReport.setAttribute("value","Jelentés")
             KommentIroReport.classList.add("btn","text-danger","float-end")
-            KommentIroReport.addEventListener("click",()=>{
-                jelentes(kommentAdat[i].KommentID,"Komment",kommentAdat[i].Keszito)
-            })
+            if (kommentAdat[i].UgyanazE==false) {
+                KommentIroReport.setAttribute("value","Jelentés")
+                KommentIroReport.addEventListener("click",()=>{
+                    jelentes(kommentAdat[i].KommentID,"Komment",kommentAdat[i].Keszito)
+                })
+            }
+            else{
+                KommentIroReport.setAttribute("value","Törlés")
+                KommentIroReport.addEventListener("click",()=>{
+                    kommentTorles(kommentAdat[i].KommentID)
+                })
+            }
             KommentIro.appendChild(KommentIroReport)
         }
         KommentekHelye.appendChild(Komment)
@@ -170,6 +172,16 @@ async function Betoltes() {
     document.getElementById("kokteldate").innerHTML="Készült: "+koktélAdat.KeszitesDatuma.split('T')[0]
     document.getElementById("recept").innerHTML=koktélAdat.Recept
     document.getElementById("mennyiseg").value=koktélAdat.AlapMennyiseg 
+    if (koktélAdat.UgyanazE) {
+        Obfuszkacio()
+        document.getElementById("FelhJel").setAttribute("id","")
+        document.getElementById("KoktJel").setAttribute("id","KoktDel")
+        torles(koktélAdat.KoktélID)
+    }
+    else{
+        document.getElementById("FelhJel").addEventListener("click",()=>{jelentes(koktélAdat.FelhID,"Felhasználó",koktélAdat.FelhID)})
+        document.getElementById("KoktJel").addEventListener("click",()=>{jelentes(koktélAdat.KoktélID,"Koktél",koktélAdat.FelhID)})
+    }
     document.getElementById("mennyiseg").addEventListener("change",()=>{
     OssztevHely.innerHTML=""
     for (let i = 0; i < osszetevoAdat.length; i++) {
@@ -178,8 +190,7 @@ async function Betoltes() {
             OssztevHely.appendChild(Ossztevo)
         }
     })
-    document.getElementById("FelhJel").addEventListener("click",()=>{jelentes(koktélAdat.FelhID,"Felhasználó",koktélAdat.FelhID)})
-    document.getElementById("KoktJel").addEventListener("click",()=>{jelentes(koktélAdat.KoktélID,"Koktél",koktélAdat.FelhID)})
+
     return eredmeny.belepette
 }
 
@@ -193,12 +204,21 @@ async function Kommentkuldes() {
     const eredmeny=await AdatKuldes(`/api/Koktel/SendKomment`,tartalom)
     Betoltes()
 }
+
+
+
 async function Tisztitas() {
     document.getElementById("komment").value=""
     document.getElementById("Kommentek").innerHTML=""
     document.getElementById("Ossztev").innerHTML=""
     document.getElementById("badgek").innerHTML=""
 }
+
+
+
+
+
+
 async function jelentes(mit,tipus,kit) {
     var JelIv = new bootstrap.Modal(document.getElementById('teszt'), {})   
     JelIv.show()
@@ -224,13 +244,15 @@ async function jelentes(mit,tipus,kit) {
         document.getElementById("JelNvm").setAttribute("disabled","true")
         document.getElementById("JelSend").setAttribute("disabled","true")
         document.getElementById("JelKonf").removeAttribute("hidden","true")
-        document.getElementById("JelKonf").addEventListener("click",()=>{
+        document.getElementById("JelKonf").addEventListener("click",()=>
+        {
             document.getElementById("JelNvm").removeAttribute("disabled","true")
             document.getElementById("JelSend").removeAttribute("disabled","true")
             document.getElementById("JelKonf").setAttribute("hidden","true")
             document.getElementById("visszajelzes").innerHTML=""
             document.getElementById("indok").value=""
             JelIv.hide()
+
         },{once:true})
 
     },{once:true})
@@ -239,4 +261,27 @@ async function jelentes(mit,tipus,kit) {
         JelIv.hide()
     },{once:true})
 
+}
+
+function Obfuszkacio(){
+        //Szétrobbantom ezeket a gombokat nehogy lehessen belekontárkodni bármibe is
+        document.getElementById("FelhJel").setAttribute("type","")
+        document.getElementById("FelhJel").classList.remove("btn","text-danger")
+        document.getElementById("FelhJel").setAttribute("hidden","true")
+
+}
+
+function torles(id){
+    document.getElementById("KoktDel").value="Koktél Törlése"
+    document.getElementById("KoktDel").addEventListener("click",async()=>{
+        await AdatKuldes("/api/Koktel/DeleteKoktel",{id:id})
+        window.location.reload()
+    })
+}
+
+async function kommentTorles(id){
+     await AdatKuldes("/api/Koktel/DeleteKomment",{id:id})
+     console.log("wallahi");
+     Betoltes()
+     
 }
