@@ -72,33 +72,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const jelentesekDocument = document.getElementsByName('jelentesekKezelese');
     const koktelDocument = document.getElementsByName('koktelokKezelese');
     const termekDocument = document.getElementsByName('termekFeltoltes');
-    const torlesDocument = document.getElementsByName("koktelTorlese")
 
     jelentesekDocument[0].addEventListener('click', () => {
         jelentesekDocument[1].removeAttribute('hidden', 'true');
         koktelDocument[1].setAttribute('hidden', 'true');
         termekDocument[1].setAttribute('hidden', 'true');
-        torlesDocument[1].setAttribute("hidden","true")
     });
     koktelDocument[0].addEventListener('click', () => {
         jelentesekDocument[1].setAttribute('hidden', 'true');
         koktelDocument[1].removeAttribute('hidden', 'true');
         termekDocument[1].setAttribute('hidden', 'true');
-        torlesDocument[1].setAttribute("hidden","true0")
     });
     termekDocument[0].addEventListener('click', () => {
         termekDocument[1].removeAttribute('hidden', 'true');
         jelentesekDocument[1].setAttribute('hidden', 'true');
         koktelDocument[1].setAttribute('hidden', 'true');
-        torlesDocument[1].setAttribute("hidden","true")
     });
-    torlesDocument[0].addEventListener("click", ()=>
-        {
-            jelentesekDocument[1].setAttribute("hidden","true")
-            koktelDocument[1].setAttribute("hidden","true")
-            termekDocument[1].setAttribute("hidden","true")
-            torlesDocument[1].removeAttribute("hidden","true")
-        })
 
     const felhasznalosJelentesGomb = document.getElementById('felhasznalokJelentesei');
     const koktelosJelentesGomb = document.getElementById('koktelokJelentesei');

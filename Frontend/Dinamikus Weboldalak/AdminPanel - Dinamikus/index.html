@@ -69,13 +69,10 @@
                         <p class="text-dark fs-5 sideBarGomb" name="jelentesekKezelese">Jelenetesek Kezelese</p>
                     </div>
                     <div class="mb-auto mt-auto">
-                        <p class="text-dark fs-5 sideBarGomb" name="koktelokKezelese">Koktelok feltoltese</p>
+                        <p class="text-dark fs-5 sideBarGomb" name="koktelokKezelese">Koktelok kezelés</p>
                     </div>
                     <div class="mb-auto mt-auto">
                         <p class="text-dark fs-5 sideBarGomb" name="termekFeltoltes">Termek Kezeles</p>
-                    </div>
-                    <div class="mb-auto mt-auto">
-                        <p class="text-dark fs-5 sideBarGomb" name="koktelTorlese">Koktél törlése</p>
                     </div>
                 </div>
                 <div name="jelentesekKezelese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5">
@@ -214,9 +211,20 @@
                                 value="Feltoltes"
                                 id="koktelFeltoltes"
                                 tabindex="8"
-                                class="btn btn-success mt-5"
+                                class="btn btn-success mt-5 mb-5"
                             />
                         </form>
+                        <hr />
+                        <h4>Koktél törlése</h4>
+                        <select name="torlesSelect" id="koktelSelect" class="form-control ms-2">
+                            <option value="" selected></option>
+                        </select>
+                        <input
+                            type="button"
+                            value="Koktél törlése"
+                            id="torlesGomb"
+                            class="btn btn-danger w-100 mt-3 ms-2"
+                        />
                     </div>
                 </div>
                 <div name="termekFeltoltes" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5" hidden="true">
@@ -305,13 +313,6 @@
                         value="Termek torlese"
                         id="termekTorlesGomb"
                     />
-                </div>
-                <div name="koktelTorlese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5" hidden>
-                    <h4>Koktél törlése</h4>
-                    <select name="torlesSelect" id="koktelSelect" class="form-control">
-                        <option value="" selected></option>
-                    </select>
-                    <input type="button" value="Koktél törlése" id="torlesGomb" class="btn btn-danger w-100 mt-3" />
                 </div>
             </div>
         </div>

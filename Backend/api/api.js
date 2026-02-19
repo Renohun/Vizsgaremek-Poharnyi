@@ -800,57 +800,36 @@ router.post('/koktelTorles/:nev', (req, res) => {
         const jelvenyTorlesQuery = 'DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?';
         const osszetevoTorlesQuery = 'DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
         const ertekelesTorlesQuery = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
-        const jelentesTorlesQuery = 'DELETE FROM jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?';
+        const kommentQuery = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+
+        const jelentesTorlesQuery = 'DELETE FROM jelentesek WHERE JelentesID LIKE ?';
         const jeletnesIDQuery =
             'SELECT JelentesID FROM jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?';
         const jelentokTorles = 'DELETE FROM jelentők WHERE JelentésID LIKE ?';
 
+        const kedvencTorlesQuery = 'DELETE FROM kedvencek WHERE MitkedveltID LIKE ?';
+
         DBconnetion.query(idLekeres, [nev], (err, rows) => {
-            if (err) {
-                throw new Error(err);
-            }
-
             const koktelID = rows[0].KoktélID;
-            DBconnetion.query(jelvenyTorlesQuery, [koktelID], (err, rows) => {
-                if (err) {
-                    throw new Error(err);
-                }
-            });
-            DBconnetion.query(osszetevoTorlesQuery, [koktelID], (err, rows) => {
-                if (err) {
-                    throw new Error(err);
-                }
-            });
-            DBconnetion.query(ertekelesTorlesQuery, [koktelID, 'Koktél'], (err, rows) => {
-                if (err) {
-                    throw new Error(err);
+
+            DBconnetion.query(jeletnesIDQuery, [koktelID, 'Koktél'], async (err, rows) => {
+                if (rows[0] != undefined) {
+                    const jelentesID = rows[0].JelentesID;
+
+                    await DBconnetion.promise().query(jelentokTorles, [jelentesID]);
+                    await DBconnetion.promise().query(jelentesTorlesQuery, [jelentesID]);
                 }
             });
 
-            DBconnetion.query(jeletnesIDQuery, [koktelID, 'Koktél'], (err, rows) => {
-                if (err) {
-                    throw new Error(err);
-                }
-                console.log(rows);
+            DBconnetion.query(jelvenyTorlesQuery, [koktelID]);
+            DBconnetion.query(osszetevoTorlesQuery, [koktelID]);
+            DBconnetion.query(ertekelesTorlesQuery, [koktelID, 'Koktél']);
 
-                const kapottJelentesID = rows[0].JelentesID;
+            DBconnetion.query(kommentQuery, [koktelID, 'Koktél']);
 
-                DBconnetion.query(jelentokTorles, [kapottJelentesID], (err, rows) => {
-                    if (err) {
-                        throw new Error(err);
-                    }
-                });
-            });
-            DBconnetion.query(jelentesTorlesQuery, [koktelID, 'Koktél'], (err, rows) => {
-                if (err) {
-                    throw new Error(err);
-                }
-            });
-            DBconnetion.query(torlesQuery, [koktelID], (err, rows) => {
-                if (err) {
-                    throw new Error(err);
-                }
-            });
+            DBconnetion.query(kedvencTorlesQuery, [koktelID]);
+
+            DBconnetion.query(torlesQuery, [koktelID]);
         });
         res.status(200).json({ message: 'Sikeres adatbazis torlesek', result: true });
     } catch (err) {
