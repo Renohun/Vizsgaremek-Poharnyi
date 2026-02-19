@@ -77,15 +77,15 @@
             </nav>
             <div  class="container">
                 <div class="border-bottom border-2 border-dark text-center">
-                    <h1 id="Cimsor"></h1>
+                    <h1><span id="Cimsor" class="ps-4"></span><span id="fav"></span></h1>
                     <span id="kokteldate"></span>
                     <div id="badgek">
 
                     </div>
-                    <input type="button" id="KoktJel" class="btn text-danger" value="Koktél Jelentése">
+                    <input type="button" id="KoktJel" class="btn text-danger border-0" value="Koktél Jelentése">
                 </div>
                 <div class="row border-bottom border-2 border-dark ">
-                    <p class="fs-4">Készítette: <span id="Madeby"></span> <span id="Tagsag" class="text-primary"></span><input type="button" id="FelhJel" class="btn text-danger" value="Jelentés"></p>
+                    <p class="fs-4">Készítette: <span id="Madeby"></span> <span id="Tagsag" class="text-primary"></span><input type="button" id="FelhJel"  class="btn text-danger border-0" value="Jelentés"> </p>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-5 d-flex">
                             <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid col-5 rounded">
                             <div class="ps-4 flex-column">
@@ -105,17 +105,16 @@
                 <div class="col-md-12 d-flex flex-column mt-4 p-0  text-center fs-4" id="Velemeny">
                     <div>
                     <label for="rate">Értékelje a Koktélt</label>
-                    <select name="" id="rate" class="form-control">
-                        <option value="">1</option>
-                        <option value="">1.5</option>
-                        <option value="">2</option>
-                        <option value="">2.5</option>
-                        <option value="">3</option>
-                        <option value="">3.5</option>
-                        <option value="">4</option>
-                        <option value="">4.5</option>
-                        <option value="">5</option>
-                    </select>
+                    <!-- ⯨ ★ ☆ -->
+                    <div class="row">
+                        <div>
+                            <input type="button" value="☆" id="star1" class="btn fs-1 p-0 border-0">
+                            <input type="button" value="☆" id="star2" class="btn fs-1 p-0 border-0">
+                            <input type="button" value="☆" id="star3" class="btn fs-1 p-0 border-0">
+                            <input type="button" value="☆" id="star4" class="btn fs-1 p-0 border-0">
+                            <input type="button" value="☆" id="star5" class="btn fs-1 p-0 border-0">
+                        </div>
+                    </div>
                     <input type="button" value="Küldés" class="btn btn-success">
                     </div>
 

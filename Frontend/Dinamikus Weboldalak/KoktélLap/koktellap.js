@@ -149,7 +149,7 @@ async function Betoltes() {
         if (eredmeny.belepette) {
 
             KommentIroReport.setAttribute("type","button")
-            KommentIroReport.classList.add("btn","text-danger","float-end")
+            KommentIroReport.classList.add("btn","text-danger","float-end","border-0")
             if (kommentAdat[i].UgyanazE==false) {
                 KommentIroReport.setAttribute("value","Jelentés")
                 KommentIroReport.addEventListener("click",()=>{
@@ -166,6 +166,28 @@ async function Betoltes() {
         }
         KommentekHelye.appendChild(Komment)
     }
+    if (eredmeny.belepette) {
+        let hova=document.getElementById("fav")
+        hova.innerHTML=""
+        let gombkedv=document.createElement("input")
+        gombkedv.setAttribute("type","button")
+        gombkedv.classList.add("btn","float-end","fs-3","m-0","p-0","border-0")
+        if (eredmeny.kedveltee==false) {            
+            gombkedv.value="☆"
+            gombkedv.addEventListener("click",async()=>{
+                gombkedv.value="★"
+                await kedveles(koktélAdat.KoktélID)
+            },{once:true})
+        }
+        else{
+            gombkedv.value="★"
+            gombkedv.addEventListener("click",async()=>{
+                gombkedv.value="☆"
+                await kedveles(koktélAdat.KoktélID)
+            },{once:true})
+        }
+        hova.appendChild(gombkedv)
+        }
     document.getElementById("KoktélKép").setAttribute("src",URL.createObjectURL(KepLekeres))
     document.getElementById("Cimsor").innerHTML=koktélAdat.KoktelCim
     document.getElementById("OldalCim").innerHTML="Pohárnyi - "+koktélAdat.KoktelCim
@@ -285,4 +307,10 @@ async function kommentTorles(id){
      console.log("wallahi");
      Betoltes()
      
+}
+
+async function kedveles(id) {
+    console.log(id);
+    await AdatKuldes("/api/Koktel/SendKedvenc",{Koktél:id})
+    Betoltes()
 }

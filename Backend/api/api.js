@@ -1156,6 +1156,7 @@ router.get("/Koktel/:id",async(request,response)=>{
     const JelvenyLekeres="SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?"
     const OsszetevőLekeres="SELECT Osszetevő,Mennyiség,Mertekegyseg FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
     const MelyikJelvenyLekeres="SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?"
+    const KedvelteELekeres="SELECT COUNT(*) as kedvelteE FROM kedvencek WHERE KikedvelteID LIKE ? AND MitkedveltID LIKE ?"
 
     try {
         
@@ -1164,11 +1165,10 @@ router.get("/Koktel/:id",async(request,response)=>{
         let jelvényinfo=[]
         for (let i = 0; i < jelvenyek.length; i++) {
             jelvényinfo.push(await lekeres(MelyikJelvenyLekeres,jelvenyek[i].JelvényID))
-            
         }
         let koktel=await lekeres(KoktelLekeres,request.params.id);
-        console.log(koktel);
         let komment=await lekeres(KommentLekeres,[request.params.id,"Koktél"])
+        let kedv=false
         if (jwt.decode(request.cookies.auth_token)!=null) {
             
             if (koktel[0].FelhID==jwt.decode(request.cookies.auth_token).userID) {
@@ -1186,6 +1186,12 @@ router.get("/Koktel/:id",async(request,response)=>{
                     komment[j].UgyanazE=false
                 }
             }
+            let kedvenc=await lekeres(KedvelteELekeres,[jwt.decode(request.cookies.auth_token).userID,request.params.id])
+            console.log(kedvenc[0].kedvelteE);
+            
+            if (kedvenc[0].kedvelteE>0) {
+                kedv=true
+            }
         }
         if (koktel.length!=0) {
                 response.status(200).json({
@@ -1193,7 +1199,8 @@ router.get("/Koktel/:id",async(request,response)=>{
                 komment: komment,
                 jelvenyek:jelvényinfo,
                 osszetevok:osszetevok,
-                belepette: jwt.decode(request.cookies.auth_token)!=null ? true:false
+                belepette: jwt.decode(request.cookies.auth_token)!=null ? true:false,
+                kedveltee:kedv
             });
         }
         else{
@@ -1221,12 +1228,31 @@ router.post('/Koktel/SendErtekeles', async (request, response) => {
 });
 router.post('/Koktel/SendKomment', async (request, response) => {
     const KommentKuldes = 'INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)';
-    await lekeres(KommentKuldes, [jwt.decode(request.cookies.auth_token).userID,request.body.Koktél,'Koktél',request.body.Tartalom
-    ]);
+    await lekeres(KommentKuldes, [jwt.decode(request.cookies.auth_token).userID,request.body.Koktél,'Koktél',request.body.Tartalom]);
     response.status(200).json({
         message: 'Sikeres Küldés'
     });
 });
+
+router.post('/Koktel/SendKedvenc', async (request, response) => {
+    const KedvencKeres = 'SELECT COUNT(*) as kedvelteE FROM kedvencek WHERE KikedvelteID LIKE ? AND MitkedveltID LIKE ?';
+    const KedvencKuldes = 'INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)';
+    const KedvencTorles = 'DELETE FROM kedvencek WHERE KikedvelteID LIKE ? AND MitkedveltID LIKE ?';
+    let kedvszam=await lekeres(KedvencKeres, [jwt.decode(request.cookies.auth_token).userID,request.body.Koktél]);
+    console.log(kedvszam);
+    
+    if (kedvszam[0].kedvelteE>0) {
+        await lekeres(KedvencTorles, [jwt.decode(request.cookies.auth_token).userID,request.body.Koktél]);
+    }
+    else{
+        await lekeres(KedvencKuldes, [jwt.decode(request.cookies.auth_token).userID,request.body.Koktél]);
+    }
+    response.status(200).json({
+        message: 'Sikeres Küldés'
+    });
+});
+
+
 router.post('/Koktel/DeleteKomment', async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE KommentID LIKE ?';
     const JelentesLekeres="SELECT JelentesID from jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?"
