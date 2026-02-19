@@ -1283,97 +1283,94 @@ router.post('/Keszites/KepFeltoltes', fileStorage.array('koktélKép'), async (r
         });
     }
 });
-router.post('/Keszites/Feltoltes',async(req,res)=>{
-try {
-    const felhaszanalo = jwt.decode(req.cookies.auth_token).userID;
-    const{nev,mennyiseg,alap,alkoholose,osszetevok,leiras,erosseg,iz,allergen,kepUtvonala} = req.body
-    const UjKoktel ='INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?,?)';
-    const UjKoktelId = 'SELECT KoktélID FROM koktél ORDER BY KoktélID DESC LIMIT 1'
-    const UjKoktelJelvenyId = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve LIKE ?'
-    const UjKoktelJelvenyIdFeltoltes = "INSERT INTO koktélokjelvényei(KoktélID,JelvényID) VALUES(?,?)"
-    const UjKoktelOsszetevokFeltoltes = "INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)"
-    DBconnetion.query(UjKoktel,[felhaszanalo,alkoholose,1,nev,kepUtvonala,alap,leiras,mennyiseg],(err)=>{
-        if (err) 
-        {   
-            console.log(err)
-            res.status(500).json({
-                message:'Sikertelen feltöltés',
-                hiba:err
-            })
-            //kérlek ne tedd ezt magaddal, az öngyilkosság mindig opcio
-        }
-        else
-        {
-            res.status(200).json({
-            message:"fasza"
-        })
-        //koktél id lekérése majd összetevők feltöltése
-        DBconnetion.query(UjKoktelId,(err,rows)=>{
+router.post('/Keszites/Feltoltes', async (req, res) => {
+    try {
+        const felhaszanalo = jwt.decode(req.cookies.auth_token).userID;
+        const { nev, mennyiseg, alap, alkoholose, osszetevok, leiras, erosseg, iz, allergen, kepUtvonala } = req.body;
+        const UjKoktel =
+            'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?,?)';
+        const UjKoktelId = 'SELECT KoktélID FROM koktél ORDER BY KoktélID DESC LIMIT 1';
+        const UjKoktelJelvenyId = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve LIKE ?';
+        const UjKoktelJelvenyIdFeltoltes = 'INSERT INTO koktélokjelvényei(KoktélID,JelvényID) VALUES(?,?)';
+        const UjKoktelOsszetevokFeltoltes =
+            'INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)';
+        DBconnetion.query(UjKoktel, [felhaszanalo, alkoholose, 1, nev, kepUtvonala, alap, leiras, mennyiseg], (err) => {
             if (err) {
-                  res.status(500).json({
-                message:'Sikertelen feltöltés',
-                hiba:err
-                })
-            }
-            else
-            {
-                //összetevők
-                let koktelid = rows[0].KoktélID;
-                for (let i = 0; i < osszetevok.length; i++) {
-                    console.log(osszetevok[i][0])
-                    DBconnetion.query(UjKoktelOsszetevokFeltoltes,[koktelid,osszetevok[i][0],osszetevok[i][1],osszetevok[i][2]],(err)=>{
-                              if (err) {
-                                res.status(500).json({
-                                message:'Sikertelen feltöltés',
-                                hiba:err
-                                })
-                            }
-                        })
-                   
-                    
-                }
-                console.log(koktelid)
-                //jelvenyek feltöltése
-                let jelvenyek = [iz,erosseg,allergen]
-                let jelvenyIDk =  []
-                for (let i = 0; i < jelvenyek.length; i++) {
-                    
-                    DBconnetion.query(UjKoktelJelvenyId,[jelvenyek[i]],(err,rows)=>{
-                        if (err) {
-                             res.status(500).json({
-                                message:'Sikertelen feltöltés',
-                                hiba:err
-                                })
+                console.log(err);
+                res.status(500).json({
+                    message: 'Sikertelen feltöltés',
+                    hiba: err
+                });
+                //kérlek ne tedd ezt magaddal, az öngyilkosság mindig opcio
+            } else {
+                res.status(200).json({
+                    message: 'fasza'
+                });
+                //koktél id lekérése majd összetevők feltöltése
+                DBconnetion.query(UjKoktelId, (err, rows) => {
+                    if (err) {
+                        res.status(500).json({
+                            message: 'Sikertelen feltöltés',
+                            hiba: err
+                        });
+                    } else {
+                        //összetevők
+                        let koktelid = rows[0].KoktélID;
+                        for (let i = 0; i < osszetevok.length; i++) {
+                            console.log(osszetevok[i][0]);
+                            DBconnetion.query(
+                                UjKoktelOsszetevokFeltoltes,
+                                [koktelid, osszetevok[i][0], osszetevok[i][1], osszetevok[i][2]],
+                                (err) => {
+                                    if (err) {
+                                        res.status(500).json({
+                                            message: 'Sikertelen feltöltés',
+                                            hiba: err
+                                        });
+                                    }
+                                }
+                            );
                         }
-                        else
-                        {
-                            jelvenyIDk.push(rows[0].JelvényID)
+                        console.log(koktelid);
+                        //jelvenyek feltöltése
+                        let jelvenyek;
+                        console.log(allergen);
+                        if (allergen == undefined) {
+                            jelvenyek = [iz, erosseg];
+                        } else {
+                            jelvenyek = [iz, erosseg, allergen];
                         }
-                        
-                        DBconnetion.query(UjKoktelJelvenyIdFeltoltes,[koktelid,jelvenyIDk[i]],(err)=>{
-                            if(err){
-                                console.log(err)
-                                res.status(500).json({
-                                message:'Sikertelen feltöltés',
-                                hiba:err
-                                })
-                            }
-                            
-                        })
-                    })
-                }
-               
-            }
+                        console.log(jelvenyek);
+                        console.log(iz);
+                        let jelvenyIDk = [];
+                        for (let i = 0; i < jelvenyek.length; i++) {
+                            DBconnetion.query(UjKoktelJelvenyId, [jelvenyek[i]], (err, rows) => {
+                                if (err) {
+                                    res.status(500).json({
+                                        message: 'Sikertelen feltöltés',
+                                        hiba: err
+                                    });
+                                } else {
+                                    jelvenyIDk.push(rows[0].JelvényID);
+                                }
 
-        })
-            
-        }
-        
-    })
+                                DBconnetion.query(UjKoktelJelvenyIdFeltoltes, [koktelid, jelvenyIDk[i]], (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                        res.status(500).json({
+                                            message: 'Sikertelen feltöltés',
+                                            hiba: err
+                                        });
+                                    }
+                                });
+                            });
+                        }
+                    }
+                });
+            }
+        });
     } catch (error) {
-         res.status(500).json({message:'Sikertelen feltöltés',
-            hiba:error
-         })
+        res.status(500).json({ message: 'Sikertelen feltöltés', hiba: error });
     }
-})
+});
 module.exports = router;
