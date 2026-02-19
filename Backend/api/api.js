@@ -1158,28 +1158,33 @@ router.get("/Koktel/:id",async(request,response)=>{
     const MelyikJelvenyLekeres="SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?"
 
     try {
+        
         let osszetevok=await lekeres(OsszetevőLekeres,request.params.id)
         let jelvenyek=await lekeres(JelvenyLekeres,request.params.id)
         let jelvényinfo=[]
         for (let i = 0; i < jelvenyek.length; i++) {
             jelvényinfo.push(await lekeres(MelyikJelvenyLekeres,jelvenyek[i].JelvényID))
-
+            
         }
         let koktel=await lekeres(KoktelLekeres,request.params.id);
+        console.log(koktel);
         let komment=await lekeres(KommentLekeres,[request.params.id,"Koktél"])
-        if (koktel[0].FelhID==jwt.decode(request.cookies.auth_token).userID) {
-            koktel[0].UgyanazE=true
-        }
-        else{
-            koktel[0].UgyanazE=false
-        }
-        for (let j = 0; j < komment.length; j++) {
+        if (jwt.decode(request.cookies.auth_token)!=null) {
             
-            if (komment[j].Keszito==jwt.decode(request.cookies.auth_token).userID) {
-                komment[j].UgyanazE=true
+            if (koktel[0].FelhID==jwt.decode(request.cookies.auth_token).userID) {
+                koktel[0].UgyanazE=true
             }
             else{
-                komment[j].UgyanazE=false
+                koktel[0].UgyanazE=false
+            }
+            for (let j = 0; j < komment.length; j++) {
+                
+                if (komment[j].Keszito==jwt.decode(request.cookies.auth_token).userID) {
+                    komment[j].UgyanazE=true
+                }
+                else{
+                    komment[j].UgyanazE=false
+                }
             }
         }
         if (koktel.length!=0) {
@@ -1198,6 +1203,8 @@ router.get("/Koktel/:id",async(request,response)=>{
         }
     } 
     catch (error) {
+        console.log(error);
+        
         response.status(500).json({
             message:"Hiba!"
         })
@@ -1289,7 +1296,6 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
                 if (MelyikAz==JelentőkLista[j].JelentésID&&jwt.decode(request.cookies.auth_token).userID==JelentőkLista[j].JelentőID) {
                     JelentetteMar=true
                 }
-        
             }
         }
     }
