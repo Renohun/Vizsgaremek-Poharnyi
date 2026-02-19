@@ -16,17 +16,49 @@ async function POSTfetch(url, obj) {
 }
 async function POSTkepFeltoltes(url, obj) {
     try {
-        const req = await fetch(url, {
-            method: 'POST',
-            body: obj
-        });
+        console.log('POSTkepFeltoltes started, URL:', url);
+
+        // When sending FormData, do NOT set Content-Type header - let browser set it with boundary
+        let req;
+        try {
+            req = await fetch(url, {
+                method: 'POST',
+                body: obj
+                // DO NOT add headers: { 'Content-Type': ... } with FormData
+            });
+            console.log('Fetch completed, status:', req.status);
+        } catch (fetchErr) {
+            console.error('Fetch itself failed:', fetchErr.message);
+            throw fetchErr;
+        }
+
+        console.log('POSTkepFeltoltes response status:', req.status);
+        console.log('POSTkepFeltoltes response ok:', req.ok);
+
+        let responseText;
+        try {
+            responseText = await req.text();
+            console.log('POSTkepFeltoltes raw response:', responseText);
+        } catch (textErr) {
+            console.error('Failed to read response text:', textErr.message);
+            throw textErr;
+        }
+
         if (req.ok) {
-            return await req.json();
+            try {
+                const parsed = JSON.parse(responseText);
+                console.log('Successfully parsed JSON:', parsed);
+                return parsed;
+            } catch (jsonErr) {
+                console.error('Failed to parse JSON:', jsonErr.message);
+                throw new Error('Nem valid JSON: ' + responseText);
+            }
         } else {
-            throw new Error('Hiba tortent: ' + req.status);
+            throw new Error('Status ' + req.status + ': ' + responseText);
         }
     } catch (err) {
-        throw new Error('Hiba tortent: ' + err);
+        console.error('POSTkepFeltoltes error caught:', err.message || err);
+        throw new Error('Hiba tortent: ' + (err.message || err));
     }
 }
 
@@ -100,126 +132,147 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
 
     document.getElementById('koktelFeltoltes').addEventListener('click', () => {
-        let hibasFrom = false;
+        try {
+            let hibasFrom = false;
 
-        const koktelNev = document.getElementById('koktelNeve');
-        if (koktelNev.value.length > 0) {
-            koktelNev.classList.add('helyesForm');
-            koktelNev.classList.remove('hibasForm');
-        } else {
-            koktelNev.classList.remove('helyesForm');
-            koktelNev.classList.add('hibasForm');
-            hibasFrom = true;
-        }
-
-        const koktelAlap = document.getElementById('koktelAlapja');
-        if (koktelAlap.value.length > 0) {
-            koktelAlap.classList.add('helyesForm');
-            koktelAlap.classList.remove('hibasForm');
-        } else {
-            koktelAlap.classList.remove('helyesForm');
-            koktelAlap.classList.add('hibasForm');
-            hibasFrom = true;
-        }
-
-        const koktelErosseg = document.getElementById('koktelErosseg');
-        if (koktelErosseg.value.length > 0) {
-            koktelErosseg.classList.add('helyesForm');
-            koktelErosseg.classList.remove('hibasForm');
-        } else {
-            koktelErosseg.classList.remove('helyesForm');
-            koktelErosseg.classList.add('hibasForm');
-            hibasFrom = true;
-        }
-        //chat? who is this guy?
-        const koktelIz = document.getElementById('koktelIze');
-        if (koktelIz.value.length > 0) {
-            koktelIz.classList.add('helyesForm');
-            koktelIz.classList.remove('hibasForm');
-        } else {
-            koktelIz.classList.remove('helyesForm');
-            koktelIz.classList.add('hibasForm');
-            hibasFrom = true;
-        }
-
-        const koktelAllergenek = document.getElementById('koktelAllergenek');
-        if (koktelAllergenek.value.length > 0) {
-            koktelAllergenek.classList.add('helyesForm');
-            koktelAllergenek.classList.remove('hibasForm');
-        } else {
-            koktelAllergenek.classList.remove('helyesForm');
-            koktelAllergenek.classList.add('hibasForm');
-            hibasFrom = true;
-        }
-
-        let osszetevokTomb = [];
-
-        const koktelOsszetevoDiv = document.getElementById('koktelOsszetevok').children;
-        for (let i = 1; i < koktelOsszetevoDiv.length; i += 2) {
-            let osszetevoObj = {
-                osszetevo: koktelOsszetevoDiv[i].children[0].value,
-                mennyiseg: koktelOsszetevoDiv[i].children[1].value
-            };
-
-            osszetevokTomb.push(osszetevoObj);
-        }
-
-        //console.log(osszetevokTomb);
-
-        const koktelRecept = document.getElementById('koktelRecept');
-        if (koktelRecept.value.length > 0) {
-            koktelRecept.classList.add('helyesForm');
-            koktelRecept.classList.remove('hibasForm');
-        } else {
-            koktelRecept.classList.remove('helyesForm');
-            koktelRecept.classList.add('hibasForm');
-            hibasFrom = true;
-        }
-
-        if (!hibasFrom) {
-            let alkoholosEBool = false;
-            const alkoholosE = document.getElementById('alkoholosE');
-            if (alkoholosE.checked) {
-                alkoholosEBool = true;
+            const koktelNev = document.getElementById('koktelNeve');
+            if (koktelNev.value.length > 0) {
+                koktelNev.classList.add('helyesForm');
+                koktelNev.classList.remove('hibasForm');
+            } else {
+                koktelNev.classList.remove('helyesForm');
+                koktelNev.classList.add('hibasForm');
+                hibasFrom = true;
             }
-            //onsole.log(document.getElementById('koktelKepFeltoltes').files[0]);
 
-            let kepTarolas = new FormData();
-            kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
-            //console.log(kepTarolas);
+            const koktelAlap = document.getElementById('koktelAlapja');
+            if (koktelAlap.value.length > 0) {
+                koktelAlap.classList.add('helyesForm');
+                koktelAlap.classList.remove('hibasForm');
+            } else {
+                koktelAlap.classList.remove('helyesForm');
+                koktelAlap.classList.add('hibasForm');
+                hibasFrom = true;
+            }
 
-            (async () => {
-                const nevObj = { nev: koktelNev.value };
+            const koktelErosseg = document.getElementById('koktelErosseg');
+            if (koktelErosseg.value.length > 0) {
+                koktelErosseg.classList.add('helyesForm');
+                koktelErosseg.classList.remove('hibasForm');
+            } else {
+                koktelErosseg.classList.remove('helyesForm');
+                koktelErosseg.classList.add('hibasForm');
+                hibasFrom = true;
+            }
+            //chat? who is this guy?
+            const koktelIz = document.getElementById('koktelIze');
+            if (koktelIz.value.length > 0) {
+                koktelIz.classList.add('helyesForm');
+                koktelIz.classList.remove('hibasForm');
+            } else {
+                koktelIz.classList.remove('helyesForm');
+                koktelIz.classList.add('hibasForm');
+                hibasFrom = true;
+            }
 
-                const ellenorzes = await POSTfetch(
-                    'http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes/NevEllenorzes',
-                    nevObj
-                );
+            const koktelAllergenek = document.getElementById('koktelAllergenek');
+            if (koktelAllergenek.value.length > 0) {
+                koktelAllergenek.classList.add('helyesForm');
+                koktelAllergenek.classList.remove('hibasForm');
+            } else {
+                koktelAllergenek.classList.remove('helyesForm');
+                koktelAllergenek.classList.add('hibasForm');
+                hibasFrom = true;
+            }
 
-                if (ellenorzes.duplikacio == false) {
-                    const kapottFajlNev = await POSTkepFeltoltes(
-                        'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
-                        kepTarolas
-                    );
+            let osszetevokTomb = [];
 
-                    const POSTobj = {
-                        nev: koktelNev.value,
-                        alap: koktelAlap.value,
-                        erosseg: koktelErosseg.value,
-                        iz: koktelIz.value,
-                        allergenek: koktelAllergenek.value,
-                        alkoholos: alkoholosEBool ? '1' : '0',
-                        osszetevok: osszetevokTomb,
-                        recept: koktelRecept.value,
-                        fajlNeve: kapottFajlNev.message
-                    };
+            const koktelOsszetevoDiv = document.getElementById('koktelOsszetevok').children;
+            for (let i = 1; i < koktelOsszetevoDiv.length; i += 2) {
+                let osszetevoObj = {
+                    osszetevo: koktelOsszetevoDiv[i].children[0].value,
+                    mennyiseg: koktelOsszetevoDiv[i].children[1].value
+                };
 
-                    const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
-                    console.log(data);
-                } else {
-                    alert('Mar van ilyen koktel');
+                osszetevokTomb.push(osszetevoObj);
+            }
+
+            //console.log(osszetevokTomb);
+
+            const alapMennyiseg = document.getElementById('koktelAlapjaMennyiseg');
+            if (alapMennyiseg.value.length > 0) {
+                alapMennyiseg.classList.add('helyesForm');
+                alapMennyiseg.classList.remove('hibasForm');
+            } else {
+                alapMennyiseg.classList.remove('helyesForm');
+                alapMennyiseg.classList.add('hibasForm');
+                hibasFrom = true;
+            }
+
+            const koktelRecept = document.getElementById('koktelRecept');
+            if (koktelRecept.value.length > 0) {
+                koktelRecept.classList.add('helyesForm');
+                koktelRecept.classList.remove('hibasForm');
+            } else {
+                koktelRecept.classList.remove('helyesForm');
+                koktelRecept.classList.add('hibasForm');
+                hibasFrom = true;
+            }
+
+            if (!hibasFrom) {
+                let alkoholosEBool = false;
+                const alkoholosE = document.getElementById('alkoholosE');
+                if (alkoholosE.checked) {
+                    alkoholosEBool = true;
                 }
-            })();
+                //onsole.log(document.getElementById('koktelKepFeltoltes').files[0]);
+
+                let kepTarolas = new FormData();
+                kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
+                //console.log(kepTarolas);
+
+                (async () => {
+                    const nevObj = { nev: koktelNev.value };
+
+                    const ellenorzes = await POSTfetch(
+                        'http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes/NevEllenorzes',
+                        nevObj
+                    );
+                    alert(ellenorzes.duplikacio);
+                    alert(alapMennyiseg.value);
+
+                    if (ellenorzes.duplikacio == false) {
+                        const kapottFajlNev = await POSTkepFeltoltes(
+                            'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
+                            kepTarolas
+                        );
+                        alert(kapottFajlNev.message);
+                        alert('teszt');
+                        const POSTobj = {
+                            nev: koktelNev.value,
+                            alapMennyiseg: alapMennyiseg.value,
+                            alap: koktelAlap.value,
+                            erosseg: koktelErosseg.value,
+                            iz: koktelIz.value,
+                            allergenek: koktelAllergenek.value,
+                            alkoholos: alkoholosEBool ? '1' : '0',
+                            osszetevok: osszetevokTomb,
+                            recept: koktelRecept.value,
+                            fajlNeve: kapottFajlNev.message
+                        };
+
+                        const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
+                        alert(JSON.stringify(data));
+                    } else {
+                        alert('Mar van ilyen koktel');
+                    }
+                })().catch((err) => {
+                    console.error('Async error:', err);
+                    alert('Hiba: ' + err);
+                });
+            }
+        } catch (err) {
+            alert(err);
         }
     });
 });

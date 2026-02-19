@@ -257,7 +257,7 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
                 if (allergenek != '') {
                     szuresTomb.push(allergenek);
                 }
-                //console.log('szuresTomb');
+                console.log(szuresTomb);
 
                 //console.log(szuresTomb);
                 //a parametereket at kene alakitania ID-ka, hogy azt majd hasznalhassam hogy melyik koktel melyik jelveny tartalmazza, igy melyik koktel felel meg a parametereknek
@@ -268,10 +268,10 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
                     //itt kiszedi az ID-kat es egy tombbe teszi, hogy a lekeresben mukodjon
                     const ids = jelvenyIds.map((j) => j.JelvényID);
                     const [jelvenyek] = await DBconnetion.promise().query(queryJelvenyek, [ids]);
-                    //console.log('jelvenyek');
 
                     //ellenorizni kell hogy a ellenorizendo tomb es a szuresTomb megegyezik e
                     let ellenorizendoTomb = jelvenyek.map((jelveny) => jelveny.JelvényNeve);
+                    //console.log(ellenorizendoTomb);
 
                     //ABC sorrend
                     szuresTomb.sort();
@@ -290,7 +290,7 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
                             ertekeles.length === 0 ? 'Még nincs értékelve' : Math.round(ertekeles[0].Osszert * 10) / 10;
                         //itt a visszaadja a map tartalmait, melyek egy tombbe lesznak fuzve a ugye a map() miatt
 
-                        console.log(koktel);
+                        //console.log(koktel);
 
                         return koktel;
                     }
@@ -700,9 +700,10 @@ router.post(
 router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, (req, res) => {
     try {
         const payload = jwt.decode(req.cookies.auth_token);
-        //console.log(req.body);
+        console.log(req.body);
 
         const { nev } = req.body;
+        const { alapMennyiseg } = req.body;
         const { alap } = req.body;
         const { erosseg } = req.body;
         const { iz } = req.body;
@@ -712,16 +713,18 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
         const { recept } = req.body;
         const { fajlNeve } = req.body;
 
+        //console.log('vegpont: ' + nev);
+
         const jelvenyReq = [erosseg, iz, allergenek];
-        //koktel nev duplikacio ellenorzese
         const query =
-            'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept) VALUES(?,?,?,?,?,?,?)';
+            'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?,?)';
         const queryKoktel = 'SELECT KoktélID FROM koktél ORDER BY KoktélID DESC LIMIT 1';
         const queryJelvenyek = 'SELECT JelvényID FROM `jelvények` WHERE JelvényNeve IN (?)';
-        const queryKoktelOsszetevok = 'INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség) VALUES(?,?,?)';
+        const queryKoktelOsszetevok =
+            'INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség, Mertekegyseg) VALUES(?,?,?,?)';
         const queryKoktelJelvenyInsert = 'INSERT INTO koktélokjelvényei(KoktélID, JelvényID) VALUES(?,?)';
 
-        DBconnetion.query(query, [payload.userID, alkoholos, 0, nev, fajlNeve, alap, recept], (err) => {
+        DBconnetion.query(query, [payload.userID, alkoholos, 0, nev, fajlNeve, alap, recept, alapMennyiseg], (err) => {
             if (err) {
                 res.status(500).json({ message: 'Sikertelen adat feltoltes' });
             }
@@ -734,7 +737,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
                 for (let i = 0; i < osszetevok.length; i++) {
                     DBconnetion.query(
                         queryKoktelOsszetevok,
-                        [feltoltottKoktelID, osszetevok[i].osszetevo, osszetevok[i].mennyiseg],
+                        [feltoltottKoktelID, osszetevok[i].osszetevo, osszetevok[i].mennyiseg, 'ML'],
                         (err) => {
                             if (err) {
                                 res.status(500).json({ message: 'Sikertelen adat feltoltes' });
