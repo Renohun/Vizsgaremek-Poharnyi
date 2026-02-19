@@ -54,7 +54,7 @@ function atvitelKoktelra() {
 function koktelRendereles(koktelok) {
     const DOMsor = document.getElementById('koktelSor');
     console.log(koktelok.koktelokAdat);
-    DOMsor.innerHTML = ""
+    DOMsor.innerHTML = '';
     koktelok.koktelokAdat.forEach((koktel) => {
         if (koktel != null) {
             const divMB = document.createElement('div');
@@ -152,7 +152,17 @@ function koktelRendereles(koktelok) {
             tovabbBtn.addEventListener('click', atvitelKoktelra);
         }
     });
-    let oszlopokSzama = koktelok.koktelokAdat.length;
+    let oszlopokSzama = 0;
+    console.log(koktelok.koktelokAdat.length);
+
+    for (let i = 0; i < koktelok.koktelokAdat.length; i++) {
+        if (koktelok.koktelokAdat[i] != null) {
+            oszlopokSzama += 1;
+        }
+    }
+
+    console.log(oszlopokSzama);
+
     while (oszlopokSzama % 4 != 0) {
         let ujOszlop = document.createElement('div');
         ujOszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
