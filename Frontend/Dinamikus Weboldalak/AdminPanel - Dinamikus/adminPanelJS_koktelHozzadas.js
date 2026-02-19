@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(alapMennyiseg.value);
 
                     if (ellenorzes.duplikacio == false) {
-                        const kapottFajlNev = await POSTkepFeltoltes(
+                        const kapottFajlNev1 = await POSTkepFeltoltes(
                             'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
                             kepTarolas
                         );
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             alkoholos: alkoholosEBool ? '1' : '0',
                             osszetevok: osszetevokTomb,
                             recept: koktelRecept.value,
-                            fajlNeve: kapottFajlNev.message
+                            fajlNeve: kapottFajlNev1.message
                         };
 
                         const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
