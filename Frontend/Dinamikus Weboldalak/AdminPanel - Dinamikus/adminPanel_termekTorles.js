@@ -41,5 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const data = await DELETEfetch(`http://127.0.0.1:3000/api/AdminPanel/TermekTorles/${id}`);
         console.log(data);
+
+        window.location.reload();
     });
 });

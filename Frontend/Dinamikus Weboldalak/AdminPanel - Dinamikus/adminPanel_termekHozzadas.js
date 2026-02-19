@@ -138,12 +138,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `http://127.0.0.1:3000/api/AdminPanel/TermekNev/Ellenorzes/${POSTobj.termekNev}`
         );
 
-        alert(JSON.stringify(ellResult));
+        //alert(JSON.stringify(ellResult));
 
         if (ellResult.duplikacio == false) {
             POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
             const fetchAdat = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
-            console.log(fetchAdat);
+            //console.log(fetchAdat);
         } else {
             alert('Mar letezik ilyen nevu termek');
         }
