@@ -268,7 +268,16 @@
                     <label for="termekAlkoholLabel" id="termekAlkoholLabel" class="form-label" hidden
                         >Termek alkholol %-ka:</label
                     >
-                    <input type="number" name="termekAlkohol" id="termekAlkohol" class="form-control" hidden required />
+                    <input
+                        type="number"
+                        name="termekAlkohol"
+                        id="termekAlkohol"
+                        min="0"
+                        max="100"
+                        class="form-control"
+                        hidden
+                        required
+                    />
 
                     <label for="termekKoraLabel" id="termekKoraLabel" class="form-label" hidden>Termek kora: </label>
                     <input type="number" class="form-control" id="termekKora" name="termekKora" hidden required />
