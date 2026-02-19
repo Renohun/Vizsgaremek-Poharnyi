@@ -279,7 +279,7 @@
                     <hr />
 
                     <h4>Termek learazas:</h4>
-                    <select name="termekLearazas" id="termekLearazas" class="form-control"></select>
+                    <select name="termekLearazas" id="termekLearazas" class="form-control mb-3"></select>
                     <label for="termekLearazasanakErteke" class="form-label">Learazas erteke:</label>
                     <input
                         type="number"
@@ -293,7 +293,17 @@
                         type="button"
                         value="Termek learazasa"
                         id="termekLearazasGomb"
-                        class="btn btn-success w-100 mt-5"
+                        class="btn btn-success w-100 mt-3"
+                    />
+
+                    <hr />
+                    <h4>Termek torles</h4>
+                    <select name="termekTorles" id="termekTorles" class="form-control"></select>
+                    <input
+                        type="button"
+                        class="btn btn-danger w-100 mt-2"
+                        value="Termek torlese"
+                        id="termekTorlesGomb"
                     />
                 </div>
                 <div name="koktelTorlese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5" hidden>
@@ -312,5 +322,6 @@
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../AdminPanel - Dinamikus/adminPanel_torles.js"></script>
         <script src="../AdminPanel - Dinamikus/adminPanel_termekHozzadas.js"></script>
+        <script src="../AdminPanel - Dinamikus/adminPanel_termekTorles.js"></script>
     </body>
 </html>

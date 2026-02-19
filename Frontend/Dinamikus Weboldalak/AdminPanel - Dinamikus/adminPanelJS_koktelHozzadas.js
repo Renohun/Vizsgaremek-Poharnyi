@@ -189,34 +189,36 @@ document.addEventListener('DOMContentLoaded', () => {
             //console.log(kepTarolas);
 
             (async () => {
-                alert(koktelNev.value);
                 const nevObj = { nev: koktelNev.value };
-                alert(JSON.stringify(nevObj));
+
                 const ellenorzes = await POSTfetch(
                     'http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes/NevEllenorzes',
                     nevObj
                 );
-                alert(JSON.stringify(ellenorzes));
 
-                const kapottFajlNev = await POSTkepFeltoltes(
-                    'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
-                    kepTarolas
-                );
+                if (ellenorzes.duplikacio == false) {
+                    const kapottFajlNev = await POSTkepFeltoltes(
+                        'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
+                        kepTarolas
+                    );
 
-                const POSTobj = {
-                    nev: koktelNev.value,
-                    alap: koktelAlap.value,
-                    erosseg: koktelErosseg.value,
-                    iz: koktelIz.value,
-                    allergenek: koktelAllergenek.value,
-                    alkoholos: alkoholosEBool ? '1' : '0',
-                    osszetevok: osszetevokTomb,
-                    recept: koktelRecept.value,
-                    fajlNeve: kapottFajlNev.message
-                };
+                    const POSTobj = {
+                        nev: koktelNev.value,
+                        alap: koktelAlap.value,
+                        erosseg: koktelErosseg.value,
+                        iz: koktelIz.value,
+                        allergenek: koktelAllergenek.value,
+                        alkoholos: alkoholosEBool ? '1' : '0',
+                        osszetevok: osszetevokTomb,
+                        recept: koktelRecept.value,
+                        fajlNeve: kapottFajlNev.message
+                    };
 
-                //await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
-                //console.log(data);
+                    const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
+                    console.log(data);
+                } else {
+                    alert('Mar van ilyen koktel');
+                }
             })();
         }
     });

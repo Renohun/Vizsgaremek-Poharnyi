@@ -678,7 +678,7 @@ router.post(
     authorizationMiddelware,
     async (req, res) => {
         try {
-            console.log(req);
+            //console.log(req);
             const { nev } = req.body;
             console.log(nev);
 
@@ -686,8 +686,8 @@ router.post(
 
             const [nevTomb] = await DBconnetion.promise().query(nevQuery, [nev]);
 
-            if (nevTomb.length >= 1) {
-                res.status(409).json({ duplikacio: true });
+            if (nevTomb.length > 0) {
+                res.status(200).json({ duplikacio: true });
             } else {
                 res.status(200).json({ duplikacio: false });
             }
@@ -967,6 +967,21 @@ router.get(
         }
     }
 );
+
+router.delete('/AdminPanel/TermekTorles/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const queryWebShop = 'DELETE FROM webshoptermek WHERE TermekID LIKE ?';
+        const queryKosar = 'DELETE FROM kosártermék WHERE TermekID LIKE ?';
+        await DBconnetion.promise().query(queryKosar, [id]);
+        await DBconnetion.promise().query(queryWebShop, [id]);
+
+        res.status(200).json({ message: 'Sikeres torles' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Sikertelen vegpont eleres', err: error });
+    }
+});
 
 //
 //
