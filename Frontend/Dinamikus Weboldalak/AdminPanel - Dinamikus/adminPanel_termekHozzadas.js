@@ -155,16 +155,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     formDiv.children[i].attributes.type.value == 'file'
                 ) {
                     if (formDiv.children[i].attributes.type.value == 'file') {
-                        let kepTarolas = new FormData();
-                        kepTarolas.append('profilkep', formDiv.children[i].files[0]);
-                        const kapottFajlNev = await POSTkepFeltoltes(
-                            'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
-                            kepTarolas
-                        );
-
-                        if (!kapottFajlNev.status == 500) {
+                        if (formDiv.children[i].files[0] == undefined) {
                             hibasAdatok = true;
                         } else {
+                            let kepTarolas = new FormData();
+                            kepTarolas.append('profilkep', formDiv.children[i].files[0]);
+                            const kapottFajlNev = await POSTkepFeltoltes(
+                                'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
+                                kepTarolas
+                            );
+
                             POSTobj.fajlNeve = kapottFajlNev.message;
                         }
 
