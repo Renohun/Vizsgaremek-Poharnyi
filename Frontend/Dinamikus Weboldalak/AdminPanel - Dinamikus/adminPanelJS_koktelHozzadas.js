@@ -81,14 +81,16 @@ document.addEventListener('DOMContentLoaded', () => {
         osszetevoInput.setAttribute('type', 'text');
         osszetevoInput.dataset.num = osszetevoNum;
         osszetevoInput.setAttribute('required', '');
-        osszetevoInput.classList.add('form-control', 'me-5', 'w-50');
+        osszetevoInput.classList.add('form-control');
 
         const osszetevoMenny = document.createElement('input');
         osszetevoMenny.setAttribute('type', 'text');
         osszetevoMenny.dataset.num = osszetevoNum;
         osszetevoMenny.setAttribute('required', '');
-        osszetevoMenny.classList.add('form-control', 'w-50');
-        osszetevoMenny.setAttribute('placeholder', 'Mennyiseg(ml)');
+        osszetevoMenny.classList.add('form-control');
+
+        const osszetevoMertekegysegSelect = document.getElementById('osszetevoMertekegyseg');
+        const osszetevoMertekegysegOptMl = document.createElement('option');
 
         osszetevoInputDiv.appendChild(osszetevoInput);
         osszetevoInputDiv.appendChild(osszetevoMenny);

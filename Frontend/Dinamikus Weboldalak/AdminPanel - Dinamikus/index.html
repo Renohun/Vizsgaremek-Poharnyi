@@ -179,9 +179,14 @@
 
                         <div id="koktelOsszetevok">
                             <label for="koktelOszztevoi" class="mt-3">Koktel 1. osszetevoje:</label>
-                            <div class="d-flex">
-                                <input type="text" class="form-control w-50 me-5" required />
-                                <input type="number" class="form-control w-50" placeholder="Mennyiseg (ml)" required />
+                            <div class="d-flex justify-content-between">
+                                <input type="text" class="form-control" required />
+                                <input type="number" class="form-control" required />
+                                <select name="osszetevoMertekegyseg" id="osszetevoMertekegyseg" class="form-control">
+                                    <option value="Ml">Ml</option>
+                                    <option value="Darab">Darab</option>
+                                    <option value="g">g (gramm)</option>
+                                </select>
                             </div>
                         </div>
                         <div>
