@@ -849,7 +849,7 @@ router.post('/koktelTorles/:nev', (req, res) => {
 
 router.post('/AdminPanel/TermekFeltoltes', async (req, res) => {
     try {
-        console.log(req.body);
+        //console.log(req.body);
 
         const {
             fajlNeve,

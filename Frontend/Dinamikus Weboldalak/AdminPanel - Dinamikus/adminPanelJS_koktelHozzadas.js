@@ -289,6 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
                         //alert(JSON.stringify(data));
+                        window.location.reload();
                     } else {
                         alert('Mar van ilyen koktel');
                     }

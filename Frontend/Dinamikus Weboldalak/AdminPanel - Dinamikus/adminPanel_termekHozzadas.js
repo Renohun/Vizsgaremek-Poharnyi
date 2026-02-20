@@ -90,11 +90,17 @@ document.addEventListener('DOMContentLoaded', () => {
             termekAlkoholMertekeLabel.removeAttribute('hidden', 'true');
             termekAlkoholKora.removeAttribute('hidden', 'true');
             termekAlkoholMerteke.removeAttribute('hidden', 'true');
+
+            document.getElementById('termekKora').removeAttribute('value');
+            document.getElementById('termekAlkohol').removeAttribute('value');
         } else {
             termekAlkoholKoraLabel.setAttribute('hidden', 'true');
             termekAlkoholMertekeLabel.setAttribute('hidden', 'true');
             termekAlkoholKora.setAttribute('hidden', 'true');
             termekAlkoholMerteke.setAttribute('hidden', 'true');
+
+            document.getElementById('termekKora').setAttribute('value', '1');
+            document.getElementById('termekAlkohol').setAttribute('value', '1');
         }
     });
 
@@ -133,10 +139,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let hibasAdatok = false;
         for (let i = 0; i < formDiv.children.length; i++) {
             if (formDiv.children[i].tagName == 'TEXTAREA') {
-                POSTobj[formDiv.children[i].getAttribute('name')] = formDiv.children[i].value;
-            } else {
-                hibasAdatok = true;
+                if (formDiv.children[i].value.length > 0) {
+                    POSTobj[formDiv.children[i].getAttribute('name')] = formDiv.children[i].value;
+                } else {
+                    hibasAdatok = true;
+                }
             }
+            //Itt atmegyek az formdiv gyermekein es megnezem hogy van neki a type attributoma, ha van akkor tudom hogy az adata
 
             if (formDiv.children[i].attributes.type != undefined) {
                 if (
@@ -146,38 +155,52 @@ document.addEventListener('DOMContentLoaded', () => {
                     formDiv.children[i].attributes.type.value == 'file'
                 ) {
                     if (formDiv.children[i].attributes.type.value == 'file') {
-                        //szoki kepfeltoltes
                         let kepTarolas = new FormData();
                         kepTarolas.append('profilkep', formDiv.children[i].files[0]);
-
                         const kapottFajlNev = await POSTkepFeltoltes(
                             'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
                             kepTarolas
                         );
-                        POSTobj.fajlNeve = kapottFajlNev.message;
+
+                        if (!kapottFajlNev.status == 500) {
+                            hibasAdatok = true;
+                        } else {
+                            POSTobj.fajlNeve = kapottFajlNev.message;
+                        }
+
+                        //szoki kepfeltoltes
                     } else {
                         if (formDiv.children[i].value.length > 0) {
                             POSTobj[formDiv.children[i].getAttribute('name')] = formDiv.children[i].value;
                         } else {
-                            hibasAdatok = true;
+                            console.log(formDiv.children[i].getAttributeNames().includes('hidden'));
+                            console.log(formDiv.children[i]);
+
+                            if (!formDiv.children[i].getAttributeNames().includes('hidden')) {
+                                hibasAdatok = true;
+                            }
                         }
                     }
                 }
             }
         }
-        //ebbe az objektumba gyurjuk ossze a kapott adatokat
-        const ellResult = await GETfetch(
-            `http://127.0.0.1:3000/api/AdminPanel/TermekNev/Ellenorzes/${POSTobj.termekNev}`
-        );
+        if (hibasAdatok == false) {
+            //ebbe az objektumba gyurjuk ossze a kapott adatokat
+            const ellResult = await GETfetch(
+                `http://127.0.0.1:3000/api/AdminPanel/TermekNev/Ellenorzes/${POSTobj.termekNev}`
+            );
 
-        //alert(JSON.stringify(ellResult));
+            //alert(JSON.stringify(ellResult));
 
-        if (ellResult.duplikacio == false) {
-            POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
-            const fetchAdat = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
-            //console.log(fetchAdat);
+            if (ellResult.duplikacio == false) {
+                POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
+                const fetchAdat = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
+                //console.log(fetchAdat);
+            } else {
+                alert('Mar letezik ilyen nevu termek');
+            }
         } else {
-            alert('Mar letezik ilyen nevu termek');
+            alert('Hianyoznak adatok!');
         }
     });
 });
