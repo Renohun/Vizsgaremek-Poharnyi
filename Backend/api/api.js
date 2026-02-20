@@ -700,7 +700,7 @@ router.post(
 router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, (req, res) => {
     try {
         const payload = jwt.decode(req.cookies.auth_token);
-        console.log(req.body);
+        //console.log(req.body);
 
         const { nev } = req.body;
         const { alapMennyiseg } = req.body;
@@ -1033,7 +1033,7 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
         } else {
             let koktel = [];
             console.log(kedvencek);
-            
+
             for (let i = 0; i < kedvencek.length; i++) {
                 let koktelbadgek = [];
                 kokteladatok = await lekeres(koktelLekeres, kedvencek[i].MitKedveltID);
@@ -1048,7 +1048,7 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
             }
             response.status(200).json({
                 message: 'siker!',
-                adat:koktel
+                adat: koktel
             });
         }
     } catch (error) {

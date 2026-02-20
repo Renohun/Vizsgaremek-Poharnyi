@@ -100,129 +100,124 @@
                 </div>
                 <div hidden="true" name="koktelokKezelese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5">
                     <div class="d-flex row flex-column">
-                        <form class="d-flex flex-column needs-validation">
-                            <input type="file" class="form-control" id="koktelKepFeltoltes" required />
+                        <h4>Koktél feltoltés</h4>
+                        <input type="file" class="form-control ms-2 mb-3" id="koktelKepFeltoltes" required />
 
-                            <label for="koktelNeve">Koktel neve: </label>
-                            <input
-                                type="text"
-                                name="koktelNeve"
-                                id="koktelNeve"
-                                class="form-control mb-3"
-                                max="50"
-                                tabindex="1"
-                                required
-                            />
+                        <label for="koktelNeve" class="ms-2">Koktel neve: </label>
+                        <input
+                            type="text"
+                            name="koktelNeve"
+                            id="koktelNeve"
+                            class="form-control mb-3 ms-2"
+                            max="50"
+                            tabindex="1"
+                            required
+                        />
 
-                            <div>
-                                <label for="alkoholosE" class="form-label">Alkoholos?</label>
-                                <input type="checkbox" name="alkoholosE" id="alkoholosE" tabindex="2" />
+                        <div class="ms-2">
+                            <label for="alkoholosE" class="form-label">Alkoholos?</label>
+                            <input type="checkbox" name="alkoholosE" id="alkoholosE" tabindex="2" />
+                        </div>
+
+                        <label for="koktelAlapja" class="ms-2">Koktel alapja: </label>
+                        <input
+                            type="text"
+                            name="koktelAlapja"
+                            id="koktelAlapja"
+                            class="form-control mb-3 ms-2"
+                            max="50"
+                            tabindex="3"
+                            required
+                        />
+                        <label for="koktelAlapjaMennyiseg" class="ms-2">Koktel alap mennyiseg: </label>
+                        <input
+                            type="number"
+                            name="koktelAlapjaMennyiseg"
+                            id="koktelAlapjaMennyiseg"
+                            class="form-control mb-3 ms-2"
+                            tabindex="4"
+                            required
+                        />
+
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-column">
+                                <label for="koktelErosseg">Erosseg:</label>
+                                <select
+                                    name="koktelErosseg"
+                                    class="form-control"
+                                    id="koktelErosseg"
+                                    style="width: 150px"
+                                    tabindex="5"
+                                    required
+                                ></select>
                             </div>
 
-                            <label for="koktelAlapja">Koktel alapja: </label>
-                            <input
-                                type="text"
-                                name="koktelAlapja"
-                                id="koktelAlapja"
-                                class="form-control mb-3"
-                                max="50"
-                                tabindex="3"
-                                required
-                            />
-                            <label for="koktelAlapjaMennyiseg">Koktel alap mennyiseg: </label>
-                            <input
-                                type="number"
-                                name="koktelAlapjaMennyiseg"
-                                id="koktelAlapjaMennyiseg"
-                                class="form-control mb-3"
-                                tabindex="4"
-                                required
-                            />
-
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex flex-column">
-                                    <label for="koktelErosseg">Erosseg:</label>
-                                    <select
-                                        name="koktelErosseg"
-                                        class="form-control"
-                                        id="koktelErosseg"
-                                        style="width: 150px"
-                                        tabindex="5"
-                                        required
-                                    ></select>
-                                </div>
-
-                                <div class="d-flex flex-column">
-                                    <label for="koktelIze">Iz:</label>
-                                    <select
-                                        name="koktelIze"
-                                        class="form-control"
-                                        id="koktelIze"
-                                        required
-                                        style="width: 150px"
-                                        tabindex="6"
-                                    ></select>
-                                </div>
-
-                                <div class="d-flex flex-column">
-                                    <label for="koktelAllergenek">Allergenek</label>
-                                    <select
-                                        name="koktelAllergenek"
-                                        class="form-control"
-                                        id="koktelAllergenek"
-                                        style="width: 150px"
-                                        tabindex="7"
-                                        required
-                                    ></select>
-                                </div>
+                            <div class="d-flex flex-column">
+                                <label for="koktelIze">Iz:</label>
+                                <select
+                                    name="koktelIze"
+                                    class="form-control"
+                                    id="koktelIze"
+                                    required
+                                    style="width: 150px"
+                                    tabindex="6"
+                                ></select>
                             </div>
 
-                            <div id="koktelOsszetevok">
-                                <label for="koktelOszztevoi" class="mt-3">Koktel 1. osszetevoje:</label>
-                                <div class="d-flex">
-                                    <input type="text" class="form-control w-50 me-5" required />
-                                    <input
-                                        type="number"
-                                        class="form-control w-50"
-                                        placeholder="Mennyiseg (ml)"
-                                        required
-                                    />
-                                </div>
+                            <div class="d-flex flex-column">
+                                <label for="koktelAllergenek">Allergenek</label>
+                                <select
+                                    name="koktelAllergenek"
+                                    class="form-control"
+                                    id="koktelAllergenek"
+                                    style="width: 150px"
+                                    tabindex="7"
+                                    required
+                                ></select>
                             </div>
-                            <div>
-                                <input
-                                    type="button"
-                                    value="Uj osszetevo"
-                                    id="ujOsszetevo"
-                                    class="btn btn-success w-25 mt-3 mb-3"
-                                />
-                                <input
-                                    type="button"
-                                    value="Osszetevo torlese"
-                                    id="osszetevoDel"
-                                    class="btn btn-danger w-25 mt-3 mb-3"
-                                />
+                        </div>
+
+                        <div id="koktelOsszetevok">
+                            <label for="koktelOszztevoi" class="mt-3">Koktel 1. osszetevoje:</label>
+                            <div class="d-flex">
+                                <input type="text" class="form-control w-50 me-5" required />
+                                <input type="number" class="form-control w-50" placeholder="Mennyiseg (ml)" required />
                             </div>
-
-                            <label for="koktelRecept">Koktel receptje: </label>
-                            <textarea
-                                type="text"
-                                name="koktelRecept"
-                                id="koktelRecept"
-                                style="height: 300px; resize: none"
-                                class="form-control"
-                                tabindex="7"
-                                required
-                            ></textarea>
-
+                        </div>
+                        <div>
                             <input
-                                type="submit"
-                                value="Feltoltes"
-                                id="koktelFeltoltes"
-                                tabindex="8"
-                                class="btn btn-success mt-5 mb-5"
+                                type="button"
+                                value="Uj osszetevo"
+                                id="ujOsszetevo"
+                                class="btn btn-success w-25 mt-3 mb-3"
                             />
-                        </form>
+                            <input
+                                type="button"
+                                value="Osszetevo torlese"
+                                id="osszetevoDel"
+                                class="btn btn-danger w-25 mt-3 mb-3"
+                            />
+                        </div>
+
+                        <label for="koktelRecept" class="ms-2">Koktel receptje: </label>
+                        <textarea
+                            type="text"
+                            name="koktelRecept"
+                            id="koktelRecept"
+                            style="height: 300px; resize: none"
+                            class="form-control ms-2"
+                            tabindex="7"
+                            required
+                        ></textarea>
+
+                        <input
+                            type="submit"
+                            value="Feltoltes"
+                            id="koktelFeltoltes"
+                            tabindex="8"
+                            class="btn btn-success mt-5 mb-5 ms-2"
+                        />
+
                         <hr />
                         <h4>Koktél törlése</h4>
                         <select name="torlesSelect" id="koktelSelect" class="form-control ms-2">
@@ -239,7 +234,7 @@
                 <div name="termekFeltoltes" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5" hidden="true">
                     <!--nev, leiras, kiszereles, keszlet, kep, kategoria, marka,  szarmazas(orszag), alkohol szazalek, kora?, ar-->
                     <!--learazashoz egy extra resz ahol nev alapu kereses alapjan lehet allitani a learazas osszeget-->
-                    <h4>Termek feltoltes / Kezeles</h4>
+                    <h4>Termek feltoltes</h4>
                     <input type="file" id="termekKepFeltoltes" class="form-control" required />
                     <label for="termekNev" class="form-label mt-2">Termek neve:</label>
                     <input type="text" id="termekNev" class="form-control" name="termekNev" required />

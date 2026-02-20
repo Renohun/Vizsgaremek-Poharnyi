@@ -238,16 +238,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         'http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes/NevEllenorzes',
                         nevObj
                     );
-                    alert(ellenorzes.duplikacio);
-                    alert(alapMennyiseg.value);
+                    //alert(ellenorzes.duplikacio);
+                    //alert(alapMennyiseg.value);
 
                     if (ellenorzes.duplikacio == false) {
                         const kapottFajlNev1 = await POSTkepFeltoltes(
                             'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
                             kepTarolas
                         );
-                        alert(kapottFajlNev.message);
-                        alert('teszt');
+                        //alert(kapottFajlNev.message);
+                        //alert('teszt');
                         const POSTobj = {
                             nev: koktelNev.value,
                             alapMennyiseg: alapMennyiseg.value,
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         };
 
                         const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
-                        alert(JSON.stringify(data));
+                        //alert(JSON.stringify(data));
                     } else {
                         alert('Mar van ilyen koktel');
                     }
