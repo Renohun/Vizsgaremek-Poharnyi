@@ -1015,7 +1015,7 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
         'SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
     let osszetevokLekerese = 'SELECT Osszetevő from koktelokosszetevoi where KoktélID like ?';
     let koktélbadgek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
-    let badgek = 'SELECT JelvényNeve FROM jelvények WHERE JelvényID LIKE ?';
+    let badgek = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?';
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     let felhaszanalo = jwt.decode(request.cookies.auth_token).userID;
     let kokteladatok;
@@ -1026,14 +1026,14 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
     //Lekérdezés
     try {
         kedvencek = await lekeres(KedvencekLekeres, felhaszanalo);
-        console.log(kedvencek);
-
         if (kedvencek.length == 0) {
             response.status(203).json({
                 message: 'Üres Lekérés!'
             });
         } else {
             let koktel = [];
+            console.log(kedvencek);
+            
             for (let i = 0; i < kedvencek.length; i++) {
                 let koktelbadgek = [];
                 kokteladatok = await lekeres(koktelLekeres, kedvencek[i].MitKedveltID);
@@ -1048,9 +1048,7 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
             }
             response.status(200).json({
                 message: 'siker!',
-                adat: kokteladatok,
-                ertek: ertekelesek,
-                ossztev: osszetevok
+                adat:koktel
             });
         }
     } catch (error) {
