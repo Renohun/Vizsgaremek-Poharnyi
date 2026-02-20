@@ -2,6 +2,7 @@
 document.addEventListener("DOMContentLoaded",async()=>{
     let be=await Betoltes()
     if (be) {
+
         document.getElementById("KommSend").addEventListener("click",async()=>{
             await Kommentkuldes()
         })
@@ -61,11 +62,6 @@ async function Betoltes() {
     const jelvényAdat=eredmeny.jelvenyek
     const osszetevoAdat=eredmeny.osszetevok
     const kommentAdat=eredmeny.komment
-    console.log(koktélAdat);
-    console.log(kommentAdat);
-    console.log(jelvényAdat);
-    console.log(osszetevoAdat);
-    console.log(eredmeny);
     
     const BadgeHely=document.getElementById("badgek")
     for (let i = 0; i < jelvényAdat.length; i++) {
@@ -109,24 +105,19 @@ async function Betoltes() {
     let KommentekHelye=document.getElementById("Kommentek")
     for (let i = kommentAdat.length-1; i > -1 ; i--) {
 
-        console.log(kommentAdat[i]);
+
         let KommIroRegDate=(kommentAdat[i].RegisztracioDatuma.split("T"))[0].split("-")
         let Komment=document.createElement("div")
         let KommentIro=document.createElement("label")
         let KommentIroTagsag=document.createElement("span")
         let KommentIroReport=document.createElement("input")
         let KommentTartalom=document.createElement("textarea")
-        
-        
+
 
         KommentIro.classList.add("ps-2","col-12")
         KommentIro.innerHTML=kommentAdat[i].Felhasználónév
         
         KommentIroTagsag.classList.add("text-primary")
-        
-        
-        
-
         
         KommentTartalom.setAttribute("rows","3")
         KommentTartalom.setAttribute("style","resize: none; text-align: left; box-sizing: border-box")
@@ -187,6 +178,7 @@ async function Betoltes() {
             },{once:true})
         }
         hova.appendChild(gombkedv)
+        ertekeles(eredmeny.ertekeltee,eredmeny.ertekeles)
         }
     document.getElementById("KoktélKép").setAttribute("src",URL.createObjectURL(KepLekeres))
     document.getElementById("Cimsor").innerHTML=koktélAdat.KoktelCim
@@ -254,9 +246,9 @@ async function jelentes(mit,tipus,kit) {
             JelentesTipusa:tipus,
             Indok:document.getElementById("indok").value
         }
-        console.log(adatok);
+
         const jelentesSend=await AdatKuldes(`/api/Koktel/SendJelentes`,adatok)
-        console.log(jelentesSend.message);
+
         
         if (jelentesSend.message==false) {
             document.getElementById("visszajelzes").innerHTML="Sikeres Jelentés"
@@ -304,13 +296,54 @@ function torles(id){
 
 async function kommentTorles(id){
      await AdatKuldes("/api/Koktel/DeleteKomment",{id:id})
-     console.log("wallahi");
      Betoltes()
      
 }
 
 async function kedveles(id) {
-    console.log(id);
     await AdatKuldes("/api/Koktel/SendKedvenc",{Koktél:id})
     Betoltes()
+}
+
+
+function ertekeles(ertekelteE,mennyire) {
+    let ert1=document.getElementById("star1")
+    let ert2=document.getElementById("star2")
+    let ert3=document.getElementById("star3")
+    let ert4=document.getElementById("star4")
+    let ert5=document.getElementById("star5")
+    let koktel=window.location.href.split("/")
+    let ertek=[ert1,ert2,ert3,ert4,ert5]
+    if (ertekelteE) {
+        for (let i = 0; i < mennyire; i++) {
+            ertek[i].value="★"
+        }
+        document.getElementById("ErtSend").setAttribute("hidden","true")
+        document.getElementById("ErtSend").setAttribute("id","")
+        document.getElementById("rateDisplay").innerHTML="Ön értékelte már a koktélt"
+    }
+    else{
+        for (let i = 0; i < ertek.length; i++) {
+                ertek[i].addEventListener("click",async()=>{
+                    
+                    clear()
+                    for (let j = 0; j < i+1; j++) {
+                        ertek[j].value="★"
+                    }
+                },{once:true})            
+        }
+        
+        document.getElementById("ErtSend").addEventListener("click",async()=>{
+            let a=ertek.filter(valaszott=>{  
+                return valaszott.value=="★"
+            }) 
+            await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:a.length,Koktél:koktel[koktel.length-1]})
+            Betoltes()
+        },{once:true})
+    }
+    function clear(){
+        for (let i = 0; i < 5; i++) {
+            ertek[i].value="☆"
+        }
+    }
 }
