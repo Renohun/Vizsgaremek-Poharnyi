@@ -700,7 +700,7 @@ router.post(
 router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, (req, res) => {
     try {
         const payload = jwt.decode(req.cookies.auth_token);
-        //console.log(req.body);
+        console.log(req.body);
 
         const { nev } = req.body;
         const { alapMennyiseg } = req.body;
@@ -737,7 +737,12 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
                 for (let i = 0; i < osszetevok.length; i++) {
                     DBconnetion.query(
                         queryKoktelOsszetevok,
-                        [feltoltottKoktelID, osszetevok[i].osszetevo, osszetevok[i].mennyiseg, 'ML'],
+                        [
+                            feltoltottKoktelID,
+                            osszetevok[i].osszetevo,
+                            osszetevok[i].mennyiseg,
+                            osszetevok[i].mertekegyseg
+                        ],
                         (err) => {
                             if (err) {
                                 res.status(500).json({ message: 'Sikertelen adat feltoltes' });

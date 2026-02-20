@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         osszetevoLabel.innerText = 'Koktel ' + osszetevoNum + '. osszetevoje: ';
 
         const osszetevoInputDiv = document.createElement('div');
-        osszetevoInputDiv.classList.add('d-flex');
+        osszetevoInputDiv.classList.add('d-flex', 'justify-content-between');
 
         const osszetevoInput = document.createElement('input');
         osszetevoInput.setAttribute('type', 'text');
@@ -84,19 +84,38 @@ document.addEventListener('DOMContentLoaded', () => {
         osszetevoInput.classList.add('form-control');
 
         const osszetevoMenny = document.createElement('input');
-        osszetevoMenny.setAttribute('type', 'text');
+        osszetevoMenny.setAttribute('type', 'number');
         osszetevoMenny.dataset.num = osszetevoNum;
         osszetevoMenny.setAttribute('required', '');
         osszetevoMenny.classList.add('form-control');
 
-        const osszetevoMertekegysegSelect = document.getElementById('osszetevoMertekegyseg');
+        const osszetevoMertekegysegSelect = document.createElement('select');
+
+        osszetevoMertekegysegSelect.setAttribute('name', 'osszetevoMertekegyseg');
+        osszetevoMertekegysegSelect.setAttribute('id', 'osszetevoMertekegyseg');
+        osszetevoMertekegysegSelect.classList.add('form-control');
+
         const osszetevoMertekegysegOptMl = document.createElement('option');
+        osszetevoMertekegysegOptMl.setAttribute('value', 'Ml');
+        osszetevoMertekegysegOptMl.innerText = 'Ml';
+
+        const osszetevoMertekegysegOptDB = document.createElement('option');
+        osszetevoMertekegysegOptDB.setAttribute('value', 'Darab');
+        osszetevoMertekegysegOptDB.innerText = 'Darab';
+
+        const osszetevoMertekegysegOptGramm = document.createElement('option');
+        osszetevoMertekegysegOptGramm.setAttribute('value', 'g');
+        osszetevoMertekegysegOptGramm.innerText = 'g (Gramm)';
 
         osszetevoInputDiv.appendChild(osszetevoInput);
         osszetevoInputDiv.appendChild(osszetevoMenny);
 
         document.getElementById('koktelOsszetevok').appendChild(osszetevoLabel);
         document.getElementById('koktelOsszetevok').appendChild(osszetevoInputDiv);
+        osszetevoInputDiv.appendChild(osszetevoMertekegysegSelect);
+        osszetevoMertekegysegSelect.appendChild(osszetevoMertekegysegOptMl);
+        osszetevoMertekegysegSelect.appendChild(osszetevoMertekegysegOptDB);
+        osszetevoMertekegysegSelect.appendChild(osszetevoMertekegysegOptGramm);
 
         console.log(document.getElementById('koktelOsszetevok').children);
     });
@@ -107,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //console.log(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
         //console.log(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
 
+        koktelOsszetevoDiv.removeChild(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
         koktelOsszetevoDiv.removeChild(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
         koktelOsszetevoDiv.removeChild(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
     });
@@ -190,10 +210,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let osszetevokTomb = [];
 
             const koktelOsszetevoDiv = document.getElementById('koktelOsszetevok').children;
+
             for (let i = 1; i < koktelOsszetevoDiv.length; i += 2) {
+                let osszetevoElemei = koktelOsszetevoDiv[i].children;
+
                 let osszetevoObj = {
-                    osszetevo: koktelOsszetevoDiv[i].children[0].value,
-                    mennyiseg: koktelOsszetevoDiv[i].children[1].value
+                    osszetevo: osszetevoElemei[0].value,
+                    mennyiseg: osszetevoElemei[1].value,
+                    mertekegyseg: osszetevoElemei[2].value
                 };
 
                 osszetevokTomb.push(osszetevoObj);
@@ -263,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             fajlNeve: kapottFajlNev1.message
                         };
 
-                        const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
+                        await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
                         //alert(JSON.stringify(data));
                     } else {
                         alert('Mar van ilyen koktel');
@@ -274,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         } catch (err) {
-            alert(err);
+            console.error(err);
         }
     });
 });
