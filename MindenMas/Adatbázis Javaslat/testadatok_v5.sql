@@ -12,24 +12,26 @@ VALUES
 ("Deutch Tamás","deutchtamas@kormany.hu","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
 ("Walton Goggins","waltongoggingshollywood@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o")
 ;
+UPDATE `felhasználó` SET `Admin` = '1' WHERE `felhasználó`.`FelhID` = 1;
+
 INSERT INTO Felhasználó(Felhasználónév,Email,Jelszó,ProfilKepUtvonal)
 VALUES
 ("Balu a Fotomaniakus","imadomafurryket@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o","dog.png");
-INSERT INTO Koktél(Keszito,KoktelCim,Recept,Alkoholos,Alap,Közösségi)
+INSERT INTO Koktél(Keszito,KoktelCim,Recept,Alkoholos,Alap,Közösségi,AlapMennyiseg)
 VALUES
-(1,"Citrom Húzó","Egy felespohárt töltsünk félig Ouzo-val, majd facsarjunk bele egy kis citromot",true,"Ouzou",false),
-(2,"Martini","nem fogom leírni kézzel a receptet",true,"Gin",false),
-(2,"A Bánat Eloszlatója","Tötsünk egy 0.5L-es poharat a tetejéig Jack Danielsel",true,"Jack Daniels",false),
-(3,"Sommersby Light","Almalevet keverjunk ossze ketszer annyi szodavizzel",true,"Almalé",false),
-(1,"Diétás Drakula","Tötsünk egy 0.5L-es pohárba tetszőleges mennyiségű szörpot, majd facsarjunk bele egy kis grapefruitot. Tálaljuk egy meggyel a tetején.",true,"Meggyszörp",false),
-(6,"Mennyei Elixir","200ml Szentelt vízhez adjunk hozzá 80mlnyi almalevet a jó és a rossz tudás fájáról és 100mlnyi Isten Vére bort és tálaljuk 3 kocka jéggel. Kivállóan illik egy szelet kovásztalan kenyérhez és szárított halhoz.",false,"Szentelt Víz",true),
-(4,"Daredevil","30ml rumot töltsünk egy pohárba amiben jég van, majd töltsünk rá 150ml narancslevet,75ml ananász és vörösáfonya lét, majd keverjük el és tálaljuk mentalevéllel.",true,"Rum",true),
-(10,"Hideg Fúzió","15ml everclearhez adjunk hozzá 10ml kék curacao-t és 5ml Ouzout.",true,"Everclear",true),
-(8,"Halászlé","20ml Sakehoz adjunk hozzá 40ml Gint és 1ml halsűrítményt",true,"Sake",true),
-(10,"Anti-Feral Serum","20ml Uborkaléhez adjunk 80ml sima Monstert",false,"Uborkalé",true),
-(9,"Folyékony Kokain","Everclearhez adjunk egy kis speedet",true,"Everclear",true),
-(1,"Silverhand","20ml Tequillahoz adjunk hozzá egy kiskanálnyi sört, és egy félkanálnyi csípőst.",true,"Tequilla",false),
-(5,"Sárrét","15ml Csokilikőrhöz adjunk hozzá 15ml Fahéjjas Jack Danielst és öntsük fel Fehér Monsterrel",true,"Csokilikőr",false)
+(1,"Citrom Húzó","Egy felespohárt töltsünk félig Ouzo-val, majd facsarjunk bele egy kis citromot",true,"Ouzou",false,50),
+(2,"Martini","nem fogom leírni kézzel a receptet",true,"Gin",false,50),
+(2,"A Bánat Eloszlatója","Tötsünk egy 0.5L-es poharat a tetejéig Jack Danielsel",true,"Jack Daniels",false,50),
+(3,"Sommersby Light","Almalevet keverjunk ossze ketszer annyi szodavizzel",true,"Almalé",false,45),
+(1,"Diétás Drakula","Tötsünk egy 0.5L-es pohárba tetszőleges mennyiségű szörpot, majd facsarjunk bele egy kis grapefruitot. Tálaljuk egy meggyel a tetején.",true,"Meggyszörp",false,50),
+(6,"Mennyei Elixir","200ml Szentelt vízhez adjunk hozzá 80mlnyi almalevet a jó és a rossz tudás fájáról és 100mlnyi Isten Vére bort és tálaljuk 3 kocka jéggel. Kivállóan illik egy szelet kovásztalan kenyérhez és szárított halhoz.",false,"Szentelt Víz",true,50),
+(4,"Daredevil","30ml rumot töltsünk egy pohárba amiben jég van, majd töltsünk rá 150ml narancslevet,75ml ananász és vörösáfonya lét, majd keverjük el és tálaljuk mentalevéllel.",true,"Rum",true,50),
+(10,"Hideg Fúzió","15ml everclearhez adjunk hozzá 10ml kék curacao-t és 5ml Ouzout.",true,"Everclear",true,50),
+(8,"Halászlé","20ml Sakehoz adjunk hozzá 40ml Gint és 1ml halsűrítményt",true,"Sake",true,50),
+(10,"Anti-Feral Serum","20ml Uborkaléhez adjunk 80ml sima Monstert",false,"Uborkalé",true,50),
+(9,"Folyékony Kokain","Everclearhez adjunk egy kis speedet",true,"Everclear",true,50),
+(1,"Silverhand","20ml Tequillahoz adjunk hozzá egy kiskanálnyi sört, és egy félkanálnyi csípőst.",true,"Tequilla",false,50),
+(5,"Sárrét","15ml Csokilikőrhöz adjunk hozzá 15ml Fahéjjas Jack Danielst és öntsük fel Fehér Monsterrel",true,"Csokilikőr",false,50)
 ;
 
 INSERT INTO Komment(Keszito,HovaIrták,Tartalom,MilyenDologhoz)
@@ -68,41 +70,41 @@ VALUES
 (1,10),
 (1,11);
 
-INSERT INTO KoktelokOsszetevoi(KoktélID,Osszetevő,Mennyiség)
+INSERT INTO KoktelokOsszetevoi(KoktélID,Osszetevő,Mennyiség,Mertekegyseg)
 VALUES
-(1,"Ouzou",5),
-(1,"Citromlé",5),
-(2,"Martini",25),
-(2,"Vermouth",25),
-(3,"Jack Daniels",500),
-(4,"Almalé",1),
-(4,"Szodaviz",2),
-(5,"Meggyszörp",20),
-(5,"Grapefruitlé",15),
-(5,"Meggy",1),
-(6,"Szentelt Víz",200),
-(6,"Isten Vére bor",50),
-(6,"Almalé",80),
-(7,"Rum",30),
-(7,"Narancslé",150),
-(7,"Ananászlé",75),
-(7,"Vörösáfonya szirup",75),
-(8,"Everclear",15),
-(8,"Kék Curacao",15),
-(8,"Ouzou",5),
-(9,"Sake",20),
-(9,"Gin",40),
-(9,"Halsűrítmény",1),
-(10,"Uborkalé",20),
-(10,"Monster",80),
-(11,"Everclear",20),
-(11,"Speed",20),
-(12,"Tequilla",20),
-(12,"Sör",5),
-(12,"Csípős",2.5),
-(13,"Csokilikőr",15),
-(13,"Fahéjas Jack Daniels",15),
-(13,"Fehér Monster",100)
+(1,"Ouzou",5,"Ml"),
+(1,"Citromlé",5,"Ml"),
+(2,"Martini",25,"Ml"),
+(2,"Vermouth",25,"Ml"),
+(3,"Jack Daniels",500,"Ml"),
+(4,"Almalé",15, "Ml"),
+(4,"Szodaviz",30, "Ml"),
+(5,"Meggyszörp",20,"Ml"),
+(5,"Grapefruitlé",15,"Ml"),
+(5,"Meggy",1,"Darab"),
+(6,"Szentelt Víz",200,"Ml"),
+(6,"Isten Vére bor",50,"Ml"),
+(6,"Almalé",80,"Ml"),
+(7,"Rum",30,"Ml"),
+(7,"Narancslé",150,"Ml"),
+(7,"Ananászlé",75,"Ml"),
+(7,"Vörösáfonya szirup",75,"Ml"),
+(8,"Everclear",15,"Ml"),
+(8,"Kék Curacao",15,"Ml"),
+(8,"Ouzou",5,"Ml"),
+(9,"Sake",20,"Ml"),
+(9,"Gin",40,"Ml"),
+(9,"Halsűrítmény",1,"Ml"),
+(10,"Uborkalé",20,"Ml"),
+(10,"Monster",80,"Ml"),
+(11,"Everclear",20,"Ml"),
+(11,"Speed",20,"Ml"),
+(12,"Tequilla",20,"Ml"),
+(12,"Sör",5,"Ml"),
+(12,"Csípős",2.5,"Ml"),
+(13,"Csokilikőr",15,"Ml"),
+(13,"Fahéjas Jack Daniels",15,"Ml"),
+(13,"Fehér Monster",100,"Ml")
 ;
 INSERT INTO WebshopTermek(TermekCim,TermekLeiras,TermekKiszereles,Ar)
 VALUES

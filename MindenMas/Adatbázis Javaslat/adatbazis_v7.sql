@@ -1,6 +1,3 @@
-DROP DATABASE IF EXISTS pohárnyi
-
-
 CREATE TABLE Felhasználó(
 	FelhID INT AUTO_INCREMENT PRIMARY KEY,
 	Felhasználónév TEXT NOT NULL,
@@ -23,6 +20,7 @@ CREATE TABLE Koktél(
 	BoritoKepUtvonal TEXT DEFAULT ("cup.webp"),
 	Alap TEXT,
 	Recept TEXT NOT NULL,
+	AlapMennyiseg INT NOT NULL,
     FOREIGN KEY(Keszito) REFERENCES Felhasználó(FelhID)
 );
 
@@ -85,6 +83,7 @@ CREATE TABLE KoktelokOsszetevoi(
 	KoktélID INT,
 	Osszetevő VARCHAR(255),
 	Mennyiség DOUBLE,
+	Mertekegyseg TEXT,
     FOREIGN KEY(KoktélID) REFERENCES Koktél(KoktélID)
 );
 
@@ -117,7 +116,6 @@ CREATE TABLE Jelentesek(
 CREATE TABLE Jelentők(
 	JelentőID INT,
 	JelentésID INT,
-	JelentesTipusa TEXT,
 	JelentesIndoka TEXT,
 	FOREIGN KEY(JelentőID) REFERENCES Felhasználó(FelhID),
 	FOREIGN KEY(JelentésID) REFERENCES Jelentesek(JelentesID)

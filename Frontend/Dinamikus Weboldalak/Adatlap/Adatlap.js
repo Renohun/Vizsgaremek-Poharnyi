@@ -328,6 +328,10 @@ async function KedvencekLekeres() {
                 koktelNev.classList.add("card-title")
                 koktelSzoveg.classList.add("card-text")
                 koktelOldal.classList.add("btn","btn-secondary")
+                let id=valasz.adat[kulsoertek].kokteladatok[0].KoktélID
+                koktelOldal.addEventListener("click",()=>{
+                    window.location.href=`http://127.0.0.1:3000/Koktel/${id}`
+                })
                 //értékek megadása             
                 let koktelkep=await AdatGetKep("/api/AdatlapLekeres/KoktelKepLekeres/"+valasz.adat[kulsoertek].kokteladatok[0].KoktélID)
                 koktelKep.setAttribute("src",URL.createObjectURL(koktelkep))
@@ -381,7 +385,9 @@ async function KedvencekLekeres() {
                 for (let j = 0; j < valasz.adat[kulsoertek].koktelbadgek.length; j++) {
                     let jelveny=document.createElement("span")
                     jelveny.innerHTML=valasz.adat[kulsoertek].koktelbadgek[j][0].JelvényNeve
-                    jelveny.classList.add("badge","me-1","text-dark","rounded-pill")
+                    console.log(valasz.adat[kulsoertek].koktelbadgek[j][0].JelvenyKategoria);
+                    
+                    jelveny.classList.add("badge","me-1","text-white","rounded-pill")
                     switch (valasz.adat[kulsoertek].koktelbadgek[j][0].JelvenyKategoria) {
                         case "ízek":
                             jelveny.classList.add("bg-success")
@@ -430,6 +436,8 @@ async function KoktelokLekeres() {
     
     let kulsoertek=0
     let sorszam=Math.round((valasz.adat.length/4)+0.5)
+    console.log(valasz);
+    
     let hova=document.getElementById("IdeSaját")
     hova.innerHTML=""
     for (let i = 0; i < sorszam; i++) 
@@ -464,6 +472,10 @@ async function KoktelokLekeres() {
                 koktelNev.innerHTML=valasz.adat[kulsoertek].KoktelCim
                 koktelOldal.setAttribute("type","button")
                 koktelOldal.setAttribute("value","Tovább a Receptre")
+                let id=valasz.adat[kulsoertek].KoktélID
+                koktelOldal.addEventListener("click",()=>{
+                    window.location.href=`http://127.0.0.1:3000/Koktel/${id}`
+                })
                 //Van-e értékelés
                 if (valasz.ertek[kulsoertek][0].Osszert!=null) 
                 {
@@ -548,7 +560,7 @@ async function JelentesekLekeres() {
                 JelentesNev.innerHTML="Jelentett Komment"
                 console.log(valasz.rep[i][1]);
                 
-                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][1].Felhasználónév} "${valasz.rep[i][0].Tartalom}" Kommentjét.<br>Indok:${valasz.adat[i][1].JelentesIndoka}`
+                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][1][0].Felhasználónév} "${valasz.rep[i][0][0].Tartalom}" Kommentjét.<br>Indok:${valasz.adat[i][1].JelentesIndoka}`
                 JelentesDiv.appendChild(JelentesNev)
                 JelentesNev.appendChild(sortör)
                 JelentesDiv.appendChild(JelentesText)

@@ -53,8 +53,8 @@ function atvitelKoktelra() {
 
 function koktelRendereles(koktelok) {
     const DOMsor = document.getElementById('koktelSor');
-    //console.log(koktelok.koktelokAdat);
-
+    console.log(koktelok.koktelokAdat);
+    DOMsor.innerHTML = '';
     koktelok.koktelokAdat.forEach((koktel) => {
         if (koktel != null) {
             const divMB = document.createElement('div');
@@ -67,7 +67,7 @@ function koktelRendereles(koktelok) {
 
             let imgTag = document.createElement('img');
             imgTag.setAttribute('alt', koktel.KoktelCim);
-            console.log(koktel.KoktélID);
+            //console.log(koktel.KoktélID);
 
             (async () => {
                 const koktelKep = await POSTKepLekeres(
@@ -134,7 +134,7 @@ function koktelRendereles(koktelok) {
                 uLista.appendChild(liOsszetevo);
                 i++;
             }
-            console.log(i);
+            //console.log(i);
 
             if (koktel.osszetevok.length > 3) {
                 const li = document.createElement('li');
@@ -152,7 +152,17 @@ function koktelRendereles(koktelok) {
             tovabbBtn.addEventListener('click', atvitelKoktelra);
         }
     });
-    let oszlopokSzama = koktelok.koktelokAdat.length;
+    let oszlopokSzama = 0;
+    console.log(koktelok.koktelokAdat.length);
+
+    for (let i = 0; i < koktelok.koktelokAdat.length; i++) {
+        if (koktelok.koktelokAdat[i] != null) {
+            oszlopokSzama += 1;
+        }
+    }
+
+    console.log(oszlopokSzama);
+
     while (oszlopokSzama % 4 != 0) {
         let ujOszlop = document.createElement('div');
         ujOszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
@@ -170,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     (async () => {
         //Jelvenyek avagy rendezesek lekerese
         const jelvenyek = await GETfetch('http://127.0.0.1:3000/api/Koktelok/Jelvenyek');
-        console.log(jelvenyek.data);
+        //console.log(jelvenyek.data);
 
         const erossegSelect = document.getElementById('Erősség');
         for (let i = 0; i < jelvenyek.data.erosseg.length; i++) {
@@ -195,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //koktelok lekeredezese
         const koktelok = await GETfetch('http://127.0.0.1:3000/api/Koktelok/lekeres');
-        console.log(koktelok);
+        //console.log(koktelok);
 
         koktelRendereles(koktelok);
     })();

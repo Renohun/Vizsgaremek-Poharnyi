@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const jelentesekDocument = document.getElementsByName('jelentesekKezelese');
     const koktelDocument = document.getElementsByName('koktelokKezelese');
     const termekDocument = document.getElementsByName('termekFeltoltes');
+
     jelentesekDocument[0].addEventListener('click', () => {
         jelentesekDocument[1].removeAttribute('hidden', 'true');
         koktelDocument[1].setAttribute('hidden', 'true');
