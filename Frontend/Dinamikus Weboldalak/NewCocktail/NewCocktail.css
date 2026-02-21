@@ -50,6 +50,10 @@ body {
 
     background-color: #d1d1d1;
 }
+#koktelkep{
+    display: flex;
+    justify-content: left;
+}
 /* Kép input mező stilusolása*/
 #drop-area {
     width: 280px;
@@ -60,7 +64,33 @@ body {
     border-radius: 10px;
     display: flex;
     justify-content: center;
+    justify-self: flex-start;
+    align-self: flex-start;
     flex-direction: column;
+    
+}
+@media only screen and (max-width: 383px) 
+{
+#drop-area {
+    width: 200px;
+    height: 200px;
+   }
+#szoveg{
+    display: none;
+}
+}
+@media only screen and (max-width: 290px) 
+{
+#drop-area {
+    width: 150px;
+    height: 150px;
+   }
+#szoveg{
+    display: none;
+}
+#urlapcim{
+    font-size: medium;
+}
 }
 #img-view {
     width: 100%;
@@ -96,7 +126,7 @@ body {
 }
 
 .Osszetevobtn {
-    width: 3.5%;
+    width: 4.5%;
     margin-left: 0cap;
     border: 1px solid grey;
     border-left: none;
@@ -116,16 +146,39 @@ body {
     font-size: 17px;
     border: 1px solid grey;
     float: left;
-    width: 60%;
+    width: 61%;
     height: 100%;
     background: #f8f8f8;
 }
 .OsszetevoMennyiseg{
-    width: 18%;
+    width: 20%;
+}
+.MertekSelect{
+    width: 14.5%;
+}
+@media only screen and (max-width: 992px) 
+{
+#osszetevoDiv{
+    display: flex;
+    margin-left: 1px;
+}
+
+.Osszetevobtn {
+    width:4,5%;
+}
+.Osszetevobtn:hover {
+    background-color: #b4b4b4;
+}
+.OsszetevoBar {
+    width: 60%;
+}
+.OsszetevoMennyiseg{
+    width: 22%;
 }
 .MertekSelect{
     width: 12%;
-}
+}}
+
 @media only screen and (max-width: 768px) 
 {
 #osszetevoDiv{
@@ -134,7 +187,7 @@ body {
 }
 
 .Osszetevobtn {
-    width: 3.5%;
+    width:10%;
 }
 .Osszetevobtn:hover {
     background-color: #b4b4b4;
@@ -262,3 +315,6 @@ display: flex;
 @media only screen and (max-width: 600px) {
 }
 */
+#eltuntet{
+    display: none;
+}

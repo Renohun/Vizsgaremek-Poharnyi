@@ -79,9 +79,9 @@
                 <div class="row mx-auto">
                     <h4 id="urlapcim" class="display-7 text-center">Új koktél adatai:</h4>
                 </div>
-                <div class="row">
+                <div class="row" id="keprow">
                     <div class="col-sm-12 col-lg-4" id="koktelkep">
-                        <label for="input-file" id="drop-area" class="mx-auto">
+                        <label for="input-file" id="drop-area">
                             <input type="file" name="koktélKép" accept="image/*" id="input-file" hidden />
                             <div id="img-view">
                                 <img src="img/icon.png" alt="" class="icon" id="iconkep" />
@@ -235,16 +235,17 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Sikeres Feltöltés</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h5>A koktélodat sikeresen feltöltötted!</h5>
-                        <img src="img/test3 copy.gif" alt="Computer man" style="width: 100px; height: 100px" />
+                        <h5 id="siker">A koktélodat sikeresen feltöltötted!</h5>
+                        <h5 id="hiba" style="display: none;">Sikertelen feltöltés!</h5>
+                    <!--<img id="" src="img/test3 copy.gif" alt="Computer man" style="width: 100px; height: 100px" />-->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>
-                        <button type="button" id="elkuld" class="btn btn-primary" data-bs-dismiss="modal">Király</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="visszaGomb">új koktél</button>
+                        <button type="button" id="elkuld" class="btn btn-primary" aria-haspopup="" data-bs-dismiss="modal">tovább a koktél oldalára</button>
+                        <button type="button" style="display: none;" id="Ujra" class="btn btn-primary" data-bs-dismiss="modal">Újra</button>
                     </div>
                 </div>
             </div>
