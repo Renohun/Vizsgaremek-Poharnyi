@@ -22,5 +22,9 @@ Content-Type: application/json
 ###
 GET http://127.0.0.1:3000/api/Koktel/13
 ###
-POST http://127.0.0.1:3000/api/Koktel/SendJelentes
+POST http://127.0.0.1:3000/api/Koktel/DeleteKoktel
 Content-Type: application/json
+
+{
+    "id":"2"
+}
