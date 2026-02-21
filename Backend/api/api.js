@@ -1229,7 +1229,6 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
         message: JelentesekLista
     });
 });
-
 //
 //
 //
@@ -1301,7 +1300,6 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
                     message: 'Sikertelen feltöltés',
                     hiba: err
                 });
-                //kérlek ne tedd ezt magaddal, az öngyilkosság mindig opcio
             } else {
                 res.status(200).json({
                     message: 'fasza'

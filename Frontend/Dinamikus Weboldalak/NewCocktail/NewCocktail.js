@@ -72,11 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
     osszetevogomb.addEventListener('click', osszetevohozzaadas);
 
     // megse gomb létrehozása és listener hozzáadása
-    function megsefugv() {
+    function megsefugv() 
+    {
     //alert('sikeres törlés!');
     window.location.reload();
-   
-}
+   }
+
     megsegomb = document.getElementById('megse');
     megsegomb.addEventListener('click', megsefugv);
     //radiogombok értékének lekérése
@@ -209,13 +210,13 @@ dropArea.addEventListener('drop', function (e) {
     inputFile.files = e.dataTransfer.files;
     KepFeltoltes();
 });
-
 //Jelvények feltöltése
 const erossegSelect = document.getElementById('erosseg');
 const izSelect = document.getElementById('iz');
 const AllergenSelect = document.getElementById('allergen');
 
-let Izlekeres = async () => {
+let Izlekeres = async () => 
+{
     const data = await Getfetch('/api/Keszites/JelvenyLekeres');
     console.log(data);
 
@@ -372,7 +373,6 @@ const AdatStorage = async () => {
     //képfeltöltés
 
     let kepUtvonal;
-
     console.log(inputFile.files[0]);
     const kep = new FormData();
     if (inputFile.files.length != 0) {
@@ -503,16 +503,7 @@ const AdatStorage = async () => {
      document.getElementById("elkuld").setAttribute("hidden",true)
      document.getElementById("visszaGomb").setAttribute("hidden",true)
 };
-
-//elküldés
-
-
-//megse gomb törlés függvény
-
-
-
 //uj koktel gomb funkcioja
-
 document.getElementById("visszaGomb").addEventListener("click",()=>{
     window.location.reload();
 })
@@ -526,8 +517,4 @@ document.getElementById("Ujra").addEventListener("click",()=>{
         }
        
         else{KivalasztottEro.classList.add("text-bg-dark")}*/
-
-
-
-
 }
