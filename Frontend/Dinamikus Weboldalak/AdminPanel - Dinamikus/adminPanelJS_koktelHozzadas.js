@@ -16,54 +16,50 @@ async function POSTfetch(url, obj) {
 }
 async function POSTkepFeltoltes(url, obj) {
     try {
-        console.log('POSTkepFeltoltes started, URL:', url);
-
-        // When sending FormData, do NOT set Content-Type header - let browser set it with boundary
-        let req;
-        try {
-            req = await fetch(url, {
-                method: 'POST',
-                body: obj
-                // DO NOT add headers: { 'Content-Type': ... } with FormData
-            });
-            console.log('Fetch completed, status:', req.status);
-        } catch (fetchErr) {
-            console.error('Fetch itself failed:', fetchErr.message);
-            throw fetchErr;
-        }
-
-        console.log('POSTkepFeltoltes response status:', req.status);
-        console.log('POSTkepFeltoltes response ok:', req.ok);
-
-        let responseText;
-        try {
-            responseText = await req.text();
-            console.log('POSTkepFeltoltes raw response:', responseText);
-        } catch (textErr) {
-            console.error('Failed to read response text:', textErr.message);
-            throw textErr;
-        }
-
+        const req = await fetch(url, {
+            method: 'POST',
+            body: obj
+        });
         if (req.ok) {
-            try {
-                const parsed = JSON.parse(responseText);
-                console.log('Successfully parsed JSON:', parsed);
-                return parsed;
-            } catch (jsonErr) {
-                console.error('Failed to parse JSON:', jsonErr.message);
-                throw new Error('Nem valid JSON: ' + responseText);
-            }
+            return await req.json();
         } else {
-            throw new Error('Status ' + req.status + ': ' + responseText);
+            throw new Error('Hiba tortent: ' + req.status);
         }
     } catch (err) {
-        console.error('POSTkepFeltoltes error caught:', err.message || err);
-        throw new Error('Hiba tortent: ' + (err.message || err));
+        throw new Error('Hiba tortent: ' + err);
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     //jelvenyek feltoltese a selectekbe
+
+    let jelvenyTombObj = [];
+    function osszetevoGombListener() {
+        const jelvenyObj = { jelveny: this.value, kategoria: this.dataset.kategoria };
+
+        let vanEMar = false;
+        let index = 0;
+        //Van e mar ilyen jelveny eltarolva
+        for (let i = 0; i < jelvenyTombObj.length; i++) {
+            if (jelvenyTombObj[i].jelveny == jelvenyObj.jelveny) {
+                vanEMar = true;
+                index = i;
+            }
+        }
+
+        if (vanEMar == false) {
+            jelvenyTombObj.push(jelvenyObj);
+            this.classList.remove('btn-info');
+            this.classList.add('btn-primary');
+        } else {
+            //torolje a mar ilyen eltarolt jelvenyt
+            jelvenyTombObj.splice(index, 1);
+
+            this.classList.add('btn-info');
+            this.classList.remove('btn-primary');
+        }
+        console.log(jelvenyTombObj);
+    }
 
     let osszetevoNum = 1;
 
@@ -133,23 +129,39 @@ document.addEventListener('DOMContentLoaded', () => {
     (async () => {
         const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/JelvenyekLetoltese');
 
-        const koktelErossegeSelect = document.getElementById('koktelErosseg');
-        const koktelIzeSelect = document.getElementById('koktelIze');
-        const koktelAllergenekSelect = document.getElementById('koktelAllergenek');
+        const koktelErossegeSelect = document.getElementById('koktelErossegek');
+        const koktelIzeSelect = document.getElementById('koktelIz');
+        const koktelAllergenekSelect = document.getElementById('koktelAllergen');
         for (let i = 0; i < data.allergenek.length; i++) {
-            let optTag = document.createElement('option');
-            optTag.innerText = data.allergenek[i].JelvényNeve;
-            koktelAllergenekSelect.appendChild(optTag);
+            //data.allergenek[i].JelvényNeve;
+            let gomb = document.createElement('input');
+            gomb.setAttribute('type', 'button');
+            gomb.setAttribute('value', data.allergenek[i].JelvényNeve);
+            gomb.dataset.kategoria = 'allergen';
+            gomb.classList.add('btn', 'btn-info');
+            //once, hogy megveletlenul se keruljon fel tobb EventListener egy Elementre, hiszen akkor tobbszor futna le az fv.
+            gomb.addEventListener('click', osszetevoGombListener);
+            koktelAllergenekSelect.appendChild(gomb);
         }
         for (let i = 0; i < data.erossegek.length; i++) {
-            let optTag = document.createElement('option');
-            optTag.innerText = data.erossegek[i].JelvényNeve;
-            koktelErossegeSelect.appendChild(optTag);
+            //data.erossegek[i].JelvényNeve
+            let gomb = document.createElement('input');
+            gomb.setAttribute('type', 'button');
+            gomb.setAttribute('value', data.erossegek[i].JelvényNeve);
+            gomb.dataset.kategoria = 'erosseg';
+            gomb.classList.add('btn', 'btn-info');
+            gomb.addEventListener('click', osszetevoGombListener);
+            koktelErossegeSelect.appendChild(gomb);
         }
         for (let i = 0; i < data.izek.length; i++) {
-            let optTag = document.createElement('option');
-            optTag.innerText = data.izek[i].JelvényNeve;
-            koktelIzeSelect.appendChild(optTag);
+            //data.izek[i].JelvényNeve
+            let gomb = document.createElement('input');
+            gomb.setAttribute('type', 'button');
+            gomb.setAttribute('value', data.izek[i].JelvényNeve);
+            gomb.dataset.kategoria = 'iz';
+            gomb.classList.add('btn', 'btn-info');
+            gomb.addEventListener('click', osszetevoGombListener);
+            koktelIzeSelect.appendChild(gomb);
         }
     })();
 
@@ -177,34 +189,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 hibasFrom = true;
             }
 
-            const koktelErosseg = document.getElementById('koktelErosseg');
-            if (koktelErosseg.value.length > 0) {
-                koktelErosseg.classList.add('helyesForm');
-                koktelErosseg.classList.remove('hibasForm');
-            } else {
-                koktelErosseg.classList.remove('helyesForm');
-                koktelErosseg.classList.add('hibasForm');
-                hibasFrom = true;
-            }
-            //chat? who is this guy?
-            const koktelIz = document.getElementById('koktelIze');
-            if (koktelIz.value.length > 0) {
-                koktelIz.classList.add('helyesForm');
-                koktelIz.classList.remove('hibasForm');
-            } else {
-                koktelIz.classList.remove('helyesForm');
-                koktelIz.classList.add('hibasForm');
-                hibasFrom = true;
-            }
+            let jelvenyTomb;
 
-            const koktelAllergenek = document.getElementById('koktelAllergenek');
-            if (koktelAllergenek.value.length > 0) {
-                koktelAllergenek.classList.add('helyesForm');
-                koktelAllergenek.classList.remove('hibasForm');
-            } else {
-                koktelAllergenek.classList.remove('helyesForm');
-                koktelAllergenek.classList.add('hibasForm');
+            if (jelvenyTombObj.length < 0) {
                 hibasFrom = true;
+            } else {
+                let iz = 0;
+                let erosseg = 0;
+
+                for (let i = 0; i < jelvenyTombObj.length; i++) {
+                    if (jelvenyTombObj[i].kategoria == 'erosseg') {
+                        erosseg++;
+                    } else if (jelvenyTombObj[i].kategoria == 'iz') {
+                        iz++;
+                    }
+                }
+
+                if (iz < 1 || erosseg != 1) {
+                    hibasFrom = true;
+                }
+
+                jelvenyTomb = jelvenyTombObj.map((obj) => {
+                    return obj.jelveny;
+                });
             }
 
             let osszetevokTomb = [];
@@ -257,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
                 //console.log(kepTarolas);
 
-                (async () => {
+                async () => {
                     const nevObj = { nev: koktelNev.value };
 
                     const ellenorzes = await POSTfetch(
@@ -278,9 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             nev: koktelNev.value,
                             alapMennyiseg: alapMennyiseg.value,
                             alap: koktelAlap.value,
-                            erosseg: koktelErosseg.value,
-                            iz: koktelIz.value,
-                            allergenek: koktelAllergenek.value,
+                            jelveny: jelvenyTomb,
                             alkoholos: alkoholosEBool ? '1' : '0',
                             osszetevok: osszetevokTomb,
                             recept: koktelRecept.value,
@@ -293,10 +298,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         alert('Mar van ilyen koktel');
                     }
-                })().catch((err) => {
-                    console.error('Async error:', err);
-                    alert('Hiba: ' + err);
-                });
+                };
+            } else {
+                alert('Adatok hianyoznak vagy hibasan vannak megadva');
             }
         } catch (err) {
             console.error(err);

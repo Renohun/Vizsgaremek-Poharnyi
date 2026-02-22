@@ -16,49 +16,17 @@ async function POSTfetch(url, obj) {
 }
 async function POSTkepFeltoltes(url, obj) {
     try {
-        console.log('POSTkepFeltoltes started, URL:', url);
-
-        // When sending FormData, do NOT set Content-Type header - let browser set it with boundary
-        let req;
-        try {
-            req = await fetch(url, {
-                method: 'POST',
-                body: obj
-                // DO NOT add headers: { 'Content-Type': ... } with FormData
-            });
-            console.log('Fetch completed, status:', req.status);
-        } catch (fetchErr) {
-            console.error('Fetch itself failed:', fetchErr.message);
-            throw fetchErr;
-        }
-
-        console.log('POSTkepFeltoltes response status:', req.status);
-        console.log('POSTkepFeltoltes response ok:', req.ok);
-
-        let responseText;
-        try {
-            responseText = await req.text();
-            console.log('POSTkepFeltoltes raw response:', responseText);
-        } catch (textErr) {
-            console.error('Failed to read response text:', textErr.message);
-            throw textErr;
-        }
-
+        const req = await fetch(url, {
+            method: 'POST',
+            body: obj
+        });
         if (req.ok) {
-            try {
-                const parsed = JSON.parse(responseText);
-                console.log('Successfully parsed JSON:', parsed);
-                return parsed;
-            } catch (jsonErr) {
-                console.error('Failed to parse JSON:', jsonErr.message);
-                throw new Error('Nem valid JSON: ' + responseText);
-            }
+            return await req.json();
         } else {
-            throw new Error('Status ' + req.status + ': ' + responseText);
+            throw new Error('Hiba tortent: ' + req.status);
         }
     } catch (err) {
-        console.error('POSTkepFeltoltes error caught:', err.message || err);
-        throw new Error('Hiba tortent: ' + (err.message || err));
+        throw new Error('Hiba tortent: ' + err);
     }
 }
 
