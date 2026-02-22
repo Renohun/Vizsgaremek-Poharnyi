@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded",()=>{
         gombok[i].addEventListener("click",()=>{oldalvaltas(i,gombok)})
         
     }
+    document.getElementById("Törlés").addEventListener("click",()=>{
+        fioktorles()
+    })
     //Profilkep Változtatás
     let fajl=document.getElementById("input")
     let kep=document.getElementById("profilkep")
@@ -324,10 +327,10 @@ async function KedvencekLekeres() {
                 koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
                 koktelCard.classList.add("card","h-100")
                 koktelKep.classList.add("card-img-top","kep")
-                koktelTartalom.classList.add("card-body")
+                koktelTartalom.classList.add("card-body","flex-column")
                 koktelNev.classList.add("card-title")
                 koktelSzoveg.classList.add("card-text")
-                koktelOldal.classList.add("btn","btn-secondary")
+                koktelOldal.classList.add("btn","btn-secondary","d-flex","align-items-end")
                 let id=valasz.adat[kulsoertek].kokteladatok[0].KoktélID
                 koktelOldal.addEventListener("click",()=>{
                     window.location.href=`http://127.0.0.1:3000/Koktel/${id}`
@@ -691,7 +694,6 @@ async function KosarLekeres() {
             koktelKuka.addEventListener("click",()=>{
                 console.log(valasz.kosár[i].TermekID);
                 let mitürít={
-                    kosár:1,
                     termék:valasz.kosár[i].TermekID
                 }
                 AdatPost("/api/AdatlapLekeres/TermekUrites/",mitürít)
@@ -709,7 +711,6 @@ async function KosarLekeres() {
             kosárModIgen.addEventListener("click",()=>{
                 hova.children[i].childNodes[3].childNodes[1].innerHTML=kosárDbMod.value
                 mitürít={
-                    kosár:3,
                     termék:valasz.kosár[i].TermekID,
                     count:kosárDbMod.value
                 }
@@ -750,8 +751,28 @@ async function KosarLekeres() {
         })
     }
     
-    
+}
 
+function fioktorles(){
+    var JelIv = new bootstrap.Modal(document.getElementById('Fioktorles'), {})   
+    JelIv.show()
+    document.getElementById("DelNvm").addEventListener("click",()=>{
+        
+        document.getElementById("DelConfText").value=""
+        JelIv.hide()
+    },{once:true})
+    document.getElementById("DelConf").addEventListener("click",async()=>{
+        if (document.getElementById("DelConfText").value!="TÖRLÉS") {
+            document.getElementById("feedback").innerHTML="A mező nem tartalmazza a helyes szavat!"
+        }
+        else{
+            document.getElementById("feedback").innerHTML="Detonation"
+            await AdatPost("")
+        }
+        
+    },{once:true})
+    
+    
     
 }
 

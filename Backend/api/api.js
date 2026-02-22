@@ -1228,13 +1228,10 @@ router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
 });
 router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
     let mit = request.body.termék;
-    let honnan = request.body.kosár;
+    let honnan = await lekeres('SELECT SessionID FROM kosár WHERE UserID LIKE ?',jwt.decode(request.cookies.auth_token).userID)
     let TermékTörlés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ? AND TermekID LIKE ?';
-    console.log(mit);
-    console.log(honnan);
-
     try {
-        await DBconnetion.promise().query(TermékTörlés, [honnan, mit]);
+        await DBconnetion.promise().query(TermékTörlés, [honnan[0].SessionID, mit]);
         response.status(200).json({
             message: 'Sikeres Törlés!'
         });
@@ -1247,18 +1244,17 @@ router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
 });
 router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     let mit = request.body.termék;
-    let honnan = request.body.kosár;
+    let honnan = await lekeres('SELECT SessionID FROM kosár WHERE UserID LIKE ?',jwt.decode(request.cookies.auth_token).userID)
     let mennyit = request.body.count;
     let TermékTöltés = 'UPDATE KosárTermék SET Darabszam = ? WHERE KosarID LIKE ? AND TermekID LIKE ?';
-    console.log(mit);
-    console.log(honnan);
-
     try {
-        await DBconnetion.promise().query(TermékTöltés, [mennyit, honnan, mit]);
+        await DBconnetion.promise().query(TermékTöltés, [mennyit, honnan[0].SessionID, mit]);
         response.status(200).json({
             message: 'Sikeres Frissítés!'
         });
     } catch (error) {
+        console.log(error);
+        
         response.status(500).json({
             message: 'Hiba Történt!',
             hiba: error
