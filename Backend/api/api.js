@@ -1126,8 +1126,14 @@ router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
     //Lekérdezés
     try {
         oJelentette = await lekeres(mitjelentetto, felhaszanalo);
+        console.log(oJelentette);
+        console.log(oJelentette.length);
+        
         if (oJelentette.length == 0) {
-            response.status(204);
+            response.status(200).json({
+                message:"Nincs Jelentésed!"
+            });
+        
         } else {
             for (let i = 0; i < oJelentette.length; i++) {
                 let temp = await lekeres(jelentesAdat, oJelentette[i].JelentésID);
@@ -1146,6 +1152,8 @@ router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
                     jelentTar[i] = await lekeres(felhjel, jelentesek[i][0].JelentettTartalomID);
                 } else if (jelentesek[i][0].JelentesTipusa == 'Komment') {
                     temp.push(await lekeres(kommentjel, jelentesek[i][0].JelentettTartalomID));
+                    console.log(jelentesek[i][0].JelentettTartalomID);
+                    
                     temp.push(await lekeres(felhjel, temp[0][0].Keszito));
                     jelentTar[i] = temp;
                 }
@@ -1157,6 +1165,8 @@ router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
             });
         }
     } catch (error) {
+        console.log(error);
+        
         response.status(500).json({
             message: 'Hiba',
             hiba: error
