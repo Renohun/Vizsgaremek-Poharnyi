@@ -366,15 +366,15 @@ router.post('/regisztracio', async (request, response) => {
     }
 });
 //A belepes oldal hoz ide, lekeri azt a sort amiben a felhasznalo adatai vannak, persz ha van ilyen egyaltalan
-router.post('/belepes', async (request, response) => {
+router.post('/belepes', (request, response) => {
     try {
-        //console.log(request.body);
+        console.log(request.body);
 
         const felhasznaloObj = {
-            felhasznalo: request.body.email,
+            felhasznalo: request.body.felhasznalo,
             jelszo: request.body.jelszo
         };
-        const sqlQuery = 'SELECT * FROM felhasználó WHERE Email LIKE ?';
+        const sqlQuery = 'SELECT Email, Jelszó FROM `felhasználó` WHERE Email LIKE ?';
 
         DBconnetion.query(sqlQuery, [felhasznaloObj.felhasznalo], async (err, rows) => {
             if (err) {
@@ -383,11 +383,13 @@ router.post('/belepes', async (request, response) => {
                 });
             } else {
                 //ez az adatbazisbol kapott felhasznaloi sor
+                console.log(rows);
+
                 const felhasznaloDB = rows[0];
                 //console.log(felhasznaloDB);
 
                 if (felhasznaloDB == undefined) {
-                    response.status(200).json({ message: 'Hibas email! Avagy nem letezik ilyen felhasznalo' });
+                    response.status(403).json({ message: 'Hibas email! Avagy nem letezik ilyen felhasznalo' });
                 } else {
                     //megnezi az argon package ellenorzi hogy az eltarolt jelszo megegyezik a beirt jelszoval
                     const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
@@ -416,7 +418,7 @@ router.post('/belepes', async (request, response) => {
                             message: 'Sikeres bejelentkezes'
                         });
                     } else {
-                        response.status(200).json({
+                        response.status(403).json({
                             message: 'Hibas jelszo'
                         });
                     }
