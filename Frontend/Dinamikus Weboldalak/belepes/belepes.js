@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //Hosszusag ellenorzes nem kell hiszen a form nem is engedi tovabb a ha ures az input mezo
         if (
             /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) &&
-            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(jelszo)
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{2,}$/.test(jelszo)
         ) {
             const uzenet = await POSTfetch('http://127.0.0.1:3000/api/belepes', { felhasznalo: email, jelszo: jelszo });
             alert(JSON.stringify(uzenet));
