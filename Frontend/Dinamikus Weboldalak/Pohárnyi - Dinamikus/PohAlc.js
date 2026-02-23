@@ -67,6 +67,7 @@ function koktelRendereles(koktelok) {
 
             let imgTag = document.createElement('img');
             imgTag.setAttribute('alt', koktel.KoktelCim);
+            imgTag.classList.add('img-fluid', 'rounded');
             //console.log(koktel.KoktélID);
 
             (async () => {
