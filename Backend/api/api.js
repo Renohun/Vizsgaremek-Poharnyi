@@ -365,6 +365,8 @@ router.post('/regisztracio', async (request, response) => {
 //A belepes oldal hoz ide, lekeri azt a sort amiben a felhasznalo adatai vannak, persz ha van ilyen egyaltalan
 router.post('/belepes', async (request, response) => {
     try {
+        console.log(request.body);
+
         const felhasznaloObj = {
             felhasznalo: request.body.email,
             jelszo: request.body.jelszo
