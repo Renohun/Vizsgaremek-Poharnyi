@@ -1045,6 +1045,7 @@ router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
         });
     }
 });
+
 router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     let ki = request.body.id;
     let mit = jwt.decode(request.cookies.auth_token).userID;
@@ -1302,7 +1303,7 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
                 });
             } else {
                 res.status(200).json({
-                    message: 'fasza'
+                    message: 'pacek'
                 });
                 //koktél id lekérése majd összetevők feltöltése
                 DBconnetion.query(UjKoktelId, (err, rows) => {
@@ -1331,18 +1332,22 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
                         }
                         console.log(koktelid);
                         //jelvenyek feltöltése
-                        let jelvenyek;
-                        console.log(allergen);
+                        let jelvenyek = {};
                         if (allergen == undefined) {
-                            jelvenyek = [iz, erosseg];
+                            jelvenyek = {lista : [iz,erosseg]};
                         } else {
-                            jelvenyek = [iz, erosseg, allergen];
+                            jelvenyek = {lista : [iz,erosseg,allergen]};
                         }
-                        console.log(jelvenyek);
-                        console.log(iz);
+                       // console.log(jelvenyek);
+                      
                         let jelvenyIDk = [];
-                        for (let i = 0; i < jelvenyek.length; i++) {
-                            DBconnetion.query(UjKoktelJelvenyId, [jelvenyek[i]], (err, rows) => {
+                        console.log(jelvenyek.lista[1])
+                        for (let i = 0; i < jelvenyek.lista.length; i++) {
+                            console.log(jelvenyek.lista[i])
+                            for (let j = 0; j < jelvenyek.lista[i].length; j++) {
+                               console.log("asd")
+                               console.log(jelvenyek.lista[i][j] +"asd")
+                                DBconnetion.query(UjKoktelJelvenyId, [jelvenyek.lista[i][j]], (err, rows) => {
                                 if (err) {
                                     res.status(500).json({
                                         message: 'Sikertelen feltöltés',
@@ -1350,19 +1355,32 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
                                     });
                                 } else {
                                     jelvenyIDk.push(rows[0].JelvényID);
+                                    console.log(jelvenyIDk + "asdasd")
                                 }
-
-                                DBconnetion.query(UjKoktelJelvenyIdFeltoltes, [koktelid, jelvenyIDk[i]], (err) => {
+                               
+                               
+                                    DBconnetion.query(UjKoktelJelvenyIdFeltoltes, [koktelid, jelvenyIDk[1]], (err) => {
+                                        console.log(jelvenyIDk)
                                     if (err) {
                                         console.log(err);
                                         res.status(500).json({
                                             message: 'Sikertelen feltöltés',
                                             hiba: err
                                         });
+                                       
                                     }
                                 });
+                                    
+                                
+                                
                             });
+                            
+                           
+                            }
+                            
                         }
+                        console.log("asd")
+                        console.log(jelvenyIDk)
                     }
                 });
             }

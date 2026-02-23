@@ -480,7 +480,7 @@ const AdatStorage = async () => {
         hiba = false;
     }
     let KoktelAdatok;
-
+    let elkuldottEro = [kinyertEro]
     KoktelAdatok = {//alapvető postobjekt, nem tartalmazza az allergent
         nev: document.getElementById('nev').value,
         mennyiseg: document.getElementById('mennyiseg').value,
@@ -488,7 +488,7 @@ const AdatStorage = async () => {
         alkoholose: alkoholose,
         osszetevok: osszetevoLista,
         leiras: leiras,
-        erosseg: kinyertEro,
+        erosseg: elkuldottEro,
         iz: KivalasztottIzek,
         kepUtvonala: kepUtvonal.message
     };
@@ -503,7 +503,7 @@ const AdatStorage = async () => {
     if (hiba == true) 
     {
         console.log(KoktelAdatok);
-        //const data = await AdatPost('/api/Keszites/Feltoltes', KoktelAdatok);
+        const data = await AdatPost('/api/Keszites/Feltoltes', KoktelAdatok);
     }
     else if(hiba == false)
     {
