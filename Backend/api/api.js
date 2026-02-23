@@ -1032,13 +1032,11 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
     try {
         kedvencek = await lekeres(KedvencekLekeres, felhaszanalo);
         if (kedvencek.length == 0) {
-            response.status(203).json({
+            response.status(200).json({
                 message: 'Üres Lekérés!'
             });
         } else {
             let koktel = [];
-            console.log(kedvencek);
-
             for (let i = 0; i < kedvencek.length; i++) {
                 let koktelbadgek = [];
                 kokteladatok = await lekeres(koktelLekeres, kedvencek[i].MitKedveltID);
@@ -1126,9 +1124,6 @@ router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
     //Lekérdezés
     try {
         oJelentette = await lekeres(mitjelentetto, felhaszanalo);
-        console.log(oJelentette);
-        console.log(oJelentette.length);
-        
         if (oJelentette.length == 0) {
             response.status(200).json({
                 message:"Nincs Jelentésed!"
@@ -1370,6 +1365,61 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
         });
     }
 });
+
+router.post("/AdatlapLekeres/Fioktorles",async(request,response)=>{
+    try {
+        
+        const FelhasznaloTorles="DELETE FROM felhasználó WHERE FelhID LIKE ?"
+        const ErtekTorles="DELETE FROM ertekeles WHERE Keszito LIKE ?"
+        const ErtekTorlesKoktel="DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+        const KoktelTorles="DELETE FROM koktél WHERE Keszito LIKE ?"
+        const KoktelLekeres="SELECT KoktélID FROM koktél WHERE Keszito LIKE ?"
+        const JelvenyTorles="DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?"
+        const KommentTorlesKoktel="DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+        const KommentTorles="DELETE FROM komment WHERE Keszito LIKE ?"
+        const JelentesTorles="DELETE FROM jelentesek WHERE JelentettID LIKE ?"
+        const JelentesLekeres="SELECT JelentesID FROM jelentesek WHERE JelentettID LIKE ?"
+        const KosarTorles="DELETE FROM kosár WHERE UserID LIKE ?"
+        const KosarLekeres="SELECT SessionID FROM kosár WHERE UserID LIKE ?"
+        const KosarTermekTorles="DELETE FROM kosártermék WHERE KosarID LIKE ?"
+        const KedvencTorles="DELETE FROM kedvencek WHERE KikedvelteID LIKE ?"
+        const OssztevTorles="DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+        const KedvencTorlesKoktel="DELETE FROM kedvencek WHERE MitkedveltID LIKE ?"
+        const JelentoTorles="DELETE FROM jelentők WHERE JelentőID LIKE ?"
+        const JelentoJelentesTorles="DELETE FROM jelentők WHERE JelentésID LIKE ?"
+        await lekeres(ErtekTorles,jwt.decode(request.cookies.auth_token).userID)
+        await lekeres(KommentTorles,jwt.decode(request.cookies.auth_token).userID)
+        await lekeres(JelentoTorles,jwt.decode(request.cookies.auth_token).userID)
+        await lekeres(KedvencTorles,jwt.decode(request.cookies.auth_token).userID)
+        let kosarId=await lekeres(KosarLekeres,jwt.decode(request.cookies.auth_token).userID)
+        if (kosarId.length!=0) {            
+            await lekeres(KosarTermekTorles,kosarId[0].SessionID)
+            await lekeres(KosarTorles,jwt.decode(request.cookies.auth_token).userID)
+        }
+        let koktel=await lekeres(KoktelLekeres,jwt.decode(request.cookies.auth_token).userID)
+        for (let i = 0; i < koktel.length; i++) {
+            await lekeres(ErtekTorlesKoktel,[koktel[i].KoktélID,"Koktél"])
+            await lekeres(KommentTorlesKoktel,[koktel[i].KoktélID,"Koktél"])
+            await lekeres(OssztevTorles,koktel[i].KoktélID)
+            await lekeres(JelvenyTorles,koktel[i].KoktélID)
+            await lekeres(KedvencTorlesKoktel,koktel[i].KoktélID)
+        }
+        await lekeres(KoktelTorles,jwt.decode(request.cookies.auth_token).userID)
+        let jelentes=await lekeres(JelentesLekeres,jwt.decode(request.cookies.auth_token).userID)
+        for (let i = 0; i < jelentes.length; i++) {
+            await lekeres(JelentoJelentesTorles,jelentes[i].JelentesID)
+        }
+        await lekeres(JelentesTorles,jwt.decode(request.cookies.auth_token).userID)
+        await lekeres(FelhasznaloTorles,jwt.decode(request.cookies.auth_token).userID)
+    } 
+    catch (error) {
+        console.log(error);
+        
+        response.status(500).json({
+            message:"hiba"
+        })
+    }
+})
 //
 //
 //

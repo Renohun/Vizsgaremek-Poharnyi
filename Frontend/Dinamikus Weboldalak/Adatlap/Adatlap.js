@@ -767,7 +767,8 @@ function fioktorles(){
         }
         else{
             document.getElementById("feedback").innerHTML="Detonation"
-            await AdatPost("")
+            await AdatPost("/api/AdatlapLekeres/Fioktorles")
+            window.location.href="/"
         }
         
     },{once:true})
