@@ -117,14 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('osszetevoDel').addEventListener('click', () => {
-        const koktelOsszetevoDiv = document.getElementById('koktelOsszetevok');
-        osszetevoNum--;
-        //console.log(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
-        //console.log(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
+        if (osszetevoNum > 1) {
+            const koktelOsszetevoDiv = document.getElementById('koktelOsszetevok');
+            osszetevoNum--;
 
-        koktelOsszetevoDiv.removeChild(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
-        koktelOsszetevoDiv.removeChild(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
-        koktelOsszetevoDiv.removeChild(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
+            koktelOsszetevoDiv.removeChild(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
+            koktelOsszetevoDiv.removeChild(koktelOsszetevoDiv.children[koktelOsszetevoDiv.children.length - 1]);
+        }
     });
     (async () => {
         const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/JelvenyekLetoltese');
