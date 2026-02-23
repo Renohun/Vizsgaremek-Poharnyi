@@ -1181,11 +1181,11 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     //Lekérdezés
     try {
-        console.log(vasarlo);
-
         kosar = await lekeres(KosarLekeres, vasarlo);
         if (kosar.length == 0) {
-            response.status(204);
+            response.status(200).json({
+                message:"Üres Kosár"
+            });
         } else {
             kosartermekek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
 
@@ -1367,8 +1367,7 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
 });
 
 router.post("/AdatlapLekeres/Fioktorles",async(request,response)=>{
-    try {
-        
+    try { 
         const FelhasznaloTorles="DELETE FROM felhasználó WHERE FelhID LIKE ?"
         const ErtekTorles="DELETE FROM ertekeles WHERE Keszito LIKE ?"
         const ErtekTorlesKoktel="DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
