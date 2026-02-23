@@ -322,6 +322,8 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
 //Regisztracio oldalrol hoz ide majd tolti fel az adatokat az adatbazisba
 router.post('/regisztracio', async (request, response) => {
     try {
+        //console.log(request.body);
+
         const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
 
         felhasznaloObjReg = {
@@ -347,6 +349,7 @@ router.post('/regisztracio', async (request, response) => {
                         message: 'Sikeres adat feltoltes!',
                         result: result.insertId
                     });
+                    /*
                     console.log(
                         'Adatok melyek felettek toltve: ' +
                             felhasznaloObjReg.felhasznaloNev +
@@ -354,7 +357,7 @@ router.post('/regisztracio', async (request, response) => {
                             felhasznaloObjReg.email +
                             ' ' +
                             felhasznaloObjReg.jelszo
-                    );
+                    );*/
                 }
             }
         );
@@ -365,7 +368,7 @@ router.post('/regisztracio', async (request, response) => {
 //A belepes oldal hoz ide, lekeri azt a sort amiben a felhasznalo adatai vannak, persz ha van ilyen egyaltalan
 router.post('/belepes', async (request, response) => {
     try {
-        console.log(request.body);
+        //console.log(request.body);
 
         const felhasznaloObj = {
             felhasznalo: request.body.email,
