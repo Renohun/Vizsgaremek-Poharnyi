@@ -835,8 +835,8 @@ async function fizetes(){
     let total=0
     //Termék Adatok
     let termékekList=document.createElement("div")
-    c.classList.add("row","justify-content-between")
-    termékekList.classList.add("col-4","bg-light","rounded","p-2")
+    c.classList.add("row","justify-content-md-between","justify-content-sm-center")
+    termékekList.classList.add("col-12","col-lg-4","col-md-4","col-sm-12","bg-light","rounded","p-2","border","border-dark")
     let szoveg=document.createElement("div")
     szoveg.innerHTML="Termék Adatok"
     termékekList.appendChild(szoveg)
@@ -849,15 +849,17 @@ async function fizetes(){
         termékekList.appendChild(sor)
     }
     //Számlázási Adatok
-    let PayList=document.createElement("div")
-    PayList.classList.add("col-4","border","border-dark","bg-light","rounded","p-2")
+    let PayList=document.createElement("form")
+    PayList.classList.add("col-12","col-lg-4","col-md-4","col-sm-12","border","border-dark","bg-light","rounded","p-2","needs-validation")
     let payszoveg=document.createElement("div")
     payszoveg.innerHTML="Számlázási Adatok"
+    //PayList.setAttribute("novalidate","true")
     PayList.appendChild(payszoveg)
     //Email
     let mailLab=document.createElement("label")
     let mail=document.createElement("input")
     mail.setAttribute("placeholder","pelda@email.cim")
+    mail.setAttribute("required","true")
     mail.setAttribute("id","fizmail")
     mail.classList.add("form-control")
     mailLab.setAttribute("for","fizmail")
@@ -868,6 +870,7 @@ async function fizetes(){
     let nameLab=document.createElement("label")
     let name=document.createElement("input")
     name.setAttribute("placeholder","Minta László")
+    name.setAttribute("required","true")
     name.setAttribute("id","fizname")
     name.classList.add("form-control")
     nameLab.setAttribute("for","fizname")
@@ -879,6 +882,7 @@ async function fizetes(){
     let locLab=document.createElement("label")
     let loc=document.createElement("input")
     loc.setAttribute("placeholder","1234 MintaVáros Minta u. 5")
+    loc.setAttribute("required","true")
     loc.setAttribute("id","fizplace")
     loc.classList.add("form-control")
     locLab.setAttribute("for","fizplace")
@@ -890,8 +894,9 @@ async function fizetes(){
     let numLab=document.createElement("label")
     let num=document.createElement("input")
     num.setAttribute("placeholder","+36201234567")
-    num.setAttribute("type","phone")
+    num.setAttribute("type","tel")
     num.setAttribute("id","fiznum")
+    num.setAttribute("required","true")
     num.classList.add("form-control")
     numLab.setAttribute("for","fiznum")
     numLab.innerHTML="Telefonszám"
@@ -901,38 +906,43 @@ async function fizetes(){
     //Kártya Vagy Készpénz
     let typeLab=document.createElement("label")
     typeLab.innerHTML="Fizetési Mód"
+    typeLab.setAttribute("for","fizmod")
     let type=document.createElement("select")
     type.classList.add("form-select")
+    type.id="fizmod"
     let kar=document.createElement("option")
     kar.innerHTML="Kártyás Fizetés"
     let kesz=document.createElement("option")
-    kesz.innerHTML="Helyben Fizetés"
+    kesz.innerHTML="Fizetés Átvételkor"
     kar.classList.add("form-option")
     kesz.classList.add("form-option")
     type.appendChild(kar)
     type.appendChild(kesz)
 
     let karszam=document.createElement("input")
+    karszam.id="kszam"
     let karszamlab=document.createElement("label")
-    karszamlab.setAttribute("for","")
+    karszamlab.setAttribute("for","kszam")
     karszamlab.innerHTML="Kártyaszám"
-    karszam.setAttribute("type","num")    
+    karszam.setAttribute("type","number")    
     karszam.setAttribute("placeholder","6795 5431 6342 6542")
     karszam.classList.add("form-control")
 
     let karexp=document.createElement("input")
+    karexp.id="kexp"
     let karexplab=document.createElement("label")
-    karexplab.setAttribute("for","")
+    karexplab.setAttribute("for","kexp")
     karexplab.innerHTML="Lejárati Dátum"
-    karexp.setAttribute("type","num")   
+    karexp.setAttribute("type","number")   
     karexp.setAttribute("placeholder","23/01")
     karexp.classList.add("form-control")
 
     let karcsv=document.createElement("input")
+    karcsv.id="kcsv"
     let karcsvlab=document.createElement("label")
-    karcsvlab.setAttribute("for","")
+    karcsvlab.setAttribute("for","kcsv")
     karcsvlab.innerHTML="CSV"
-    karcsv.setAttribute("type","num")   
+    karcsv.setAttribute("type","number")   
     karcsv.setAttribute("placeholder","123")
     karcsv.classList.add("form-control")
 
@@ -944,27 +954,48 @@ async function fizetes(){
         PayList.appendChild(karexplab)
         PayList.appendChild(karexp)
         PayList.appendChild(karcsvlab)        
-        PayList.appendChild(karcsv)
+        PayList.appendChild(karcsv)    
+        karszam.setAttribute("required","true")
+        karexp.setAttribute("required","true")
+        karcsv.setAttribute("required","true")
     }
+
+    let rendgomb=document.createElement("input")
+    rendgomb.setAttribute("type","submit")
+    rendgomb.setAttribute("value","Rendelés leadása")
+    rendgomb.classList.add("btn","btn-success","mt-2","w-100")
+    PayList.appendChild(rendgomb)
+
     type.addEventListener("change",()=>{
         if (type.selectedIndex==0) {
+            PayList.removeChild(rendgomb)
             PayList.appendChild(karszamlab)
             PayList.appendChild(karszam)
             PayList.appendChild(karexplab)
             PayList.appendChild(karexp)
             PayList.appendChild(karcsvlab)        
-            PayList.appendChild(karcsv)
+            PayList.appendChild(karcsv)        
+            PayList.appendChild(rendgomb)
+            karszam.setAttribute("required","true")
+            karexp.setAttribute("required","true")
+            karcsv.setAttribute("required","true")
         }
-        else{
+        else{            
+            PayList.removeChild(rendgomb)
             PayList.removeChild(karszamlab)
             PayList.removeChild(karszam)
             PayList.removeChild(karexplab)
             PayList.removeChild(karexp)
             PayList.removeChild(karcsvlab)        
             PayList.removeChild(karcsv)
+            PayList.appendChild(rendgomb)
+            karszam.removeAttribute("required","true")
+            karexp.removeAttribute("required","true")
+            karcsv.removeAttribute("required","true")
         }
     })
-   
+    
+
     //PayList.appendChild()
     c.appendChild(termékekList)
     c.appendChild(PayList)
