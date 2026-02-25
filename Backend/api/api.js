@@ -269,19 +269,19 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
                     const ids = jelvenyIds.map((j) => j.JelvényID);
                     const [jelvenyek] = await DBconnetion.promise().query(queryJelvenyek, [ids]);
 
-                    //ellenorizni kell hogy a ellenorizendo tomb es a szuresTomb megegyezik e
+                    //ellenorizni kell hogy a ellenorizendo tomb es a szuresTomb megegyezik e -- a koktel jelvenyeinek tombje
                     let ellenorizendoTomb = jelvenyek.map((jelveny) => jelveny.JelvényNeve);
                     //console.log(ellenorizendoTomb);
 
-                    //ABC sorrend
-                    szuresTomb.sort();
-                    ellenorizendoTomb.sort();
-                    //At kell irni includos megoldasra
-                    const tombOsszehasonlitas = (a, b) => {
-                        return JSON.stringify(a) === JSON.stringify(b);
-                    };
+                    let szerepel = 0;
 
-                    if (tombOsszehasonlitas(szuresTomb, ellenorizendoTomb)) {
+                    for (let i = 0; i < szuresTomb.length; i++) {
+                        if (ellenorizendoTomb.includes(szuresTomb[i])) {
+                            szerepel++;
+                        }
+                    }
+
+                    if (szerepel > 0) {
                         koktel.jelvenyek = jelvenyek;
 
                         const [ertekeles] = await DBconnetion.promise().query(queryErtekelesek, [koktel.KoktélID]);
