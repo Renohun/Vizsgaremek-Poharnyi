@@ -1,0 +1,9 @@
+#main{
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    background-color: aqua;
+}
+#NevKereses{
+    width: 100px;
+}
