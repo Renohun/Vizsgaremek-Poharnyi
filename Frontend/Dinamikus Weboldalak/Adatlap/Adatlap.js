@@ -615,6 +615,7 @@ async function JelentesekLekeres() {
 
 
 async function KosarLekeres() {
+    visszaepites()
     const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/")
     if (valasz.message=="Üres Kosár") {
         document.getElementById("KosárGombok").innerHTML="Üres A Kosarad!"
@@ -805,29 +806,7 @@ async function fizetes(){
     gomb.classList.add("btn","btn-secondary")
     //Visszaépítem a Gombokat mert nem dinamikusak de törölhetőek
     gomb.addEventListener("click",()=>{
-        let termSzov=document.createElement("span")
-        termSzov.innerHTML="A Kosárban lévő termékek"
-        termSzov.classList.add("fs-3","align-middle")
-        let fizgom=document.createElement("input")
-        let delgom=document.createElement("input")
-        let modgom=document.createElement("input")
-        fizgom.setAttribute("type","button")
-        fizgom.setAttribute("id","KosárFizet")
-        fizgom.setAttribute("value","Fizetés")
-        fizgom.classList.add("btn","btn-success","ms-1")        
-        delgom.setAttribute("type","button")
-        delgom.setAttribute("id","KosárDelete")
-        delgom.setAttribute("value","Kosár Ürítése")
-        delgom.classList.add("btn","btn-danger","ms-1")        
-        modgom.setAttribute("type","button")
-        modgom.setAttribute("id","KosárEdit")
-        modgom.setAttribute("value","Kosár Módosítása")
-        modgom.classList.add("btn","btn-info","ms-1")
-        gombSáv.innerHTML=""
-        gombSáv.appendChild(termSzov)
-        gombSáv.appendChild(fizgom)
-        gombSáv.appendChild(delgom)
-        gombSáv.appendChild(modgom)
+        visszaepites()
         KosarLekeres()
     })
     gombSáv.appendChild(gomb)
@@ -923,8 +902,7 @@ async function fizetes(){
     karszam.id="kszam"
     let karszamlab=document.createElement("label")
     karszamlab.setAttribute("for","kszam")
-    karszamlab.innerHTML="Kártyaszám"
-    karszam.setAttribute("type","number")    
+    karszamlab.innerHTML="Kártyaszám"  
     karszam.setAttribute("placeholder","6795 5431 6342 6542")
     karszam.classList.add("form-control")
 
@@ -933,7 +911,6 @@ async function fizetes(){
     let karexplab=document.createElement("label")
     karexplab.setAttribute("for","kexp")
     karexplab.innerHTML="Lejárati Dátum"
-    karexp.setAttribute("type","number")   
     karexp.setAttribute("placeholder","23/01")
     karexp.classList.add("form-control")
 
@@ -965,11 +942,35 @@ async function fizetes(){
     rendgomb.setAttribute("value","Rendelés leadása")
     rendgomb.classList.add("btn","btn-success","mt-2","w-100")
     rendgomb.addEventListener("click",async()=>{
-        //actual validacio
-        if (type.selectedIndex==0&&"".test(karcsv.value)) {
-            
+        //actual validacio^
+        let valid=true
+        let adat={}
+        let hiba=""
+        if (type.selectedIndex==0) {
+            if (!(/^[0-9]{3}$/.test(karcsv.value)&&/^[0-9]{2}\/[0-9]{2}$/.test(karexp.value)&&/^[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}$/.test(karszam.value))) {
+                valid=false
+                hiba+="Kártya"
+            }
         }
-        await AdatPost("/")
+        if (!(/^\+[0-9]{11}$/.test(num.value)||/^[0-9]{11}$/.test(num.value)) ) {
+            hiba+="Tel"
+            valid=false 
+        }
+        if (name.value=="") {
+            hiba+="Név"
+            valid=false
+        }
+        if (!(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail.value))) {
+            hiba+="Mail"
+            valid=false
+        }
+        if (valid) {
+            //Mivel valójában nem szállítunk semmit (meglepő), nem számít hogy mit küldünk fel az endpointra, csak az számí hogy helyes az adat
+            await AdatPost("/api/AdatlapLekeres/Fizetes",adat)
+        }
+        else{
+            alert("Hiba történt!")
+        }
     })
     PayList.appendChild(rendgomb)
 
@@ -1012,7 +1013,37 @@ async function fizetes(){
     //KosarLekeres()
 }
 
-
+function visszaepites(){    
+        let gombSáv=document.getElementById("KosárGombok")
+        gombSáv.innerHTML=""
+        let összJelző=document.getElementById("IdeKosár")
+        összJelző.innerHTML=""
+        let c=document.getElementById("KosárFizetésGomb")
+        c.innerHTML=""
+        let termSzov=document.createElement("span")
+        termSzov.innerHTML="A Kosárban lévő termékek"
+        termSzov.classList.add("fs-3","align-middle")
+        let fizgom=document.createElement("input")
+        let delgom=document.createElement("input")
+        let modgom=document.createElement("input")
+        fizgom.setAttribute("type","button")
+        fizgom.setAttribute("id","KosárFizet")
+        fizgom.setAttribute("value","Fizetés")
+        fizgom.classList.add("btn","btn-success","ms-1")        
+        delgom.setAttribute("type","button")
+        delgom.setAttribute("id","KosárDelete")
+        delgom.setAttribute("value","Kosár Ürítése")
+        delgom.classList.add("btn","btn-danger","ms-1")        
+        modgom.setAttribute("type","button")
+        modgom.setAttribute("id","KosárEdit")
+        modgom.setAttribute("value","Kosár Módosítása")
+        modgom.classList.add("btn","btn-info","ms-1")
+        gombSáv.innerHTML=""
+        gombSáv.appendChild(termSzov)
+        gombSáv.appendChild(fizgom)
+        gombSáv.appendChild(delgom)
+        gombSáv.appendChild(modgom)
+}
 
 function betoltes(oldal){
     let oldalak=[AdatlapLekeres,KedvencekLekeres,KoktelokLekeres,JelentesekLekeres,KosarLekeres]
