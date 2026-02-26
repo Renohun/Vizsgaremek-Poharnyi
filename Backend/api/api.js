@@ -1419,6 +1419,29 @@ router.post("/AdatlapLekeres/Fioktorles",async(request,response)=>{
         })
     }
 })
+
+router.post("/AdatlapLekeres/Fizetes",async(request,response)=>{
+    try {
+        const KosarLekeres="SELECT SessionID FROM kosár WHERE UserID LIKE ?"
+        const KosarTermekLekeres="SELECT TermekID,Darabszam FROM kosártermék WHERE KosarID LIKE ?"
+        const TermekFrissites="UPDATE webshoptermerk SET Termekkeszlet=Termekkeszlet-? WHERE TermekID LIKE ?"
+        const KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
+        let kosar=await lekeres(KosarLekeres,jwt.decode(request.cookies.auth_token).userID)
+        let kosartermek=await lekeres(KosarTermekLekeres,kosar[0].SessionID)
+        for (let i = 0; i < kosartermek.length; i++) {
+            await lekeres(TermekFrissites,[kosartermek[i]-Darabszam,kosartermek[i].TermekID])
+        }
+        await lekeres(KosárÜrítés,kosar[0].SessionID)
+        response.status(200).json({
+            message:"sikeres fizetés!"
+        })
+    } 
+    catch (error) {
+        response.status(500).json({
+            message:"hiba"
+        })
+    }
+})
 //
 //
 //

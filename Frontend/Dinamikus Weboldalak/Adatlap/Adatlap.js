@@ -960,10 +960,17 @@ async function fizetes(){
         karcsv.setAttribute("required","true")
     }
 
-    let rendgomb=document.createElement("input")
+    let rendgomb=document.createElement("input")    
     rendgomb.setAttribute("type","submit")
     rendgomb.setAttribute("value","Rendelés leadása")
     rendgomb.classList.add("btn","btn-success","mt-2","w-100")
+    rendgomb.addEventListener("click",async()=>{
+        //actual validacio
+        if (type.selectedIndex==0&&"".test(karcsv.value)) {
+            
+        }
+        await AdatPost("/")
+    })
     PayList.appendChild(rendgomb)
 
     type.addEventListener("change",()=>{
