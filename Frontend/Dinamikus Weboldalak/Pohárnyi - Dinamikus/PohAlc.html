@@ -36,7 +36,7 @@
                             <a href="" class="nav-link">Mi van a polcon?</a>
                         </li>
                     </div>
-                    <div>
+                    <div class="navbar-nav">
                         <input type="button" value="" id="ThemeSwitcher" />
                         <a href="/Regisztralj">
                             <input
@@ -49,16 +49,18 @@
                         <a href="/LepjBe">
                             <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="belepes" />
                         </a>
+                        <div class="d-flex flex-column align-items-center">
+                            <a href="/Keszites">
+                                <input
+                                    type="button"
+                                    class="nav-item btn btn-warning"
+                                    hidden
+                                    value="Saját koktél létrehozása"
+                                    id="sajatKoktelKeszites"
+                                />
+                            </a>
+                        </div>
 
-                        <a href="/Keszites">
-                            <input
-                                type="button"
-                                class="nav-item btn btn-warning"
-                                hidden
-                                value="Saját koktél létrehozása"
-                                id="sajatKoktelKeszites"
-                            />
-                        </a>
                         <a href="/Adatlap">
                             <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
                         </a>
