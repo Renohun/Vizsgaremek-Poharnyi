@@ -362,7 +362,7 @@ async function KedvencekLekeres() {
                         Osszetevo.innerHTML=valasz.adat[kulsoertek].osszetevok[i].Osszetevő
                         koktelOsszetevoLista.appendChild(Osszetevo)
                     }
-                    if (valasz.adat[kulsoertek].length==3)
+                    if (valasz.adat[kulsoertek].osszetevok.length==3)
                     {
                          let VegsoOsszetevo=document.createElement("li")
                          VegsoOsszetevo.innerHTML=valasz.adat[kulsoertek].osszetevok[2].Osszetevő
