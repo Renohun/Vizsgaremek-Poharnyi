@@ -1036,13 +1036,11 @@ router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
     try {
         kedvencek = await lekeres(KedvencekLekeres, felhaszanalo);
         if (kedvencek.length == 0) {
-            response.status(203).json({
+            response.status(200).json({
                 message: 'Üres Lekérés!'
             });
         } else {
             let koktel = [];
-            console.log(kedvencek);
-
             for (let i = 0; i < kedvencek.length; i++) {
                 let koktelbadgek = [];
                 kokteladatok = await lekeres(koktelLekeres, kedvencek[i].MitKedveltID);
@@ -1131,7 +1129,10 @@ router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
     try {
         oJelentette = await lekeres(mitjelentetto, felhaszanalo);
         if (oJelentette.length == 0) {
-            response.status(204);
+            response.status(200).json({
+                message:"Nincs Jelentésed!"
+            });
+        
         } else {
             for (let i = 0; i < oJelentette.length; i++) {
                 let temp = await lekeres(jelentesAdat, oJelentette[i].JelentésID);
@@ -1150,6 +1151,8 @@ router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
                     jelentTar[i] = await lekeres(felhjel, jelentesek[i][0].JelentettTartalomID);
                 } else if (jelentesek[i][0].JelentesTipusa == 'Komment') {
                     temp.push(await lekeres(kommentjel, jelentesek[i][0].JelentettTartalomID));
+                    console.log(jelentesek[i][0].JelentettTartalomID);
+                    
                     temp.push(await lekeres(felhjel, temp[0][0].Keszito));
                     jelentTar[i] = temp;
                 }
@@ -1161,6 +1164,8 @@ router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
             });
         }
     } catch (error) {
+        console.log(error);
+        
         response.status(500).json({
             message: 'Hiba',
             hiba: error
@@ -1180,11 +1185,11 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     //Lekérdezés
     try {
-        console.log(vasarlo);
-
         kosar = await lekeres(KosarLekeres, vasarlo);
         if (kosar.length == 0) {
-            response.status(204);
+            response.status(200).json({
+                message:"Üres Kosár"
+            });
         } else {
             kosartermekek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
 
@@ -1232,13 +1237,10 @@ router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
 });
 router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
     let mit = request.body.termék;
-    let honnan = request.body.kosár;
+    let honnan = await lekeres('SELECT SessionID FROM kosár WHERE UserID LIKE ?',jwt.decode(request.cookies.auth_token).userID)
     let TermékTörlés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ? AND TermekID LIKE ?';
-    console.log(mit);
-    console.log(honnan);
-
     try {
-        await DBconnetion.promise().query(TermékTörlés, [honnan, mit]);
+        await DBconnetion.promise().query(TermékTörlés, [honnan[0].SessionID, mit]);
         response.status(200).json({
             message: 'Sikeres Törlés!'
         });
@@ -1251,18 +1253,17 @@ router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
 });
 router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     let mit = request.body.termék;
-    let honnan = request.body.kosár;
+    let honnan = await lekeres('SELECT SessionID FROM kosár WHERE UserID LIKE ?',jwt.decode(request.cookies.auth_token).userID)
     let mennyit = request.body.count;
     let TermékTöltés = 'UPDATE KosárTermék SET Darabszam = ? WHERE KosarID LIKE ? AND TermekID LIKE ?';
-    console.log(mit);
-    console.log(honnan);
-
     try {
-        await DBconnetion.promise().query(TermékTöltés, [mennyit, honnan, mit]);
+        await DBconnetion.promise().query(TermékTöltés, [mennyit, honnan[0].SessionID, mit]);
         response.status(200).json({
             message: 'Sikeres Frissítés!'
         });
     } catch (error) {
+        console.log(error);
+        
         response.status(500).json({
             message: 'Hiba Történt!',
             hiba: error
@@ -1368,6 +1369,89 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
         });
     }
 });
+
+router.post("/AdatlapLekeres/Fioktorles",async(request,response)=>{
+    try { 
+        const FelhasznaloTorles="DELETE FROM felhasználó WHERE FelhID LIKE ?"
+        const ErtekTorles="DELETE FROM ertekeles WHERE Keszito LIKE ?"
+        const ErtekTorlesKoktel="DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+        const KoktelTorles="DELETE FROM koktél WHERE Keszito LIKE ?"
+        const KoktelLekeres="SELECT KoktélID FROM koktél WHERE Keszito LIKE ?"
+        const JelvenyTorles="DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?"
+        const KommentTorlesKoktel="DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+        const KommentTorles="DELETE FROM komment WHERE Keszito LIKE ?"
+        const JelentesTorles="DELETE FROM jelentesek WHERE JelentettID LIKE ?"
+        const JelentesLekeres="SELECT JelentesID FROM jelentesek WHERE JelentettID LIKE ?"
+        const KosarTorles="DELETE FROM kosár WHERE UserID LIKE ?"
+        const KosarLekeres="SELECT SessionID FROM kosár WHERE UserID LIKE ?"
+        const KosarTermekTorles="DELETE FROM kosártermék WHERE KosarID LIKE ?"
+        const KedvencTorles="DELETE FROM kedvencek WHERE KikedvelteID LIKE ?"
+        const OssztevTorles="DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+        const KedvencTorlesKoktel="DELETE FROM kedvencek WHERE MitkedveltID LIKE ?"
+        const JelentoTorles="DELETE FROM jelentők WHERE JelentőID LIKE ?"
+        const JelentoJelentesTorles="DELETE FROM jelentők WHERE JelentésID LIKE ?"
+        await lekeres(ErtekTorles,jwt.decode(request.cookies.auth_token).userID)
+        await lekeres(KommentTorles,jwt.decode(request.cookies.auth_token).userID)
+        await lekeres(JelentoTorles,jwt.decode(request.cookies.auth_token).userID)
+        await lekeres(KedvencTorles,jwt.decode(request.cookies.auth_token).userID)
+        let kosarId=await lekeres(KosarLekeres,jwt.decode(request.cookies.auth_token).userID)
+        if (kosarId.length!=0) {            
+            await lekeres(KosarTermekTorles,kosarId[0].SessionID)
+            await lekeres(KosarTorles,jwt.decode(request.cookies.auth_token).userID)
+        }
+        let koktel=await lekeres(KoktelLekeres,jwt.decode(request.cookies.auth_token).userID)
+        for (let i = 0; i < koktel.length; i++) {
+            await lekeres(ErtekTorlesKoktel,[koktel[i].KoktélID,"Koktél"])
+            await lekeres(KommentTorlesKoktel,[koktel[i].KoktélID,"Koktél"])
+            await lekeres(OssztevTorles,koktel[i].KoktélID)
+            await lekeres(JelvenyTorles,koktel[i].KoktélID)
+            await lekeres(KedvencTorlesKoktel,koktel[i].KoktélID)
+        }
+        await lekeres(KoktelTorles,jwt.decode(request.cookies.auth_token).userID)
+        let jelentes=await lekeres(JelentesLekeres,jwt.decode(request.cookies.auth_token).userID)
+        for (let i = 0; i < jelentes.length; i++) {
+            await lekeres(JelentoJelentesTorles,jelentes[i].JelentesID)
+        }
+        await lekeres(JelentesTorles,jwt.decode(request.cookies.auth_token).userID)
+        await lekeres(FelhasznaloTorles,jwt.decode(request.cookies.auth_token).userID)
+    } 
+    catch (error) {
+        console.log(error);
+        
+        response.status(500).json({
+            message:"hiba"
+        })
+    }
+})
+
+router.post("/AdatlapLekeres/Fizetes",async(request,response)=>{
+    try {
+        const KosarLekeres="SELECT SessionID FROM kosár WHERE UserID LIKE ?"
+        const KosarTermekLekeres="SELECT TermekID,Darabszam FROM kosártermék WHERE KosarID LIKE ?"
+        const TermekFrissites="UPDATE webshoptermek SET Termekkeszlet=Termekkeszlet-? WHERE TermekID LIKE ?"
+        const KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
+        let kosar=await lekeres(KosarLekeres,jwt.decode(request.cookies.auth_token).userID)
+        console.log(kosar);
+        
+        let kosartermek=await lekeres(KosarTermekLekeres,kosar[0].SessionID)
+        console.log(kosartermek);
+        
+        for (let i = 0; i < kosartermek.length; i++) {
+            await lekeres(TermekFrissites,[kosartermek[i].Darabszam,kosartermek[i].TermekID])
+        }
+        await lekeres(KosárÜrítés,kosar[0].SessionID)
+        response.status(200).json({
+            message:"sikeres fizetés!"
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        
+        response.status(500).json({
+            message:"hiba"
+        })
+    }
+})
 //
 //
 //

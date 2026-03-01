@@ -235,7 +235,7 @@ async function Tisztitas() {
 
 
 async function jelentes(mit,tipus,kit) {
-    var JelIv = new bootstrap.Modal(document.getElementById('teszt'), {})   
+    var JelIv = new bootstrap.Modal(document.getElementById('Fioktorles'), {})   
     JelIv.show()
     document.getElementById("JelSend").addEventListener("click",async()=>{
             

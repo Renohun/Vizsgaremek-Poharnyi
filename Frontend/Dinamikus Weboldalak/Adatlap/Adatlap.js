@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded",()=>{
         gombok[i].addEventListener("click",()=>{oldalvaltas(i,gombok)})
         
     }
+    document.getElementById("Törlés").addEventListener("click",()=>{
+        fioktorles()
+    })
     //Profilkep Változtatás
     let fajl=document.getElementById("input")
     let kep=document.getElementById("profilkep")
@@ -321,13 +324,13 @@ async function KedvencekLekeres() {
                 let koktelOsszetevoLista=document.createElement("ul")
                 let koktelOldal=document.createElement("input")
                 //bootstrap és css elemek megadása
-                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                koktelDiv.classList.add("col-12","col-sm-12","col-md-8","col-lg-7","col-xl-4","col-xxl-2","mb-1")
                 koktelCard.classList.add("card","h-100")
                 koktelKep.classList.add("card-img-top","kep")
-                koktelTartalom.classList.add("card-body")
+                koktelTartalom.classList.add("card-body","flex-column")
                 koktelNev.classList.add("card-title")
                 koktelSzoveg.classList.add("card-text")
-                koktelOldal.classList.add("btn","btn-secondary")
+                koktelOldal.classList.add("btn","btn-secondary","align-self-center")
                 let id=valasz.adat[kulsoertek].kokteladatok[0].KoktélID
                 koktelOldal.addEventListener("click",()=>{
                     window.location.href=`http://127.0.0.1:3000/Koktel/${id}`
@@ -340,11 +343,32 @@ async function KedvencekLekeres() {
                 koktelNev.innerHTML=valasz.adat[kulsoertek].kokteladatok[0].KoktelCim
                 koktelOsszetevok.innerHTML="Összetevők:"
                 koktelOldal.setAttribute("type","button")
+                koktelOldal.setAttribute("style","width:95%; margin-bottom:12px;")
                 koktelOldal.setAttribute("value","Tovább a Receptre")
                 //Van-e értékelés
                 if (valasz.adat[kulsoertek].ertekeles[0].Osszert!=null) 
                 {
-                    koktelErtekeles.innerHTML=`Értékelés:${Math.round(valasz.adat[kulsoertek].ertekeles[0].Osszert * 10) / 10}/5`
+                    let csillagert=Math.round(valasz.adat[kulsoertek].ertekeles[0].Osszert * 10) / 10
+                    
+                    
+                    let csillagok=""
+                    for (let i = 0; i < Math.round(csillagert-0.5); i++) {
+                        csillagok+="★"
+                    }
+                    //Számot stringé alakítunk, majd megnézzük hogy van e benne tizedesjelölő
+                    if (csillagert.toString().includes('.')) {
+                        csillagok+="★"
+                        for (let i = 0; i < 5-Math.round(csillagert); i++) {
+                            csillagok+="☆"
+                        }
+                    }
+                    else{
+                        for (let i = 0; i < 5-Math.round(csillagert-0.5); i++) {
+                            csillagok+="☆"
+                        }
+                            
+                    }
+                    koktelErtekeles.innerHTML=`Értékelés:${csillagok} (${csillagert })`
                 }
                 else
                 {
@@ -358,13 +382,13 @@ async function KedvencekLekeres() {
                         Osszetevo.innerHTML=valasz.adat[kulsoertek].osszetevok[i].Osszetevő
                         koktelOsszetevoLista.appendChild(Osszetevo)
                     }
-                    if (valasz.adat[kulsoertek].length==3)
+                    if (valasz.adat[kulsoertek].osszetevok.length==3)
                     {
                          let VegsoOsszetevo=document.createElement("li")
                          VegsoOsszetevo.innerHTML=valasz.adat[kulsoertek].osszetevok[2].Osszetevő
                          koktelOsszetevoLista.appendChild(VegsoOsszetevo)
                     }
-                    else if (valasz.adat[kulsoertek].length>3)
+                    else if (valasz.adat[kulsoertek].osszetevok.length>3)
                     {
                          let VegsoOsszetevo=document.createElement("li")
                          VegsoOsszetevo.innerHTML=`és ${(valasz.adat[kulsoertek].length)-2}`
@@ -385,8 +409,6 @@ async function KedvencekLekeres() {
                 for (let j = 0; j < valasz.adat[kulsoertek].koktelbadgek.length; j++) {
                     let jelveny=document.createElement("span")
                     jelveny.innerHTML=valasz.adat[kulsoertek].koktelbadgek[j][0].JelvényNeve
-                    console.log(valasz.adat[kulsoertek].koktelbadgek[j][0].JelvenyKategoria);
-                    
                     jelveny.classList.add("badge","me-1","text-white","rounded-pill")
                     switch (valasz.adat[kulsoertek].koktelbadgek[j][0].JelvenyKategoria) {
                         case "ízek":
@@ -411,15 +433,15 @@ async function KedvencekLekeres() {
                 koktelSzoveg.appendChild(koktelOsszetevok)
                 koktelSzoveg.appendChild(koktelOsszetevoLista)
                 koktelTartalom.appendChild(koktelSzoveg)
-                koktelTartalom.appendChild(koktelOldal)
                 koktelCard.appendChild(koktelTartalom)
+                koktelCard.appendChild(koktelOldal)
                 koktelDiv.appendChild(koktelCard)
                 sor.appendChild(koktelDiv)
             }
             else
             {
                 let koktelDiv=document.createElement("div")
-                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                koktelDiv.classList.add("col-12","col-sm-12","col-md-8","col-lg-7","col-xl-4","col-xxl-2","mb-1")
                 sor.appendChild(koktelDiv)
             }
             hova.appendChild(sor)
@@ -458,7 +480,7 @@ async function KoktelokLekeres() {
                 let koktelKomment=document.createElement("div")
                 let koktelOldal=document.createElement("input")
                 //bootstrap és css elemek megadása
-                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                koktelDiv.classList.add("col-12","col-sm-12","col-md-8","col-lg-7","col-xl-4","col-xxl-2","mb-1")
                 koktelCard.classList.add("card","h-100")
                 koktelKep.classList.add("card-img-top","kep")
                 koktelTartalom.classList.add("card-body")
@@ -477,9 +499,30 @@ async function KoktelokLekeres() {
                     window.location.href=`http://127.0.0.1:3000/Koktel/${id}`
                 })
                 //Van-e értékelés
+                
                 if (valasz.ertek[kulsoertek][0].Osszert!=null) 
                 {
-                    koktelErtekeles.innerHTML=`Értékelés:${Math.round(valasz.ertek[kulsoertek][0].Osszert * 10) / 10}/5`
+                    let csillagert=Math.round(valasz.ertek[kulsoertek][0].Osszert * 10) / 10
+                    
+                    
+                    let csillagok=""
+                    for (let i = 0; i < Math.round(csillagert-0.5); i++) {
+                        csillagok+="★"
+                    }
+                    //Számot stringé alakítunk, majd megnézzük hogy van e benne tizedesjelölő
+                    if (csillagert.toString().includes('.')) {
+                        csillagok+="★"
+                        for (let i = 0; i < 5-Math.round(csillagert); i++) {
+                            csillagok+="☆"
+                        }
+                    }
+                    else{
+                        for (let i = 0; i < 5-Math.round(csillagert-0.5); i++) {
+                            csillagok+="☆"
+                        }
+                            
+                    }
+                    koktelErtekeles.innerHTML=`Értékelés:${csillagok} (${csillagert })`
                 }
                 else
                 {
@@ -512,7 +555,7 @@ async function KoktelokLekeres() {
             else
             {
                 let koktelDiv=document.createElement("div")
-                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                koktelDiv.classList.add("col-12","col-sm-12","col-md-8","col-lg-7","col-xl-4","col-xxl-2","mb-1")
                 sor.appendChild(koktelDiv)
             }
             hova.appendChild(sor)
@@ -612,11 +655,13 @@ async function JelentesekLekeres() {
 
 
 async function KosarLekeres() {
+    visszaepites()
     const valasz=await AdatGet("/api/AdatlapLekeres/Kosar/")
-    if (valasz.message=="Üres Lekérés!") {
+    if (valasz.message=="Üres Kosár") {
         document.getElementById("KosárGombok").innerHTML="Üres A Kosarad!"
     }
     else{    
+        //Termékek létrehozása
         let hova=document.getElementById("IdeKosár")
         hova.innerHTML=""
         let összár=0
@@ -664,6 +709,8 @@ async function KosarLekeres() {
         let kosárÖsszeg=document.createElement("div")
         kosárÖsszeg.innerHTML=`Összesen: ${összár} Ft`
         hovaÖsszeg.appendChild(kosárÖsszeg)
+
+        //Gombok
         let kosárMódosít=document.getElementById("KosárEdit")
         let kosárFizet=document.getElementById("KosárFizet")
         let kosárÜrít=document.getElementById("KosárDelete")
@@ -691,7 +738,6 @@ async function KosarLekeres() {
             koktelKuka.addEventListener("click",()=>{
                 console.log(valasz.kosár[i].TermekID);
                 let mitürít={
-                    kosár:1,
                     termék:valasz.kosár[i].TermekID
                 }
                 AdatPost("/api/AdatlapLekeres/TermekUrites/",mitürít)
@@ -709,7 +755,6 @@ async function KosarLekeres() {
             kosárModIgen.addEventListener("click",()=>{
                 hova.children[i].childNodes[3].childNodes[1].innerHTML=kosárDbMod.value
                 mitürít={
-                    kosár:3,
                     termék:valasz.kosár[i].TermekID,
                     count:kosárDbMod.value
                 }
@@ -748,11 +793,296 @@ async function KosarLekeres() {
                 alert("Hiba Történt!")
             }
         })
+        //Fizetés
+        kosárFizet.addEventListener("click",()=>{
+            fizetes()
+        })
     }
     
+}
+
+function fioktorles(){
+    var JelIv = new bootstrap.Modal(document.getElementById('Fioktorles'), {})   
+    JelIv.show()
+    document.getElementById("DelNvm").addEventListener("click",()=>{
+        
+        document.getElementById("DelConfText").value=""
+        JelIv.hide()
+    },{once:true})
+    document.getElementById("DelConf").addEventListener("click",async()=>{
+        if (document.getElementById("DelConfText").value!="TÖRLÉS") {
+            document.getElementById("feedback").innerHTML="A mező nem tartalmazza a helyes szavat!"
+        }
+        else{
+            document.getElementById("feedback").innerHTML="Detonation"
+            await AdatPost("/api/AdatlapLekeres/Fioktorles")
+            window.location.href="/"
+        }
+        
+    },{once:true})
+    
+    
+    
+}
+
+
+async function fizetes(){
+    let gombSáv=document.getElementById("KosárGombok")
+    gombSáv.innerHTML=""
+    let összJelző=document.getElementById("IdeKosár")
+    összJelző.innerHTML=""
+    let c=document.getElementById("KosárFizetésGomb")
+    c.innerHTML=""
+
+    let gomb=document.createElement("input")
+    let kosar=await AdatGet("/api/AdatlapLekeres/Kosar")
+    console.log(kosar);
+    let termekek=kosar.termekek
+    let termekadatok=kosar.kosár
+    
+    
+    gomb.setAttribute("type","button")
+    gomb.setAttribute("value","Vissza")
+    gomb.classList.add("btn","btn-secondary")
+    //Visszaépítem a Gombokat mert nem dinamikusak de törölhetőek
+    gomb.addEventListener("click",()=>{
+        visszaepites()
+        KosarLekeres()
+    })
+    gombSáv.appendChild(gomb)
+    c.classList.add("mt-2")
+    let total=0
+    //Termék Adatok
+    let termékekList=document.createElement("div")
+    c.classList.add("row","justify-content-md-between","justify-content-sm-center")
+    termékekList.classList.add("col-12","col-lg-4","col-md-4","col-sm-12","bg-light","rounded","p-2","border","border-dark")
+    let szoveg=document.createElement("div")
+    szoveg.innerHTML="Termék Adatok"
+    termékekList.appendChild(szoveg)
+
+    for (let i = 0; i < termekek.length; i++) {
+        let sor=document.createElement("div")
+        sor.classList.add("border-top","border-dark")
+        sor.innerHTML=termekek[i].TermekCim+" - "+`${termekadatok[i].Darabszam}db `+(termekadatok[i].EgysegAr*termekadatok[i].Darabszam)+" Ft"
+        total+=termekadatok[i].EgysegAr*termekadatok[i].Darabszam
+        termékekList.appendChild(sor)
+    }
+    //Számlázási Adatok
+    let PayList=document.createElement("form")
+    PayList.classList.add("col-12","col-lg-4","col-md-4","col-sm-12","border","border-dark","bg-light","rounded","p-2","needs-validation")
+    let payszoveg=document.createElement("div")
+    payszoveg.innerHTML="Számlázási Adatok"
+    //PayList.setAttribute("novalidate","true")
+    PayList.appendChild(payszoveg)
+    //Email
+    let mailLab=document.createElement("label")
+    let mail=document.createElement("input")
+    mail.setAttribute("placeholder","pelda@email.cim")
+    mail.setAttribute("required","true")
+    mail.setAttribute("id","fizmail")
+    mail.classList.add("form-control")
+    mailLab.setAttribute("for","fizmail")
+    mailLab.innerHTML="Email-Cím"
+    PayList.appendChild(mailLab)
+    PayList.appendChild(mail)
+    //Név
+    let nameLab=document.createElement("label")
+    let name=document.createElement("input")
+    name.setAttribute("placeholder","Minta László")
+    name.setAttribute("required","true")
+    name.setAttribute("id","fizname")
+    name.classList.add("form-control")
+    nameLab.setAttribute("for","fizname")
+    nameLab.innerHTML="Teljes Név"
+    PayList.appendChild(nameLab)
+    PayList.appendChild(name)
+
+    //Cím
+    let locLab=document.createElement("label")
+    let loc=document.createElement("input")
+    loc.setAttribute("placeholder","1234 MintaVáros Minta u. 5")
+    loc.setAttribute("required","true")
+    loc.setAttribute("id","fizplace")
+    loc.classList.add("form-control")
+    locLab.setAttribute("for","fizplace")
+    locLab.innerHTML="Teljes Cím"
+    PayList.appendChild(locLab)
+    PayList.appendChild(loc)
+    
+    //TelSzám
+    let numLab=document.createElement("label")
+    let num=document.createElement("input")
+    num.setAttribute("placeholder","+36201234567")
+    num.setAttribute("type","tel")
+    num.setAttribute("id","fiznum")
+    num.setAttribute("required","true")
+    num.classList.add("form-control")
+    numLab.setAttribute("for","fiznum")
+    numLab.innerHTML="Telefonszám"
+    PayList.appendChild(numLab)
+    PayList.appendChild(num)
+    
+    //Kártya Vagy Készpénz
+    let typeLab=document.createElement("label")
+    typeLab.innerHTML="Fizetési Mód"
+    typeLab.setAttribute("for","fizmod")
+    let type=document.createElement("select")
+    type.classList.add("form-select")
+    type.id="fizmod"
+    let kar=document.createElement("option")
+    kar.innerHTML="Kártyás Fizetés"
+    let kesz=document.createElement("option")
+    kesz.innerHTML="Fizetés Átvételkor"
+    kar.classList.add("form-option")
+    kesz.classList.add("form-option")
+    type.appendChild(kar)
+    type.appendChild(kesz)
+
+    let karszam=document.createElement("input")
+    karszam.id="kszam"
+    let karszamlab=document.createElement("label")
+    karszamlab.setAttribute("for","kszam")
+    karszamlab.innerHTML="Kártyaszám"  
+    karszam.setAttribute("placeholder","6795 5431 6342 6542")
+    karszam.classList.add("form-control")
+
+    let karexp=document.createElement("input")
+    karexp.id="kexp"
+    let karexplab=document.createElement("label")
+    karexplab.setAttribute("for","kexp")
+    karexplab.innerHTML="Lejárati Dátum"
+    karexp.setAttribute("placeholder","23/01")
+    karexp.classList.add("form-control")
+
+    let karcsv=document.createElement("input")
+    karcsv.id="kcsv"
+    let karcsvlab=document.createElement("label")
+    karcsvlab.setAttribute("for","kcsv")
+    karcsvlab.innerHTML="CSV"
+    karcsv.setAttribute("type","number")   
+    karcsv.setAttribute("placeholder","123")
+    karcsv.classList.add("form-control")
+
+    PayList.appendChild(typeLab)
+    PayList.appendChild(type)
+    if (type.selectedIndex==0) {
+        PayList.appendChild(karszamlab)
+        PayList.appendChild(karszam)
+        PayList.appendChild(karexplab)
+        PayList.appendChild(karexp)
+        PayList.appendChild(karcsvlab)        
+        PayList.appendChild(karcsv)    
+        karszam.setAttribute("required","true")
+        karexp.setAttribute("required","true")
+        karcsv.setAttribute("required","true")
+    }
+
+    let rendgomb=document.createElement("input")    
+    rendgomb.setAttribute("type","submit")
+    rendgomb.setAttribute("value","Rendelés leadása")
+    rendgomb.classList.add("btn","btn-success","mt-2","w-100")
+    rendgomb.addEventListener("click",async()=>{
+        //actual validacio^
+        let valid=true
+        let adat={}
+        let hiba=""
+        if (type.selectedIndex==0) {
+            if (!(/^[0-9]{3}$/.test(karcsv.value)&&/^[0-9]{2}\/[0-9]{2}$/.test(karexp.value)&&/^[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}$/.test(karszam.value))) {
+                valid=false
+                hiba+="Kártya"
+            }
+        }
+        if (!(/^\+[0-9]{11}$/.test(num.value)||/^[0-9]{11}$/.test(num.value)) ) {
+            hiba+="Tel"
+            valid=false 
+        }
+        if (name.value=="") {
+            hiba+="Név"
+            valid=false
+        }
+        if (!(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail.value))) {
+            hiba+="Mail"
+            valid=false
+        }
+        if (valid) {
+            //Mivel valójában nem szállítunk semmit (meglepő), nem számít hogy mit küldünk fel az endpointra, csak az számí hogy helyes az adat
+            await AdatPost("/api/AdatlapLekeres/Fizetes",adat)
+        }
+        else{
+            alert("Hiba történt!")
+        }
+    })
+    PayList.appendChild(rendgomb)
+
+    type.addEventListener("change",()=>{
+        if (type.selectedIndex==0) {
+            PayList.removeChild(rendgomb)
+            PayList.appendChild(karszamlab)
+            PayList.appendChild(karszam)
+            PayList.appendChild(karexplab)
+            PayList.appendChild(karexp)
+            PayList.appendChild(karcsvlab)        
+            PayList.appendChild(karcsv)        
+            PayList.appendChild(rendgomb)
+            karszam.setAttribute("required","true")
+            karexp.setAttribute("required","true")
+            karcsv.setAttribute("required","true")
+        }
+        else{            
+            PayList.removeChild(rendgomb)
+            PayList.removeChild(karszamlab)
+            PayList.removeChild(karszam)
+            PayList.removeChild(karexplab)
+            PayList.removeChild(karexp)
+            PayList.removeChild(karcsvlab)        
+            PayList.removeChild(karcsv)
+            PayList.appendChild(rendgomb)
+            karszam.removeAttribute("required","true")
+            karexp.removeAttribute("required","true")
+            karcsv.removeAttribute("required","true")
+        }
+    })
     
 
-    
+    //PayList.appendChild()
+    c.appendChild(termékekList)
+    c.appendChild(PayList)
+    összJelző.innerHTML=`Összesen: ${total} Ft`
+    összJelző.classList.add("ps-3")
+    //await AdatPost()
+    //KosarLekeres()
+}
+
+function visszaepites(){    
+        let gombSáv=document.getElementById("KosárGombok")
+        gombSáv.innerHTML=""
+        let összJelző=document.getElementById("IdeKosár")
+        összJelző.innerHTML=""
+        let c=document.getElementById("KosárFizetésGomb")
+        c.innerHTML=""
+        let termSzov=document.createElement("span")
+        termSzov.innerHTML="A Kosárban lévő termékek"
+        termSzov.classList.add("fs-3","align-middle")
+        let fizgom=document.createElement("input")
+        let delgom=document.createElement("input")
+        let modgom=document.createElement("input")
+        fizgom.setAttribute("type","button")
+        fizgom.setAttribute("id","KosárFizet")
+        fizgom.setAttribute("value","Fizetés")
+        fizgom.classList.add("btn","btn-success","ms-1")        
+        delgom.setAttribute("type","button")
+        delgom.setAttribute("id","KosárDelete")
+        delgom.setAttribute("value","Kosár Ürítése")
+        delgom.classList.add("btn","btn-danger","ms-1")        
+        modgom.setAttribute("type","button")
+        modgom.setAttribute("id","KosárEdit")
+        modgom.setAttribute("value","Kosár Módosítása")
+        modgom.classList.add("btn","btn-info","ms-1")
+        gombSáv.innerHTML=""
+        gombSáv.appendChild(termSzov)
+        gombSáv.appendChild(fizgom)
+        gombSáv.appendChild(delgom)
+        gombSáv.appendChild(modgom)
 }
 
 function betoltes(oldal){
