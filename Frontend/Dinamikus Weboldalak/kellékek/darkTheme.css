@@ -60,3 +60,13 @@ body {
 #fav>input{
     color: yellow;
 }
+
+
+/*Koktél Hiba*/
+
+#vissza{
+    color: rgb(173, 1, 36);
+}
+#vissza:hover{
+    color: red;
+}
