@@ -330,7 +330,7 @@ async function KedvencekLekeres() {
                 koktelTartalom.classList.add("card-body","flex-column")
                 koktelNev.classList.add("card-title")
                 koktelSzoveg.classList.add("card-text")
-                koktelOldal.classList.add("btn","btn-secondary","d-flex","align-items-end")
+                koktelOldal.classList.add("btn","btn-secondary","align-self-center")
                 let id=valasz.adat[kulsoertek].kokteladatok[0].KoktélID
                 koktelOldal.addEventListener("click",()=>{
                     window.location.href=`http://127.0.0.1:3000/Koktel/${id}`
@@ -343,6 +343,7 @@ async function KedvencekLekeres() {
                 koktelNev.innerHTML=valasz.adat[kulsoertek].kokteladatok[0].KoktelCim
                 koktelOsszetevok.innerHTML="Összetevők:"
                 koktelOldal.setAttribute("type","button")
+                koktelOldal.setAttribute("style","width:95%; margin-bottom:12px;")
                 koktelOldal.setAttribute("value","Tovább a Receptre")
                 //Van-e értékelés
                 if (valasz.adat[kulsoertek].ertekeles[0].Osszert!=null) 
@@ -367,7 +368,7 @@ async function KedvencekLekeres() {
                          VegsoOsszetevo.innerHTML=valasz.adat[kulsoertek].osszetevok[2].Osszetevő
                          koktelOsszetevoLista.appendChild(VegsoOsszetevo)
                     }
-                    else if (valasz.adat[kulsoertek].length>3)
+                    else if (valasz.adat[kulsoertek].osszetevok.length>3)
                     {
                          let VegsoOsszetevo=document.createElement("li")
                          VegsoOsszetevo.innerHTML=`és ${(valasz.adat[kulsoertek].length)-2}`
@@ -414,8 +415,8 @@ async function KedvencekLekeres() {
                 koktelSzoveg.appendChild(koktelOsszetevok)
                 koktelSzoveg.appendChild(koktelOsszetevoLista)
                 koktelTartalom.appendChild(koktelSzoveg)
-                koktelTartalom.appendChild(koktelOldal)
                 koktelCard.appendChild(koktelTartalom)
+                koktelCard.appendChild(koktelOldal)
                 koktelDiv.appendChild(koktelCard)
                 sor.appendChild(koktelDiv)
             }
