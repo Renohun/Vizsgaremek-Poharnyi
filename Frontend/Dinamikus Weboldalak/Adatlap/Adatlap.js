@@ -324,7 +324,7 @@ async function KedvencekLekeres() {
                 let koktelOsszetevoLista=document.createElement("ul")
                 let koktelOldal=document.createElement("input")
                 //bootstrap és css elemek megadása
-                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                koktelDiv.classList.add("col-12","col-sm-12","col-md-8","col-lg-7","col-xl-4","col-xxl-2","mb-1")
                 koktelCard.classList.add("card","h-100")
                 koktelKep.classList.add("card-img-top","kep")
                 koktelTartalom.classList.add("card-body","flex-column")
@@ -441,7 +441,7 @@ async function KedvencekLekeres() {
             else
             {
                 let koktelDiv=document.createElement("div")
-                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                koktelDiv.classList.add("col-12","col-sm-12","col-md-8","col-lg-7","col-xl-4","col-xxl-2","mb-1")
                 sor.appendChild(koktelDiv)
             }
             hova.appendChild(sor)
@@ -480,7 +480,7 @@ async function KoktelokLekeres() {
                 let koktelKomment=document.createElement("div")
                 let koktelOldal=document.createElement("input")
                 //bootstrap és css elemek megadása
-                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                koktelDiv.classList.add("col-12","col-sm-12","col-md-8","col-lg-7","col-xl-4","col-xxl-2","mb-1")
                 koktelCard.classList.add("card","h-100")
                 koktelKep.classList.add("card-img-top","kep")
                 koktelTartalom.classList.add("card-body")
@@ -555,7 +555,7 @@ async function KoktelokLekeres() {
             else
             {
                 let koktelDiv=document.createElement("div")
-                koktelDiv.classList.add("col-8","col-sm-7","col-md-6","col-lg-6","col-xl-3","col-xxl-3","mb-1")
+                koktelDiv.classList.add("col-12","col-sm-12","col-md-8","col-lg-7","col-xl-4","col-xxl-2","mb-1")
                 sor.appendChild(koktelDiv)
             }
             hova.appendChild(sor)
