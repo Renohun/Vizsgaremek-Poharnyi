@@ -25,7 +25,9 @@ body {
 }
 .navbar-nav > li > .dropdown-menu {
     background-color: #647c33;
-    border-radius: 0px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top: 0px;
 }
 /*Adatlap*/
 #Sidebar{
@@ -52,4 +54,9 @@ body {
     border-radius: 5px;
     padding-top: 12px;
     padding-bottom: 12px;
+}
+
+/*Koktel Oldal*/
+#fav>input{
+    color: yellow;
 }
