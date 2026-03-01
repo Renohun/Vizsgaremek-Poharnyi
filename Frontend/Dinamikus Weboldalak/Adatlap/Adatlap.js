@@ -348,7 +348,27 @@ async function KedvencekLekeres() {
                 //Van-e értékelés
                 if (valasz.adat[kulsoertek].ertekeles[0].Osszert!=null) 
                 {
-                    koktelErtekeles.innerHTML=`Értékelés:${Math.round(valasz.adat[kulsoertek].ertekeles[0].Osszert * 10) / 10}/5`
+                    let csillagert=Math.round(valasz.adat[kulsoertek].ertekeles[0].Osszert * 10) / 10
+                    
+                    
+                    let csillagok=""
+                    for (let i = 0; i < Math.round(csillagert-0.5); i++) {
+                        csillagok+="★"
+                    }
+                    //Számot stringé alakítunk, majd megnézzük hogy van e benne tizedesjelölő
+                    if (csillagert.toString().includes('.')) {
+                        csillagok+="★"
+                        for (let i = 0; i < 5-Math.round(csillagert); i++) {
+                            csillagok+="☆"
+                        }
+                    }
+                    else{
+                        for (let i = 0; i < 5-Math.round(csillagert-0.5); i++) {
+                            csillagok+="☆"
+                        }
+                            
+                    }
+                    koktelErtekeles.innerHTML=`Értékelés:${csillagok} (${csillagert })`
                 }
                 else
                 {
@@ -389,8 +409,6 @@ async function KedvencekLekeres() {
                 for (let j = 0; j < valasz.adat[kulsoertek].koktelbadgek.length; j++) {
                     let jelveny=document.createElement("span")
                     jelveny.innerHTML=valasz.adat[kulsoertek].koktelbadgek[j][0].JelvényNeve
-                    console.log(valasz.adat[kulsoertek].koktelbadgek[j][0].JelvenyKategoria);
-                    
                     jelveny.classList.add("badge","me-1","text-white","rounded-pill")
                     switch (valasz.adat[kulsoertek].koktelbadgek[j][0].JelvenyKategoria) {
                         case "ízek":
@@ -481,9 +499,30 @@ async function KoktelokLekeres() {
                     window.location.href=`http://127.0.0.1:3000/Koktel/${id}`
                 })
                 //Van-e értékelés
+                
                 if (valasz.ertek[kulsoertek][0].Osszert!=null) 
                 {
-                    koktelErtekeles.innerHTML=`Értékelés:${Math.round(valasz.ertek[kulsoertek][0].Osszert * 10) / 10}/5`
+                    let csillagert=Math.round(valasz.ertek[kulsoertek][0].Osszert * 10) / 10
+                    
+                    
+                    let csillagok=""
+                    for (let i = 0; i < Math.round(csillagert-0.5); i++) {
+                        csillagok+="★"
+                    }
+                    //Számot stringé alakítunk, majd megnézzük hogy van e benne tizedesjelölő
+                    if (csillagert.toString().includes('.')) {
+                        csillagok+="★"
+                        for (let i = 0; i < 5-Math.round(csillagert); i++) {
+                            csillagok+="☆"
+                        }
+                    }
+                    else{
+                        for (let i = 0; i < 5-Math.round(csillagert-0.5); i++) {
+                            csillagok+="☆"
+                        }
+                            
+                    }
+                    koktelErtekeles.innerHTML=`Értékelés:${csillagok} (${csillagert })`
                 }
                 else
                 {
