@@ -15,10 +15,6 @@
     height: 60px;
     border-radius: 50%;
 }
-.navbar-nav > li > .dropdown-menu {
-    background-color: #9acd32;
-    border-radius: 0px;
-}
 
 .navbar-nav > li > .dropdown-menu {
     background-color: #9acd32;
