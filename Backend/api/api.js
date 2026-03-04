@@ -1614,3 +1614,28 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
     }
 });
 module.exports = router;
+//
+//
+//
+//
+// WebshopMain
+//
+//
+//
+//
+router.get("/WebShop/TermekLekeres",async(request,response)=>{
+    try {
+        const query = "SELECT * FROM webshoptermek"
+        const [termekek] = await DBconnetion.promise().query(query);
+        response.status(200).json({
+            data:termekek
+        })
+    } catch (error) {
+        throw new Error(error)
+        console.log(error)
+        response.status(500).json({
+            message:"Hibás lekérés"
+        })
+    }
+    
+})

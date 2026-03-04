@@ -8,12 +8,11 @@
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
-        <link rel="stylesheet" href="../WebShopMain/WebShopMain.css">
+        <link rel="stylesheet" href="../WebShopMain/WebShopMain.css   ">
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
-        <link rel="stylesheet" href="../Pohárnyi - Dinamikus/PohAlc.css" />
     </head>
     <body>
         <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
@@ -70,19 +69,40 @@
             <div id="main"> 
                 <div id="szuresek">
                      <div id="kereses">
-                        <input type="text"  placeholder="Keresés" id="NevKereses">
-                     </div>
-                     <div id="szures">
-
-                     </div>
-                     <div id="sorrend">
-
-                     </div>
+                       
+                            <input type="text"  placeholder="Keresés" id="NevKereses">
+                            <button type="button" class="formBtn" id="keresesBtn"><i class="fa fa-search"></i></button>
+                            <button type="button" class="formBtn" id="szuresGomb" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">szűrés</button>
+                        
+                    </div>
+                   
+               
             </div>
+             <div id="szures">
+                    <div class="collapse" id="collapseExample">
+                            <div id="szuresek" class="card card-body">
+                                <div id="ar">
+                                    <div class="slidecontainer">
+                                        <label for="ArSlider">Maximum ár</label>
+                                        <input type="range" min="1" name="ArSlider" max="100" value="50" class="slider" id="myRange">
+                                        <label id="maxAr"></label>
+                                    </div>
+                                </div>
+                                 <div id="alkoholTart">
+                                    <div class="slidecontainer">
+                                        <label for="AlkSlider">Maximum alkoholtartalom</label>
+                                        <input type="range" min="1" name="AlkSlider" max="100" value="50" class="slider" id="AlkRange">
+                                        <label id="maxAlk"></label>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+            </div>
+                    
 
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
-        <script src="../kellékek/NavBar.js"></script>
         <script src="../WebShopMain/WebShopMain.js"></script>
         <script src="../kellékek/navBar.js"></script>
     </body>
