@@ -78,33 +78,44 @@
     cursor: pointer;
 }
 #maxAlk {
-    width: 5%;
+    width: 50px;
 }
 #maxAr {
-    width: 15%;
+    width: 125px;
 }
+#alkoholTart{
+    margin-top: 15px;
+}
+/*Száramazasi hely*/
+
+#szarmazasiHely{
+    margin-top: 15px;
+}
+#SzarmazasSelectDiv{
+    display: flex;
+    flex-direction: column;
+}
+
+/*Márka*/
+#Marka{
+    margin-top: 15px;
+}
+#MarkaSelectDiv{
+    display: flex;
+    flex-direction: column;
+}
+
 /*Oldal méretezése*/
-@media only screen and (max-width: 990px) {
-    #maxAlk {
-        width: 10%;
-    }
+@media only screen and (max-width: 425px) {
+   
     #maxAr {
-        width: 30%;
+        width: 100px;
     }
-}
-@media only screen and (max-width: 700px) {
-    #maxAlk {
-        width: 13%;
+    #AlkLabel{
+        font-size: small;
+    
     }
-    #maxAr {
-        width: 30%;
-    }
-}
-@media only screen and (max-width: 520px) {
-    #maxAlk {
-        width: 15%;
-    }
-    #maxAr {
-        width: 35%;
+    #ArLabel{
+        font-size: small;
     }
 }
