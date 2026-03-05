@@ -36,12 +36,12 @@
                             <a href="" class="nav-link">Mi van a polcon?</a>
                         </li>
                     </div>
-                    <div>
+                    <div class="navbar-nav d-flex align-items-center">
                         <input type="button" value="" id="ThemeSwitcher" />
                         <a href="/Regisztralj">
                             <input
                                 type="button"
-                                class="btn btn-secondary nav-item"
+                                class="btn btn-secondary nav-item mx-2"
                                 value="Regisztárció"
                                 id="regisztracio"
                             />
@@ -53,15 +53,26 @@
                         <a href="/Keszites">
                             <input
                                 type="button"
-                                class="nav-item btn btn-warning"
+                                class="nav-item btn btn-warning mx-2"
                                 hidden
                                 value="Saját koktél létrehozása"
                                 id="sajatKoktelKeszites"
                             />
                         </a>
-                        <a href="/Adatlap">
-                            <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
-                        </a>
+                        <div class="nav-item dropdown" id="dropdownMenu">
+                            <img
+                                class="nav-link dropdown-toggle profil"
+                                data-bs-toggle="dropdown"
+                                role="button"
+                                aria-expanded="false"
+                                id="Profile"
+                            />
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
+                                <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -144,7 +155,6 @@
 
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
-        <script src="../kellékek/NavBar.js"></script>
         <script src="../Pohárnyi - Dinamikus/PohAlc.js"></script>
         <script src="../kellékek/navBar.js"></script>
     </body>
