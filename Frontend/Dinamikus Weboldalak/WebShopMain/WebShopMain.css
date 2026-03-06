@@ -83,39 +83,37 @@
 #maxAr {
     width: 125px;
 }
-#alkoholTart{
+#alkoholTart {
     margin-top: 15px;
 }
 /*Száramazasi hely*/
 
-#szarmazasiHely{
+#szarmazasiHely {
     margin-top: 15px;
 }
-#SzarmazasSelectDiv{
+#SzarmazasSelectDiv {
     display: flex;
     flex-direction: column;
 }
 
 /*Márka*/
-#Marka{
+#Marka {
     margin-top: 15px;
 }
-#MarkaSelectDiv{
+#MarkaSelectDiv {
     display: flex;
     flex-direction: column;
 }
 
 /*Oldal méretezése*/
 @media only screen and (max-width: 425px) {
-   
     #maxAr {
         width: 100px;
     }
-    #AlkLabel{
+    #AlkLabel {
         font-size: small;
-    
     }
-    #ArLabel{
+    #ArLabel {
         font-size: small;
     }
 }
