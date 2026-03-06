@@ -1,14 +1,14 @@
 async function POSTfetch(url, obj) {
     try {
-        const req = await fetch(url, {
+        const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(obj)
         });
-        if (req.ok) {
-            return await req.json();
+        if (res.ok || res.redirected) {
+            return await res.json();
         } else {
-            throw new Error('Hiba tortent: ' + req.status);
+            throw new Error('Hiba tortent: ' + res.status);
         }
     } catch (err) {
         throw new Error('Hiba tortent: ' + err);
@@ -35,8 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
             /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) &&
             /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{2,}$/.test(jelszo)
         ) {
-            const uzenet = await POSTfetch('http://127.0.0.1:3000/api/belepes', { felhasznalo: email, jelszo: jelszo });
-            alert(JSON.stringify(uzenet));
+            const res = await POSTfetch('http://127.0.0.1:3000/api/belepes', { felhasznalo: email, jelszo: jelszo });
+            alert(res.message);
         } else {
             //Ide jonne majd a modal-os alert
             alert('Valamelyik input mezo nem felel meg a kriteriumoknak');

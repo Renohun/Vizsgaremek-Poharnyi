@@ -38,15 +38,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('regisztracio').setAttribute('hidden', '');
         document.getElementById('belepes').setAttribute('hidden', '');
         document.getElementById('sajatKoktelKeszites').removeAttribute('hidden');
-        document.getElementById('dropdownMenu').removeAttribute('hidden');
-        //blob:http://127.0.0.1:3000/c420e19f-6ac3-4d77-ab30-6d7bb123149d
-        //blob:http://127.0.0.1:3000/9ec0786f-0748-4b20-99eb-f7841d0defc8
+        document.getElementById('Profile').removeAttribute('hidden');
+
         const koktelKep = await POSTKepLekeres(`http://127.0.0.1:3000/api/Koktelok/KepLekeres`);
         document.getElementById('Profile').setAttribute('src', URL.createObjectURL(koktelKep));
     } else {
         document.getElementById('regisztracio').removeAttribute('hidden');
         document.getElementById('belepes').removeAttribute('hidden');
         document.getElementById('sajatKoktelKeszites').setAttribute('hidden', '');
-        document.getElementById('dropdownMenu').setAttribute('hidden', '');
+        document.getElementById('Profile').setAttribute('hidden', '');
     }
 });

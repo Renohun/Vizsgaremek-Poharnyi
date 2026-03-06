@@ -386,7 +386,7 @@ router.post('/belepes', (request, response) => {
                 //console.log(rows);
 
                 const felhasznaloDB = rows[0];
-                console.log(felhasznaloDB);
+                //console.log(felhasznaloDB);
 
                 if (felhasznaloDB == undefined) {
                     response.status(403).json({ message: 'Hibas email! Avagy nem letezik ilyen felhasznalo' });
@@ -395,9 +395,9 @@ router.post('/belepes', (request, response) => {
                     const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
                     if (jelszoEll) {
                         //web token letrehozasa
-                        console.log('Adatbazis: ' + felhasznaloDB.FelhID);
-                        console.log('Adatbazis: ' + felhasznaloDB.Admin);
-                        console.log(felhasznaloObj);
+                        //console.log('Adatbazis: ' + felhasznaloDB.FelhID);
+                        //console.log('Adatbazis: ' + felhasznaloDB.Admin);
+                        //console.log(felhasznaloObj);
 
                         const WebToken = JWT.sign(
                             {
@@ -418,9 +418,7 @@ router.post('/belepes', (request, response) => {
                             path: '/'
                         });
 
-                        response.status(200).json({
-                            message: 'Sikeres bejelentkezes'
-                        });
+                        response.redirect('/Koktelok');
                     } else {
                         response.status(403).json({
                             message: 'Hibas jelszo'
