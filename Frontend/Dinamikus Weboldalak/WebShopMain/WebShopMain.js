@@ -109,13 +109,18 @@ const SelectFeltolt = (data, Select1, Select2, Select3) => {
         option2.innerHTML = data.data[i].TermekMarka;
         option2.setAttribute('id', `Marka${i}`);
         Select2.appendChild(option2);
-        //KategSelect
-
+        //Kategoriak kivalasztasa
+        if (!kategoria.includes(data.data[i].TermekKategoria)) {
+            kategoria.push(data.data[i].TermekKategoria);
+        }
+    }
+    //kategoria select feltoltese
+    for (let i = 0; i < kategoria.length; i++) {
         let option3 = document.createElement('option');
-        option2.setAttribute('value', data.data[i].TermekMarka);
-        option2.innerHTML = data.data[i].TermekMarka;
-        option2.setAttribute('id', `Marka${i}`);
-        Select2.appendChild(option2);
+        option3.setAttribute('value', kategoria[i]);
+        option3.innerHTML = kategoria[i];
+        option3.setAttribute('id', `Marka${i}`);
+        Select3.appendChild(option3);
     }
 };
 
@@ -126,7 +131,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     //Selectek feltöltése
     let OrszagSelect = document.getElementById('OrszagSelect');
     let MarkaSelect = document.getElementById('MarkaSelect');
-    SelectFeltolt(data, OrszagSelect, MarkaSelect);
+    let KategoriaSelect = document.getElementById('KategoriaSelect');
+    SelectFeltolt(data, OrszagSelect, MarkaSelect, KategoriaSelect);
     OrszagSelect.addEventListener('change', () => {
         console.log(OrszagSelect.value);
     });

@@ -104,7 +104,24 @@
     display: flex;
     flex-direction: column;
 }
-
+/*kategoria*/
+#Kategoria {
+    margin-top: 15px;
+}
+#KategoriaSelectDiv {
+    display: flex;
+    flex-direction: column;
+}
+/*akciose*/
+#Akciose {
+    margin-top: 15px;
+}
+#AkcioSelectDiv {
+    display: flex;
+}
+#AkcioseCheck {
+    margin-left: 5px;
+}
 /*Oldal méretezése*/
 @media only screen and (max-width: 425px) {
     #maxAr {
