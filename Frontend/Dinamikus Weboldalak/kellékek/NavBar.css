@@ -13,6 +13,7 @@
 .profil {
     width: 80px;
     height: 80px;
+    cursor: pointer;
     border-radius: 50%;
 }
 .navbar-nav > li > .dropdown-menu {
@@ -35,7 +36,4 @@ div > li {
     width: 60px;
     height: 60px;
     background-color: white;
-}
-#Profile {
-    cursor: pointer;
 }

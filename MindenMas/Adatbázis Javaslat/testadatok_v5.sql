@@ -14,6 +14,7 @@ VALUES
 ("poharnyiAdmin", "poharnyiAdmin@gmail.com", "$argon2id$v=19$m=65536,t=3,p=4$aHw3kmpIBeoIUUgnd637sQ$KJ2Jdyx6oPAEYzMPNx/OfKIOdsRp88kPRuRMtqfzsWY")
 ;
 UPDATE `felhasználó` SET `Admin` = '1' WHERE `felhasználó`.`FelhID` = 1;
+UPDATE `felhasználó` SET `Admin` = '1' WHERE `felhasználó`.`FelhID` = 11;
 
 INSERT INTO Felhasználó(Felhasználónév,Email,Jelszó,ProfilKepUtvonal)
 VALUES
