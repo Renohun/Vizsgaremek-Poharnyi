@@ -368,13 +368,13 @@ router.post('/regisztracio', async (request, response) => {
 //A belepes oldal hoz ide, lekeri azt a sort amiben a felhasznalo adatai vannak, persz ha van ilyen egyaltalan
 router.post('/belepes', (request, response) => {
     try {
-        console.log(request.body);
-
+        //console.log(request.body);
+        // Ez a kapott ertekek a formbol
         const felhasznaloObj = {
             felhasznalo: request.body.felhasznalo,
             jelszo: request.body.jelszo
         };
-        const sqlQuery = 'SELECT Email, Jelszó FROM `felhasználó` WHERE Email LIKE ?';
+        const sqlQuery = 'SELECT FelhID, Email, Jelszó, Admin FROM felhasználó WHERE Email LIKE ?';
 
         DBconnetion.query(sqlQuery, [felhasznaloObj.felhasznalo], async (err, rows) => {
             if (err) {
@@ -383,7 +383,7 @@ router.post('/belepes', (request, response) => {
                 });
             } else {
                 //ez az adatbazisbol kapott felhasznaloi sor
-                console.log(rows);
+                //console.log(rows);
 
                 const felhasznaloDB = rows[0];
                 //console.log(felhasznaloDB);
@@ -395,6 +395,10 @@ router.post('/belepes', (request, response) => {
                     const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
                     if (jelszoEll) {
                         //web token letrehozasa
+                        //console.log('Adatbazis: ' + felhasznaloDB.FelhID);
+                        //console.log('Adatbazis: ' + felhasznaloDB.Admin);
+                        //console.log(felhasznaloObj);
+
                         const WebToken = JWT.sign(
                             {
                                 userID: felhasznaloDB.FelhID,
@@ -408,15 +412,13 @@ router.post('/belepes', (request, response) => {
 
                         //sutibe valo betetele
                         response.cookie('auth_token', WebToken, {
-                            httpOnly: 'true',
+                            httpOnly: true,
                             sameSite: 'none',
-                            secure: 'true',
+                            secure: true,
                             path: '/'
                         });
 
-                        response.status(200).json({
-                            message: 'Sikeres bejelentkezes'
-                        });
+                        response.redirect('/Koktelok');
                     } else {
                         response.status(403).json({
                             message: 'Hibas jelszo'
@@ -1339,6 +1341,19 @@ router.post('/AdminPanel/KepLekeres/:id', async (request, response) => {
         let kepkereses = 'SELECT BoritoKepUtvonal FROM koktél WHERE KoktélID LIKE ?';
         let kinek = await lekeres(kepkereses, id);
         response.sendFile(path.join(__dirname, '..', 'images', kinek[0].BoritoKepUtvonal));
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+router.post('/Koktelok/KepLekeres', async (request, response) => {
+    try {
+        let profil = jwt.decode(request.cookies.auth_token).userID;
+        console.log(profil);
+
+        let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
+        let kinek = await lekeres(kepkereses, profil);
+        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].ProfilkepUtvonal));
     } catch (error) {
         console.log(error);
     }

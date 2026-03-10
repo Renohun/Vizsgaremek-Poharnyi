@@ -32,36 +32,36 @@
                         <li class="nav-item">
                             <a href="/Koktelok" class="nav-link">Koktelok</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">Mi van a polcon?</a>
-                        </li>
                     </div>
-                    <div>
+                    <div class="navbar-nav d-flex align-items-center">
                         <input type="button" value="" id="ThemeSwitcher" />
-                        <a href="/Regisztralj">
-                            <input
-                                type="button"
-                                class="btn btn-secondary nav-item"
-                                value="Regisztárció"
-                                id="regisztracio"
-                            />
+                        <a href="/Regisztralj" id="regisztracio">
+                            <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
-                        <a href="/LepjBe">
-                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="belepes" />
+                        <a href="/LepjBe" id="belepes">
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" />
                         </a>
 
-                        <a href="/Keszites">
+                        <a href="/Keszites" id="sajatKoktelKeszites" hidden>
                             <input
                                 type="button"
-                                class="nav-item btn btn-warning"
-                                hidden
+                                class="nav-item btn btn-warning mx-2"
                                 value="Saját koktél létrehozása"
-                                id="sajatKoktelKeszites"
                             />
                         </a>
-                        <a href="/Adatlap">
-                            <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
-                        </a>
+                        <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                            <img
+                                class="nav-link dropdown-toggle profil"
+                                data-bs-toggle="dropdown"
+                                role="button"
+                                aria-expanded="false"
+                            />
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
+                                <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -144,7 +144,6 @@
 
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
-        <script src="../kellékek/NavBar.js"></script>
         <script src="../Pohárnyi - Dinamikus/PohAlc.js"></script>
         <script src="../kellékek/navBar.js"></script>
     </body>
