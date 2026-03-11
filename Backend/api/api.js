@@ -11,6 +11,7 @@ const multer = require('multer');
 const path = require('path');
 const fajlkezelo = require('fs/promises');
 const { error } = require('console');
+const { blob } = require('stream/consumers');
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -1638,4 +1639,22 @@ router.get("/WebShop/TermekLekeres",async(request,response)=>{
         })
     }
     
+})
+
+
+router.get("/Webshop/Keplekeres/:id", async(request,response)=>{
+    try {
+        const {id} = request.params
+        const query = "SELECT  TermekKepUtvonal FROM webshoptermek WHERE TermekID = ?"
+        const [termekek] = await DBconnetion.promise().query(query,[id]);
+        console.log(termekek[0].TermekKepUtvonal)
+        response.sendFile(path.join(__dirname, '..', 'images',termekek[0].TermekKepUtvonal))
+    } catch (error) {
+        throw new Error(error)
+        console.log(error)
+        response.status(500).json({
+            
+            message:"hiba"
+        })
+    }
 })

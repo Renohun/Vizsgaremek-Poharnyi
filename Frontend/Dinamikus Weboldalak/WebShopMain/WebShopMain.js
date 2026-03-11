@@ -1,3 +1,6 @@
+
+
+
 const TermekLekeres = async (url) => {
     try {
         const valasz = await fetch(url);
@@ -8,7 +11,19 @@ const TermekLekeres = async (url) => {
         throw new Error(error);
     }
 };
-
+const TermekKepLekeres = async (url) => {
+    try {
+        const valasz = await fetch(url,{
+            method : "GET",
+            headers:{'Content-Type':'image/jpeg'}
+        });
+        if (valasz.ok) {
+            return valasz.blob();
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 //? Sliderek alapértékének beállítása
 const Sliderek = async () => {
     var slider1 = document.getElementById('myRange');
@@ -123,11 +138,107 @@ const SelectFeltolt = (data, Select1, Select2, Select3) => {
         Select3.appendChild(option3);
     }
 };
+//Kártya Generálás
+const kartyaGen = async(data,hova)=>{
 
+    for (let i = 0; i < data.data.length; i++) {
+        const oszlop = document.createElement('div');
+        oszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
+        hova.appendChild(oszlop);
+
+
+        let kartyaMain = document.createElement("div")
+        kartyaMain.classList.add("card","kartya")
+        kartyaMain.setAttribute("id",`kartya${i}`)
+        oszlop.appendChild(kartyaMain)
+
+        let img = document.createElement("img")
+        const kartyaKep = await TermekKepLekeres(`/api/WebShop/Keplekeres/${data.data[i].TermekID}`)
+        console.log(kartyaKep)
+        const kepURL = URL.createObjectURL(kartyaKep)
+        img.setAttribute("src",kepURL)
+        console.log(img)
+        img.classList.add("card-img-top","kartyakep")
+        kartyaMain.appendChild(img)
+
+        let KartyaBody = document.createElement("div")
+        KartyaBody.classList.add("card-body","kartyaBody")
+        KartyaBody.setAttribute("id",`KartyaBody${i}`)
+        kartyaMain.appendChild(KartyaBody)
+
+        let KartyaCim = document.createElement("h5")
+        KartyaCim.classList.add("card-title","kartyaCim")
+         KartyaCim.setAttribute("id",`KartyaCim${i}`)
+        KartyaCim.innerHTML = data.data[i].TermekCim
+        KartyaBody.appendChild(KartyaCim)
+
+        let adatDiv = document.createElement("div")
+        adatDiv.classList.add("adatDiv")
+        adatDiv.setAttribute("id",`KartyaAdatok${i}`)
+        KartyaBody.appendChild(adatDiv)
+
+        //adatok kiírása
+//kateg
+        let div1 = document.createElement("div")
+        div1.classList.add("kulondiv")
+        let tipus = document.createElement("p")
+        tipus.classList.add("kuloncim")
+        tipus.innerHTML = "Kategória"
+        div1.appendChild(tipus)
+        let tipusertek = document.createElement("p")
+        tipusertek.classList.add("kulonErtek")
+        tipusertek.innerHTML = data.data[i].TermekKategoria;
+        div1.appendChild(tipusertek)
+        adatDiv.appendChild(div1)
+//szarmaza
+        let div2 = document.createElement("div")
+        div2.classList.add("kulondiv")
+        let szarmazas = document.createElement("p")
+        szarmazas.classList.add("kuloncim")
+        szarmazas.innerHTML = "Származás"
+        div2.appendChild(szarmazas)
+        let szarmazasertek = document.createElement("p")
+        szarmazasertek.classList.add("kulonErtek")
+        szarmazasertek.innerHTML = data.data[i].TermekSzarmazas;
+        div2.appendChild(szarmazasertek)
+        adatDiv.appendChild(div2)
+//marka
+        let div3 = document.createElement("div")
+        div3.id = "kulondiv3"
+        div3.classList.add("kulondiv")
+        let marka = document.createElement("p")
+        marka.classList.add("kuloncim")
+        marka.innerHTML = "Márka"
+        div3.appendChild(marka)
+        let markaErtek = document.createElement("p")
+        markaErtek.classList.add("kulonErtek")
+        markaErtek.innerHTML = data.data[i].TermekMarka;
+        div3.appendChild(markaErtek)
+        adatDiv.appendChild(div3)
+        
+
+        let ar = document.createElement("h4")
+        ar.classList.add("ar")
+        ar.setAttribute("id",`${i}kartyaId`)
+        ar.innerHTML = data.data[i].Ar + "Ft"
+        adatDiv.appendChild(ar)
+
+        let kosarba = document.createElement("button")
+        kosarba.classList.add("btn","kartyaGomb")
+        kosarba.innerHTML = "kosárba"
+        adatDiv.appendChild(kosarba)
+
+    }
+}
 document.addEventListener('DOMContentLoaded', async () => {
     const data = await TermekLekeres('/api/WebShop/TermekLekeres');
     console.log(data);
+    
+    //kepek lekerese
+    const kepek = await TermekKepLekeres('/api/WebShop/Keplekeres/2');
+    console.log(URL.createObjectURL(kepek));
     Sliderek();
+    data.data
     //Selectek feltöltése
     let OrszagSelect = document.getElementById('OrszagSelect');
     let MarkaSelect = document.getElementById('MarkaSelect');
@@ -136,4 +247,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     OrszagSelect.addEventListener('change', () => {
         console.log(OrszagSelect.value);
     });
+    //kártyák generálása
+    let KartyaHova = document.getElementById("kartyaSor")
+    kartyaGen(data,KartyaHova)
+    
 });

@@ -122,6 +122,46 @@
 #AkcioseCheck {
     margin-left: 5px;
 }
+/*Kuldes*/
+#kuldes{
+    margin-top: 15px;
+}
+/*kártyák*/
+.kartya{
+    height: 100%    ;
+}
+.kartyaCim{
+    height: 40px;
+}
+.adatDiv{
+    margin-top: 20px;
+}
+.ar{
+    margin-top: 20px;
+}
+.kulondiv{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 0.1px black solid;
+    margin: 0px;
+    padding: 0px;
+    height: 25px;
+}
+#kulondiv3{
+    border: none;
+}
+.kuloncim{
+    margin:0px ;
+    padding: 0px;
+}
+.kulonertek{
+    margin: 0px;
+    padding: 0px;
+}
+.kartyaGomb{
+    width: 100%;
+    background-color: #04aa6d
+}
 /*Oldal méretezése*/
 @media only screen and (max-width: 425px) {
     #maxAr {
