@@ -79,16 +79,42 @@ function koktelRendereles(koktelok) {
 
             cardDiv.appendChild(imgTag);
             const cardBody = document.createElement('div');
-            cardBody.classList.add('card-body');
+            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
             cardDiv.appendChild(cardBody);
 
             let cim = document.createElement('h4');
             cim.innerText = koktel.KoktelCim;
             cardBody.appendChild(cim);
 
-            let ertekeles = document.createElement('span');
-            ertekeles.innerText = 'Értékelés: ' + koktel.ertekeles;
-            cardBody.appendChild(ertekeles);
+            if (koktel.ertekeles == null) {
+                let ertekeles = document.createElement('span');
+                ertekeles.innerText = 'Értékelés: ☆☆☆☆☆';
+                cardBody.appendChild(ertekeles);
+            } else {
+                const ertekeles = Math.round(koktel.ertekeles * 10) / 10;
+                let csillagok = '';
+
+                for (let i = 0; i < Math.round(ertekeles - 0.5); i++) {
+                    csillagok += '★';
+                }
+                //Számot stringé alakítunk, majd megnézzük hogy van e benne tizedesjelölő
+                if (ertekeles.toString().includes('.')) {
+                    csillagok += '★';
+                    for (let i = 0; i < 5 - Math.round(ertekeles); i++) {
+                        csillagok += '☆';
+                    }
+                } else {
+                    for (let i = 0; i < 5 - Math.round(ertekeles - 0.5); i++) {
+                        csillagok += '☆';
+                    }
+                }
+
+                csillagok += '(' + ertekeles + ')';
+
+                let ertekelesElement = document.createElement('span');
+                ertekelesElement.innerText = 'Értékelés: ' + csillagok;
+                cardBody.appendChild(ertekelesElement);
+            }
 
             const cardText = document.createElement('div');
             cardText.classList.add('card-text');
@@ -120,7 +146,6 @@ function koktelRendereles(koktelok) {
             cardText.appendChild(osszetevoDOM);
 
             const uLista = document.createElement('ul');
-            cardText.classList.add('h-100');
             let i = 0;
             //console.log(koktel.osszetevok[0].Osszetevő);
 
@@ -149,7 +174,7 @@ function koktelRendereles(koktelok) {
             tovabbBtn.setAttribute('value', 'Tovább a Receptre');
             tovabbBtn.classList.add('btn', 'btn-secondary', 'w-100');
             tovabbBtn.dataset.id = koktel.KoktélID;
-            cardText.appendChild(tovabbBtn);
+            cardBody.appendChild(tovabbBtn);
             tovabbBtn.addEventListener('click', atvitelKoktelra);
         }
     });
