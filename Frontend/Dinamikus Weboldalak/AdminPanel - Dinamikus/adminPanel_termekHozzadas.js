@@ -53,7 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const termekAlkoholMerteke = document.getElementById('termekAlkohol');
         const termekAlkoholKora = document.getElementById('termekKora');
-        if (termekKategoriaSelect.value == 'Alkholok') {
+        if (
+            termekKategoriaSelect.value != 'Eszkozok' ||
+            termekKategoriaSelect.value != 'Pohar' ||
+            termekKategoriaSelect.value != 'Merch' ||
+            termekKategoriaSelect.value != 'Egyeb'
+        ) {
             termekAlkoholKoraLabel.removeAttribute('hidden', 'true');
             termekAlkoholMertekeLabel.removeAttribute('hidden', 'true');
             termekAlkoholKora.removeAttribute('hidden', 'true');
@@ -163,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ellResult.duplikacio == false) {
                 POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
                 const fetchAdat = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
+                alert('Sikeres termek hozzaadas');
                 //console.log(fetchAdat);
             } else {
                 alert('Mar letezik ilyen nevu termek');
