@@ -64,7 +64,7 @@ router.get('/Kijelentkezes', authenticationMiddleware, (req, res) => {
         sameSite: process.env.COOKIE_SECURE
     });
 
-    res.redirect('/Koktelok');
+    res.redirect('/');
 });
 
 //Adatok - Dinamikus
