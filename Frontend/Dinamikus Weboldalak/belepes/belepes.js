@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{2,}$/.test(jelszo)
         ) {
             const res = await POSTfetch('http://127.0.0.1:3000/api/belepes', { felhasznalo: email, jelszo: jelszo });
+            //modal alert
             alert(res.message);
         } else {
             //Ide jonne majd a modal-os alert
