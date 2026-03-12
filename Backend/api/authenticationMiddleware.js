@@ -6,21 +6,16 @@ function AuthMiddleware(req, res, next) {
     console.log('Auth: ' + JSON.stringify(jwt.decode(token)));
 
     if (!token) {
-        res.status(401).json({
-            message: 'Not authenticated'
-        });
-    }
-    try {
-        //ervenyesseg ellorzese (lejart, alairas)
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
-        req.data = payload;
-        next();
-    } catch (err) {
-        /*return res.status(401).json({
-            message: "Nem ervenyes token",
-            error: err
-        })*/
         res.redirect('/LepjBe');
+    } else {
+        try {
+            //ervenyesseg ellorzese (lejart, alairas)
+            const payload = jwt.verify(token, process.env.JWT_SECRET);
+            req.data = payload;
+            next();
+        } catch (error) {
+            res.redirect('/KoktelHiba');
+        }
     }
 }
 module.exports = AuthMiddleware;

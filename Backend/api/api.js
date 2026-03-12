@@ -418,7 +418,7 @@ router.post('/belepes', (request, response) => {
                             path: '/'
                         });
 
-                        response.redirect('/Koktelok');
+                        response.status(200).json({ message: 'sikeres bejelentkezes' });
                     } else {
                         response.status(403).json({
                             message: 'Hibas jelszo'
