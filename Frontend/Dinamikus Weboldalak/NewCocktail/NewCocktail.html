@@ -32,36 +32,36 @@
                         <li class="nav-item">
                             <a href="/Koktelok" class="nav-link">Koktelok</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">Mi van a polcon?</a>
-                        </li>
                     </div>
-                    <div>
+                    <div class="navbar-nav d-flex align-items-center">
                         <input type="button" value="" id="ThemeSwitcher" />
-                        <a href="/Regisztralj">
-                            <input
-                                type="button"
-                                class="btn btn-secondary nav-item"
-                                value="Regisztárció"
-                                id="regisztracio"
-                            />
+                        <a href="/Regisztralj" id="regisztracio">
+                            <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
-                        <a href="/LepjBe">
-                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="belepes" />
+                        <a href="/LepjBe" id="belepes">
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" />
                         </a>
 
-                        <a href="/Keszites">
+                        <a href="/Keszites" id="sajatKoktelKeszites" hidden>
                             <input
                                 type="button"
-                                class="nav-item btn btn-warning"
-                                hidden
+                                class="nav-item btn btn-warning mx-2"
                                 value="Saját koktél létrehozása"
-                                id="sajatKoktelKeszites"
                             />
                         </a>
-                        <a href="/Adatlap">
-                            <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
-                        </a>
+                        <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                            <img
+                                class="nav-link dropdown-toggle profil"
+                                data-bs-toggle="dropdown"
+                                role="button"
+                                aria-expanded="false"
+                            />
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
+                                <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -113,12 +113,24 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="mennyiseg">Hány ml lesz a kész koktél:</label>
-                                <input type="number" maxlength="100" class="form-control" placeholder="350" id="mennyiseg" />
+                                <input
+                                    type="number"
+                                    maxlength="100"
+                                    class="form-control"
+                                    placeholder="350"
+                                    id="mennyiseg"
+                                />
                             </div>
 
                             <div class="mb-3" hidden id="alapEltuntet">
                                 <label for="alap" class="form-label">A koktél alkoholos alapja: </label>
-                                <input type="text" maxlength="100" class="form-control" id="alap" placeholder="whiskey" />
+                                <input
+                                    type="text"
+                                    maxlength="100"
+                                    class="form-control"
+                                    id="alap"
+                                    placeholder="whiskey"
+                                />
                             </div>
                         </form>
                     </div>
@@ -126,17 +138,15 @@
                 <label for="osszetevo" class="form-label">Add hozzá az összetevőket: </label>
                 <div class="row mt-1" id="osszetevoDiv">
                     <div class="row" id="elsoOsszetevo">
-                       
-                            <input class="OsszetevoBar" type="text" placeholder="Összetevő" name="search" />
-                            <input type="number" id="mennyiseg" placeholder="mennyiség" class="OsszetevoMennyiseg">
-                            <select name="MertekEgyseg" id="MertekEgyseg" class="MertekSelect">
-                                <option value="ml">ml</option>
-                                <option value="db">db</option>
-                                <option value="gr">gr</option>
-                            </select>
-                            <button class="Osszetevobtn" type="button" id="osztv1">X</button
-                            ><!--utána kell nézni!!!-->
-                        
+                        <input class="OsszetevoBar" type="text" placeholder="Összetevő" name="search" />
+                        <input type="number" id="mennyiseg" placeholder="mennyiség" class="OsszetevoMennyiseg" />
+                        <select name="MertekEgyseg" id="MertekEgyseg" class="MertekSelect">
+                            <option value="ml">ml</option>
+                            <option value="db">db</option>
+                            <option value="gr">gr</option>
+                        </select>
+                        <button class="Osszetevobtn" type="button" id="osztv1">X</button
+                        ><!--utána kell nézni!!!-->
                     </div>
                 </div>
                 <!--Létrehozott új összetevők helye-->
@@ -235,17 +245,35 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <h5 id="siker">A koktélodat sikeresen feltöltötted!</h5>
-                        <h5 id="hiba" style="display: none;">Sikertelen feltöltés!</h5>
-                    <!--<img id="" src="img/test3 copy.gif" alt="Computer man" style="width: 100px; height: 100px" />-->
+                        <h5 id="hiba" style="display: none">Sikertelen feltöltés!</h5>
+                        <!--<img id="" src="img/test3 copy.gif" alt="Computer man" style="width: 100px; height: 100px" />-->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="visszaGomb">új koktél</button>
-                        <button type="button" id="elkuld" class="btn btn-primary" aria-haspopup="" data-bs-dismiss="modal">tovább a koktél oldalára</button>
-                        <button type="button" style="display: none;" id="Ujra" class="btn btn-primary" data-bs-dismiss="modal">Újra</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="visszaGomb">
+                            új koktél
+                        </button>
+                        <button
+                            type="button"
+                            id="tovabb"
+                            class="btn btn-primary"
+                            aria-haspopup=""
+                            data-bs-dismiss="modal"
+                        >
+                            tovább a koktél oldalára
+                        </button>
+                        <button
+                            type="button"
+                            style="display: none"
+                            id="Ujra"
+                            class="btn btn-primary"
+                            data-bs-dismiss="modal"
+                        >
+                            Újra
+                        </button>
                     </div>
                 </div>
             </div>
