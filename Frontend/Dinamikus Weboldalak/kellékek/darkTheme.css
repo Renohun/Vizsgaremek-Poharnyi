@@ -1,7 +1,72 @@
+/*Általános*/
 body {
-    background-color: rgb(92, 92, 92);
-    color: white;
+    background-color: rgb(29, 27, 27);
+    color: rgb(61, 139, 61);
 }
 .card{
     color: black;
+    background-color: burlywood;
+}
+
+.btn-secondary{
+    background-color: rgb(61, 139, 61);
+    border: rgb(61, 139, 61);
+    color: black;
+}
+
+.btn-secondary:hover{
+    background-color: #9acd32;
+    color: black;
+}
+/*NavBar*/
+.hatter{
+    background-color: #647c33;
+    border-bottom-right-radius: 5px;
+}
+.navbar-nav > li > .dropdown-menu {
+    background-color: #647c33;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top: 0px;
+}
+/*Adatlap*/
+#Sidebar{
+    background-color: #647c33;
+    margin-top:5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.gomb,.torles-gomb{
+    background-color: #647c33;
+}
+.torles-gomb{
+    color: rgb(173, 1, 36);
+}
+/*Koktelok weboldal*/
+#keresofelulet{
+    margin-top: 20px;
+    background-color: rgb(66, 66, 66);
+    border-radius: 5px;
+    padding-bottom: 20px;
+}
+#koktelSor{
+    background-color: rgb(66, 66, 66);
+    border-radius: 5px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+/*Koktel Oldal*/
+#fav>input{
+    color: yellow;
+}
+
+
+/*Koktél Hiba*/
+
+#vissza{
+    color: rgb(173, 1, 36);
+}
+#vissza:hover{
+    color: red;
 }

@@ -53,8 +53,8 @@ function atvitelKoktelra() {
 
 function koktelRendereles(koktelok) {
     const DOMsor = document.getElementById('koktelSor');
-    //console.log(koktelok.koktelokAdat);
-
+    console.log(koktelok.koktelokAdat);
+    DOMsor.innerHTML = '';
     koktelok.koktelokAdat.forEach((koktel) => {
         if (koktel != null) {
             const divMB = document.createElement('div');
@@ -67,7 +67,8 @@ function koktelRendereles(koktelok) {
 
             let imgTag = document.createElement('img');
             imgTag.setAttribute('alt', koktel.KoktelCim);
-            console.log(koktel.KoktélID);
+            imgTag.classList.add('img-fluid', 'rounded');
+            //console.log(koktel.KoktélID);
 
             (async () => {
                 const koktelKep = await POSTKepLekeres(
@@ -78,16 +79,42 @@ function koktelRendereles(koktelok) {
 
             cardDiv.appendChild(imgTag);
             const cardBody = document.createElement('div');
-            cardBody.classList.add('card-body');
+            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
             cardDiv.appendChild(cardBody);
 
             let cim = document.createElement('h4');
             cim.innerText = koktel.KoktelCim;
             cardBody.appendChild(cim);
 
-            let ertekeles = document.createElement('span');
-            ertekeles.innerText = 'Értékelés: ' + koktel.ertekeles;
-            cardBody.appendChild(ertekeles);
+            if (koktel.ertekeles == null) {
+                let ertekeles = document.createElement('span');
+                ertekeles.innerText = 'Értékelés: ☆☆☆☆☆';
+                cardBody.appendChild(ertekeles);
+            } else {
+                const ertekeles = Math.round(koktel.ertekeles * 10) / 10;
+                let csillagok = '';
+
+                for (let i = 0; i < Math.round(ertekeles - 0.5); i++) {
+                    csillagok += '★';
+                }
+                //Számot stringé alakítunk, majd megnézzük hogy van e benne tizedesjelölő
+                if (ertekeles.toString().includes('.')) {
+                    csillagok += '★';
+                    for (let i = 0; i < 5 - Math.round(ertekeles); i++) {
+                        csillagok += '☆';
+                    }
+                } else {
+                    for (let i = 0; i < 5 - Math.round(ertekeles - 0.5); i++) {
+                        csillagok += '☆';
+                    }
+                }
+
+                csillagok += '(' + ertekeles + ')';
+
+                let ertekelesElement = document.createElement('span');
+                ertekelesElement.innerText = 'Értékelés: ' + csillagok;
+                cardBody.appendChild(ertekelesElement);
+            }
 
             const cardText = document.createElement('div');
             cardText.classList.add('card-text');
@@ -119,7 +146,6 @@ function koktelRendereles(koktelok) {
             cardText.appendChild(osszetevoDOM);
 
             const uLista = document.createElement('ul');
-            cardText.classList.add('h-100');
             let i = 0;
             //console.log(koktel.osszetevok[0].Osszetevő);
 
@@ -134,7 +160,7 @@ function koktelRendereles(koktelok) {
                 uLista.appendChild(liOsszetevo);
                 i++;
             }
-            console.log(i);
+            //console.log(i);
 
             if (koktel.osszetevok.length > 3) {
                 const li = document.createElement('li');
@@ -148,11 +174,21 @@ function koktelRendereles(koktelok) {
             tovabbBtn.setAttribute('value', 'Tovább a Receptre');
             tovabbBtn.classList.add('btn', 'btn-secondary', 'w-100');
             tovabbBtn.dataset.id = koktel.KoktélID;
-            cardText.appendChild(tovabbBtn);
+            cardBody.appendChild(tovabbBtn);
             tovabbBtn.addEventListener('click', atvitelKoktelra);
         }
     });
-    let oszlopokSzama = koktelok.koktelokAdat.length;
+    let oszlopokSzama = 0;
+    console.log(koktelok.koktelokAdat.length);
+
+    for (let i = 0; i < koktelok.koktelokAdat.length; i++) {
+        if (koktelok.koktelokAdat[i] != null) {
+            oszlopokSzama += 1;
+        }
+    }
+
+    console.log(oszlopokSzama);
+
     while (oszlopokSzama % 4 != 0) {
         let ujOszlop = document.createElement('div');
         ujOszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
@@ -170,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
     (async () => {
         //Jelvenyek avagy rendezesek lekerese
         const jelvenyek = await GETfetch('http://127.0.0.1:3000/api/Koktelok/Jelvenyek');
-        console.log(jelvenyek.data);
+        //console.log(jelvenyek.data);
 
         const erossegSelect = document.getElementById('Erősség');
         for (let i = 0; i < jelvenyek.data.erosseg.length; i++) {
@@ -195,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //koktelok lekeredezese
         const koktelok = await GETfetch('http://127.0.0.1:3000/api/Koktelok/lekeres');
-        console.log(koktelok);
+        //console.log(koktelok);
 
         koktelRendereles(koktelok);
     })();
@@ -222,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const keresettKoktelNeve = document.getElementById('searchBar').value;
             if (keresettKoktelNeve.length > 0) {
                 const koktelok = await GETfetch(`http://127.0.0.1:3000/api/Koktelok/lekeres/${keresettKoktelNeve}`);
-                console.log(koktelok);
+                koktelRendereles(koktelok);
             } else {
                 alert('Nem adott meg nevet!');
             }

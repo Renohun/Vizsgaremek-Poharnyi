@@ -77,7 +77,7 @@
         </nav>
         <div class="container-fluid">
             <div class="row ">
-                <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-2 col-xxl-1 col-3 vh-100" id="Sidebar">
+                <div class="d-flex flex-column col-md-3 col-sm-4 col-lg-2 col-xl-2 col-xxl-1 col-4 vh-100" id="Sidebar">
                     <div class="mb-auto mt-auto">
                         <input type="button" value="Adatlap" class="gomb jelenlegi" id="Adatlap" />
                     </div>
@@ -95,10 +95,10 @@
                     </div>
                     <!--Does Nothing:-->
                     <div class="mb-auto mt-auto">
-                        <input type="button" value="Fiók Törlése" class="torles-gomb" id="" />
+                        <input type="button" value="Fiók Törlése" class="torles-gomb" id="Törlés" />
                     </div>
                 </div>
-                <div id="adatoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                <div id="adatoldal" class="col-md-9 col-sm-8 col-lg-10 col-xl-10 col-8">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Adatlap</p>
                     </div>
@@ -156,18 +156,15 @@
                         </div>
                     </div>
                 </div>
-                <div hidden id="kosároldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                <div hidden id="kosároldal" class="col-md-9 col-sm-8 col-lg-10 col-xl-10 col-8 col-xxl-11 pe-0">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">A Kosarad</p>
                     </div>
-                    <div class="row mb-4">
+                    <div class="row mb-4 p-0">
                         <div id="KosárGombok">
-                                <span class="fs-3 align-middle">A Kosárban lévő termékek</span>
-                                <input type="button" class="btn btn-success" value="Fizetés" id="KosárFizet">
-                                <input id="KosárDelete" class="btn btn-danger" type="button" value="Kosár Ürítése">
-                                <input id="KosárEdit" class="btn btn-info" type="button" value="Kosár Módosítása">
+
                         </div>
-                        <div class="row">
+                        <div class="row pe-0">
                             <div id="KosárFizetésGomb">
 
                             </div>
@@ -179,7 +176,7 @@
 
 
                 </div>
-                <div hidden id="kedvencoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                <div hidden id="kedvencoldal" class="col-md-9 col-sm-8 col-lg-10 col-xl-10 col-8 col-xxl-11">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Kedvenc Koktélok</p>
                     </div>
@@ -187,7 +184,7 @@
 
                     </div>
                 </div>
-                <div hidden id="kokteloldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                <div hidden id="kokteloldal" class="col-md-9 col-sm-8 col-lg-10 col-xl-10 col-8 col-xxl-11">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Saját Koktélok</p>
                     </div>
@@ -195,7 +192,7 @@
 
                     </div>  
                 </div>
-                <div hidden id="reportoldal" class="col-md-9 col-sm-9 col-lg-10 col-xl-10 col-9">
+                <div hidden id="reportoldal" class="col-md-9 col-sm-8 col-lg-10 col-xl-10 col-8 col-xxl-11">
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Jelentések</p>
                     </div>
@@ -204,7 +201,24 @@
 
                     </div>
                 </div>
-            </div>
+                <div class="modal" tabindex="-1" id="Fioktorles">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="text-center mt-1">
+                          <h5 class="">Fiók Törlése</h5>
+                          <span id="feedback"></span>
+                        </div>
+                        <div class="modal-body">
+                            A fiók törléséhez írja be a "TÖRLÉS" szót
+                            <input type="text" class="form-control" id="DelConfText">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="DelNvm">Mégse</button>
+                            <button type="button" class="btn btn-danger"id="DelConf">Fiók Törlése</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
         </div>
         <script src="Adatlap.js"></script>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>

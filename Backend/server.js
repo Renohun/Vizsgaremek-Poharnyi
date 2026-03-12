@@ -48,13 +48,11 @@ router.get('/LepjBe', (req, res) => {
 //KoktelKeszites
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/')));
 router.get('/Keszites', (req, res) => {
-     if (req.cookies.auth_token==null) {
-        res.redirect('/LepjBe')
+    if (req.cookies.auth_token == null) {
+        res.redirect('/LepjBe');
+    } else {
+        res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/NewCocktail.html'));
     }
-    else{
-         res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/NewCocktail.html'));
-    }
-   
 });
 
 //Kijelentkezes
@@ -66,19 +64,12 @@ router.get('/Kijelentkezes', authenticationMiddleware, (req, res) => {
         sameSite: process.env.COOKIE_SECURE
     });
 
-    res.status(200).json({
-        message: 'Sikeresen kijelentkezve'
-    });
+    res.redirect('/');
 });
 
 //Adatok - Dinamikus
-router.get('/Adatlap', (req, res) => {
-    if (req.cookies.auth_token==null) {
-        res.redirect('/LepjBe')
-    }
-    else{
-        res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Adatlap/Adatlap.html'));
-    }
+router.get('/Adatlap', authenticationMiddleware, (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Adatlap/Adatlap.html'));
 });
 //AdminPanel - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/AdminPanel - Dinamikus')));
@@ -93,20 +84,25 @@ router.get('/Koktelok', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'Pohárnyi - Dinamikus', 'PohAlc.html'));
 });
 
-//KoktelParam
-router.use(express.static(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'KoktélLap')));
+//Koktel
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap')));
 router.get('/Koktel/:koktelID', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/koktellap.html'));
 });
-
-//server.post('Koktel/:koktelID');
+router.get('/KoktelHiba', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/nincsilyen.html'));
+});
 
 //!API endpoints
 app.use('/', router);
 const endpoints = require('./api/api.js');
-const cookieParser = require('cookie-parser');
 app.use('/api', endpoints);
 
+//ÁLTALÁNOS SZŰRÉS
+//ha olyan endpointra hivatkozunk ami nincs, akkor száműzzük, jelenleg a koktélos hibaoldalra
+app.use((req, res) => {
+    res.redirect('/KoktelHiba');
+});
 //!Szerver futtatása
 app.listen(port, ip, () => {
     console.log(`Szerver elérhetősége: http://${ip}:${port}`);

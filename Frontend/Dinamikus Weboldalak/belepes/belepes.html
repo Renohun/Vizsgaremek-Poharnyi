@@ -93,13 +93,37 @@
                     <div class="card">
                         <div class="card-header text-center fw-bold">Bejelentkezes</div>
                         <div class="card-body">
-                            <label for="felhasznalo">Email</label>
-                            <input type="text" id="felhasznalo" class="form-control" />
-                            <label for="jelszo" class="mt-3">Jelszo</label>
-                            <input type="password" id="jelszo" min="5" max="30" class="form-control" />
-                            <input type="checkbox" name="" id="jelszomutatas" class="mt-3" />
+                            <form action="/api/belepes" method="post" id="formTag">
+                                <label for="email">Email</label>
+                                <!--Ez sajnos nem ellenorzi azt hogy van . vegen, hanem a csak a @-ot -->
+                                <input
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    class="form-control"
+                                    placeholder="pelda@domain.com"
+                                    required
+                                />
+                                <label for="jelszo" class="mt-3">Jelszo</label>
+                                <input
+                                    type="password"
+                                    name="jelszo"
+                                    id="jelszo"
+                                    min="5"
+                                    max="30"
+                                    class="form-control"
+                                    required
+                                />
+
+                                <input
+                                    type="submit"
+                                    id="bejelentkezesGomb"
+                                    value="Bejelentkezes"
+                                    class="w-100 btn btn-success mt-4"
+                                />
+                            </form>
                             <label for="jelszomutatas">Jelszo megjelenitese</label>
-                            <input type="button" value="Bejelentkezes" class="w-100 btn btn-success mt-4" />
+                            <input type="checkbox" name="" id="jelszomutatas" class="mt-3" />
                         </div>
                         <div class="card-header d-flex flex-column align-items-center">
                             <span class="text-center fw-bold"

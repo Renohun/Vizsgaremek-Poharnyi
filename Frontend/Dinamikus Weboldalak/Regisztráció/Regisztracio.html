@@ -92,36 +92,72 @@
                 <div class="card mt-5">
                     <div class="card-body">
                         <p class="text-center fs-1 card-title">Regisztrálj a weblapunkra</p>
-                        <div>
-                            <label for="">Adj meg email címét:</label>
-                            <input type="email" class="form-control mb-2" placeholder="example@gmail.com" />
-                        </div>
-                        <div>
-                            <label for="">Adja meg a felhasználónevét (Min: 3 Max: 30)</label>
-                            <input
-                                type="text"
-                                class="form-control mb-2"
-                                min="3"
-                                max="30"
-                                placeholder="Felhasznalo Nev"
-                            />
-                        </div>
-                        <div>
-                            <label for="">Adja meg a jelszavát (Min: 5 Max: 30)</label>
-                            <input type="password" min="5" max="30" class="form-control mb-2 jelszoElement" />
-                        </div>
-                        <div>
-                            <label for="">Ismételje meg jelszavát (Min: 5 Max: 30)</label>
-                            <input type="password" min="5" max="30" class="form-control mb-2 jelszoElement" />
-                        </div>
+                        <form action="" method="post" id="formTag">
+                            <div>
+                                <label for="emailInp">Adj meg email címét:</label>
+                                <input
+                                    type="email"
+                                    class="form-control mb-2"
+                                    placeholder="example@gmail.com"
+                                    id="emailInp"
+                                    name="emailInp"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label for="felhasnzaloNev">Adja meg a felhasználónevét (Min: 3 Max: 30)</label>
+                                <input
+                                    type="text"
+                                    class="form-control mb-2"
+                                    min="3"
+                                    max="30"
+                                    placeholder="Felhasznalo Nev"
+                                    name="felhasnzaloNev"
+                                    id="felhasnzaloNev"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label for="jelszo">Adja meg a jelszavát (Min: 8 Max: 20)</label>
+                                <input
+                                    type="password"
+                                    min="8"
+                                    max="20"
+                                    class="form-control mb-2 jelszoElement"
+                                    name="jelszo"
+                                    id="jelszo"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label for="jelszoIsmet">Ismételje meg jelszavát (Min: 8 Max: 20)</label>
+                                <input
+                                    type="password"
+                                    min="8"
+                                    max="20"
+                                    class="form-control mb-2 jelszoElement"
+                                    name="jelszoIsmet"
+                                    id="jelszoIsmet"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="submit"
+                                    id="RegisztracioGomb"
+                                    value="Regisztráció"
+                                    class="btn btn-success w-100"
+                                />
+                            </div>
+                        </form>
+
                         <div>
                             <input type="checkbox" name="jelszoMutatas" id="jelszoMutatas" />
                             <label for="jelszoMutatas">Jelszo mutatasa</label>
                         </div>
-                        <div><input type="checkbox" name="" id="" />Elfogadom az <a href="">ÁFSZ</a> feltételeit</div>
                         <div>
-                            <input type="submit" id="RegisztracioGomb" value="Regisztráció" class="btn btn-success" />
-                            <input type="reset" value="Vissza az oldalra" class="btn btn-danger" />
+                            <input type="checkbox" name="ASZFCheck" id="ASZFCheck" required />
+                            <label for="ASZFCheck">Elfogadom az <a href="" target="_blank">ASZF</a> felteteleit</label>
                         </div>
                     </div>
                     <div class="card-footer">
