@@ -1,34 +1,38 @@
 /*Általános*/
 body {
-    background-color: rgb(29, 27, 27);
-    color: rgb(61, 139, 61);
+    background-color: rgb(66, 66, 66);
+    color: rgb(103, 194, 103);
 }
 .card{
     color: black;
-    background-color: burlywood;
+    background-color: rgb(196, 163, 121);
 }
 
 .btn-secondary{
     background-color: rgb(61, 139, 61);
     border: rgb(61, 139, 61);
-    color: black;
+    --bs-btn-color:white
+}
+
+.badge{
+    font-weight: 500;
 }
 
 .btn-secondary:hover{
-    background-color: #9acd32;
+    background-color: #a7e727;
     color: black;
 }
 /*NavBar*/
 .hatter{
-    background-color: #647c33;
+    background-color: #9acd32;
     border-bottom-right-radius: 5px;
 }
 .navbar-nav > div > .dropdown-menu {
-    background-color: #647c33;
+    background-color: #9acd32;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     border-top: 0px;
-    border-color: #647c33;
+    border-color: #9acd32;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     --bs-dropdown-link-hover-bg: #9acd32;
@@ -36,18 +40,18 @@ body {
 }
 .navbar-nav > div > .dropdown-menu > li > a {
     text-decoration: none;
-    color: rgb(216, 247, 247);
+    color: rgb(28, 180, 28);
 }
 
 /*Adatlap*/
 #Sidebar{
-    background-color: #647c33;
+    background-color: #9acd32;
     margin-top:5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
 .gomb,.torles-gomb{
-    background-color: #647c33;
+    background-color: #9acd32;
 }
 .torles-gomb{
     color: rgb(173, 1, 36);
@@ -59,12 +63,12 @@ body {
 /*Koktelok weboldal*/
 #keresofelulet{
     margin-top: 20px;
-    background-color: rgb(66, 66, 66);
+    background-color: rgb(97, 97, 97);
     border-radius: 5px;
     padding-bottom: 20px;
 }
 #koktelSor{
-    background-color: rgb(66, 66, 66);
+    background-color: rgb(97, 97, 97);
     border-radius: 5px;
     padding-top: 12px;
     padding-bottom: 12px;
@@ -74,11 +78,17 @@ body {
 #fav>input,.star,.star:hover,.star:disabled{
     color: yellow;
 }
-#Adatok{
-    color:rgb(166, 185, 185);
-}
+
 #Jelentes{
     --bs-modal-bg:rgb(66, 66, 66)
+}
+#Kommentek{
+    background-color: rgb(97, 97, 97);
+    padding-bottom:5px;
+    padding-top:5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
 }
 /*Koktél Hiba*/
 
