@@ -5,7 +5,7 @@ function AuthMiddleware(req, res, next) {
     const token = req.cookies.auth_token;
     console.log('Auth: ' + JSON.stringify(jwt.decode(token)));
 
-    if (!token) {
+    if (token == undefined) {
         res.redirect('/LepjBe');
     } else {
         try {
@@ -14,7 +14,7 @@ function AuthMiddleware(req, res, next) {
             req.data = payload;
             next();
         } catch (error) {
-            res.redirect('/KoktelHiba');
+            res.redirect('/LepjBe');
         }
     }
 }
