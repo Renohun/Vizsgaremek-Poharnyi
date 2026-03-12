@@ -99,3 +99,13 @@ body {
     color: red;
 }
 
+/*Koktel Keszites*/
+.main{
+    background-color:rgb(97, 97, 97) ;
+}
+#koktelurlap{
+    background-color: rgb(143, 112, 72);
+}
+#urlapcim{
+    background-color: rgb(184, 152, 112);
+}
