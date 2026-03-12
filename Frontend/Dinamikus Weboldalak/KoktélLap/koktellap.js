@@ -129,7 +129,7 @@ async function Betoltes() {
             KommentIroTagsag.innerText+=` - ${jelenDate.getFullYear()-KommIroRegDate[0]} Éve Tag`
         }
         else if(jelenDate.getMonth()+1!=KommIroRegDate[1]){
-            KommentIroTagsag.innerText+=` - ${jelenDate.getMonth()-KommIroRegDate[1]} Hónapja Tag`
+            KommentIroTagsag.innerText+=` - ${jelenDate.getMonth()-KommIroRegDate[1]+1} Hónapja Tag`
         }
         else{
             KommentIroTagsag.innerText+=` - ${jelenDate.getDate()-KommIroRegDate[2]} Napja Tag`
@@ -235,7 +235,7 @@ async function Tisztitas() {
 
 
 async function jelentes(mit,tipus,kit) {
-    var JelIv = new bootstrap.Modal(document.getElementById('Fioktorles'), {})   
+    var JelIv = new bootstrap.Modal(document.getElementById('Jelentes'), {})   
     JelIv.show()
     document.getElementById("JelSend").addEventListener("click",async()=>{
             
@@ -318,19 +318,23 @@ function ertekeles(ertekelteE,mennyire) {
         for (let i = 0; i < mennyire; i++) {
             ertek[i].value="★"
         }
+        for (let i = 0; i < ertek.length; i++) {
+            ertek[i].setAttribute("disabled","true")
+            ertek[i].classList.add("star")
+        }
         document.getElementById("ErtSend").setAttribute("hidden","true")
         document.getElementById("ErtSend").setAttribute("id","")
         document.getElementById("rateDisplay").innerHTML="Ön értékelte már a koktélt"
     }
     else{
         for (let i = 0; i < ertek.length; i++) {
+                ertek[i].classList.add("star")
                 ertek[i].addEventListener("click",async()=>{
-                    
                     clear()
                     for (let j = 0; j < i+1; j++) {
                         ertek[j].value="★"
                     }
-                },{once:true})            
+                })
         }
         
         document.getElementById("ErtSend").addEventListener("click",async()=>{
