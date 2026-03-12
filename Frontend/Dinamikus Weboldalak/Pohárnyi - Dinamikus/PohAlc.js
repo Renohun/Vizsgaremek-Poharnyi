@@ -79,7 +79,7 @@ function koktelRendereles(koktelok) {
 
             cardDiv.appendChild(imgTag);
             const cardBody = document.createElement('div');
-            cardBody.classList.add('card-body');
+            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
             cardDiv.appendChild(cardBody);
 
             let cim = document.createElement('h4');
@@ -120,7 +120,6 @@ function koktelRendereles(koktelok) {
             cardText.appendChild(osszetevoDOM);
 
             const uLista = document.createElement('ul');
-            cardText.classList.add('h-100');
             let i = 0;
             //console.log(koktel.osszetevok[0].Osszetevő);
 
@@ -149,7 +148,7 @@ function koktelRendereles(koktelok) {
             tovabbBtn.setAttribute('value', 'Tovább a Receptre');
             tovabbBtn.classList.add('btn', 'btn-secondary', 'w-100');
             tovabbBtn.dataset.id = koktel.KoktélID;
-            cardText.appendChild(tovabbBtn);
+            cardBody.appendChild(tovabbBtn);
             tovabbBtn.addEventListener('click', atvitelKoktelra);
         }
     });
