@@ -98,10 +98,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await GETfetch(
                     `http://127.0.0.1:3000/api/AdminPanel/TermekLearazas/${kivalasztottTermek}/${learazas}`
                 );
-                console.log(data);
+                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                modalElement.show();
+
+                document.getElementById('modalText').innerText = 'Termék sikeresen leárazva ' + learazas + '%-kal!';
+
+                document.getElementById('modalBtn').addEventListener('click', () => {
+                    modalElement.hide();
+                });
             })();
         } else {
-            alert('Hianyzik a learazas erteke');
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = 'Leárazás értéke hiányzik!';
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
         }
     });
 
@@ -168,13 +182,34 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ellResult.duplikacio == false) {
                 POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
                 const fetchAdat = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
-                alert('Sikeres termek hozzaadas');
+                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                modalElement.show();
+
+                document.getElementById('modalText').innerText = 'Termék sikeresen hozzáadva!';
+
+                document.getElementById('modalBtn').addEventListener('click', () => {
+                    modalElement.hide();
+                });
                 //console.log(fetchAdat);
             } else {
-                alert('Mar letezik ilyen nevu termek');
+                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                modalElement.show();
+
+                document.getElementById('modalText').innerText = 'Ilyen nevű koktél már létezik';
+
+                document.getElementById('modalBtn').addEventListener('click', () => {
+                    modalElement.hide();
+                });
             }
         } else {
-            alert('Hianyoznak adatok!');
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = 'Hiányoznak adatok!';
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
         }
     });
 });

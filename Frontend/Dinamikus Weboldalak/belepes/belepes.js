@@ -37,10 +37,24 @@ document.addEventListener('DOMContentLoaded', () => {
         ) {
             const res = await POSTfetch('http://127.0.0.1:3000/api/belepes', { felhasznalo: email, jelszo: jelszo });
             //modal alert
-            alert(res.message);
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = res.message;
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
         } else {
             //Ide jonne majd a modal-os alert
-            alert('Valamelyik input mezo nem felel meg a kriteriumoknak');
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = res.message;
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
         }
     });
 });
