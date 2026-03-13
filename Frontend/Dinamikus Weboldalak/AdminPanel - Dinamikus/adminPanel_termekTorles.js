@@ -40,8 +40,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log(id);
 
         const data = await DELETEfetch(`http://127.0.0.1:3000/api/AdminPanel/TermekTorles/${id}`);
-        console.log(data);
+        var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+        modalElement.show();
 
-        window.location.reload();
+        document.getElementById('modalText').innerText = 'Termék sikeresen törölve';
+
+        document.getElementById('modalBtn').addEventListener('click', () => {
+            modalElement.hide();
+            window.location.reload();
+        });
     });
 });

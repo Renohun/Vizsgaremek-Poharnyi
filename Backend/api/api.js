@@ -346,7 +346,7 @@ router.post('/regisztracio', async (request, response) => {
                     });
                 } else {
                     response.status(200).json({
-                        message: 'Sikeres adat feltoltes!',
+                        message: 'Sikeres regisztracio!',
                         result: result.insertId
                     });
                     /*
@@ -363,6 +363,9 @@ router.post('/regisztracio', async (request, response) => {
         );
     } catch (err) {
         console.log('Valamilyen extra hiba tortent: ' + err);
+        response.status(500).json({
+            message: 'Hiba tortent adat feltoltesnel!' + err
+        });
     }
 });
 //A belepes oldal hoz ide, lekeri azt a sort amiben a felhasznalo adatai vannak, persz ha van ilyen egyaltalan
@@ -389,7 +392,7 @@ router.post('/belepes', (request, response) => {
                 //console.log(felhasznaloDB);
 
                 if (felhasznaloDB == undefined) {
-                    response.status(403).json({ message: 'Hibas email! Avagy nem letezik ilyen felhasznalo' });
+                    response.status(200).json({ message: 'Hibas email! Avagy nem letezik ilyen felhasznalo' });
                 } else {
                     //megnezi az argon package ellenorzi hogy az eltarolt jelszo megegyezik a beirt jelszoval
                     const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
