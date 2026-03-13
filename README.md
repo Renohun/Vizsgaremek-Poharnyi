@@ -31,22 +31,24 @@ lehetőségeket koktélkészítésre.
 ### Használt nyelvek:
 ● HTML
 ● CSS
-o Bootstrap
+  o Bootstrap
 ● JS
-o NodeJS
-▪ Express
-▪ CORS
-
+  o NodeJS
+    ▪ Express
+    ▪ multer
+    ▪ JsonWebToken
+    ▪ argon2
+    ▪ path
 ● SQL
+  ▪ MySQL2
 
 Az alábbi felsorolás nem kimerítő, a feladatok mennyisége és felosztása a projekt során
 változhat
 ### Csoporttagok feladatai:
-Bettes Kornél: Főoldal elkészítése, Közösségi adatbázisok létrehozása, Felhasználói adatbázis
-létrehozása, Jelszó titkosítás, JS Szerver létrehozása, Backend API létrehozása
-Benczik Marcell Ferenc: Bejelentkezési felület elkészítése, Kúrált Nem alkoholos koktélok
-adatbázisának elkészítése és feltöltése, Bejelentkezési rendszer elkészítése, Szociális
-rendszerek elkészítése, Adminisztratív funkciók elkészítése
-Sziklai Dávid: Koktélok keresésre szánt weboldal elkészítése, Kúrált Koktélok adatbázisának
-elkészítése és feltöltése, Szűrési rendszer elkészítése, Koktél oldalának generálására használt
-backend funkciók kifejlesztése
+Bettes Kornél: Adminpanel elkészítése, Koktél böngésző elkészítése, Bejelentkezés és Regisztráció elkészítése
+
+Benczik Marcell Ferenc:
+Adatbázis elkészítése, Adatlap elkészítése, Koktél Lap elkészítése
+
+
+Sziklai Dávid: Koktélok keresésre szánt weboldal elkészítése, Főoldal elkészítése, Webshop elkészítése
