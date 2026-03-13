@@ -814,8 +814,8 @@ function fioktorles(){
             document.getElementById("feedback").innerHTML="A mező nem tartalmazza a helyes szavat!"
         }
         else{
-            document.getElementById("feedback").innerHTML="Detonation"
             await AdatPost("/api/AdatlapLekeres/Fioktorles")
+            await AdatPost("/api/Kijelentkezes")
             window.location.href="/"
         }
         
