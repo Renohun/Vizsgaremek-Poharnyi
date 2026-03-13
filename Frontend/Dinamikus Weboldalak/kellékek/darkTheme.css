@@ -23,25 +23,7 @@ body {
     color: black;
 }
 /*NavBar*/
-.hatter{
-    background-color: #9acd32;
-    border-bottom-right-radius: 5px;
-}
-.navbar-nav > div > .dropdown-menu {
-    background-color: #9acd32;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-top: 0px;
-    border-color: #9acd32;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    --bs-dropdown-link-hover-bg: #9acd32;
 
-}
-.navbar-nav > div > .dropdown-menu > li > a {
-    text-decoration: none;
-    color: rgb(28, 180, 28);
-}
 
 /*Adatlap*/
 #Sidebar{
@@ -102,10 +84,51 @@ body {
 /*Koktel Keszites*/
 .main{
     background-color:rgb(97, 97, 97) ;
+    color: black;
 }
 #koktelurlap{
+    margin-top: 0px;
     background-color: rgb(143, 112, 72);
 }
-#urlapcim{
-    background-color: rgb(184, 152, 112);
+#urlapcim,#drop-area{
+    background-color: rgb(175, 137, 90);
+}
+
+#osszetevoDiv{
+    background-color: rgb(175, 137, 90);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+
+
+/*Javaslat Kavicsnak*/
+.Osszetevobtn{
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.OsszetevoBar{
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+#eroDiv,#izDiv,#allergenDiv{
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+/*A gombra nyomás után i guess*/
+.jelvenygomb{
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+#osszetevogomb{
+    background-color: #324ecd;
+    border-color:#324ecd ;
+    color: white;
+}
+#osszetevogomb:hover{
+    background-color: #2774e7;
+    border-color:#2774e7 ;
 }
