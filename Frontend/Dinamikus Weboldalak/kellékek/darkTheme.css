@@ -1,6 +1,8 @@
 /*Általános*/
 body {
-    /*background-color: rgb(66, 66, 66);*/
+    /*
+    background-color: rgb(66, 66, 66);
+    */
     background-color: rgb(34, 41, 34);
     color: rgb(103, 194, 103);
 }
@@ -47,12 +49,12 @@ body {
 /*Koktelok weboldal*/
 #keresofelulet{
     margin-top: 20px;
-    background-color: rgb(97, 97, 97);
+    background-color: rgb(75, 75, 75);
     border-radius: 5px;
     padding-bottom: 20px;
 }
 #koktelSor{
-    background-color: rgb(97, 97, 97);
+    background-color: rgb(75, 75, 75);
     border-radius: 5px;
     padding-top: 12px;
     padding-bottom: 12px;
