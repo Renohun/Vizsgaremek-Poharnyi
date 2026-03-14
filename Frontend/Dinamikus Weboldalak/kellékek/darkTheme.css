@@ -1,11 +1,13 @@
 /*Általános*/
 body {
-    background-color: rgb(66, 66, 66);
+    /*background-color: rgb(66, 66, 66);*/
+    background-color: rgb(34, 41, 34);
     color: rgb(103, 194, 103);
 }
 .card{
     color: black;
     background-color: rgb(196, 163, 121);
+    border: 0px;
 }
 
 .btn-secondary{
@@ -72,6 +74,7 @@ body {
     padding-right: 10px;
     border-radius: 5px;
 }
+
 /*Koktél Hiba*/
 
 #vissza{
@@ -83,7 +86,7 @@ body {
 
 /*Koktel Keszites*/
 .main{
-    background-color:rgb(97, 97, 97) ;
+    background-color: rgb(34, 41, 34);
     color: black;
 }
 #koktelurlap{
