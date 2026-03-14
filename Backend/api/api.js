@@ -1658,3 +1658,24 @@ router.get("/Webshop/Keplekeres/:id", async(request,response)=>{
         })
     }
 })
+
+
+router.post("/Webshop/szures",async(request,response)=>{
+    try {
+
+        const feltetelek = request.body
+        let whereErtekek
+        for (const item of Object.entries(feltetelek)) 
+        {
+            
+        }
+        const query = "SELECT * FROM webshoptermek WHERE"
+        
+    } catch (error) {
+        throw new Error(error)
+        response.status(500).json({
+            
+            message:"hiba"
+        })
+    }
+})

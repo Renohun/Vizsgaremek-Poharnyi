@@ -87,17 +87,15 @@
             <div id="szures">
                 <div class="collapse" id="collapseExample">
                     <div id="szuresek" class="card card-body">
+                        
                         <div id="ar">
                             <div class="slidecontainer">
                                 <label id="ArLabel" for="ArSlider">Maximum ár</label>
                                 <input
                                     type="range"
-                                    min="1"
-                                    name="ArSlider"
-                                    max="100"
-                                    value="50"
+                                   name="ArSlider"
                                     class="slider"
-                                    id="myRange"
+                                    id="arRange"
                                 />
                                 <div id="arKiiras">
                                     <input type="text" maxlength="7" id="maxAr"></input>
@@ -106,15 +104,12 @@
                                
                             </div>
                         </div>
-                        <div id="alkoholTart">
+                        <div id="alkoholTart" class="eltunt">
                             <div class="slidecontainer">
                                 <label id="AlkLabel" for="AlkSlider">Maximum alkoholtartalom</label>
                                 <input
                                     type="range"
-                                    min="1"
                                     name="AlkSlider"
-                                    max="100"
-                                    value="50"
                                     class="slider"
                                     id="AlkRange"
                                 />
@@ -146,6 +141,17 @@
                                 <label for="KategSel">Kategória</label>
                                 <select name="KategSel" id="KategoriaSelect">
                                     
+                                </select>
+                            </div>
+                         </div>
+                         <div id="Rendezes">
+                            <div id="RendezesSelectDiv">
+                                <label for="RendezesSelect">Rendezés</label>
+                                <select name="RendezSel" id="RendezesSelect">
+                                    <option value="-">-</option>
+                                    <option value="abc">abc sorrend</option>
+                                    <option value="novekvo">Ár szerint növekvő</option>
+                                    <option value="csokkeno">Ár szerint csökkenő</option>
                                 </select>
                             </div>
                          </div>

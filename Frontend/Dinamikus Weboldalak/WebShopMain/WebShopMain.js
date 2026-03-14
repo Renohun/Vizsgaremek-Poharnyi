@@ -26,7 +26,7 @@ const TermekKepLekeres = async (url) => {
 };
 //? Sliderek alapértékének beállítása
 const Sliderek = async () => {
-    var slider1 = document.getElementById('myRange');
+    var slider1 = document.getElementById('arRange');
     var output1 = document.getElementById('maxAr');
     var slider2 = document.getElementById('AlkRange');
     var output2 = document.getElementById('maxAlk');
@@ -47,13 +47,14 @@ const Sliderek = async () => {
     alk.sort((a, b) => a - b);
     console.log(ar);
     console.log(alk);
-    slider1.setAttribute('value', ar[0]);
-    output1.value = ar[0];
     slider1.setAttribute('min', ar[0]);
     slider1.setAttribute('max', ar[ar.length - 1]);
+       slider1.setAttribute('value', ar[ar.length - 1]);
+    output1.value = ar[ar.length-1];
+  
     //slider2
-    slider2.setAttribute('value', alk[0]);
-    output2.value = alk[0];
+    slider2.setAttribute('value', alk[alk.length-1]);
+    output2.value = alk[alk.length-1];
     slider2.setAttribute('min', alk[0]);
     slider2.setAttribute('max', alk[alk.length - 1]);
 
@@ -84,7 +85,7 @@ const Sliderek = async () => {
             slider2.value = alk[0];
         } else if (output2.value > alk[alk.length - 1]) {
             output2.value = alk[alk.length - 1];
-            slider2.value = alk[0];
+            slider2.value = alk[alk.length - 1];
         } else {
             slider2.value = output2.value;
             console.log(slider2.value);
@@ -106,6 +107,7 @@ const SelectFeltolt = (data, Select1, Select2, Select3) => {
     //3.Option
     let alapOption3 = document.createElement('option');
     alapOption3.setAttribute('value', '-');
+    alapOption3.setAttribute('selected', 'true');
     alapOption3.setAttribute('id', 'AlapKategOption');
     alapOption3.innerHTML = '-';
     Select3.appendChild(alapOption3);
@@ -243,12 +245,78 @@ document.addEventListener('DOMContentLoaded', async () => {
     let OrszagSelect = document.getElementById('OrszagSelect');
     let MarkaSelect = document.getElementById('MarkaSelect');
     let KategoriaSelect = document.getElementById('KategoriaSelect');
+    let RendezesSelect = document.getElementById('RendezesSelect');
     SelectFeltolt(data, OrszagSelect, MarkaSelect, KategoriaSelect);
     OrszagSelect.addEventListener('change', () => {
         console.log(OrszagSelect.value);
     });
+    //alkohol ellernörzés
+  
+    let alkoholcsuszka = document.getElementById("alkoholTart")
+    
+    KategoriaSelect.addEventListener("change",()=>{
+       
+if(KategoriaSelect.value == "alkohol")
+        {
+             alkoholcsuszka.classList.remove("eltunt")
+        }
+        else
+        {
+            alkoholcsuszka.classList.add("eltunt")
+        }
+    } )
     //kártyák generálása
     let KartyaHova = document.getElementById("kartyaSor")
     kartyaGen(data,KartyaHova)
+
+    //
+    //szuresi adatok osszegyujtese
+    //
+    let SzuresGomb = document.getElementById("kuldesGomb")
+    let szuresiAdatok = {};
+    SzuresGomb.addEventListener("click",()=>
+    {
+        let arSlider = document.getElementById('arRange');
+        let alkoholSlider = document.getElementById('AlkRange');
+        
+        //max ár hozzaadasa
+        szuresiAdatok.MaxAr = arSlider.value
+        //max alkoholtartalom hozáaadása
+        if(KategoriaSelect.value == "alkohol")
+        {
+            szuresiAdatok.MaxAlk = alkoholSlider.value
+        }
+        //selectek hozzáadása
+        if (OrszagSelect.value != "-") 
+        {
+            szuresiAdatok.TermekSzarmazas = OrszagSelect.value    
+        }
+
+        if (MarkaSelect.value != "-") 
+        {
+            szuresiAdatok.TermekMarka = MarkaSelect.value    
+        }
+
+        if (KategoriaSelect.value != "-") 
+        {
+            szuresiAdatok.TermekKategoria = KategoriaSelect.value    
+        }
+
+        if (RendezesSelect.value != "-") 
+        {
+            szuresiAdatok.rendezes = RendezesSelect.value    
+        }
+
+        //akcios-e?
+        let akcio = document.getElementById("AkcioseCheck")
+        if (akcio.checked == true) 
+        {
+            szuresiAdatok.akcio = true    
+        }
+
+        console.log(szuresiAdatok)
+    })
+    
     
 });
+ //)

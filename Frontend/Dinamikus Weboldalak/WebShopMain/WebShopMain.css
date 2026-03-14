@@ -112,6 +112,15 @@
     display: flex;
     flex-direction: column;
 }
+.eltunt{display: none;}
+/*Rendezes*/
+#Rendezes {
+    margin-top: 15px;
+}
+#RendezesSelectDiv {
+    display: flex;
+    flex-direction: column;
+}
 /*akciose*/
 #Akciose {
     margin-top: 15px;
