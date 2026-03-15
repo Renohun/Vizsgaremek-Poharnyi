@@ -1671,28 +1671,32 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
         let VanEMarIlyen = false;
         let JelentetteMar = false;
         let MelyikAz;
+        console.log(request.body.JelentettID);
+        console.log(request.body.JelentettTartalomID);
+        console.log(request.body.JelentesTipusa);
+        
         for (let i = 0; i < JelentesekLista.length; i++) {
-            if (
-                request.body.JelentettID == JelentesekLista[i].JelentettID &&
-                request.body.JelentettTartalomID == JelentesekLista[i].JelentettTartalomID &&
-                request.body.JelentesTipusa == JelentesekLista[i].JelentesTipusa
-            ) {
+            //Ha a feljelentett felhasználü, feljelentett tartalom és jelentés típusa is egyezik
+            if (request.body.JelentettID == JelentesekLista[i].JelentettID &&request.body.JelentettTartalomID == JelentesekLista[i].JelentettTartalomID &&request.body.JelentesTipusa == JelentesekLista[i].JelentesTipusa) {
+                //Akkor megjelöljük, hogy nem kell létrehozni új jelentést
                 VanEMarIlyen = true;
+                //Eltároljuk a jelentés idjét
                 MelyikAz = JelentesekLista[i].JelentesID;
                 for (let j = 0; j < JelentőkLista.length; j++) {
-                    if (
-                        MelyikAz == JelentőkLista[j].JelentésID &&
-                        jwt.decode(request.cookies.auth_token).userID == JelentőkLista[j].JelentőID
-                    ) {
+                    //megnézzük hogy a jelentő felhasználó tett e már ugyanilyen jelentést
+                    if (MelyikAz == JelentőkLista[j].JelentésID &&jwt.decode(request.cookies.auth_token).userID == JelentőkLista[j].JelentőID) {
                         JelentetteMar = true;
                     }
                 }
             }
         }
 
+        //Ha nem jelentette
         if (JelentetteMar != true) {
             const JelentoKuldes = 'INSERT INTO jelentők (JelentőID,JelentésID,JelentesIndoka) VALUES (?,?,?)';
+            //és nem létezik
             if (VanEMarIlyen == false) {
+                //Akkor létrehozunk egy ilyen jelentést
                 const JelentesKuldes =
                     'INSERT INTO jelentesek (JelentettID,JelentettTartalomID,JelentesTipusa) VALUES (?,?,?)';
                 await lekeres(JelentesKuldes, [
@@ -1700,13 +1704,17 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
                     request.body.JelentettTartalomID,
                     request.body.JelentesTipusa
                 ]);
+                //és a jelentő felhasználó nevében teszünk egy jelentést az utolsó (most létrejött) jelentésre
                 let utolso = await lekeres('SELECT COUNT(*) as Darab FROM jelentesek');
                 await lekeres(JelentoKuldes, [
                     jwt.decode(request.cookies.auth_token).userID,
                     utolso[0].Darab,
                     request.body.Indok
                 ]);
-            } else {
+            } 
+            //és létezik
+            else {
+                //Akkor a nevében teszünk egy jelentést a már létező jelentésre
                 const JelentesModositas =
                     'UPDATE jelentesek SET JelentesMennyisege =JelentesMennyisege+1 WHERE JelentesID LIKE ?';
                 await lekeres(JelentesModositas, MelyikAz);
@@ -1717,6 +1725,7 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
                 ]);
             }
         }
+        //Visszaadjuk hogy jelentette e már ezt a felhasználó
         response.status(200).json({
             message: JelentetteMar
         });
