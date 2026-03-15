@@ -1160,8 +1160,6 @@ router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
                     jelentTar[i] = await lekeres(felhjel, jelentesek[i][0].JelentettTartalomID);
                 } else if (jelentesek[i][0].JelentesTipusa == 'Komment') {
                     temp.push(await lekeres(kommentjel, jelentesek[i][0].JelentettTartalomID));
-                    console.log(jelentesek[i][0].JelentettTartalomID);
-
                     temp.push(await lekeres(felhjel, temp[0][0].Keszito));
                     jelentTar[i] = temp;
                 }
@@ -1363,8 +1361,6 @@ router.post('/AdminPanel/KepLekeres/:id', async (request, response) => {
 router.post('/Koktelok/KepLekeres', async (request, response) => {
     try {
         let profil = jwt.decode(request.cookies.auth_token).userID;
-        console.log(profil);
-
         let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
         let kinek = await lekeres(kepkereses, profil);
         response.sendFile(path.join(__dirname, '..', 'images', kinek[0].ProfilkepUtvonal));
@@ -1459,10 +1455,9 @@ router.post('/AdatlapLekeres/Fizetes', async (request, response) => {
         const TermekFrissites = 'UPDATE webshoptermek SET Termekkeszlet=Termekkeszlet-? WHERE TermekID LIKE ?';
         const KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
         let kosar = await lekeres(KosarLekeres, jwt.decode(request.cookies.auth_token).userID);
-        console.log(kosar);
+
 
         let kosartermek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
-        console.log(kosartermek);
 
         for (let i = 0; i < kosartermek.length; i++) {
             await lekeres(TermekFrissites, [kosartermek[i].Darabszam, kosartermek[i].TermekID]);
@@ -1671,9 +1666,6 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
         let VanEMarIlyen = false;
         let JelentetteMar = false;
         let MelyikAz;
-        console.log(request.body.JelentettID);
-        console.log(request.body.JelentettTartalomID);
-        console.log(request.body.JelentesTipusa);
         
         for (let i = 0; i < JelentesekLista.length; i++) {
             //Ha a feljelentett felhasználü, feljelentett tartalom és jelentés típusa is egyezik
