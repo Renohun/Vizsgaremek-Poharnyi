@@ -1,23 +1,29 @@
+let felhosszetevok=[]
 function badge(nev){
     let jelveny=document.createElement("span")
     jelveny.classList.add("badge","text-bg-secondary","me-1")
     jelveny.innerHTML=nev+" "
+    felhosszetevok.push(nev)
     let jelvenygomb=document.createElement("input")
     jelvenygomb.setAttribute("type","button")
     jelvenygomb.setAttribute("value","x")
     jelvenygomb.classList.add("bgomb")
     jelvenygomb.addEventListener("click",()=>{
         document.getElementById("ideJelzok").removeChild(jelveny)
+        felhosszetevok.splice(felhosszetevok.indexOf(nev),1)
+        console.log(felhosszetevok);
     })
     jelveny.appendChild(jelvenygomb)
     document.getElementById("ideJelzok").appendChild(jelveny)
 }
 
+let osszetevoInput=document.getElementById("osszetevo")
+let hozzaadasGomb=document.getElementById("hozzaad")
+let opciokLista=document.getElementById("ideOpciok")
+
+
+
 document.addEventListener("DOMContentLoaded",()=>{
-    badge("Whiskey")
-    badge("Rum")
-    badge("Tequilla")
-    badge("Tonic")
     let lista=["Whiskey","Tequilla","Tonic"]
     let valasztek=document.createElement("div")
     for (let i = 0; i < lista.length; i++) {
@@ -25,33 +31,35 @@ document.addEventListener("DOMContentLoaded",()=>{
                 valasz.setAttribute("type","button")
                 valasz.classList.add("ogomb")
                 valasz.addEventListener("click",()=>{
-                    document.getElementById("osszetevo").value=lista[i]
-                    document.getElementById("ideOpciok").removeChild(valasztek)
-                    document.getElementById("ideOpciok").setAttribute("hidden","")
+                    osszetevoInput.value=lista[i]
+                    opciokLista.removeChild(valasztek)
+                    opciokLista.setAttribute("hidden","")
                 })
                 valasz.setAttribute("value",lista[i])
                 valasztek.appendChild(valasz)
         }
-    document.getElementById("osszetevo").addEventListener("focusin",()=>{
+    osszetevoInput.addEventListener("focusin",()=>{
         
-        document.getElementById("ideOpciok").removeAttribute("hidden")
-        document.getElementById("ideOpciok").appendChild(valasztek)
+        opciokLista.removeAttribute("hidden")
+        opciokLista.appendChild(valasztek)
     })
 
-    document.getElementById("osszetevo").addEventListener("input",()=>{
-        document.getElementById("ideOpciok").removeChild(valasztek)
+    osszetevoInput.addEventListener("input",()=>{
+        opciokLista.removeChild(valasztek)
         valasztek.innerHTML=""
         let hanydb=0
         for (let i = 0; i < lista.length; i++) {
-            if (lista[i].toLowerCase().startsWith(document.getElementById("osszetevo").value.toLowerCase())) {
+
+            if (lista[i].toLowerCase().startsWith(osszetevoInput.value.toLowerCase())&&felhosszetevok.includes(lista[i])==false) {
                 
                 let valasz=document.createElement("input")
                 valasz.setAttribute("type","button")
                 valasz.classList.add("ogomb")
                 valasz.addEventListener("click",()=>{
-                    document.getElementById("osszetevo").value=lista[i]
-                    document.getElementById("ideOpciok").removeChild(valasztek)
-                    document.getElementById("ideOpciok").setAttribute("hidden","")
+                    osszetevoInput.value=lista[i]
+                    opciokLista.removeChild(valasztek)
+                    opciokLista.setAttribute("hidden","")
+                    hozzaadasGomb.removeAttribute("disabled","")
                 })
                 valasz.setAttribute("value",lista[i])
                 valasztek.appendChild(valasz)
@@ -60,13 +68,30 @@ document.addEventListener("DOMContentLoaded",()=>{
         }
         if (hanydb==0) {
             valasztek.innerHTML="Nincs ilyen összetevőnk"
+            hozzaadasGomb.setAttribute("disabled","")
         }
-        document.getElementById("ideOpciok").appendChild(valasztek)
+        else{
+            hozzaadasGomb.removeAttribute("disabled","")
+        }
+        opciokLista.appendChild(valasztek)
         })
-        
 })
 
-document.getElementById("hozzaad").addEventListener("click",()=>{
-    badge(document.getElementById("osszetevo").value)
-    document.getElementById("osszetevo").value=""
+osszetevoInput.addEventListener("input",()=>{
+    if (osszetevoInput.value.length==0) {
+        hozzaadasGomb.setAttribute("disabled","")
+        
+    }
+    else{
+        hozzaadasGomb.removeAttribute("disabled","")
+    }
+})
+
+hozzaadasGomb.addEventListener("click",()=>{
+    if (osszetevoInput.value!="") {
+        badge(osszetevoInput.value)
+        console.log(felhosszetevok);
+        
+        osszetevoInput.value=""
+    }
 })
