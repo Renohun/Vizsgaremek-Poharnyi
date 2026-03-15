@@ -1192,12 +1192,13 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     //Lekérdezés
     try {
         kosar = await lekeres(KosarLekeres, vasarlo);
-        if (kosar.length == 0) {
+        kosartermekek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
+        if (kosartermekek.length == 0) {
             response.status(200).json({
                 message: 'Üres Kosár'
             });
         } else {
-            kosartermekek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
+            
 
             for (let i = 0; i < kosartermekek.length; i++) {
                 let temp = await lekeres(TermekLekeres, kosartermekek[i].TermekID);
