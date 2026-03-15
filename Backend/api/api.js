@@ -10,7 +10,7 @@ const multer = require('multer');
 
 const path = require('path');
 const fajlkezelo = require('fs/promises');
-const { error } = require('console');
+const { error, log } = require('console');
 const { blob } = require('stream/consumers');
 const datum = new Date();
 const storage = multer.diskStorage({
@@ -1664,15 +1664,105 @@ router.post("/Webshop/szures",async(request,response)=>{
     try {
 
         const feltetelek = request.body
+        let query = "SELECT * FROM webshoptermek WHERE"
+        console.log(feltetelek)
         let whereErtekek
+        let ertekLista = []
+        let OrderBy;
+        let OrderByErtek;
         for (const item of Object.entries(feltetelek)) 
         {
             
+            if(item[0] == "MaxAr")
+            {
+                query += " Ar < ? AND"
+            } 
+            else if(item[0] == "MaxAlk"){
+                query += " TermekAlkoholSzazalek < ? AND"
+            }
+            else if(item[0] == "rendezes"){
+                OrderBy = ` ORDER BY ? DESC`
+                OrderByErtek = item[1]
+            }
+            else if(item[0] == "akcio"){
+                query += " TermekDiscount is NOT NULL AND"
+            }
+            else
+            {
+             query += ` ${item[0]} like ? AND`
+            }
+
+            if(item[0] != "rendezes"){
+                 ertekLista.push(item[1]) 
+            }
+           
         }
-        const query = "SELECT * FROM webshoptermek WHERE"
+        console.log(query)
+        query = query.slice(query[0], query.length-4)
+       
+        if (OrderBy != null) {
+            query += OrderBy;
+        }
+        console.log(OrderByErtek)
+         console.log(query)
+        for (let i = 0; i < ertekLista.length; i++) {
+            console.log(ertekLista[i])
+        }
         
+        let szurtTermekek;
+        if (ertekLista.length == 1) {
+              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0]]);
+        }
+        else if(ertekLista.length == 2 && OrderByErtek != null)
+        {
+            console.log("asd");
+            
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],OrderByErtek]);
+        }
+        else if(ertekLista.length == 2 && OrderByErtek == null)
+        {
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1]]);
+        }
+
+        else if(ertekLista.length == 3 && OrderByErtek != null)
+        {
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],OrderByErtek]);
+        }
+        else if(ertekLista.length == 3 && OrderByErtek == null)
+        {
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2]]);
+        }
+
+        else if(ertekLista.length == 4 && OrderByErtek != null)
+        {
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],OrderByErtek]);
+        }
+        else if(ertekLista.length == 4 && OrderByErtek == null)
+        {
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4]]);
+        }
+
+        else if(ertekLista.length == 5 && OrderByErtek != null)
+        {
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3] ,OrderByErtek]);
+        }
+        else if(ertekLista.length == 5 && OrderByErtek == null)
+        {
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5]]);
+        }
+
+        else if(ertekLista.length == 6)
+        {
+            [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5],OrderByErtek]);
+        }
+       
+
+        response.status(200).json({
+            
+            data: szurtTermekek
+        })
     } catch (error) {
-        throw new Error(error)
+        console.log(error)
         response.status(500).json({
             
             message:"hiba"

@@ -24,6 +24,25 @@ const TermekKepLekeres = async (url) => {
         throw new Error(error);
     }
 };
+const SzuresPost=async(url,data)=>{
+    try {
+      const ertek=await fetch(url,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(data)
+      })  
+      if (ertek.ok) {
+        return ertek.json()
+      }
+      else{
+        console.log("hiba");
+        
+      }
+    } 
+    catch (error) {
+        console.error(error)
+    }
+}
 //? Sliderek alapértékének beállítása
 const Sliderek = async () => {
     var slider1 = document.getElementById('arRange');
@@ -274,8 +293,9 @@ if(KategoriaSelect.value == "alkohol")
     //
     let SzuresGomb = document.getElementById("kuldesGomb")
     let szuresiAdatok = {};
-    SzuresGomb.addEventListener("click",()=>
+    SzuresGomb.addEventListener("click", async ()=>
     {
+        KartyaHova.innerHTML = ""
         let arSlider = document.getElementById('arRange');
         let alkoholSlider = document.getElementById('AlkRange');
         
@@ -314,7 +334,12 @@ if(KategoriaSelect.value == "alkohol")
             szuresiAdatok.akcio = true    
         }
 
-        console.log(szuresiAdatok)
+        
+        const KuldData = await SzuresPost("/api/Webshop/szures",szuresiAdatok)
+        szuresiAdatok = {};
+        
+        kartyaGen(KuldData,KartyaHova)
+        console.log(KuldData)
     })
     
     
