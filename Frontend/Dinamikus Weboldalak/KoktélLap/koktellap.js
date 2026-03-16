@@ -74,12 +74,15 @@ async function Betoltes() {
     const osszetevoAdat=eredmeny.osszetevok
     const kommentAdat=eredmeny.komment
     
+    //Koktél jelvényei
     const BadgeHely=document.getElementById("badgek")
     for (let i = 0; i < jelvényAdat.length; i++) {
+        
         let adat=jelvényAdat[i][0]
         let badge=document.createElement("span")
         badge.innerHTML=adat.JelvényNeve
         badge.classList.add("badge","bg-primary","ms-1")
+        //megnézzük hogy milyen típusú jelvény és az alapján színezzük be  
         switch (adat.JelvenyKategoria) {
             case "ízek":
                 badge.classList.add("bg-success")
@@ -91,14 +94,19 @@ async function Betoltes() {
                 badge.classList.add("bg-danger")
             break;
         }
+        //Majd hozzáadjuk a badge divhez
         BadgeHely.appendChild(badge)
     }
+
+    //Összetevők létrehozása
     const OssztevHely=document.getElementById("Ossztev")
     for (let i = 0; i < osszetevoAdat.length; i++) {
         let Ossztevo=document.createElement("li")
         Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${osszetevoAdat[i].Mennyiség} ${osszetevoAdat[i].Mertekegyseg}`
         OssztevHely.appendChild(Ossztevo)
     }
+
+    //A koktél képének lekérése
     const KepLekeres=await AdatLekeresKep("/api/AdatlapLekeres/KoktelKepLekeres/"+koktélAdat.KoktélID)
     let keszitesDate=(koktélAdat.RegisztracioDatuma.split('T')[0]).split("-");
     let jelenDate=new Date()
