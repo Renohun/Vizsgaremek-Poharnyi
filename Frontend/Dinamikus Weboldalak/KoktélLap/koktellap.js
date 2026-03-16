@@ -1,8 +1,10 @@
 
 document.addEventListener("DOMContentLoaded",async()=>{
+    //megvárjuk hogy betöltsön a weboldal és eltároljuk a bool ertéket hogy be van e lépve
     let be=await Betoltes()
+    //ha be van
     if (be) {
-
+        //Bekapcsoljuk a komment küldési felületet
         document.getElementById("KommSend").addEventListener("click",async()=>{
             await Kommentkuldes()
         })
@@ -10,8 +12,11 @@ document.addEventListener("DOMContentLoaded",async()=>{
                 document.getElementById("szam").innerHTML=document.getElementById("komment").value.length
         })
     }
+    //ha nincs
     else{
+        //Átalakítjuk a komment felületet egy tájékoztató szövegre
         document.getElementById("Velemeny").innerHTML="Komment írásához és a Koktél Értékeléséhez lépj be!"
+        //Leromboljuk a jelentési gombokat, visszaélés elkerülése érdekében
         Obfuszkacio()
         document.getElementById("KoktJel").setAttribute("type","")
         document.getElementById("KoktJel").classList.remove("btn","text-danger")
@@ -50,14 +55,20 @@ const AdatKuldes=async(url,adat)=>{
     }
 }
 
-
+//A fő betöltési function
 async function Betoltes() {
+    //Kiürítünk pár divet
     await Tisztitas()
+    //Megkapjuk a koktélid-t a link végéről
     let koktel=window.location.href.split("/")
+    //ez alapján lekérjük az adatokat
     const eredmeny=await AdatLekeres(`/api/Koktel/${koktel[koktel.length-1]}`)
+    //ha nincs ilyen köktélunk
     if (eredmeny==undefined) {
+        //Átirányítjuk a hibaoldalra
         window.location.href="/KoktelHiba"
     }
+    //Külön változókban tároljuk el a kapott adatokat
     const koktélAdat=eredmeny.adat[0]
     const jelvényAdat=eredmeny.jelvenyek
     const osszetevoAdat=eredmeny.osszetevok
@@ -210,19 +221,25 @@ async function Betoltes() {
 }
 
 async function Kommentkuldes() {
+    //Megkapjuk a koktél idjét a link utolsó részéből
     let koktel=window.location.href.split("/")
+    //Egy objectbe eltároljuk
     let tartalom={
+        //A komment szövegét
         Tartalom:document.getElementById("komment").value,
+        //Melyik koktélhoz írták
         Koktél:koktel[koktel.length-1]
     }
-    
-    const eredmeny=await AdatKuldes(`/api/Koktel/SendKomment`,tartalom)
+    //Elküldjük a kommentet a backendre
+    await AdatKuldes(`/api/Koktel/SendKomment`,tartalom)
+    //Úrjatöltjük az oldlat
     Betoltes()
 }
 
 
 
 async function Tisztitas() {
+    //Több elemes dinamikus divek ürítése
     document.getElementById("komment").value=""
     document.getElementById("Kommentek").innerHTML=""
     document.getElementById("Ossztev").innerHTML=""
@@ -235,32 +252,43 @@ async function Tisztitas() {
 
 
 async function jelentes(mit,tipus,kit) {
+    //A jelentési felület lekérése
     var JelIv = new bootstrap.Modal(document.getElementById('JelentesLap'), {})   
+    //és megmutatása
     JelIv.show()
+    //Az elküldés gomb után
     document.getElementById("JelSend").addEventListener("click",async()=>{
-            
-
+        //egy objektumba eltároljuk
         let adatok={
+            //Hogy kit jelentünk fel
             JelentettID:kit,
+            //Mi a jelentett tartalom idje
             JelentettTartalomID:mit,
+            //Mi a jelentett tartalom típusa
             JelentesTipusa:tipus,
+            //Mi a jelentett tartalom jelentési indoka
             Indok:document.getElementById("indok").value
         }
 
+        //ezeket elküldjük az endpointra, ahol feldolgozzuk és a választ eltároljuk
         const jelentesSend=await AdatKuldes(`/api/Koktel/SendJelentes`,adatok)
 
-        
+        //Ha nincs hiba
         if (jelentesSend.message==false) {
             document.getElementById("visszajelzes").innerHTML="Sikeres Jelentés"
         }
+        //Ha van hiba, avagy jelentette már a dolgot
         else{
             document.getElementById("visszajelzes").innerHTML="Már tett jelentést ez ellen!"
         }
+        //Kikapcsoljuk a küldési lehetőséget
         document.getElementById("JelNvm").setAttribute("disabled","true")
         document.getElementById("JelSend").setAttribute("disabled","true")
+        //És előhozzuk a nyugtázó gombot
         document.getElementById("JelKonf").removeAttribute("hidden","true")
         document.getElementById("JelKonf").addEventListener("click",()=>
         {
+            //elrejtük a felületet, és visszaállítjuk az alaphelyzetbe, hogyha megint rányom a felhasználó, ugyan úgy nézzen ki mint amikor betölt az oldal
             document.getElementById("JelNvm").removeAttribute("disabled","true")
             document.getElementById("JelSend").removeAttribute("disabled","true")
             document.getElementById("JelKonf").setAttribute("hidden","true")
@@ -272,6 +300,7 @@ async function jelentes(mit,tipus,kit) {
 
     },{once:true})
 
+    //A vissza gomb után egyszerűen csak elrejtük a felületet
     document.getElementById("JelNvm").addEventListener("click",()=>{
         JelIv.hide()
     },{once:true})
