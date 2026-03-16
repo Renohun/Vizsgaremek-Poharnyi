@@ -307,13 +307,8 @@ async function kedveles(id) {
 
 
 function ertekeles(ertekelteE,mennyire) {
-    let ert1=document.getElementById("star1")
-    let ert2=document.getElementById("star2")
-    let ert3=document.getElementById("star3")
-    let ert4=document.getElementById("star4")
-    let ert5=document.getElementById("star5")
     let koktel=window.location.href.split("/")
-    let ertek=[ert1,ert2,ert3,ert4,ert5]
+    let ertek=[document.getElementById("star1"),document.getElementById("star2"),document.getElementById("star3"),document.getElementById("star4"),document.getElementById("star5")]
     if (ertekelteE) {
         for (let i = 0; i < mennyire; i++) {
             ertek[i].value="★"
@@ -323,27 +318,56 @@ function ertekeles(ertekelteE,mennyire) {
         document.getElementById("rateDisplay").innerHTML="Ön értékelte már a koktélt"
     }
     else{
-        for (let i = 0; i < ertek.length; i++) {
-                ertek[i].addEventListener("click",async()=>{
-                    
-                    clear()
-                    for (let j = 0; j < i+1; j++) {
-                        ertek[j].value="★"
-                    }
-                },{once:true})            
+        //Értékelést akar e adni a felhasználó
+        let kattint=false
+        //Csillagonként
+        ertek.forEach(csillag => {
+            //Ha rákattintunk egy csillagra
+            csillag.addEventListener("click",()=>{
+                //kikapcsoljuk a hover funkciókat
+                kattint=true
+                //az összesnek a telítettségét nullázuk,
+                csillagvaltoztatas(ertek.length,"☆")
+                //és addig a csillagig betelítjük őket
+                csillagvaltoztatas(ertek.indexOf(csillag)+1,"★")
+            })
+
+            //Ha rávisszük az egerünket egy csillagra
+            csillag.addEventListener("pointerover",()=>{
+                //de nem kattintottunk
+                if (!kattint) {
+                    //Akkor addig a csillagig betelítjük őket
+                    csillagvaltoztatas(ertek.indexOf(csillag)+1,"★")
+                }
+            })
+            //Ha elvisszük a csillagról az egerünket 
+            csillag.addEventListener("pointerout",()=>{
+                //és nem kattintottunk
+                if (!kattint) {
+                    //Akkor az összesnek a telítettségét nullázuk
+                    csillagvaltoztatas(ertek.length,"☆")
+                }
+            });
+        })
+        function csillagvaltoztatas(honnan,mive){
+            //Melyik csillagig
+            for (let i = 0; i < honnan; i++) 
+            {
+                //Mi legyen kimutatva
+                ertek[i].value=mive
+            }
         }
-        
+        //Amikor le akarjuk fixálni az értékelést
         document.getElementById("ErtSend").addEventListener("click",async()=>{
+            //Szűrés segítségével eltároljuk az összes csillagnak az elemét egy tömbben
             let a=ertek.filter(valaszott=>{  
                 return valaszott.value=="★"
             }) 
+            //Aminek a hosszát elküljük a backendre a koktél idjével
             await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:a.length,Koktél:koktel[koktel.length-1]})
+            //és újratöltjük az oldalt hogy ne adhasson új értékelést
             Betoltes()
         },{once:true})
     }
-    function clear(){
-        for (let i = 0; i < 5; i++) {
-            ertek[i].value="☆"
-        }
-    }
+
 }
