@@ -338,10 +338,17 @@ async function kedveles(id) {
 function ertekeles(ertekelteE,mennyire) {
     let koktel=window.location.href.split("/")
     let ertek=[document.getElementById("star1"),document.getElementById("star2"),document.getElementById("star3"),document.getElementById("star4"),document.getElementById("star5")]
+    //Ha értékelve van már
     if (ertekelteE) {
+        //Akkor a már megkapott értékelést megjelenítjük
         for (let i = 0; i < mennyire; i++) {
             ertek[i].value="★"
         }
+        //És kikapcsoljuk a kattintást
+        ertek.forEach(csillag => {
+            csillag.setAttribute("disabled","")
+        });
+        //És kitöröljük a gombot amivel lehet küldeni
         document.getElementById("ErtSend").setAttribute("hidden","true")
         document.getElementById("ErtSend").setAttribute("id","")
         document.getElementById("rateDisplay").innerHTML="Ön értékelte már a koktélt"
