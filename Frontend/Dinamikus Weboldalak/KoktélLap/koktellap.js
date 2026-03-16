@@ -1,8 +1,10 @@
 
 document.addEventListener("DOMContentLoaded",async()=>{
+    //megvárjuk hogy betöltsön a weboldal és eltároljuk a bool ertéket hogy be van e lépve
     let be=await Betoltes()
+    //ha be van
     if (be) {
-
+        //Bekapcsoljuk a komment küldési felületet
         document.getElementById("KommSend").addEventListener("click",async()=>{
             await Kommentkuldes()
         })
@@ -10,8 +12,11 @@ document.addEventListener("DOMContentLoaded",async()=>{
                 document.getElementById("szam").innerHTML=document.getElementById("komment").value.length
         })
     }
+    //ha nincs
     else{
+        //Átalakítjuk a komment felületet egy tájékoztató szövegre
         document.getElementById("Velemeny").innerHTML="Komment írásához és a Koktél Értékeléséhez lépj be!"
+        //Leromboljuk a jelentési gombokat, visszaélés elkerülése érdekében
         Obfuszkacio()
         document.getElementById("KoktJel").setAttribute("type","")
         document.getElementById("KoktJel").classList.remove("btn","text-danger")
@@ -50,14 +55,20 @@ const AdatKuldes=async(url,adat)=>{
     }
 }
 
-
+//A fő betöltési function
 async function Betoltes() {
+    //Kiürítünk pár divet
     await Tisztitas()
+    //Megkapjuk a koktélid-t a link végéről
     let koktel=window.location.href.split("/")
+    //ez alapján lekérjük az adatokat
     const eredmeny=await AdatLekeres(`/api/Koktel/${koktel[koktel.length-1]}`)
+    //ha nincs ilyen köktélunk
     if (eredmeny==undefined) {
+        //Átirányítjuk a hibaoldalra
         window.location.href="/KoktelHiba"
     }
+    //Külön változókban tároljuk el a kapott adatokat
     const koktélAdat=eredmeny.adat[0]
     const jelvényAdat=eredmeny.jelvenyek
     const osszetevoAdat=eredmeny.osszetevok
@@ -210,19 +221,25 @@ async function Betoltes() {
 }
 
 async function Kommentkuldes() {
+    //Megkapjuk a koktél idjét a link utolsó részéből
     let koktel=window.location.href.split("/")
+    //Egy objectbe eltároljuk
     let tartalom={
+        //A komment szövegét
         Tartalom:document.getElementById("komment").value,
+        //Melyik koktélhoz írták
         Koktél:koktel[koktel.length-1]
     }
-    
-    const eredmeny=await AdatKuldes(`/api/Koktel/SendKomment`,tartalom)
+    //Elküldjük a kommentet a backendre
+    await AdatKuldes(`/api/Koktel/SendKomment`,tartalom)
+    //Úrjatöltjük az oldlat
     Betoltes()
 }
 
 
 
 async function Tisztitas() {
+    //Több elemes dinamikus divek ürítése
     document.getElementById("komment").value=""
     document.getElementById("Kommentek").innerHTML=""
     document.getElementById("Ossztev").innerHTML=""
@@ -235,32 +252,43 @@ async function Tisztitas() {
 
 
 async function jelentes(mit,tipus,kit) {
-    var JelIv = new bootstrap.Modal(document.getElementById('Fioktorles'), {})   
+    //A jelentési felület lekérése
+    var JelIv = new bootstrap.Modal(document.getElementById('JelentesLap'), {})   
+    //és megmutatása
     JelIv.show()
+    //Az elküldés gomb után
     document.getElementById("JelSend").addEventListener("click",async()=>{
-            
-
+        //egy objektumba eltároljuk
         let adatok={
+            //Hogy kit jelentünk fel
             JelentettID:kit,
+            //Mi a jelentett tartalom idje
             JelentettTartalomID:mit,
+            //Mi a jelentett tartalom típusa
             JelentesTipusa:tipus,
+            //Mi a jelentett tartalom jelentési indoka
             Indok:document.getElementById("indok").value
         }
 
+        //ezeket elküldjük az endpointra, ahol feldolgozzuk és a választ eltároljuk
         const jelentesSend=await AdatKuldes(`/api/Koktel/SendJelentes`,adatok)
 
-        
+        //Ha nincs hiba
         if (jelentesSend.message==false) {
             document.getElementById("visszajelzes").innerHTML="Sikeres Jelentés"
         }
+        //Ha van hiba, avagy jelentette már a dolgot
         else{
             document.getElementById("visszajelzes").innerHTML="Már tett jelentést ez ellen!"
         }
+        //Kikapcsoljuk a küldési lehetőséget
         document.getElementById("JelNvm").setAttribute("disabled","true")
         document.getElementById("JelSend").setAttribute("disabled","true")
+        //És előhozzuk a nyugtázó gombot
         document.getElementById("JelKonf").removeAttribute("hidden","true")
         document.getElementById("JelKonf").addEventListener("click",()=>
         {
+            //elrejtük a felületet, és visszaállítjuk az alaphelyzetbe, hogyha megint rányom a felhasználó, ugyan úgy nézzen ki mint amikor betölt az oldal
             document.getElementById("JelNvm").removeAttribute("disabled","true")
             document.getElementById("JelSend").removeAttribute("disabled","true")
             document.getElementById("JelKonf").setAttribute("hidden","true")
@@ -272,6 +300,7 @@ async function jelentes(mit,tipus,kit) {
 
     },{once:true})
 
+    //A vissza gomb után egyszerűen csak elrejtük a felületet
     document.getElementById("JelNvm").addEventListener("click",()=>{
         JelIv.hide()
     },{once:true})
@@ -307,43 +336,74 @@ async function kedveles(id) {
 
 
 function ertekeles(ertekelteE,mennyire) {
-    let ert1=document.getElementById("star1")
-    let ert2=document.getElementById("star2")
-    let ert3=document.getElementById("star3")
-    let ert4=document.getElementById("star4")
-    let ert5=document.getElementById("star5")
     let koktel=window.location.href.split("/")
-    let ertek=[ert1,ert2,ert3,ert4,ert5]
+    let ertek=[document.getElementById("star1"),document.getElementById("star2"),document.getElementById("star3"),document.getElementById("star4"),document.getElementById("star5")]
+    //Ha értékelve van már
     if (ertekelteE) {
+        //Akkor a már megkapott értékelést megjelenítjük
         for (let i = 0; i < mennyire; i++) {
             ertek[i].value="★"
         }
+        //És kikapcsoljuk a kattintást
+        ertek.forEach(csillag => {
+            csillag.setAttribute("disabled","")
+        });
+        //És kitöröljük a gombot amivel lehet küldeni
         document.getElementById("ErtSend").setAttribute("hidden","true")
         document.getElementById("ErtSend").setAttribute("id","")
         document.getElementById("rateDisplay").innerHTML="Ön értékelte már a koktélt"
     }
     else{
-        for (let i = 0; i < ertek.length; i++) {
-                ertek[i].addEventListener("click",async()=>{
-                    
-                    clear()
-                    for (let j = 0; j < i+1; j++) {
-                        ertek[j].value="★"
-                    }
-                },{once:true})            
+        //Értékelést akar e adni a felhasználó
+        let kattint=false
+        //Csillagonként
+        ertek.forEach(csillag => {
+            //Ha rákattintunk egy csillagra
+            csillag.addEventListener("click",()=>{
+                //kikapcsoljuk a hover funkciókat
+                kattint=true
+                //az összesnek a telítettségét nullázuk,
+                csillagvaltoztatas(ertek.length,"☆")
+                //és addig a csillagig betelítjük őket
+                csillagvaltoztatas(ertek.indexOf(csillag)+1,"★")
+            })
+
+            //Ha rávisszük az egerünket egy csillagra
+            csillag.addEventListener("pointerover",()=>{
+                //de nem kattintottunk
+                if (!kattint) {
+                    //Akkor addig a csillagig betelítjük őket
+                    csillagvaltoztatas(ertek.indexOf(csillag)+1,"★")
+                }
+            })
+            //Ha elvisszük a csillagról az egerünket 
+            csillag.addEventListener("pointerout",()=>{
+                //és nem kattintottunk
+                if (!kattint) {
+                    //Akkor az összesnek a telítettségét nullázuk
+                    csillagvaltoztatas(ertek.length,"☆")
+                }
+            });
+        })
+        function csillagvaltoztatas(honnan,mive){
+            //Melyik csillagig
+            for (let i = 0; i < honnan; i++) 
+            {
+                //Mi legyen kimutatva
+                ertek[i].value=mive
+            }
         }
-        
+        //Amikor le akarjuk fixálni az értékelést
         document.getElementById("ErtSend").addEventListener("click",async()=>{
+            //Szűrés segítségével eltároljuk az összes csillagnak az elemét egy tömbben
             let a=ertek.filter(valaszott=>{  
                 return valaszott.value=="★"
             }) 
+            //Aminek a hosszát elküljük a backendre a koktél idjével
             await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:a.length,Koktél:koktel[koktel.length-1]})
+            //és újratöltjük az oldalt hogy ne adhasson új értékelést
             Betoltes()
         },{once:true})
     }
-    function clear(){
-        for (let i = 0; i < 5; i++) {
-            ertek[i].value="☆"
-        }
-    }
+
 }

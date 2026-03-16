@@ -1160,8 +1160,6 @@ router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
                     jelentTar[i] = await lekeres(felhjel, jelentesek[i][0].JelentettTartalomID);
                 } else if (jelentesek[i][0].JelentesTipusa == 'Komment') {
                     temp.push(await lekeres(kommentjel, jelentesek[i][0].JelentettTartalomID));
-                    console.log(jelentesek[i][0].JelentettTartalomID);
-
                     temp.push(await lekeres(felhjel, temp[0][0].Keszito));
                     jelentTar[i] = temp;
                 }
@@ -1363,8 +1361,6 @@ router.post('/AdminPanel/KepLekeres/:id', async (request, response) => {
 router.post('/Koktelok/KepLekeres', async (request, response) => {
     try {
         let profil = jwt.decode(request.cookies.auth_token).userID;
-        console.log(profil);
-
         let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
         let kinek = await lekeres(kepkereses, profil);
         response.sendFile(path.join(__dirname, '..', 'images', kinek[0].ProfilkepUtvonal));
@@ -1459,10 +1455,9 @@ router.post('/AdatlapLekeres/Fizetes', async (request, response) => {
         const TermekFrissites = 'UPDATE webshoptermek SET Termekkeszlet=Termekkeszlet-? WHERE TermekID LIKE ?';
         const KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
         let kosar = await lekeres(KosarLekeres, jwt.decode(request.cookies.auth_token).userID);
-        console.log(kosar);
+
 
         let kosartermek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
-        console.log(kosartermek);
 
         for (let i = 0; i < kosartermek.length; i++) {
             await lekeres(TermekFrissites, [kosartermek[i].Darabszam, kosartermek[i].TermekID]);
@@ -1671,28 +1666,29 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
         let VanEMarIlyen = false;
         let JelentetteMar = false;
         let MelyikAz;
+        
         for (let i = 0; i < JelentesekLista.length; i++) {
-            if (
-                request.body.JelentettID == JelentesekLista[i].JelentettID &&
-                request.body.JelentettTartalomID == JelentesekLista[i].JelentettTartalomID &&
-                request.body.JelentesTipusa == JelentesekLista[i].JelentesTipusa
-            ) {
+            //Ha a feljelentett felhasználü, feljelentett tartalom és jelentés típusa is egyezik
+            if (request.body.JelentettID == JelentesekLista[i].JelentettID &&request.body.JelentettTartalomID == JelentesekLista[i].JelentettTartalomID &&request.body.JelentesTipusa == JelentesekLista[i].JelentesTipusa) {
+                //Akkor megjelöljük, hogy nem kell létrehozni új jelentést
                 VanEMarIlyen = true;
+                //Eltároljuk a jelentés idjét
                 MelyikAz = JelentesekLista[i].JelentesID;
                 for (let j = 0; j < JelentőkLista.length; j++) {
-                    if (
-                        MelyikAz == JelentőkLista[j].JelentésID &&
-                        jwt.decode(request.cookies.auth_token).userID == JelentőkLista[j].JelentőID
-                    ) {
+                    //megnézzük hogy a jelentő felhasználó tett e már ugyanilyen jelentést
+                    if (MelyikAz == JelentőkLista[j].JelentésID &&jwt.decode(request.cookies.auth_token).userID == JelentőkLista[j].JelentőID) {
                         JelentetteMar = true;
                     }
                 }
             }
         }
 
+        //Ha nem jelentette
         if (JelentetteMar != true) {
             const JelentoKuldes = 'INSERT INTO jelentők (JelentőID,JelentésID,JelentesIndoka) VALUES (?,?,?)';
+            //és nem létezik
             if (VanEMarIlyen == false) {
+                //Akkor létrehozunk egy ilyen jelentést
                 const JelentesKuldes =
                     'INSERT INTO jelentesek (JelentettID,JelentettTartalomID,JelentesTipusa) VALUES (?,?,?)';
                 await lekeres(JelentesKuldes, [
@@ -1700,13 +1696,17 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
                     request.body.JelentettTartalomID,
                     request.body.JelentesTipusa
                 ]);
+                //és a jelentő felhasználó nevében teszünk egy jelentést az utolsó (most létrejött) jelentésre
                 let utolso = await lekeres('SELECT COUNT(*) as Darab FROM jelentesek');
                 await lekeres(JelentoKuldes, [
                     jwt.decode(request.cookies.auth_token).userID,
                     utolso[0].Darab,
                     request.body.Indok
                 ]);
-            } else {
+            } 
+            //és létezik
+            else {
+                //Akkor a nevében teszünk egy jelentést a már létező jelentésre
                 const JelentesModositas =
                     'UPDATE jelentesek SET JelentesMennyisege =JelentesMennyisege+1 WHERE JelentesID LIKE ?';
                 await lekeres(JelentesModositas, MelyikAz);
@@ -1717,6 +1717,7 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
                 ]);
             }
         }
+        //Visszaadjuk hogy jelentette e már ezt a felhasználó
         response.status(200).json({
             message: JelentetteMar
         });
