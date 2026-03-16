@@ -130,7 +130,7 @@ VALUES
 INSERT INTO Jelentesek(JelentettID,JelentettTartalomID,JelentesTipusa)
 VALUES
 (2,2,"Koktél"),
-(10,11,"Koktél"),
+(9,11,"Koktél"),
 (4,4,"Felhasználó"),
 (8,8,"Felhasználó"),
 (2,6,"Komment"),
