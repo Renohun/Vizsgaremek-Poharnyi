@@ -230,13 +230,6 @@
                         maxlength="300"
                         required
                     ></textarea>
-
-                    <label for="termekKiszereles" class="form-label">Termek kiszerelese:</label>
-                    <input type="number" id="termekKiszereles" class="form-control" name="termekKiszereles" required />
-
-                    <label for="termekKeszlet" class="form-label">Termek keszlete:</label>
-                    <input type="number" class="form-control" id="termekKeszlet" name="termekKeszlet" required />
-
                     <label for="termekKategoria" class="form-label">Termek kategoria:</label>
                     <select name="termekKategoria" id="termekKategoria" class="form-control" required>
                         <option value="Eszkozok" selected>Eszkozok</option>
@@ -257,6 +250,24 @@
                         <option value="Merch">Merch</option>
                         <option value="Egyeb">Egyeb</option>
                     </select>
+
+                    <label for="termekKiszereles" class="form-label">Termek kiszerelese:</label>
+                    <input type="number" id="termekKiszereles" class="form-control" name="termekKiszereles" required />
+
+                    <label for="termekKeszlet" class="form-label">Termek keszlete:</label>
+                    <input type="number" class="form-control" id="termekKeszlet" name="termekKeszlet" required />
+
+                    <label for="termekUrtartalom" id="termekUrtartalomLabel" class="form-label" hidden
+                        >Termek urtaltalma</label
+                    >
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="termekUrtartalom"
+                        name="termekUrtartalom"
+                        required
+                        hidden
+                    />
 
                     <label for="termekMarka" class="form-label">Termek marka:</label>
                     <input type="text" name="termekMarka" id="termekMarka" class="form-control" required />

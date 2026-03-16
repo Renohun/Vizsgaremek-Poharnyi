@@ -90,7 +90,8 @@ router.get('/Koktelok/Jelvenyek', async (req, res) => {
 
 router.get('/Koktelok/lekeres', async (req, res) => {
     try {
-        const queryKoktelok = 'SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC';
+        const queryKoktelok =
+            'SELECT * FROM koktél LEFT JOIN jelentesek ON jelentesek.JelentettTartalomID = koktél.KoktélID AND jelentesek.JelentesTipusa LIKE ? AND jelentesek.JelentesAllapota NOT LIKE 2 ORDER BY koktél.KoktelNepszeruseg DESC';
         const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID = ?';
         //Majd ide kell tennem a szuroket, de viszont elotte viszont at kell alakitani a kapott szueresi felteteleket id-kra
         const queryKoktelJelvenyek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID = ?';
@@ -99,7 +100,7 @@ router.get('/Koktelok/lekeres', async (req, res) => {
             'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz = "Koktél" AND HovaIrták = ?';
         //promise().igeret amit esku hogy megcsinalok - MIERT NEM MUKODOTT ALAPBOL: mert a query callback alapu igy egy CALLBACK HELL-t csinaltam es azt nem lehet await-elni
         //promise() egy igeretet tesz es csak ezt lehet await-ni callbacket nem, ezert kellett promise() igy az atalakitja callbackbol promise-ba
-        const [koktelok] = await DBconnetion.promise().query(queryKoktelok);
+        const [koktelok] = await DBconnetion.promise().query(queryKoktelok, ['Koktél']);
         //Promise.all: akkor adja vissza ha az erteke ha az osszes belso promise beteljesul
         const eredmeny = await Promise.all(
             koktelok.map(async (koktel) => {
@@ -423,7 +424,7 @@ router.post('/belepes', (request, response) => {
 
                         response.status(200).json({ message: 'sikeres bejelentkezes' });
                     } else {
-                        response.status(403).json({
+                        response.status(200).json({
                             message: 'Hibas jelszo'
                         });
                     }
@@ -1456,7 +1457,6 @@ router.post('/AdatlapLekeres/Fizetes', async (request, response) => {
         const KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
         let kosar = await lekeres(KosarLekeres, jwt.decode(request.cookies.auth_token).userID);
 
-
         let kosartermek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
 
         for (let i = 0; i < kosartermek.length; i++) {
@@ -1666,17 +1666,24 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
         let VanEMarIlyen = false;
         let JelentetteMar = false;
         let MelyikAz;
-        
+
         for (let i = 0; i < JelentesekLista.length; i++) {
             //Ha a feljelentett felhasználü, feljelentett tartalom és jelentés típusa is egyezik
-            if (request.body.JelentettID == JelentesekLista[i].JelentettID &&request.body.JelentettTartalomID == JelentesekLista[i].JelentettTartalomID &&request.body.JelentesTipusa == JelentesekLista[i].JelentesTipusa) {
+            if (
+                request.body.JelentettID == JelentesekLista[i].JelentettID &&
+                request.body.JelentettTartalomID == JelentesekLista[i].JelentettTartalomID &&
+                request.body.JelentesTipusa == JelentesekLista[i].JelentesTipusa
+            ) {
                 //Akkor megjelöljük, hogy nem kell létrehozni új jelentést
                 VanEMarIlyen = true;
                 //Eltároljuk a jelentés idjét
                 MelyikAz = JelentesekLista[i].JelentesID;
                 for (let j = 0; j < JelentőkLista.length; j++) {
                     //megnézzük hogy a jelentő felhasználó tett e már ugyanilyen jelentést
-                    if (MelyikAz == JelentőkLista[j].JelentésID &&jwt.decode(request.cookies.auth_token).userID == JelentőkLista[j].JelentőID) {
+                    if (
+                        MelyikAz == JelentőkLista[j].JelentésID &&
+                        jwt.decode(request.cookies.auth_token).userID == JelentőkLista[j].JelentőID
+                    ) {
                         JelentetteMar = true;
                     }
                 }
@@ -1703,7 +1710,7 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
                     utolso[0].Darab,
                     request.body.Indok
                 ]);
-            } 
+            }
             //és létezik
             else {
                 //Akkor a nevében teszünk egy jelentést a már létező jelentésre

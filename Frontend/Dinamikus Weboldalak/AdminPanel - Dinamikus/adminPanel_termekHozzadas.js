@@ -53,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const termekAlkoholMerteke = document.getElementById('termekAlkohol');
         const termekAlkoholKora = document.getElementById('termekKora');
+
+        const termekUrtartalomLabel = document.getElementById('termekUrtartalomLabel');
+        const termekUrtartalom = document.getElementById('termekUrtartalom');
+
         if (
             termekKategoriaSelect.value != 'Eszkozok' ||
             termekKategoriaSelect.value != 'Pohar' ||
