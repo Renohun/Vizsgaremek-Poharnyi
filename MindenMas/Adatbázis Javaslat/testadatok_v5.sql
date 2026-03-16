@@ -108,12 +108,12 @@ VALUES
 (13,"Fahéjas Jack Daniels",15,"Ml"),
 (13,"Fehér Monster",100,"Ml")
 ;
-INSERT INTO WebshopTermek(TermekCim,TermekLeiras,TermekKiszereles,Ar)
+INSERT INTO WebshopTermek(TermekCim,TermekLeiras,TermekKiszereles,TermekUrtartalom,TermekKeszlet,TermekKepUtvonal,TermekKategoria,TermekMarka,TermekSzarmazas,TermekAlkoholSzazalek,Ar)
 VALUES
-("Pohárnyi Mintájú Felespohár","Szeretnéd közvetlen támogatni a csapatunkat? Akarsz is cserébe érte valamit? Vásárold meg ezt!",4,8000),
-("Jack Daniels","Amerikai Import Whiskey",0.75,7650),
-("Ouzou","Görög alkohol, mentolos ízzel",0.5,9500),
-("Soju Eper","Koreai desztillált alkohol, eper ízben",0.35,2500);
+("Pohárnyi Mintájú Felespohár","Szeretnéd közvetlen támogatni a csapatunkat? Akarsz is cserébe érte valamit? Vásárold meg ezt!",4,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,8000),
+("Jack Daniels","Amerikai Import Whiskey",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,7650),
+("Ouzou","Görög alkohol, mentolos ízzel",1,0.5,200,"what.webp","Egyéb","Görög Varázs","Görögország",12,9500),
+("Soju Eper","Koreai desztillált alkohol, eper ízben",1,0.35,200,"what.webp","Egyéb","Jinro","Korea",12,2500);
 
 INSERT INTO Kosár(UserID)
 VALUES
