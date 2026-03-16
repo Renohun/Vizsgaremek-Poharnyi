@@ -1675,10 +1675,10 @@ router.post("/Webshop/szures",async(request,response)=>{
             
             if(item[0] == "MaxAr")
             {
-                query += " Ar < ? AND"
+                query += " Ar <= ? AND"
             } 
             else if(item[0] == "MaxAlk"){
-                query += " TermekAlkoholSzazalek < ? AND"
+                query += " TermekAlkoholSzazalek <= ? AND"
             }
             else if(item[0] == "rendezes"){
                 OrderBy = ` ORDER BY ? DESC`
