@@ -870,15 +870,11 @@ router.post('/AdminPanel/TermekFeltoltes', async (req, res) => {
             termekMarka,
             termekSzarmazas,
             termekAra,
-            termekKategoria
+            termekKategoria,
+            termekUrtartalom
         } = req.body;
 
-        if (
-            termekKategoria == 'Eszkozok' ||
-            termekKategoria == 'Pohar' ||
-            termekKategoria == 'Merch' ||
-            termekKategoria == 'Egyeb'
-        ) {
+        if (termekKategoria == 'Eszkozok' || termekKategoria == 'Merch') {
             const termekQuery =
                 'INSERT INTO webshoptermek (TermekCim, TermekLeiras, TermekKiszereles, TermekKeszlet, TermekKepUtvonal, TermekKategoria, TermekMarka, TermekSzarmazas, Ar) VALUES (?,?,?,?,?,?,?,?,?)';
             await DBconnetion.promise().query(termekQuery, [
@@ -892,24 +888,49 @@ router.post('/AdminPanel/TermekFeltoltes', async (req, res) => {
                 termekSzarmazas,
                 termekAra
             ]);
+
+            res.status(200).json({ message: 'Termek hozzadva sikeresen' });
         } else {
-            const termekQuery =
-                'INSERT INTO webshoptermek (TermekCim, TermekLeiras, TermekKiszereles, TermekKeszlet, TermekKepUtvonal, TermekKategoria, TermekMarka, TermekSzarmazas, TermekAlkoholSzazalek, TermekKora, Ar) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-            await DBconnetion.promise().query(termekQuery, [
-                termekNev,
-                termekLeiras,
-                termekKiszereles,
-                termekKeszlet,
-                fajlNeve,
-                termekKategoria,
-                termekMarka,
-                termekSzarmazas,
-                req.body.termekAlkohol,
-                req.body.termekKora,
-                termekAra
-            ]);
+            if (termekKategoria == 'Pohar') {
+                const termekQuery =
+                    'INSERT INTO webshoptermek (TermekCim, TermekLeiras, TermekKiszereles, TermekUrtartalom, TermekKeszlet, TermekKepUtvonal, TermekKategoria, TermekMarka, TermekSzarmazas, Ar) VALUES (?,?,?,?,?,?,?,?,?,?)';
+                await DBconnetion.promise().query(termekQuery, [
+                    termekNev,
+                    termekLeiras,
+                    termekKiszereles,
+                    termekUrtartalom,
+                    termekKeszlet,
+                    fajlNeve,
+                    termekKategoria,
+                    termekMarka,
+                    termekSzarmazas,
+                    termekAra
+                ]);
+                res.status(200).json({ message: 'Termek hozzadva sikeresen' });
+            } else {
+                //Ha alkoholt tartalmazo kategoriarol van szo
+                const termekQuery =
+                    'INSERT INTO webshoptermek (TermekCim, TermekLeiras, TermekKiszereles, TermekUrtartalom, TermekKeszlet, TermekKepUtvonal, TermekKategoria, TermekMarka, TermekSzarmazas, TermekAlkoholSzazalek, TermekKora, Ar) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+                await DBconnetion.promise().query(termekQuery, [
+                    termekNev,
+                    termekLeiras,
+                    termekKiszereles,
+                    termekUrtartalom,
+                    termekKeszlet,
+                    fajlNeve,
+                    termekKategoria,
+                    termekMarka,
+                    termekSzarmazas,
+                    req.body.termekAlkohol,
+                    req.body.termekKora,
+                    termekAra
+                ]);
+                res.status(200).json({ message: 'Termek hozzadva sikeresen' });
+            }
         }
     } catch (error) {
+        console.log(error);
+
         res.status(500).json({ message: 'Hiba tortent a vegponton', error: error });
     }
 });
