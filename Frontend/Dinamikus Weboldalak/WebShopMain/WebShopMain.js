@@ -111,7 +111,7 @@ const Sliderek = async () => {
         }
     });
 };
-const SelectFeltolt = (data, Select1, Select2, Select3) => {
+const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
     let alapOption1 = document.createElement('option');
     alapOption1.setAttribute('value', '-');
     alapOption1.setAttribute('id', 'AlapOrszagOption');
@@ -130,24 +130,46 @@ const SelectFeltolt = (data, Select1, Select2, Select3) => {
     alapOption3.setAttribute('id', 'AlapKategOption');
     alapOption3.innerHTML = '-';
     Select3.appendChild(alapOption3);
+     //4.Option
+    let alapOption4 = document.createElement('option');
+    alapOption4.setAttribute('value', '-');
+    alapOption4.setAttribute('selected', 'true');
+    alapOption4.setAttribute('id', 'AlapKategOption');
+    alapOption4.innerHTML = '-';
+    Select4.appendChild(alapOption4);
+     //5.Option
+    let alapOption5 = document.createElement('option');
+    alapOption5.setAttribute('value', '-');
+    alapOption5.setAttribute('selected', 'true');
+    alapOption5.setAttribute('id', 'AlapKategOption');
+    alapOption5.innerHTML = '-';
+    Select5.appendChild(alapOption5);
 
     let kategoria = [];
+    let Orszag = [];
+    let Marka = [];
+    let kiszereles = [];
+    let urtartalom = [];
     for (let i = 0; i < data.data.length; i++) {
-        //orszagSelect
-        let option = document.createElement('option');
-        option.setAttribute('value', data.data[i].TermekSzarmazas);
-        option.innerHTML = data.data[i].TermekSzarmazas;
-        option.setAttribute('id', `szarmazas${i}`);
-        Select1.appendChild(option);
-        //MárkaSelect
-        let option2 = document.createElement('option');
-        option2.setAttribute('value', data.data[i].TermekMarka);
-        option2.innerHTML = data.data[i].TermekMarka;
-        option2.setAttribute('id', `Marka${i}`);
-        Select2.appendChild(option2);
-        //Kategoriak kivalasztasa
+        //orszag kivalasztasa
+        if (!Orszag.includes(data.data[i].TermekSzarmazas)) {
+            Orszag.push(data.data[i].TermekSzarmazas);
+        }
+       //Márka kivalasztasa
+        if (!Marka.includes(data.data[i].TermekMarka)) {
+            Marka.push(data.data[i].TermekMarka);
+        }
+       //Kategoriak kivalasztasa
         if (!kategoria.includes(data.data[i].TermekKategoria)) {
             kategoria.push(data.data[i].TermekKategoria);
+        }
+        //Kiszereles kivalasztasa
+        if (!kiszereles.includes(data.data[i].TermekKiszereles)) {
+            kiszereles.push(data.data[i].TermekKiszereles);
+        }
+        //urtartalom kivalasztasa
+        if (!urtartalom.includes(data.data[i].TermekUrtartalom)) {
+            urtartalom.push(data.data[i].TermekUrtartalom);
         }
     }
     //kategoria select feltoltese
@@ -155,9 +177,41 @@ const SelectFeltolt = (data, Select1, Select2, Select3) => {
         let option3 = document.createElement('option');
         option3.setAttribute('value', kategoria[i]);
         option3.innerHTML = kategoria[i];
-        option3.setAttribute('id', `Marka${i}`);
+        option3.setAttribute('id', `kategoria${i}`);
         Select3.appendChild(option3);
     }
+    //marka select feltoltese
+     for (let i = 0; i < Marka.length; i++) {
+            let option2 = document.createElement('option');
+            option2.setAttribute('value', Marka[i]);
+            option2.innerHTML =  Marka[i];
+            option2.setAttribute('id', `Marka${i}`);
+            Select2.appendChild(option2);   
+        }
+    //orszag select feltoltese
+      for (let i = 0; i < Orszag.length; i++) {
+            let option = document.createElement('option');
+             option.setAttribute('value', Orszag[i]);
+            option.innerHTML = Orszag[i];
+            option.setAttribute('id', `szarmazas${i}`);
+            Select1.appendChild(option); 
+        }
+        //kiszereles select feltoltese
+      for (let i = 0; i < kiszereles.length; i++) {
+            let option = document.createElement('option');
+             option.setAttribute('value', kiszereles[i]);
+            option.innerHTML = kiszereles[i];
+            option.setAttribute('id', `kiszereles${i}`);
+            Select1.appendChild(option); 
+        }
+        //urtartalom select feltoltese
+      for (let i = 0; i < urtartalom.length; i++) {
+            let option = document.createElement('option');
+             option.setAttribute('value',urtartalom[i]);
+            option.innerHTML = urtartalom[i];
+            option.setAttribute('id', `urtartalom${i}`);
+            Select1.appendChild(option); 
+        }
 };
 //Kártya Generálás
 const kartyaGen = async(data,hova)=>{
@@ -265,24 +319,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     let MarkaSelect = document.getElementById('MarkaSelect');
     let KategoriaSelect = document.getElementById('KategoriaSelect');
     let RendezesSelect = document.getElementById('RendezesSelect');
-    SelectFeltolt(data, OrszagSelect, MarkaSelect, KategoriaSelect);
+    let kiszerelesSelect = document.getElementById('KiszerelesSelect');
+    let UrtartalomSelect = document.getElementById('UrtartalomSelect');
+    SelectFeltolt(data, OrszagSelect, MarkaSelect, KategoriaSelect,kiszerelesSelect,UrtartalomSelect);
     OrszagSelect.addEventListener('change', () => {
         console.log(OrszagSelect.value);
     });
     //alkohol ellernörzés
   
     let alkoholcsuszka = document.getElementById("alkoholTart")
-    
+    let urtalrtalom = document.getElementById("Urtartalom")
     KategoriaSelect.addEventListener("change",()=>{
-       
-if(KategoriaSelect.value == "alkohol")
-        {
-             alkoholcsuszka.classList.remove("eltunt")
-        }
+    
+    //alkohol-e?
+        if(KategoriaSelect.value != "Szirup" || KategoriaSelect.value != "Merch" || KategoriaSelect.value != "Pohar")
+            {
+                alkoholcsuszka.classList.remove("eltunt")
+            }
         else
-        {
-            alkoholcsuszka.classList.add("eltunt")
-        }
+            {
+                alkoholcsuszka.classList.add("eltunt")
+            }
+        if(KategoriaSelect.value != "Szirup" || KategoriaSelect.value != "Merch")
+            {
+                urtalrtalom.classList.remove("eltunt")
+            }   
+        else
+            {
+                urtalrtalom.classList.add("eltunt")
+            }
     } )
     //kártyák generálása
     let KartyaHova = document.getElementById("kartyaSor")

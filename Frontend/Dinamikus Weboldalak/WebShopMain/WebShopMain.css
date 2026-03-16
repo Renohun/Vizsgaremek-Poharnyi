@@ -88,32 +88,24 @@
 }
 /*Száramazasi hely*/
 
-#szarmazasiHely {
-    margin-top: 15px;
-}
-#SzarmazasSelectDiv {
-    display: flex;
-    flex-direction: column;
-}
-
-/*Márka*/
-#Marka {
-    margin-top: 15px;
-}
-#MarkaSelectDiv {
-    display: flex;
-    flex-direction: column;
-}
-/*kategoria*/
-#Kategoria {
-    margin-top: 15px;
-}
-#KategoriaSelectDiv {
-    display: flex;
-    flex-direction: column;
-}
 .eltunt{display: none;}
 /*Rendezes*/
+/*selectek tulajdonsagai*/
+.selekt{
+    margin-top: 15px;
+}
+.selektdiv{
+display: flex;
+    flex-direction: column;
+} 
+/*Kis
+#Rendezes {
+    margin-top: 15px;
+}
+#RendezesSelectDiv {
+    display: flex;
+    flex-direction: column;
+}
 #Rendezes {
     margin-top: 15px;
 }
