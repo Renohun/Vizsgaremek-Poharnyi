@@ -370,6 +370,17 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
         res.status(400).json({ message: 'Hibas koktel lekeres', error: err });
     }
 });
+
+router.patch('/Koktelok/nepszeruseg/:id', async (req, res) => {
+    try {
+        const query = 'UPDATE koktél SET KoktelNepszeruseg = KoktelNepszeruseg + 1 WHERE KoktélID LIKE ?';
+        await DBconnetion.promise().query(query, [req.params.id]);
+        res.status(200).json({ message: 'Nepszeruseg frissites' });
+    } catch (error) {
+        res.status(500).json({ message: 'Hiba tortent a vegpont elereseben', error: error });
+    }
+});
+
 //Regisztracio oldalrol hoz ide majd tolti fel az adatokat az adatbazisba
 router.post('/regisztracio', async (request, response) => {
     try {
