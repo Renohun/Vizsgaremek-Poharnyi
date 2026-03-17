@@ -134,14 +134,14 @@ const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
     let alapOption4 = document.createElement('option');
     alapOption4.setAttribute('value', '-');
     alapOption4.setAttribute('selected', 'true');
-    alapOption4.setAttribute('id', 'AlapKategOption');
+    alapOption4.setAttribute('id', 'AlapKiszerelesOption');
     alapOption4.innerHTML = '-';
     Select4.appendChild(alapOption4);
      //5.Option
     let alapOption5 = document.createElement('option');
     alapOption5.setAttribute('value', '-');
     alapOption5.setAttribute('selected', 'true');
-    alapOption5.setAttribute('id', 'AlapKategOption');
+    alapOption5.setAttribute('id', 'AlapUrtartalomOption');
     alapOption5.innerHTML = '-';
     Select5.appendChild(alapOption5);
 
@@ -202,7 +202,7 @@ const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
              option.setAttribute('value', kiszereles[i]);
             option.innerHTML = kiszereles[i];
             option.setAttribute('id', `kiszereles${i}`);
-            Select1.appendChild(option); 
+            Select4.appendChild(option); 
         }
         //urtartalom select feltoltese
       for (let i = 0; i < urtartalom.length; i++) {
@@ -210,7 +210,7 @@ const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
              option.setAttribute('value',urtartalom[i]);
             option.innerHTML = urtartalom[i];
             option.setAttribute('id', `urtartalom${i}`);
-            Select1.appendChild(option); 
+            Select5.appendChild(option); 
         }
 };
 //Kártya Generálás
@@ -332,21 +332,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     KategoriaSelect.addEventListener("change",()=>{
     
     //alkohol-e?
-        if(KategoriaSelect.value != "Szirup" || KategoriaSelect.value != "Merch" || KategoriaSelect.value != "Pohar")
-            {
-                alkoholcsuszka.classList.remove("eltunt")
-            }
-        else
+        if(KategoriaSelect.value == "Szirup" || KategoriaSelect.value == "Merch" || KategoriaSelect.value == "Pohar" || KategoriaSelect.value =="-")
             {
                 alkoholcsuszka.classList.add("eltunt")
             }
-        if(KategoriaSelect.value != "Szirup" || KategoriaSelect.value != "Merch")
+        else
             {
-                urtalrtalom.classList.remove("eltunt")
+                alkoholcsuszka.classList.remove("eltunt")
+            }
+        if(KategoriaSelect.value == "Eszkoz" || KategoriaSelect.value == "Merch" || KategoriaSelect.value == "-")
+            {
+                urtalrtalom.classList.add("eltunt")
             }   
         else
             {
-                urtalrtalom.classList.add("eltunt")
+                urtalrtalom.classList.remove("eltunt")
             }
     } )
     //kártyák generálása
@@ -387,24 +387,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             szuresiAdatok.TermekKategoria = KategoriaSelect.value    
         }
 
-        if (RendezesSelect.value != "-") 
+         
+
+        if (kiszerelesSelect.value != "-") 
         {
-            szuresiAdatok.rendezes = RendezesSelect.value    
+            szuresiAdatok.TermekKiszereles = kiszerelesSelect.value    
         }
 
+        if (UrtartalomSelect.value != "-") 
+        {
+            szuresiAdatok.TermekUrtartalom = UrtartalomSelect.value    
+        }
         //akcios-e?
         let akcio = document.getElementById("AkcioseCheck")
         if (akcio.checked == true) 
         {
             szuresiAdatok.akcio = true    
         }
+        //rendezes
+       szuresiAdatok.rendezes = RendezesSelect.value    
+        
 
         
         const KuldData = await SzuresPost("/api/Webshop/szures",szuresiAdatok)
         szuresiAdatok = {};
         
         kartyaGen(KuldData,KartyaHova)
-        console.log(KuldData)
+        console.log( KuldData)
     })
     
     

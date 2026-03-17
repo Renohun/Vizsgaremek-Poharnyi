@@ -1680,9 +1680,34 @@ router.post("/Webshop/szures",async(request,response)=>{
             else if(item[0] == "MaxAlk"){
                 query += " TermekAlkoholSzazalek <= ? AND"
             }
+            else if(item[0] == "TermekKategoria"){
+                query += " TermekKategoria < ? AND"
+            }
+            else if(item[0] == "MaxAlk"){
+                query += " TermekUrtartalom = ? AND"
+            }
             else if(item[0] == "rendezes"){
-                OrderBy = ` ORDER BY ? DESC`
-                OrderByErtek = item[1]
+                if (item[1] =="novekvo") 
+                {
+                    OrderBy = ` ORDER BY ? ASC`
+                    ertekLista.push("Ar") 
+                }
+                else if(item[1] =="csokkeno")
+                {
+                    OrderBy = ` ORDER BY ? DESC`
+                    ertekLista.push("Ar") 
+                }
+                else if(item[1] == "TermekCim")
+                {
+                    OrderBy = ` ORDER BY ? DESC`
+                    ertekLista.push(item[1])
+                }
+                else if(item[1] == "-")
+                {
+                    OrderBy = ` ORDER BY ? ASC`
+                    ertekLista.push("TermekId")
+                }
+                
             }
             else if(item[0] == "akcio"){
                 query += " TermekDiscount is NOT NULL AND"
@@ -1697,66 +1722,53 @@ router.post("/Webshop/szures",async(request,response)=>{
             }
            
         }
+
         console.log(query)
+        // a query utolso 3 elemenek (AND) levágása
         query = query.slice(query[0], query.length-4)
        
-        if (OrderBy != null) {
+        if (OrderBy != null)
+        {
             query += OrderBy;
         }
-        console.log(OrderByErtek)
-         console.log(query)
+            // console.log(OrderByErtek)
+        console.log(query)
         for (let i = 0; i < ertekLista.length; i++) {
-            console.log(ertekLista[i])
-        }
-        
-        let szurtTermekek;
-        if (ertekLista.length == 1) {
-              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0]]);
-        }
-        else if(ertekLista.length == 2 && OrderByErtek != null)
-        {
-            console.log("asd");
-            
-             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],OrderByErtek]);
-        }
-        else if(ertekLista.length == 2 && OrderByErtek == null)
-        {
-             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1]]);
+           // console.log(ertekLista[i])
         }
 
-        else if(ertekLista.length == 3 && OrderByErtek != null)
-        {
-             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],OrderByErtek]);
+        let szurtTermekek;
+        if(ertekLista.length == 1){
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0]]);
         }
-        else if(ertekLista.length == 3 && OrderByErtek == null)
-        {
+        else if(ertekLista.length == 2)
+            {
+          
+                [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1]]);
+
+            }
+        else if(ertekLista.length == 3){
              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2]]);
         }
-
-        else if(ertekLista.length == 4 && OrderByErtek != null)
-        {
-             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],OrderByErtek]);
+        else if(ertekLista.length == 4){
+              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3]]);
+        }   
+        else if(ertekLista.length == 5){
+              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4]]);  
         }
-        else if(ertekLista.length == 4 && OrderByErtek == null)
-        {
-             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4]]);
+        else if(ertekLista.length == 6){
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5]]);  
         }
-
-        else if(ertekLista.length == 5 && OrderByErtek != null)
-        {
-             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3] ,OrderByErtek]);
+         else if(ertekLista.length == 7){
+              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5],ertekLista[6]]);    
         }
-        else if(ertekLista.length == 5 && OrderByErtek == null)
-        {
-             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5]]);
+         else if(ertekLista.length == 8){
+                [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5],ertekLista[6],ertekLista[7]]);   
         }
-
-        else if(ertekLista.length == 6)
-        {
-            [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5],OrderByErtek]);
+         else if(ertekLista.length == 9){
+                [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5],ertekLista[6],ertekLista[7],ertekLista[8]]);   
         }
        
-
         response.status(200).json({
             
             data: szurtTermekek
