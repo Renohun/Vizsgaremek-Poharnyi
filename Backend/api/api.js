@@ -7,7 +7,7 @@ const authenticationMiddleware = require('./authenticationMiddleware.js');
 const authorizationMiddelware = require('./authorizationMiddelware.js');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-
+const mysql = require('mysql2')
 const path = require('path');
 const fajlkezelo = require('fs/promises');
 const { error, log } = require('console');
@@ -1667,6 +1667,7 @@ router.post("/Webshop/szures",async(request,response)=>{
         let query = "SELECT * FROM webshoptermek WHERE"
         console.log(feltetelek)
         let whereErtekek
+        const elfogadott =["csokkeno","novekvo","-","TermekCim"]
         let ertekLista = []
         let OrderBy;
         let OrderByErtek;
@@ -1687,27 +1688,32 @@ router.post("/Webshop/szures",async(request,response)=>{
                 query += " TermekUrtartalom = ? AND"
             }
             else if(item[0] == "rendezes"){
-                if (item[1] =="novekvo") 
+               if (elfogadott.includes(item[1])) 
+               {
+                    if (item[1] =="novekvo") 
+                    {
+                    OrderBy = ` ORDER BY Ar ASC`
+                     
+                    }
+                    else if(item[1] =="csokkeno")
+                    {
+                    OrderBy = ` ORDER BY Ar DESC`
+                    
+                    }
+                    else if(item[1] == "TermekCim")
+                    {
+                    OrderBy = ` ORDER BY TermekCim ASC`
+                    
+                    }
+                    else if(item[1] == "-")
+                    {
+                    OrderBy = ` ORDER BY TermekId ASC`
+                    
+                    }
+               }else
                 {
-                    OrderBy = ` ORDER BY ? ASC`
-                    ertekLista.push("Ar") 
-                }
-                else if(item[1] =="csokkeno")
-                {
-                    OrderBy = ` ORDER BY ? DESC`
-                    ertekLista.push("Ar") 
-                }
-                else if(item[1] == "TermekCim")
-                {
-                    OrderBy = ` ORDER BY ? DESC`
-                    ertekLista.push(item[1])
-                }
-                else if(item[1] == "-")
-                {
-                    OrderBy = ` ORDER BY ? ASC`
-                    ertekLista.push("TermekId")
-                }
-                
+                throw new Error("Rendezéshiba")
+               }
             }
             else if(item[0] == "akcio"){
                 query += " TermekDiscount is NOT NULL AND"
@@ -1727,14 +1733,12 @@ router.post("/Webshop/szures",async(request,response)=>{
         // a query utolso 3 elemenek (AND) levágása
         query = query.slice(query[0], query.length-4)
        
-        if (OrderBy != null)
-        {
-            query += OrderBy;
-        }
+        query += OrderBy;
+        
             // console.log(OrderByErtek)
         console.log(query)
         for (let i = 0; i < ertekLista.length; i++) {
-           // console.log(ertekLista[i])
+           console.log(ertekLista[i])
         }
 
         let szurtTermekek;
@@ -1743,30 +1747,32 @@ router.post("/Webshop/szures",async(request,response)=>{
         }
         else if(ertekLista.length == 2)
             {
-          
-                [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1]]);
-
+                
+                [szurtTermekek] = await DBconnetion.promise().query(query,[parseInt(ertekLista[0])]);
+                const sql = mysql.format(query, [ertekLista[0], ertekLista[1]]);
+                console.log(sql);
+                console.log(typeof(ertekLista[1]))
             }
         else if(ertekLista.length == 3){
-             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2]]);
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1]]);
         }
         else if(ertekLista.length == 4){
-              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3]]);
+              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2]]);
         }   
         else if(ertekLista.length == 5){
-              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4]]);  
+              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3]]);  
         }
         else if(ertekLista.length == 6){
-             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5]]);  
+             [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4]]);  
         }
          else if(ertekLista.length == 7){
-              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5],ertekLista[6]]);    
+              [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5]]);    
         }
          else if(ertekLista.length == 8){
-                [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5],ertekLista[6],ertekLista[7]]);   
+                [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5],ertekLista[6]]);   
         }
          else if(ertekLista.length == 9){
-                [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5],ertekLista[6],ertekLista[7],ertekLista[8]]);   
+                [szurtTermekek] = await DBconnetion.promise().query(query,[ertekLista[0],ertekLista[1],ertekLista[2],ertekLista[3],ertekLista[4],ertekLista[5],ertekLista[6],ertekLista[7]]);   
         }
        
         response.status(200).json({
