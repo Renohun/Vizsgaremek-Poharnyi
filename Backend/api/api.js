@@ -90,8 +90,22 @@ router.get('/Koktelok/Jelvenyek', async (req, res) => {
 
 router.get('/Koktelok/lekeres', async (req, res) => {
     try {
-        const queryKoktelok =
-            'SELECT * FROM koktél LEFT JOIN jelentesek ON jelentesek.JelentettTartalomID = koktél.KoktélID AND jelentesek.JelentesTipusa LIKE ? AND jelentesek.JelentesAllapota NOT LIKE 2 ORDER BY koktél.KoktelNepszeruseg DESC';
+        const queryJelentettTartalmak =
+            'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE 2';
+
+        let [jelentettTartalomID] = await DBconnetion.promise().query(queryJelentettTartalmak, ['Koktél']);
+        console.log(jelentettTartalomID);
+
+        jelentettTartalomID = jelentettTartalomID.map((a) => {
+            return a.JelentettTartalomID;
+        });
+        console.log(jelentettTartalomID);
+
+        let queryKoktelok = 'SELECT * FROM koktél';
+
+        if (jelentettTartalomID.length > 0) {
+            queryKoktelok += ' WHERE KoktélID NOT IN (?)';
+        }
         const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID = ?';
         //Majd ide kell tennem a szuroket, de viszont elotte viszont at kell alakitani a kapott szueresi felteteleket id-kra
         const queryKoktelJelvenyek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID = ?';
@@ -100,7 +114,7 @@ router.get('/Koktelok/lekeres', async (req, res) => {
             'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz = "Koktél" AND HovaIrták = ?';
         //promise().igeret amit esku hogy megcsinalok - MIERT NEM MUKODOTT ALAPBOL: mert a query callback alapu igy egy CALLBACK HELL-t csinaltam es azt nem lehet await-elni
         //promise() egy igeretet tesz es csak ezt lehet await-ni callbacket nem, ezert kellett promise() igy az atalakitja callbackbol promise-ba
-        const [koktelok] = await DBconnetion.promise().query(queryKoktelok, ['Koktél']);
+        const [koktelok] = await DBconnetion.promise().query(queryKoktelok, [jelentettTartalomID]);
         //Promise.all: akkor adja vissza ha az erteke ha az osszes belso promise beteljesul
         const eredmeny = await Promise.all(
             koktelok.map(async (koktel) => {
@@ -140,11 +154,28 @@ router.get('/Koktelok/lekeres', async (req, res) => {
 
 router.get('/Koktelok/lekeres/:koktelNev', async (req, res) => {
     try {
+        const queryJelentettTartalmak =
+            'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE 2';
+
+        let [jelentettTartalomID] = await DBconnetion.promise().query(queryJelentettTartalmak, ['Koktél']);
+        console.log(jelentettTartalomID);
+
+        jelentettTartalomID = jelentettTartalomID.map((a) => {
+            return a.JelentettTartalomID;
+        });
+        console.log(jelentettTartalomID);
+
         let { koktelNev } = req.params;
         //console.log(koktelNev);
+        koktelNev.toLowerCase();
         koktelNev = '%' + koktelNev + '%';
 
-        const queryKoktelok = 'SELECT * FROM koktél WHERE KoktelCim LIKE ?';
+        let queryKoktelok = 'SELECT * FROM koktél WHERE LOWER(KoktelCim) LIKE ?';
+
+        if (jelentettTartalomID.length > 0) {
+            queryKoktelok += ' AND KoktélID NOT IN (?)';
+        }
+
         const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID = ?';
         //Majd ide kell tennem a szuroket, de viszont elotte viszont at kell alakitani a kapott szueresi felteteleket id-kra
         const queryKoktelJelvenyek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID = ?';
@@ -153,7 +184,7 @@ router.get('/Koktelok/lekeres/:koktelNev', async (req, res) => {
             'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz = "Koktél" AND HovaIrták = ?';
         //promise().igeret amit esku hogy megcsinalok - MIERT NEM MUKODOTT ALAPBOL: mert a query callback alapu igy egy CALLBACK HELL-t csinaltam es azt nem lehet await-elni
         //promise() egy igeretet tesz es csak ezt lehet await-ni callbacket nem, ezert kellett promise() igy az atalakitja callbackbol promise-ba
-        const [koktelok] = await DBconnetion.promise().query(queryKoktelok, [koktelNev]);
+        const [koktelok] = await DBconnetion.promise().query(queryKoktelok, [koktelNev, jelentettTartalomID]);
         //Promise.all: akkor adja vissza ha az erteke ha az osszes belso promise beteljesul
         const eredmeny = await Promise.all(
             koktelok.map(async (koktel) => {
@@ -210,6 +241,25 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
             queryKoktelok += ' WHERE Alkoholos LIKE FALSE';
         }
 
+        const queryJelentettTartalmak =
+            'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE 2';
+
+        let [jelentettTartalomID] = await DBconnetion.promise().query(queryJelentettTartalmak, ['Koktél']);
+        console.log(jelentettTartalomID);
+
+        jelentettTartalomID = jelentettTartalomID.map((a) => {
+            return a.JelentettTartalomID;
+        });
+        console.log(jelentettTartalomID);
+
+        if (jelentettTartalomID.length > 0) {
+            if (queryKoktelok.includes('WHERE')) {
+                queryKoktelok += ' AND KoktélID NOT IN (?)';
+            } else {
+                queryKoktelok += ' WHERE KoktélID NOT IN (?)';
+            }
+        }
+
         if (rendezes == 'Nepszeruseg novekvo') {
             queryKoktelok += ' ORDER BY KoktelNepszeruseg ASC';
         } else if (rendezes == 'Nepszeruseg csokkeno') {
@@ -235,7 +285,7 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
             'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz = "Koktél" AND HovaIrták = ?';
         //promise().igeret amit esku hogy megcsinalok - MIERT NEM MUKODOTT ALAPBOL: mert a query callback alapu igy egy CALLBACK HELL-t csinaltam es azt nem lehet await-elni
         //promise() egy igeretet tesz es csak ezt lehet await-ni callbacket nem, ezert kellett promise() igy az atalakitja callbackbol promise-ba
-        const [koktelok] = await DBconnetion.promise().query(queryKoktelok);
+        const [koktelok] = await DBconnetion.promise().query(queryKoktelok, [jelentettTartalomID]);
         //Promise.all: akkor adja vissza ha az erteke ha az osszes belso promise beteljesul
         const eredmeny = await Promise.all(
             koktelok.map(async (koktel) => {

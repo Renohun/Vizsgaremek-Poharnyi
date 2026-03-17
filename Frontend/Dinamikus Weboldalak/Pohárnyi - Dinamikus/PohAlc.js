@@ -260,7 +260,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const koktelok = await GETfetch(`http://127.0.0.1:3000/api/Koktelok/lekeres/${keresettKoktelNeve}`);
                 koktelRendereles(koktelok);
             } else {
-                alert('Nem adott meg nevet!');
+                const koktelok = await GETfetch('http://127.0.0.1:3000/api/Koktelok/lekeres');
+                //console.log(koktelok);
+                koktelRendereles(koktelok);
             }
         } catch (err) {
             console.error(err);
