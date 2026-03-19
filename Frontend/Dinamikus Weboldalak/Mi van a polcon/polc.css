@@ -34,7 +34,7 @@
     font-size: large;
 }
 .ogomb:hover{
-    background-color: gold;
+    background-color: rgb(150, 150, 150);
 }
 .badge{
     --bs-badge-font-weight: 500;
