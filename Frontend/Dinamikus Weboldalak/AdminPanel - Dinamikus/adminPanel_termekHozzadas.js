@@ -50,14 +50,12 @@ function inputFieldClear() {
     console.log(typeof inputokFields);
     for (let i = 2; i < inputokFields.length; i++) {
         if (
-            inputokFields[i].tagName ==
-            'INPUT'(
-                inputokFields[i].getAttribute('type') == 'text' || inputokFields[i].getAttribute('type') == 'number'
-            )
+            inputokFields[i].tagName == 'INPUT' &&
+            (inputokFields[i].getAttribute('type') == 'text' || inputokFields[i].getAttribute('type') == 'number')
         ) {
             inputokFields[i].value = '';
         } else if (inputokFields[i].tagName == 'TEXTAREA') {
-            inputokFields[i].innerText = '';
+            inputokFields[i].value = '';
         }
     }
 }
@@ -169,14 +167,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (formDiv.children[i].files[0] == undefined) {
                             hibasAdatok = true;
                         } else {
-                            let kepTarolas = new FormData();
-                            kepTarolas.append('profilkep', formDiv.children[i].files[0]);
-                            const kapottFajlNev = await POSTkepFeltoltes(
-                                'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
-                                kepTarolas
-                            );
+                            if (
+                                formDiv.children[i].files[0].length != 0 &&
+                                (formDiv.children[i].files[0].type == 'image/jpeg' ||
+                                    formDiv.children[i].files[0].type == 'image/png' ||
+                                    formDiv.children[i].files[0].type == 'image/bmp' ||
+                                    formDiv.children[i].files[0].type == 'image/webp')
+                            ) {
+                                let kepTarolas = new FormData();
+                                kepTarolas.append('profilkep', formDiv.children[i].files[0]);
+                                const kapottFajlNev = await POSTkepFeltoltes(
+                                    'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
+                                    kepTarolas
+                                );
 
-                            POSTobj.fajlNeve = kapottFajlNev.message;
+                                POSTobj.fajlNeve = kapottFajlNev.message;
+                            } else {
+                                hibasAdatok = true;
+                            }
                         }
 
                         //szoki kepfeltoltes

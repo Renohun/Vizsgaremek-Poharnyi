@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
+                window.location.href = '/';
             });
         } else {
             //Ide jonne majd a modal-os alert

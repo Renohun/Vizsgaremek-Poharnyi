@@ -250,6 +250,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 koktelRecept.classList.add('hibasForm');
                 hibasFrom = true;
             }
+            let kepTarolas = new FormData();
+            if (
+                document.getElementById('koktelKepFeltoltes').files[0].length != 0 &&
+                (document.getElementById('koktelKepFeltoltes').files[0].type == 'image/jpeg' ||
+                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/png' ||
+                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/webp' ||
+                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/bmp')
+            ) {
+                kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
+            } else {
+                hibasFrom = true;
+            }
 
             if (!hibasFrom) {
                 let alkoholosEBool = false;
@@ -259,8 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 //onsole.log(document.getElementById('koktelKepFeltoltes').files[0]);
 
-                let kepTarolas = new FormData();
-                kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
                 //console.log(kepTarolas);
 
                 (async () => {
@@ -302,7 +312,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             modalElement.hide();
                             window.location.reload();
                         });
-                        window.location.reload();
                     } else {
                         var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
                         modalElement.show();

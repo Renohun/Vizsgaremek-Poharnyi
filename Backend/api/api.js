@@ -10,7 +10,6 @@ const multer = require('multer');
 
 const path = require('path');
 const fajlkezelo = require('fs/promises');
-const { error } = require('console');
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -848,6 +847,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
                 });
             });
         });
+        res.status(200).json({ message: 'Sikeres koktel feltoltes' });
     } catch (err) {
         console.log(err);
     }
