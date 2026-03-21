@@ -1565,9 +1565,9 @@ router.post('/AdatlapLekeres/Fizetes', async (request, response) => {
 //
 router.get('/Koktel/:id', async (request, response) => {
     const KoktelLekeres =
-        'SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?';
+        'SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg,ProfilkepUtvonal FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?';
     const KommentLekeres =
-        'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+        'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const JelvenyLekeres = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
     const OsszetevőLekeres = 'SELECT Osszetevő,Mennyiség,Mertekegyseg FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
     const MelyikJelvenyLekeres = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?';
@@ -1812,8 +1812,21 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
         });
     } catch (error) {
         console.log(error);
+        response.status(500).json({
+            message:"Hiba!"
+        })
     }
 });
+
+router.post("/Koktel/KommenteloKepLekeres/:utvonal",async(request,response)=>{
+    try {
+        response.sendFile(path.join(__dirname, '..', 'images', request.params.utvonal));
+    } 
+    catch (error) {
+        console.log(error);
+        
+    }
+})
 //
 //
 //
