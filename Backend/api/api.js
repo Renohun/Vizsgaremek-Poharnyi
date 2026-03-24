@@ -1848,8 +1848,11 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
         res.status(500).json({ message: 'Sikertelen feltöltés', hiba: error });
     }
 });
+//
+//
 //PolcKoktél
-
+//
+//
 router.get("/PolcKoktel/OsszetevoLekeres",async(request,response)=>{
     try {
         const osszetevolekeres=await lekeres("SELECT Osszetevő FROM koktelokosszetevoi GROUP BY Osszetevő")
@@ -1868,17 +1871,17 @@ router.get("/PolcKoktel/OsszetevoLekeres",async(request,response)=>{
     }
 })
 
-router.get("/PolcKoktel/HelyesKoktelLekeres",async(request,response)=>{
+router.post("/PolcKoktel/HelyesKoktelLekeres",async(request,response)=>{
+
     try {
-        const osszetevolekeres=await lekeres("SELECT KoktélID FROM koktelokosszetevoi WHERE Osszetevő IN (?) GROUP BY KoktélID")
-        let osszetevok=[]
-        for (let i = 0; i < osszetevolekeres.length; i++) {
-            osszetevok.push(osszetevolekeres[i].Osszetevő)
-            
-        }
+        let osszetevok=request.body.osszetevok
+        console.log(osszetevok);
+        
+        const koktelLekeres=await lekeres("SELECT KoktélID FROM koktelokosszetevoi WHERE Osszetevő IN (?) GROUP BY KoktélID")
+        const [valasz]=await lekeres(koktelLekeres,[osszetevok])
         response.status(200).json({
             message:"siker",
-            adat:osszetevok
+            adat:valasz
         })
     } 
     catch (error) {

@@ -50,7 +50,7 @@ const AdatPost=async(url,data)=>{
         body:JSON.stringify(data)
       })  
       if (ertek.ok) {
-        return ertek.json(),ertek.status
+        return ertek.json()
       }
       else{
         console.log("hiba");
@@ -65,8 +65,6 @@ const AdatPost=async(url,data)=>{
 document.addEventListener("DOMContentLoaded",async()=>{
     //A koktélok összevetőit tartalmazó lista
     let valasz=await AdatGet("/api/PolcKoktel/OsszetevoLekeres")
-    console.log(valasz);
-    
     lista=valasz.adat
     //A suggestion tömb létrehozása, és feltöltése
     
@@ -184,5 +182,10 @@ function badge(nev){
 }
 
 document.getElementById("kereses").addEventListener("click",async()=>{
-    await AdatGet("")
+    let adatok={
+        osszetevok:felhosszetevok
+    }
+    let valasz=await AdatPost("/api/PolcKoktel/HelyesKoktelLekeres",adatok)
+    console.log(valasz);
+    
 })
