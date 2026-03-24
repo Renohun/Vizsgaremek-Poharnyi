@@ -1,4 +1,4 @@
-
+let megtortentemar=false
 document.addEventListener("DOMContentLoaded",async()=>{
     //megvárjuk hogy betöltsön a weboldal és eltároljuk a bool ertéket hogy be van e lépve
     let be=await Betoltes()
@@ -76,6 +76,7 @@ async function Betoltes() {
     
     //Koktél jelvényei
     const BadgeHely=document.getElementById("badgek")
+    BadgeHely.innerHTML=""
     for (let i = 0; i < jelvényAdat.length; i++) {
         
         let adat=jelvényAdat[i][0]
@@ -100,6 +101,7 @@ async function Betoltes() {
 
     //Összetevők létrehozása
     const OssztevHely=document.getElementById("Ossztev")
+    OssztevHely.innerHTML=""
     for (let i = 0; i < osszetevoAdat.length; i++) {
         let Ossztevo=document.createElement("li")
         Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${osszetevoAdat[i].Mennyiség} ${osszetevoAdat[i].Mertekegyseg}`
@@ -111,8 +113,6 @@ async function Betoltes() {
     document.getElementById("KoktélKép").setAttribute("src",URL.createObjectURL(KepLekeres))
 
     //A koktél képének lekérése és megadása
-    console.log(koktélAdat.ProfilkepUtvonal);
-    
     const FelhKep=await AdatLekeresKep("/api/Koktel/KommenteloKepLekeres/"+koktélAdat.ProfilkepUtvonal)
     document.getElementById("keszKep").setAttribute("src",URL.createObjectURL(FelhKep))
     document.getElementById("keszKep").classList.add("profilkep","m-0")
@@ -133,6 +133,7 @@ async function Betoltes() {
     
     //Kommentek létrehozása
     let KommentekHelye=document.getElementById("Kommentek")
+    KommentekHelye.innerHTML=""
     //Visszafele számolunk, így a legújjabb van felül
     for (let i = kommentAdat.length-1; i > -1 ; i--) {
 
@@ -247,7 +248,7 @@ async function Betoltes() {
     document.getElementById("recept").innerHTML=koktélAdat.Recept
     document.getElementById("mennyiseg").value=koktélAdat.AlapMennyiseg 
     //Ha ez a felhasználó készítette a koktélt
-    if (koktélAdat.UgyanazE) {
+    if (koktélAdat.UgyanazE&&megtortentemar) {
         //ne tudja jelenteni magát
         Obfuszkacio()
         document.getElementById("FelhJel").setAttribute("id","")
@@ -364,10 +365,13 @@ async function jelentes(mit,tipus,kit) {
 }
 
 function Obfuszkacio(){
+    if (!megtortentemar) {
         //Szétrobbantom ezeket a gombokat nehogy lehessen belekontárkodni bármibe is
         document.getElementById("FelhJel").setAttribute("type","")
         document.getElementById("FelhJel").classList.remove("btn","text-danger")
         document.getElementById("FelhJel").setAttribute("hidden","true")
+    }
+    megtortentemar=true
 
 }
 
