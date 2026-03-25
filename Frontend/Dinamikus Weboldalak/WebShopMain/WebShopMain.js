@@ -305,15 +305,39 @@ const kartyaGen = async(data,hova)=>{
 
     }
 }
-document.addEventListener('DOMContentLoaded', async () => {
-    const data = await TermekLekeres('/api/WebShop/TermekLekeres');
-    console.log(data);
+//Keresés
+const kereses = async ()=>{
+    const keresendoSzo = document.getElementById("NevKereses").value
+    if (keresendoSzo == "") 
+        {
+            alert("Töltse Ki a keresőmezőt!")
+        }
+    else
+        {
+            console.log(keresendoSzo)
+            let KartyaHova = document.getElementById("kartyaSor")
+            KartyaHova.textContent = "";
+            const data = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo.value}`);
+            if (data.data.length == 0) 
+            {
+                alert("nincs ilyen Termék")
+            }
+            console.log(data);
+            kartyaGen(data,KartyaHova)
+        }
     
-    //kepek lekerese
-    const kepek = await TermekKepLekeres('/api/WebShop/Keplekeres/2');
-    console.log(URL.createObjectURL(kepek));
+}
+document.addEventListener('DOMContentLoaded', async () => {
+    //összes termék lekérése
+    const data = await TermekLekeres('/api/WebShop/TermekLekeres');
+    
+    //kártyák generálása
+    let KartyaHova = document.getElementById("kartyaSor")
+    kartyaGen(data,KartyaHova)
+
+    //sliderek Feltöltése
     Sliderek();
-    data.data
+    
     //Selectek feltöltése
     let OrszagSelect = document.getElementById('OrszagSelect');
     let MarkaSelect = document.getElementById('MarkaSelect');
@@ -324,8 +348,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     SelectFeltolt(data, OrszagSelect, MarkaSelect, KategoriaSelect,kiszerelesSelect,UrtartalomSelect);
     OrszagSelect.addEventListener('change', () => {
         console.log(OrszagSelect.value);
-    });
-    //alkohol ellernörzés
+    });//alkohol ellernörzés
   
     let alkoholcsuszka = document.getElementById("alkoholTart")
     let urtalrtalom = document.getElementById("Urtartalom")
@@ -349,9 +372,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 urtalrtalom.classList.remove("eltunt")
             }
     } )
-    //kártyák generálása
-    let KartyaHova = document.getElementById("kartyaSor")
-    kartyaGen(data,KartyaHova)
+   
+    //Név Szerinti Keresés
+        let keresoGomb = document.getElementById("keresesBtn")
+        keresoGomb.addEventListener("click",kereses)
 
     //
     //szuresi adatok osszegyujtese
@@ -387,8 +411,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             szuresiAdatok.TermekKategoria = KategoriaSelect.value    
         }
 
-         
-
         if (kiszerelesSelect.value != "-") 
         {
             szuresiAdatok.TermekKiszereles = kiszerelesSelect.value    
@@ -406,16 +428,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         //rendezes
        szuresiAdatok.rendezes = RendezesSelect.value    
-        
-
-        
         const KuldData = await SzuresPost("/api/Webshop/szures",szuresiAdatok)
         szuresiAdatok = {};
         
         kartyaGen(KuldData,KartyaHova)
         console.log( KuldData)
+
+        
     })
     
     
 });
- //)

@@ -1640,6 +1640,31 @@ router.get('/WebShop/TermekLekeres', async (request, response) => {
     }
 });
 
+router.get('/WebShop/TermeklekeresByNev/:nev', async (request, response) => {
+    try {
+        const nev = request.params.nev;
+        console.log(nev)
+        const query = 'SELECT * FROM webshoptermek';
+        let Nevlista = []
+        const [termekek] = await DBconnetion.promise().query(query);
+        for (let i = 0; i < termekek.length; i++) {
+            if (termekek[i].TermekCim.includes(nev)) 
+            {
+                Nevlista.push(termekek[i])    
+            }
+            }
+        response.status(200).json({
+            data: Nevlista
+        });
+    } catch (error) {
+        throw new Error(error);
+        console.log(error);
+        response.status(500).json({
+            message: 'Hibás lekérés'
+        });
+    }
+});
+
 router.get('/Webshop/Keplekeres/:id', async (request, response) => {
     try {
         const { id } = request.params;
