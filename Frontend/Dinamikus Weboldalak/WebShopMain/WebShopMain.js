@@ -227,6 +227,10 @@ const kartyaGen = async(data,hova)=>{
         kartyaMain.setAttribute("id",`kartya${i}`)
         oszlop.appendChild(kartyaMain)
 
+        kartyaMain.addEventListener("click",()=>{
+            // itt továbbítjuk a termekoldalra
+        })
+
         let img = document.createElement("img")
         const kartyaKep = await TermekKepLekeres(`/api/WebShop/Keplekeres/${data.data[i].TermekID}`)
         console.log(kartyaKep)

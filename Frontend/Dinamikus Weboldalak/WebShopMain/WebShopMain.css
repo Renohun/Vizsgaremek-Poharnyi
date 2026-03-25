@@ -131,6 +131,9 @@ display: flex;
 .kartya{
     height: 100%    ;
 }
+.kartya:hover{
+    border: rgb(48, 48, 48) 2px solid;
+}
 .kartyaCim{
     height: 40px;
 }
