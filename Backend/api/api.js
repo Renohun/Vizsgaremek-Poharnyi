@@ -10,6 +10,7 @@ const multer = require('multer');
 
 const path = require('path');
 const fajlkezelo = require('fs/promises');
+const { error } = require('console');
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -438,61 +439,74 @@ router.post('/belepes', (request, response) => {
             felhasznalo: request.body.felhasznalo,
             jelszo: request.body.jelszo
         };
-        const sqlQuery = 'SELECT FelhID, Email, Jelszó, Admin FROM felhasználó WHERE Email LIKE ?';
 
-        DBconnetion.query(sqlQuery, [felhasznaloObj.felhasznalo], async (err, rows) => {
-            if (err) {
-                response.status(500).json({
-                    message: 'Adatbazissal kapcsolatos hiba!'
-                });
-            } else {
-                //ez az adatbazisbol kapott felhasznaloi sor
-                //console.log(rows);
+        //kriterium ellenorzes -- min / max hozzatetele
+        if (
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(felhasznaloObj.felhasznalo) &&
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{2,}$/.test(felhasznaloObj.jelszo)
+        ) {
+            const sqlQuery = 'SELECT FelhID, Email, Jelszó, Admin FROM felhasználó WHERE Email LIKE ?';
 
-                const felhasznaloDB = rows[0];
-                //console.log(felhasznaloDB);
-
-                if (felhasznaloDB == undefined) {
-                    response.status(200).json({ message: 'Hibas email! Avagy nem letezik ilyen felhasznalo' });
+            DBconnetion.query(sqlQuery, [felhasznaloObj.felhasznalo], async (err, rows) => {
+                if (err) {
+                    response.status(500).json({
+                        message: 'Adatbazissal kapcsolatos hiba!',
+                        error: err
+                    });
                 } else {
-                    //megnezi az argon package ellenorzi hogy az eltarolt jelszo megegyezik a beirt jelszoval
-                    const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
-                    if (jelszoEll) {
-                        //web token letrehozasa
-                        //console.log('Adatbazis: ' + felhasznaloDB.FelhID);
-                        //console.log('Adatbazis: ' + felhasznaloDB.Admin);
-                        //console.log(felhasznaloObj);
+                    //ez az adatbazisbol kapott felhasznaloi sor
+                    //console.log(rows);
 
-                        const WebToken = JWT.sign(
-                            {
-                                userID: felhasznaloDB.FelhID,
-                                adminStatus: felhasznaloDB.Admin
-                            },
-                            process.env.JWT_SECRET,
-                            {
-                                expiresIn: '1h'
-                            }
-                        );
+                    const felhasznaloDB = rows[0];
+                    //console.log(felhasznaloDB);
 
-                        //sutibe valo betetele
-                        response.cookie('auth_token', WebToken, {
-                            httpOnly: true,
-                            sameSite: 'none',
-                            secure: true,
-                            path: '/'
-                        });
-
-                        response.status(200).json({ message: 'sikeres bejelentkezes' });
+                    if (felhasznaloDB == undefined) {
+                        response.status(200).json({ kriterium: false, hiba: true, sikeres: false });
                     } else {
-                        response.status(200).json({
-                            message: 'Hibas jelszo'
-                        });
+                        //megnezi az argon package ellenorzi hogy az eltarolt jelszo megegyezik a beirt jelszoval
+                        const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
+                        if (jelszoEll) {
+                            //web token letrehozasa
+                            //console.log('Adatbazis: ' + felhasznaloDB.FelhID);
+                            //console.log('Adatbazis: ' + felhasznaloDB.Admin);
+                            //console.log(felhasznaloObj);
+
+                            const WebToken = JWT.sign(
+                                {
+                                    userID: felhasznaloDB.FelhID,
+                                    adminStatus: felhasznaloDB.Admin
+                                },
+                                process.env.JWT_SECRET,
+                                {
+                                    expiresIn: '1h'
+                                }
+                            );
+
+                            //sutibe valo betetele
+                            response.cookie('auth_token', WebToken, {
+                                httpOnly: true,
+                                sameSite: 'none',
+                                secure: true,
+                                path: '/'
+                            });
+
+                            response.status(200).json({ kriterium: false, hiba: false, sikeres: true });
+                        } else {
+                            response.status(200).json({
+                                kriterium: false,
+                                hiba: true,
+                                sikeres: false
+                            });
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            response.status(200).json({ kriterium: true, hiba: false, sikeres: false });
+        }
     } catch (err) {
-        console.log('Valami egyeb hiba tortent: ' + err);
+        console.error(err);
+        response.status(500).json({ message: 'Hiba van a vegpontban', error: err });
     }
 });
 //
@@ -1814,20 +1828,18 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
     } catch (error) {
         console.log(error);
         response.status(500).json({
-            message:"Hiba!"
-        })
+            message: 'Hiba!'
+        });
     }
 });
 
-router.post("/Koktel/KommenteloKepLekeres/:utvonal",async(request,response)=>{
+router.post('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
     try {
         response.sendFile(path.join(__dirname, '..', 'images', request.params.utvonal));
-    } 
-    catch (error) {
+    } catch (error) {
         console.log(error);
-        
     }
-})
+});
 //
 //
 //
