@@ -38,43 +38,56 @@ document.addEventListener('DOMContentLoaded', () => {
         const jelszo = document.getElementById('jelszo').value;
         const jelszoIsmet = document.getElementById('jelszoIsmet').value;
 
-        //console.log(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email));
-        //console.log(/^[a-zA-Z0-9_]{2,30}$/.test(felhaszanaloNev));
-        //console.log(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(jelszo));
+        const response = await POSTfetch('http://127.0.0.1:3000/api/regisztracio', {
+            email: email,
+            felhasznaloNev: felhaszanaloNev,
+            jelszo: jelszo,
+            jelszoIsmet: jelszoIsmet,
+            ASZF: document.getElementById('ASZFCheck').checked
+        });
+        if (response.megEgyezik) {
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
 
-        if (jelszoIsmet == jelszo) {
-            if (
-                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) &&
-                /^[a-zA-Z0-9_]{2,30}$/.test(felhaszanaloNev) &&
-                /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(jelszo) &&
-                /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(jelszoIsmet) &&
-                document.getElementById('ASZFCheck').checked
-            ) {
-                const response = await POSTfetch('http://127.0.0.1:3000/api/regisztracio', {
-                    email: email,
-                    felhasznaloNev: felhaszanaloNev,
-                    jelszo: jelszo
-                });
-                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
-                modalElement.show();
+            document.getElementById('modalText').innerText = 'A megadott jelszavak nem egyeznek!';
 
-                document.getElementById('modalText').innerText = response.message;
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
+        }
 
-                document.getElementById('modalBtn').addEventListener('click', () => {
-                    modalElement.hide();
-                });
-            } else {
-                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
-                modalElement.show();
+        if (response.kriterium) {
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
 
-                document.getElementById('modalText').innerText = response.message;
+            document.getElementById('modalText').innerText = 'A meg adott tartalmak nem egyeznek a kritériumoknak!';
 
-                document.getElementById('modalBtn').addEventListener('click', () => {
-                    modalElement.hide();
-                });
-            }
-        } else {
-            alert('A ket jelszo nem egyezik meg egymassal');
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
+        }
+
+        if (response.duplikacio) {
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = 'Ez az email cím / felhasználónév már foglalt!';
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
+        }
+
+        if (response.sikeres) {
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = 'Sikeres regisztráció!';
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+                window.location.href = '/LepjBe';
+            });
         }
     });
 });
