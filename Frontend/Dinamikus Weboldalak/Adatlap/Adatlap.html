@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Pohárnyi | Profilod</title>
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="Adatlap.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
@@ -25,52 +25,39 @@
                         <li class="nav-item">
                             <a class="nav-link active jelenlegi" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                                aria-expanded="false"
-                                >Poháryni koktélok</a
-                            >
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="/PoharnyiAlkoholosKoktelok">Alkoholos Koktélok</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                                aria-expanded="false"
-                                >Ti koktéljaitok</a
-                            >
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Alkoholos Koktélok</a></li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
-                                </li>
-                            </ul>
-                        </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">Mi van a polcon?</a>
+                            <a href="/Koktelok" class="nav-link">Koktelok</a>
                         </li>
                     </div>
-                    <div>
+                    <div class="navbar-nav d-flex align-items-center">
                         <input type="button" value="" id="ThemeSwitcher" />
-                        <a href="/Keszites">
-                            <input type="button" class="nav-item btn btn-warning"  value="Saját koktél létrehozása" id=""/>
+                        <a href="/Regisztralj" id="regisztracio">
+                            <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
-                        <a href="/Adatlap">
-                            <input type="button" class="nav-item profil"  value="     " id="Profile" />
+                        <a href="/LepjBe" id="belepes">
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" />
                         </a>
+
+                        <a href="/Keszites" id="sajatKoktelKeszites" hidden>
+                            <input
+                                type="button"
+                                class="nav-item btn btn-warning mx-2"
+                                value="Saját koktél létrehozása"
+                            />
+                        </a>
+                        <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                            <img
+                                class="nav-link dropdown-toggle profil"
+                                data-bs-toggle="dropdown"
+                                role="button"
+                                aria-expanded="false"
+                            />
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
+                                <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,7 +80,6 @@
                     <div class="mb-auto mt-auto">
                         <input type="button" value="Jelentések" class="gomb" id="Jelentések" />
                     </div>
-                    <!--Does Nothing:-->
                     <div class="mb-auto mt-auto">
                         <input type="button" value="Fiók Törlése" class="torles-gomb" id="Törlés" />
                     </div>
@@ -223,5 +209,7 @@
         <script src="Adatlap.js"></script>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
+        <script src="../kellékek/navBar.js"></script>
+
     </body>
 </html>
