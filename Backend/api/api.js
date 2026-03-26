@@ -386,32 +386,47 @@ router.post('/regisztracio', async (request, response) => {
     try {
         //console.log(request.body);
 
-        const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
+        if (request.body.jelszo == request.body.jelszoIsmet) {
+            if (
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.email) &&
+                /^[a-zA-Z0-9_]{2,30}$/.test(request.body.felhaszanaloNev) &&
+                /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.jelszo) &&
+                request.body.ASZF
+            ) {
+                const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
 
-        felhasznaloObjReg = {
-            email: request.body.email,
-            felhasznaloNev: request.body.felhasznaloNev,
-            jelszo: hashed
-        };
+                const felhasznaloObjReg = {
+                    email: request.body.email,
+                    felhasznaloNev: request.body.felhasznaloNev,
+                    jelszo: hashed
+                };
 
-        //console.log(felhasznaloObjReg.jelszo);
+                const duplikacioEll = 'SELECT FelhID FROM felhasználó WHERE Felhasználónév LIKE ? OR Email LIKE ?';
 
-        const sqlQuery = 'INSERT INTO felhasználó (Felhasználónév, Email, Jelszó) VALUES (?,?,?)';
+                const [rows] = await DBconnetion.promise().query(duplikacioEll, [
+                    felhasznaloObjReg.felhasznaloNev,
+                    felhasznaloObjReg.email
+                ]);
 
-        DBconnetion.query(
-            sqlQuery,
-            [felhasznaloObjReg.felhasznaloNev, felhasznaloObjReg.email, felhasznaloObjReg.jelszo],
-            (err, result) => {
-                if (err) {
-                    response.status(500).json({
-                        message: 'Hiba tortent adat feltoltesnel!' + err
-                    });
-                } else {
-                    response.status(200).json({
-                        message: 'Sikeres regisztracio!',
-                        result: result.insertId
-                    });
-                    /*
+                if (rows.length == 0) {
+                    const sqlQuery = 'INSERT INTO felhasználó (Felhasználónév, Email, Jelszó) VALUES (?,?,?)';
+
+                    DBconnetion.query(
+                        sqlQuery,
+                        [felhasznaloObjReg.felhasznaloNev, felhasznaloObjReg.email, felhasznaloObjReg.jelszo],
+                        (err, result) => {
+                            if (err) {
+                                response.status(500).json({
+                                    message: 'Hiba tortent adat feltoltesnel!' + err
+                                });
+                            } else {
+                                response.status(200).json({
+                                    megEgyezik: false,
+                                    kriterium: false,
+                                    duplikacio: false,
+                                    sikeres: true
+                                });
+                                /*
                     console.log(
                         'Adatok melyek felettek toltve: ' +
                             felhasznaloObjReg.felhasznaloNev +
@@ -420,9 +435,22 @@ router.post('/regisztracio', async (request, response) => {
                             ' ' +
                             felhasznaloObjReg.jelszo
                     );*/
+                            }
+                        }
+                    );
+                } else {
+                    response
+                        .status(200)
+                        .json({ megEgyezik: false, kriterium: false, duplikacio: true, sikeres: false });
                 }
+            } else {
+                response.status(200).json({ megEgyezik: false, kriterium: true, duplikacio: false, sikeres: false });
             }
-        );
+        } else {
+            response.status(200).json({ megEgyezik: true, kriterium: false, duplikacio: false, sikeres: false });
+        }
+
+        //console.log(felhasznaloObjReg.jelszo);
     } catch (err) {
         console.log('Valamilyen extra hiba tortent: ' + err);
         response.status(500).json({
@@ -1296,8 +1324,6 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
                 message: 'Üres Kosár'
             });
         } else {
-            
-
             for (let i = 0; i < kosartermekek.length; i++) {
                 let temp = await lekeres(TermekLekeres, kosartermekek[i].TermekID);
                 termekek.push(temp[0]);
