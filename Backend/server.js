@@ -97,6 +97,10 @@ router.get('/KoktelHiba', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/nincsilyen.html'));
 });
 
+router.get('/jogosultsag', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/hibaOldalak/jogosultsag.html'));
+});
+
 //!API endpoints
 app.use('/', router);
 const endpoints = require('./api/api.js');
