@@ -406,6 +406,7 @@ function ertekeles(ertekelteE,mennyire) {
         }
         //És kikapcsoljuk a kattintást
         ertek.forEach(csillag => {
+            csillag.classList.add("star")
             csillag.setAttribute("disabled","")
         });
         //És kitöröljük a gombot amivel lehet küldeni
@@ -418,6 +419,7 @@ function ertekeles(ertekelteE,mennyire) {
         let kattint=false
         //Csillagonként
         ertek.forEach(csillag => {
+            csillag.classList.add("star")
             //Ha rákattintunk egy csillagra
             csillag.addEventListener("click",()=>{
                 //kikapcsoljuk a hover funkciókat

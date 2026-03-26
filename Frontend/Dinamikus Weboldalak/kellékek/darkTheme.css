@@ -18,10 +18,6 @@ body {
     --bs-btn-color:white
 }
 
-.badge{
-    font-weight: 500;
-}
-
 .btn-secondary:hover{
     background-color: #a7e727;
     color: black;
@@ -64,6 +60,7 @@ body {
 #fav>input,.star,.star:hover,.star:disabled{
     color: yellow;
 }
+
 
 #Jelentes{
     --bs-modal-bg:rgb(66, 66, 66)
