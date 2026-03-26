@@ -5,7 +5,12 @@
     
 }
 
-
+.profilkep{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    margin-right: 4px;
+}
 
 .asd{
     color: white;

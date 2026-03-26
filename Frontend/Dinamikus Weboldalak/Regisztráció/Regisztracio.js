@@ -50,14 +50,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(jelszoIsmet) &&
                 document.getElementById('ASZFCheck').checked
             ) {
-                const uzenet = await POSTfetch('http://127.0.0.1:3000/api/regisztracio', {
+                const response = await POSTfetch('http://127.0.0.1:3000/api/regisztracio', {
                     email: email,
                     felhasznaloNev: felhaszanaloNev,
                     jelszo: jelszo
                 });
-                alert('sikeres regisztralas');
+                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                modalElement.show();
+
+                document.getElementById('modalText').innerText = response.message;
+
+                document.getElementById('modalBtn').addEventListener('click', () => {
+                    modalElement.hide();
+                });
             } else {
-                alert('Valamelyik input nem felelo meg az eloirt kriteriumoknak');
+                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                modalElement.show();
+
+                document.getElementById('modalText').innerText = response.message;
+
+                document.getElementById('modalBtn').addEventListener('click', () => {
+                    modalElement.hide();
+                });
             }
         } else {
             alert('A ket jelszo nem egyezik meg egymassal');

@@ -37,11 +37,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('termekTorlesGomb').addEventListener('click', async () => {
         const id = document.getElementById('termekTorles').value;
-        console.log(id);
+        if (id.length > 0) {
+            const data = await DELETEfetch(`http://127.0.0.1:3000/api/AdminPanel/TermekTorles/${id}`);
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
 
-        const data = await DELETEfetch(`http://127.0.0.1:3000/api/AdminPanel/TermekTorles/${id}`);
-        console.log(data);
+            document.getElementById('modalText').innerText = 'Termék sikeresen törölve';
 
-        window.location.reload();
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+                window.location.reload();
+            });
+        } else {
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = 'Eloszor valasszon ki egy termeket!';
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
+        }
     });
 });

@@ -28,36 +28,36 @@
                         <li class="nav-item">
                             <a href="/Koktelok" class="nav-link">Koktelok</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">Mi van a polcon?</a>
-                        </li>
                     </div>
-                    <div>
+                    <div class="navbar-nav d-flex align-items-center">
                         <input type="button" value="" id="ThemeSwitcher" />
-                        <a href="/Regisztralj">
-                            <input
-                                type="button"
-                                class="btn btn-secondary nav-item"
-                                value="Regisztárció"
-                                id="regisztracio"
-                            />
+                        <a href="/Regisztralj" id="regisztracio">
+                            <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
-                        <a href="/LepjBe">
-                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="belepes" />
+                        <a href="/LepjBe" id="belepes">
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" />
                         </a>
 
-                        <a href="/Keszites">
+                        <a href="/Keszites" id="sajatKoktelKeszites" hidden>
                             <input
                                 type="button"
-                                class="nav-item btn btn-warning"
-                                hidden
+                                class="nav-item btn btn-warning mx-2"
                                 value="Saját koktél létrehozása"
-                                id="sajatKoktelKeszites"
                             />
                         </a>
-                        <a href="/Adatlap">
-                            <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
-                        </a>
+                        <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                            <img
+                                class="nav-link dropdown-toggle profil"
+                                data-bs-toggle="dropdown"
+                                role="button"
+                                aria-expanded="false"
+                            />
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
+                                <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -230,13 +230,6 @@
                         maxlength="300"
                         required
                     ></textarea>
-
-                    <label for="termekKiszereles" class="form-label">Termek kiszerelese:</label>
-                    <input type="number" id="termekKiszereles" class="form-control" name="termekKiszereles" required />
-
-                    <label for="termekKeszlet" class="form-label">Termek keszlete:</label>
-                    <input type="number" class="form-control" id="termekKeszlet" name="termekKeszlet" required />
-
                     <label for="termekKategoria" class="form-label">Termek kategoria:</label>
                     <select name="termekKategoria" id="termekKategoria" class="form-control" required>
                         <option value="Eszkozok" selected>Eszkozok</option>
@@ -257,6 +250,24 @@
                         <option value="Merch">Merch</option>
                         <option value="Egyeb">Egyeb</option>
                     </select>
+
+                    <label for="termekKiszereles" class="form-label">Termek kiszerelese:</label>
+                    <input type="number" id="termekKiszereles" class="form-control" name="termekKiszereles" required />
+
+                    <label for="termekKeszlet" class="form-label">Termek keszlete:</label>
+                    <input type="number" class="form-control" id="termekKeszlet" name="termekKeszlet" required />
+
+                    <label for="termekUrtartalom" id="termekUrtartalomLabel" class="form-label" hidden
+                        >Termek urtaltalma</label
+                    >
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="termekUrtartalom"
+                        name="termekUrtartalom"
+                        required
+                        hidden
+                    />
 
                     <label for="termekMarka" class="form-label">Termek marka:</label>
                     <input type="text" name="termekMarka" id="termekMarka" class="form-control" required />
@@ -316,13 +327,27 @@
                     <hr />
                     <div>
                         <h4>Termek torles</h4>
-                        <select name="termekTorles" id="termekTorles" class="form-control"></select>
+                        <select name="termekTorles" id="termekTorles" class="form-control">
+                            <option value="" selected></option>
+                        </select>
                         <input
                             type="button"
                             class="btn btn-danger w-100 mt-2"
                             value="Termek torlese"
                             id="termekTorlesGomb"
                         />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" id="infoModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="text-center mt-1">
+                        <h5 id="modalText"></h5>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" id="modalBtn" value="Rendben" class="btn btn-success w-100" />
                     </div>
                 </div>
             </div>
