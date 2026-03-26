@@ -1296,8 +1296,6 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
                 message: 'Üres Kosár'
             });
         } else {
-            
-
             for (let i = 0; i < kosartermekek.length; i++) {
                 let temp = await lekeres(TermekLekeres, kosartermekek[i].TermekID);
                 termekek.push(temp[0]);
@@ -1962,6 +1960,28 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ message: 'Sikertelen feltöltés', hiba: error });
+    }
+});
+
+//
+//
+//
+// TermekOldal
+//
+//
+//
+
+router.get('/termek/lekeres/:id', async (request, response) => {
+    try {
+        const id = request.params.id;
+        const query = 'SELECT * FROM webshoptermek WHERE termekID = ?';
+        const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
+        response.status(200).json({
+            termek: lekertTermek
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
     }
 });
 

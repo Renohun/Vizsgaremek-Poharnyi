@@ -92,7 +92,10 @@ router.get('/Koktel/:koktelID', (req, res) => {
 router.get('/KoktelHiba', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/nincsilyen.html'));
 });
-
+// termekek
+router.get('/Termek/:termekID', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/TermekOldal/TermekOldal.html'));
+});
 //!API endpoints
 app.use('/', router);
 const endpoints = require('./api/api.js');
