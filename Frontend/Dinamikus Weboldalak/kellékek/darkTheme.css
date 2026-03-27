@@ -39,8 +39,9 @@ body {
     color: rgb(173, 1, 36);
 }
 
-#Fioktorles{
-    --bs-modal-bg:rgb(66, 66, 66)
+.modal-content{
+    --bs-modal-bg:rgb(66, 66, 66);
+    color:#9acd32;
 }
 /*Koktelok weboldal*/
 #keresofelulet{
@@ -61,10 +62,6 @@ body {
     color: yellow;
 }
 
-
-#Jelentes{
-    --bs-modal-bg:rgb(66, 66, 66)
-}
 #Kommentek{
     background-color: rgb(97, 97, 97);
     padding-bottom:5px;
@@ -90,24 +87,28 @@ body {
 }
 #koktelurlap{
     margin-top: 0px;
-    background-color: rgb(143, 112, 72);
+    background-color:rgb(97, 97, 97);/* rgb(143, 112, 72);*/
+    color: white;
 }
 #urlapcim,#drop-area{
-    background-color: rgb(175, 137, 90);
+    background-color: rgb(124, 124, 124);/*rgb(175, 137, 90);*/
+}
+
+#szoveg{
+    color: black;
 }
 
 #osszetevoDiv{
-    background-color: rgb(175, 137, 90);
+    background-color: rgb(124, 124, 124);/*rgb(175, 137, 90);*/
+    color: white;
     padding: 10px;
     border-radius: 5px;
 }
 
 /*Belepes*/
-#modalText{
-    color: black;
-}
 
-/*Javaslat Kavicsnak*/
+
+/*Javaslat Kavicsnak
 .Osszetevobtn{
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;
@@ -121,11 +122,11 @@ body {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
 }
-/*A gombra nyomás után i guess*/
+A gombra nyomás után i guess
 .jelvenygomb{
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
-}
+}*/
 
 #osszetevogomb{
     background-color: #324ecd;

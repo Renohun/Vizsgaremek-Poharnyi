@@ -135,6 +135,15 @@ async function Betoltes() {
     let KommentekHelye=document.getElementById("Kommentek")
     KommentekHelye.innerHTML=""
     //Visszafele számolunk, így a legújjabb van felül
+    if (kommentAdat.length==0) {
+        KommentekHelye.classList.add("p-0")
+    }
+    else{
+        if (KommentekHelye.classList.contains("p-0")) {
+            KommentekHelye.classList.remove("p-0")
+        }
+
+    }
     for (let i = kommentAdat.length-1; i > -1 ; i--) {
 
         //elemek létrehozása
