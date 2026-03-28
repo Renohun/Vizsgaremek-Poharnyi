@@ -41,6 +41,24 @@ router.get('/test', (req, res) => {
         }
     });
 });
+
+async function kepculling(){
+    const felhkep="SELECT ProfilkepUtvonal FROM felhasználó;SELECT BoritoKepUtvonal FROM koktél;SELECT TermekKepUtvonal FROM webshoptermek"
+    let sqlkepek=await lekeres(felhkep)
+    let kepek=[]
+    for (let i = 0; i < sqlkepek.length; i++) {
+        sqlkepek[i].forEach(element => {
+            kepek.push(Object.values(element)[0])
+        });
+    } 
+    let mappa=await fajlkezelo.readdir(path.join(__dirname, '../images/'))
+    for (let i = 0; i < mappa.length; i++) {
+        if (!(kepek.includes(mappa[i]))) {
+            fajlkezelo.rm(path.join(__dirname, '../images/',mappa[i]))
+        }
+    }
+}
+
 //Koktelok vegpontok
 router.post('/sutiJelenlete', (req, res) => {
     if (!req.cookies.auth_token) {
@@ -812,7 +830,7 @@ router.post(
     }
 );
 
-router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, (req, res) => {
+router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, async(req, res) => {
     try {
         const payload = jwt.decode(req.cookies.auth_token);
         console.log(req.body);
@@ -890,6 +908,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
             });
         });
         res.status(200).json({ message: 'Sikeres koktel feltoltes' });
+        await kepculling()
     } catch (err) {
         console.log(err);
     }
@@ -1029,6 +1048,7 @@ router.post('/AdminPanel/TermekFeltoltes', async (req, res) => {
                     termekAra
                 ]);
                 res.status(200).json({ message: 'Termek hozzadva sikeresen' });
+                await kepculling()
             }
         }
     } catch (error) {
@@ -1508,6 +1528,7 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
         }
         adatmodositas += ` WHERE FelhID LIKE ${profil}`;
         await lekeres(adatmodositas, tomb.split(','));
+        await kepculling()
         response.status(200).json({
             message: 'Siker!'
         });
