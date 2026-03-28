@@ -1220,7 +1220,8 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
+
+router.delete('/AdatlapLekeres/Kosarurites', async (request, response) => {
     let mit = jwt.decode(request.cookies.auth_token).userID;
     let MelyikKosár = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
     let MelyikKosárAz;
@@ -1242,7 +1243,9 @@ router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
         });
     }
 });
-router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
+
+
+router.delete('/AdatlapLekeres/TermekUrites', async (request, response) => {
     let mit = request.body.termék;
     let honnan = await lekeres(
         'SELECT SessionID FROM kosár WHERE UserID LIKE ?',
@@ -1261,7 +1264,9 @@ router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
         });
     }
 });
-router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
+
+
+router.patch('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     let mit = request.body.termék;
     let honnan = await lekeres(
         'SELECT SessionID FROM kosár WHERE UserID LIKE ?',
@@ -1284,7 +1289,8 @@ router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
+
+router.delete('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     let ki = request.body.id;
     let mit = jwt.decode(request.cookies.auth_token).userID;
     let milyen = request.body.tipus;
@@ -1313,7 +1319,8 @@ router.post('/AdatlapLekeres/KepFeltoltes', fileStorage.array('profilkep'), asyn
         });
     }
 });
-router.post('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response) => {
+
+router.get('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response) => {
     try {
         let melyik = request.params.melyik;
         let kepkereses = 'SELECT BoritoKepUtvonal FROM Koktél WHERE KoktélID LIKE ?';
@@ -1324,7 +1331,7 @@ router.post('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response
     }
 });
 
-router.post('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response) => {
+router.get('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response) => {
     try {
         let melyik = request.params.melyik;
         let kepkereses = 'SELECT TermekKepUtvonal FROM WebshopTermek WHERE TermekID LIKE ?';
@@ -1335,7 +1342,7 @@ router.post('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response
     }
 });
 
-router.post('/AdatlapLekeres/KepLekeres/', async (request, response) => {
+router.get('/AdatlapLekeres/KepLekeres/', async (request, response) => {
     try {
         let profil = jwt.decode(request.cookies.auth_token).userID;
         let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
@@ -1371,7 +1378,8 @@ router.post('/Koktelok/KepLekeres', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
+
+router.put('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     try {
         let adatmodositas = 'UPDATE felhasználó SET Felhasználónév=?,Email=?';
         let tomb = `${request.body.Felhasználónév},${request.body.Email}`;
@@ -1397,7 +1405,7 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Fioktorles', async (request, response) => {
+router.delete('/AdatlapLekeres/Fioktorles', async (request, response) => {
     try {
         const FelhasznaloTorles = 'DELETE FROM felhasználó WHERE FelhID LIKE ?';
         const ErtekTorles = 'DELETE FROM ertekeles WHERE Keszito LIKE ?';
