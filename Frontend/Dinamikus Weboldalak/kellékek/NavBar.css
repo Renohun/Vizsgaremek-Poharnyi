@@ -29,7 +29,8 @@ div > li {
     margin-left: 5px;
 }
 #ThemeSwitcher {
-    width: 60px;
-    height: 60px;
-    background-color: white;
+    cursor: pointer;
+    color: white;
+    height: 50px;
+    width: 50px;
 }

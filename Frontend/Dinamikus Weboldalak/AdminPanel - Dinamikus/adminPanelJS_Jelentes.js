@@ -119,12 +119,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                 'col-lg-6',
                                 'col-xl-3',
                                 'col-xxl-3',
+                                'h-100',
+                                'align-self-stretch',
                                 'mb-1'
                             );
+                            ujOszlop.setAttribute('id', 'felhasznaloJelentes');
                             jelentesekSor.appendChild(ujOszlop);
 
                             let margoDiv = document.createElement('div');
-                            margoDiv.classList.add('mb-1');
+                            margoDiv.classList.add('mb-1', 'h-100');
                             ujOszlop.appendChild(margoDiv);
 
                             let cardDiv = document.createElement('div');
@@ -261,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 'col-lg-6',
                                 'col-xl-3',
                                 'col-xxl-3',
+                                'h-100',
                                 'mb-1'
                             );
                             jelentesekSor.appendChild(ujOszlop);

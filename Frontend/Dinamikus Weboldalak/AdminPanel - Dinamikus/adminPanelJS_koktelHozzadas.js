@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gomb.setAttribute('type', 'button');
             gomb.setAttribute('value', data.allergenek[i].JelvényNeve);
             gomb.dataset.kategoria = 'allergen';
-            gomb.classList.add('btn', 'btn-info');
+            gomb.classList.add('btn', 'btn-success', 'shadow-sm');
             //once, hogy megveletlenul se keruljon fel tobb EventListener egy Elementre, hiszen akkor tobbszor futna le az fv.
             gomb.addEventListener('click', osszetevoGombListener);
             koktelAllergenekSelect.appendChild(gomb);
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gomb.setAttribute('type', 'button');
             gomb.setAttribute('value', data.erossegek[i].JelvényNeve);
             gomb.dataset.kategoria = 'erosseg';
-            gomb.classList.add('btn', 'btn-info');
+            gomb.classList.add('btn', 'btn-success', 'shadow-sm');
             gomb.addEventListener('click', osszetevoGombListener);
             koktelErossegeSelect.appendChild(gomb);
         }
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gomb.setAttribute('type', 'button');
             gomb.setAttribute('value', data.izek[i].JelvényNeve);
             gomb.dataset.kategoria = 'iz';
-            gomb.classList.add('btn', 'btn-info');
+            gomb.classList.add('btn', 'btn-success', 'shadow-sm');
             gomb.addEventListener('click', osszetevoGombListener);
             koktelIzeSelect.appendChild(gomb);
         }

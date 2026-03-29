@@ -80,7 +80,7 @@ function koktelRendereles(koktelok) {
             DOMsor.appendChild(divMB);
 
             const cardDiv = document.createElement('div');
-            cardDiv.classList.add('card', 'h-100');
+            cardDiv.classList.add('card', 'h-100', 'shadow-sm');
             divMB.appendChild(cardDiv);
 
             let imgTag = document.createElement('img');

@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter shadow">
             <div class="container-fluid hatter">
                 <div class="navbar-brand">
                     <a class="navbar-brand" id="marka" href="#">Pohárnyi</a>
@@ -29,8 +29,15 @@
                             <a href="/Koktelok" class="nav-link">Koktelok</a>
                         </li>
                     </div>
-                    <div class="navbar-nav d-flex align-items-center">
-                        <input type="button" value="" id="ThemeSwitcher" />
+                    <div class="navbar-nav d-flex align-items-center gap-2">
+                        <div id="ThemeSwitcher">
+                            <img
+                                src="../kellékek/free-moon-icon-2304-thumb.png"
+                                id="themeSwitcherimg"
+                                style="height: 50px; width: 50px"
+                                alt=""
+                            />
+                        </div>
                         <a href="/Regisztralj" id="regisztracio">
                             <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
@@ -64,7 +71,7 @@
         </nav>
         <div class="container-fluid">
             <div class="row">
-                <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-1 col-3 vh-100" id="Sidebar">
+                <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-1 col-3 vh-100 shadow" id="Sidebar">
                     <div class="mb-auto mt-auto">
                         <p class="text-dark fs-5 sideBarGomb" name="jelentesekKezelese">Jelenetesek Kezelese</p>
                     </div>
@@ -96,30 +103,30 @@
                             class="btn btn-success text-white p-3 col-3 mb-5"
                         />
                     </div>
-                    <div class="row justify-content-center" id="jelentesekCard"></div>
+                    <div class="row d-flex align-items-stretch" id="jelentesekCard"></div>
                 </div>
                 <div hidden="true" name="koktelokKezelese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5">
-                    <div class="d-flex row flex-column">
+                    <div class="container-fluid d-flex row flex-column">
                         <h4>Koktél feltoltés</h4>
                         <input type="file" class="form-control ms-2 mb-3" id="koktelKepFeltoltes" required />
 
-                        <label for="koktelNeve" class="ms-2">Koktel neve: </label>
+                        <label for="koktelNeve">Koktel neve: </label>
                         <input
                             type="text"
                             name="koktelNeve"
                             id="koktelNeve"
-                            class="form-control mb-3 ms-2"
+                            class="form-control mb-3 ms-2 me-2"
                             max="50"
                             tabindex="1"
                             required
                         />
 
-                        <div class="ms-2">
+                        <div>
                             <label for="alkoholosE" class="form-label">Alkoholos?</label>
                             <input type="checkbox" name="alkoholosE" id="alkoholosE" tabindex="2" />
                         </div>
 
-                        <label for="koktelAlapja" class="ms-2">Koktel alapja: </label>
+                        <label for="koktelAlapja">Koktel alapja: </label>
                         <input
                             type="text"
                             name="koktelAlapja"
@@ -129,7 +136,7 @@
                             tabindex="3"
                             required
                         />
-                        <label for="koktelAlapjaMennyiseg" class="ms-2">Koktel alap mennyiseg: </label>
+                        <label for="koktelAlapjaMennyiseg">Koktel alap mennyiseg: </label>
                         <input
                             type="number"
                             name="koktelAlapjaMennyiseg"
@@ -139,16 +146,16 @@
                             required
                         />
 
-                        <div class="d-flex justify-content-between">
-                            <div class="d-flex flex-column w-100 text-center" id="koktelErossegek">
-                                <label for="koktelErosseg">Erosseg: (max 1)</label>
+                        <div class="d-flex justify-content-between gap-2 flex-wrap">
+                            <div class="d-flex flex-column w-100 text-center gap-2" id="koktelErossegek">
+                                <label for="koktelErosseg">Erosseg: (min / max 1)</label>
                             </div>
 
-                            <div class="d-flex flex-column w-100 text-center" id="koktelIz">
+                            <div class="d-flex flex-column w-100 text-center gap-2" id="koktelIz">
                                 <label for="koktelIze">Iz:(min 1)</label>
                             </div>
 
-                            <div class="d-flex flex-column w-100 text-center" id="koktelAllergen">
+                            <div class="d-flex flex-column w-100 text-center gap-2" id="koktelAllergen">
                                 <label for="koktelAllergenek">Allergenek (nem kotelezo)</label>
                             </div>
                         </div>
@@ -170,17 +177,17 @@
                                 type="button"
                                 value="Uj osszetevo"
                                 id="ujOsszetevo"
-                                class="btn btn-success mt-3 mb-3"
+                                class="btn btn-success mt-3 mb-3 shadow-sm"
                             />
                             <input
                                 type="button"
                                 value="Osszetevo torlese"
                                 id="osszetevoDel"
-                                class="btn btn-danger mt-3 mb-3"
+                                class="btn btn-danger mt-3 mb-3 shadow-sm"
                             />
                         </div>
 
-                        <label for="koktelRecept" class="ms-2">Koktel receptje: </label>
+                        <label for="koktelRecept">Koktel receptje: </label>
                         <textarea
                             type="text"
                             name="koktelRecept"
@@ -196,7 +203,7 @@
                             value="Feltoltes"
                             id="koktelFeltoltes"
                             tabindex="8"
-                            class="btn btn-success mt-5 mb-5 ms-2"
+                            class="btn btn-success mt-5 mb-5 ms-2 shadow-sm"
                         />
 
                         <hr />
@@ -208,11 +215,15 @@
                             type="button"
                             value="Koktél törlése"
                             id="torlesGomb"
-                            class="btn btn-danger w-100 mt-3 ms-2"
+                            class="btn btn-danger w-100 mt-3 ms-2 shadow-sm"
                         />
                     </div>
                 </div>
-                <div name="termekFeltoltes" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5" hidden="true">
+                <div
+                    name="termekFeltoltes"
+                    class="container-fluid col-sm-9 col-lg-10 col-xl-11 col-9 mt-5 mx-2"
+                    hidden="true"
+                >
                     <!--nev, leiras, kiszereles, keszlet, kep, kategoria, marka,  szarmazas(orszag), alkohol szazalek, kora?, ar-->
                     <!--learazashoz egy extra resz ahol nev alapu kereses alapjan lehet allitani a learazas osszeget-->
                     <h4>Termek feltoltes</h4>
