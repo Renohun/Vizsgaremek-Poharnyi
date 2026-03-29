@@ -725,9 +725,9 @@ async function KosarLekeres() {
 
         //Kosár termékek módosítása
         kosárMódosít.addEventListener("click",()=>{
-            kosárMódosít.setAttribute("disabled","true")
-            kosárFizet.setAttribute("disabled","true")
-            kosárÜrít.setAttribute("disabled","true")
+            kosárMódosít.setAttribute("hidden","true")
+            kosárFizet.setAttribute("hidden","true")
+            kosárÜrít.setAttribute("hidden","true")
             let kosárGombok=document.getElementById("KosárGombok")
             for (let i = 0; i < hova.children.length; i++) {
             let kosárDbMod=document.createElement("input")
@@ -774,12 +774,12 @@ async function KosarLekeres() {
 
             })
         function tisztitas(){   
-            hova.children[i].childNodes[0].removeChild(koktelKuka)
+            hova.children[i].childNodes[0].removeChild(termekKuka)
             kosárGombok.removeChild(kosárModIgen)
             kosárGombok.removeChild(kosárModMégse)
-            kosárMódosít.removeAttribute("disabled","true")
-            kosárFizet.removeAttribute("disabled","true")
-            kosárÜrít.removeAttribute("disabled","true")
+            kosárMódosít.removeAttribute("hidden","true")
+            kosárFizet.removeAttribute("hidden","true")
+            kosárÜrít.removeAttribute("hidden","true")
             KosarLekeres()
             }}
 
@@ -860,8 +860,8 @@ async function fizetes(){
     let total=0
     //Termék Adatok
     let termékekList=document.createElement("div")
-    c.classList.add("row","justify-content-md-between","justify-content-sm-center")
-    termékekList.classList.add("col-12","col-lg-4","col-md-4","col-sm-12","bg-light","rounded","p-2","border","border-dark")
+    c.classList.add("row","justify-content-md-center","justify-content-sm-center","justify-content-lg-between")
+    termékekList.classList.add("col-12","col-lg-4","col-md-6","col-sm-12","bg-light","rounded","p-2","border","border-dark")
     let szoveg=document.createElement("div")
     szoveg.innerHTML="Termék Adatok"
     termékekList.appendChild(szoveg)
@@ -875,7 +875,7 @@ async function fizetes(){
     }
     //Számlázási Adatok
     let PayList=document.createElement("form")
-    PayList.classList.add("col-12","col-lg-4","col-md-4","col-sm-12","border","border-dark","bg-light","rounded","p-2","needs-validation")
+    PayList.classList.add("col-12","col-lg-4","col-md-6","col-sm-12","border","border-dark","bg-light","rounded","p-2","needs-validation")
     let payszoveg=document.createElement("div")
     payszoveg.innerHTML="Számlázási Adatok"
     //PayList.setAttribute("novalidate","true")
@@ -1064,6 +1064,7 @@ function visszaepites(){
         gombSáv.innerHTML=""
         let összJelző=document.getElementById("IdeKosár")
         összJelző.innerHTML=""
+        összJelző.classList.remove("ps-3")
         let c=document.getElementById("KosárFizetésGomb")
         c.innerHTML=""
         let termSzov=document.createElement("span")
