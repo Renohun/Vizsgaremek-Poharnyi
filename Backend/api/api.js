@@ -1381,22 +1381,41 @@ router.post('/Koktelok/KepLekeres', async (request, response) => {
 
 router.put('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     try {
+        let hiba=false
+        let tomb =""
         let adatmodositas = 'UPDATE felhasználó SET Felhasználónév=?,Email=?';
-        let tomb = `${request.body.Felhasználónév},${request.body.Email}`;
-        let profil = jwt.decode(request.cookies.auth_token).userID;
-        if (request.body.Jelszó != 'undefined') {
-            adatmodositas += ',Jelszó=?';
-            tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
+        if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.Email)&&/^[a-zA-Z0-9_]{2,30}$/.test(request.body.Felhasználónév)) {
+            tomb = `${request.body.Felhasználónév},${request.body.Email}`;
         }
-        if (request.body.KépÚtvonal != undefined) {
+        else{
+            hiba=true
+        }
+        let profil = jwt.decode(request.cookies.auth_token).userID;
+        if (request.body.Jelszó != 'undefined'&&hiba==false) {
+            if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.Jelszó)) {
+                adatmodositas += ',Jelszó=?';
+                tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
+            }
+            else{
+                hiba=true
+            }
+        }
+        if (request.body.KépÚtvonal != undefined&&hiba==false) {
             adatmodositas += ',ProfilKepUtvonal=?';
             tomb += `,${request.body.KépÚtvonal}`;
         }
         adatmodositas += ` WHERE FelhID LIKE ${profil}`;
-        await lekeres(adatmodositas, tomb.split(','));
-        response.status(200).json({
-            message: 'Siker!'
-        });
+        if (hiba==false) {
+            await lekeres(adatmodositas, tomb.split(','));
+            response.status(200).json({
+                message: 'Siker!'
+            });
+        }
+        else{
+            response.status(500).json({
+                message: 'Hibás adat!'
+            });
+        }
     } catch (error) {
         console.log(error);
         response.status(500).json({

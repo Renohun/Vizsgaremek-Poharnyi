@@ -79,7 +79,7 @@ const AdatPost=async(url,data,tipus)=>{
         body:JSON.stringify(data)
       })  
       if (ertek.ok) {
-        return ertek.json(),ertek.status
+        return ertek.status
       }
       else{
         console.log("hiba");
@@ -191,9 +191,6 @@ async function AdatlapLekeres(){
             eredmény.innerHTML="Sikeres Mentés!"
             GombOles()
         }
-        else{
-            eredmény.innerHTML="Hibás Adat!"
-        }
 
 
         })
@@ -219,29 +216,53 @@ async function AdatlapLekeres(){
         async function adatvaltas(){
             try {
                     let FelhAdatok={
-                        Felhasználónév:AdatlapFelh.value,
-                        Email:AdatlapEmail.value,
+                        
+                    }//" " a space ellenőrzés
+                    if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(AdatlapEmail.value)&&/^[a-zA-Z0-9_]{2,30}$/.test(AdatlapFelh.value)) {
+                            FelhAdatok.Felhasználónév=AdatlapFelh.value
+                            FelhAdatok.Email=AdatlapEmail.value
                     }
+                    else{
+                        eredmény.innerHTML="A felhasználónév / email-cím nem felel meg a követelményeknek!"
+                        return false
+                    }
+                    FelhAdatok.Felhasználónév=AdatlapFelh.value
+                    FelhAdatok.Email=AdatlapEmail.value
                     const data=new FormData()
                     //A Kép Eltárolása. Visszakapjuk a kép új nevét, amit továbbadunk az adatbázisnak   
                     if(titkos.files.length!=0){
                         if (titkos.files[0].type!="image/jpeg"&&titkos.files[0].type!="image/png"&&titkos.files[0].type!="image/bmp"&&titkos.files[0].type!="image/webp") {
+                            eredmény.innerHTML="A megadott fájl nem felel meg a követelményeknek!"
                             return false
                         }
-                        else{        
+                        else{
                             data.append("profilkep",titkos.files[0])
                             const kepUtvonal=await AdatPostKep("/api/AdatlapLekeres/KepFeltoltes",data)
                             FelhAdatok.KépÚtvonal=kepUtvonal.message
                         }
                     }
                     if(AdatlapJelszo2.value!=AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true){
+                        eredmény.innerHTML="A kettő jelszó nem egyezik!"
+
+                        return false
+                    }
+                    else if(AdatlapJelszo2.value==AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true&&/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(AdatlapJelszo)==false){
+                        eredmény.innerHTML="A Jelszó nem felel meg a követelményeknek!"
                         return false
                     }
                     else{
+
                         FelhAdatok.Jelszó=AdatlapJelszo.value
                         
-                        await AdatPost("/api/AdatlapLekeres/Adatmodositas/",FelhAdatok,"PUT")
-                        return true
+                        let valasz=await AdatPost("/api/AdatlapLekeres/Adatmodositas/",FelhAdatok,"PUT")
+                        console.log(valasz);
+                        if (valasz=="200") {
+                            return true
+                        }
+                        else{
+                            eredmény.innerHTML="Váratlan hiba történt!"
+                            return false
+                        }
                     }
                     
             } 
@@ -249,7 +270,7 @@ async function AdatlapLekeres(){
                 //redirect?
                 console.log(error);
                 
-                eredmény.innerHTML="Hiba történt!"
+                eredmény.innerHTML="Váratlan hiba történt!"
                 return false
             }
 
