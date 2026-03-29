@@ -56,7 +56,7 @@ const AdatGet=async(url)=>{
 const AdatGetKep=async(url)=>{
     try {
       const ertek=await fetch(url,{
-        method: "POST",
+        method: "GET",
         headers: {"Content-Type":"image/jpeg"}
       })  
       if (ertek.ok) {
@@ -71,15 +71,15 @@ const AdatGetKep=async(url)=>{
         console.error(error)
     }
 }
-const AdatPost=async(url,data)=>{
+const AdatPost=async(url,data,tipus)=>{
     try {
       const ertek=await fetch(url,{
-        method:"POST",
+        method:tipus,
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(data)
       })  
       if (ertek.ok) {
-        return ertek.json(),ertek.status
+        return ertek.status
       }
       else{
         console.log("hiba");
@@ -191,9 +191,6 @@ async function AdatlapLekeres(){
             eredmény.innerHTML="Sikeres Mentés!"
             GombOles()
         }
-        else{
-            eredmény.innerHTML="Hibás Adat!"
-        }
 
 
         })
@@ -219,29 +216,53 @@ async function AdatlapLekeres(){
         async function adatvaltas(){
             try {
                     let FelhAdatok={
-                        Felhasználónév:AdatlapFelh.value,
-                        Email:AdatlapEmail.value,
+                        
+                    }//" " a space ellenőrzés
+                    if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(AdatlapEmail.value)&&/^[a-zA-Z0-9_]{2,30}$/.test(AdatlapFelh.value)) {
+                            FelhAdatok.Felhasználónév=AdatlapFelh.value
+                            FelhAdatok.Email=AdatlapEmail.value
                     }
+                    else{
+                        eredmény.innerHTML="A felhasználónév / email-cím nem felel meg a követelményeknek!"
+                        return false
+                    }
+                    FelhAdatok.Felhasználónév=AdatlapFelh.value
+                    FelhAdatok.Email=AdatlapEmail.value
                     const data=new FormData()
                     //A Kép Eltárolása. Visszakapjuk a kép új nevét, amit továbbadunk az adatbázisnak   
                     if(titkos.files.length!=0){
                         if (titkos.files[0].type!="image/jpeg"&&titkos.files[0].type!="image/png"&&titkos.files[0].type!="image/bmp"&&titkos.files[0].type!="image/webp") {
+                            eredmény.innerHTML="A megadott fájl nem felel meg a követelményeknek!"
                             return false
                         }
-                        else{        
+                        else{
                             data.append("profilkep",titkos.files[0])
                             const kepUtvonal=await AdatPostKep("/api/AdatlapLekeres/KepFeltoltes",data)
                             FelhAdatok.KépÚtvonal=kepUtvonal.message
                         }
                     }
                     if(AdatlapJelszo2.value!=AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true){
+                        eredmény.innerHTML="A kettő jelszó nem egyezik!"
+
+                        return false
+                    }
+                    else if(AdatlapJelszo2.value==AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true&&/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(AdatlapJelszo)==false){
+                        eredmény.innerHTML="A Jelszó nem felel meg a követelményeknek!"
                         return false
                     }
                     else{
+
                         FelhAdatok.Jelszó=AdatlapJelszo.value
                         
-                        await AdatPost("/api/AdatlapLekeres/Adatmodositas/",FelhAdatok)
-                        return true
+                        let valasz=await AdatPost("/api/AdatlapLekeres/Adatmodositas/",FelhAdatok,"PUT")
+                        console.log(valasz);
+                        if (valasz=="200") {
+                            return true
+                        }
+                        else{
+                            eredmény.innerHTML="Váratlan hiba történt!"
+                            return false
+                        }
                     }
                     
             } 
@@ -249,7 +270,7 @@ async function AdatlapLekeres(){
                 //redirect?
                 console.log(error);
                 
-                eredmény.innerHTML="Hiba történt!"
+                eredmény.innerHTML="Váratlan hiba történt!"
                 return false
             }
 
@@ -627,7 +648,7 @@ async function JelentesekLekeres() {
                 }
                 
                 
-                AdatPost("/api/AdatlapLekeres/JelentesTorles",mit)
+                AdatPost("/api/AdatlapLekeres/JelentesTorles",mit,"DELETE")
                 JelentesekLekeres()
             })
 
@@ -704,9 +725,9 @@ async function KosarLekeres() {
 
         //Kosár termékek módosítása
         kosárMódosít.addEventListener("click",()=>{
-            kosárMódosít.setAttribute("disabled","true")
-            kosárFizet.setAttribute("disabled","true")
-            kosárÜrít.setAttribute("disabled","true")
+            kosárMódosít.setAttribute("hidden","true")
+            kosárFizet.setAttribute("hidden","true")
+            kosárÜrít.setAttribute("hidden","true")
             let kosárGombok=document.getElementById("KosárGombok")
             for (let i = 0; i < hova.children.length; i++) {
             let kosárDbMod=document.createElement("input")
@@ -718,17 +739,17 @@ async function KosarLekeres() {
             kosárDbMod.value=hova.children[i].childNodes[3].childNodes[1].innerHTML
             hova.children[i].childNodes[3].childNodes[1].innerHTML=""
             hova.children[i].childNodes[3].childNodes[1].appendChild(kosárDbMod)
-            let koktelKuka=document.createElement("input")
-            koktelKuka.setAttribute("type","button")
-            koktelKuka.classList.add("btn","text-black","fs-4","align-top","float-end","kuka")
-            koktelKuka.setAttribute("value","🗑︎")
-            koktelKuka.addEventListener("click",()=>{
+            let termekKuka=document.createElement("input")
+            termekKuka.setAttribute("type","button")
+            termekKuka.classList.add("btn","text-black","fs-4","align-top","float-end","kuka")
+            termekKuka.setAttribute("value","🗑︎")
+            termekKuka.addEventListener("click",()=>{
                 let mitürít={
                     termék:valasz.kosár[i].TermekID
                 }
-                AdatPost("/api/AdatlapLekeres/TermekUrites/",mitürít)
+                AdatPost("/api/AdatlapLekeres/TermekUrites/",mitürít,"DELETE")
             })
-            hova.children[i].childNodes[0].appendChild(koktelKuka)
+            hova.children[i].childNodes[0].appendChild(termekKuka)
 
             kosárModMégse.setAttribute("type","button")
             kosárModIgen.setAttribute("type","button")
@@ -744,7 +765,7 @@ async function KosarLekeres() {
                     termék:valasz.kosár[i].TermekID,
                     count:kosárDbMod.value
                 }
-                AdatPost("/api/AdatlapLekeres/TermekFrissites",mitürít)
+                AdatPost("/api/AdatlapLekeres/TermekFrissites",mitürít,"PATCH")
                 tisztitas()
             })
             kosárModMégse.addEventListener("click",()=>{
@@ -753,12 +774,12 @@ async function KosarLekeres() {
 
             })
         function tisztitas(){   
-            hova.children[i].childNodes[0].removeChild(koktelKuka)
+            hova.children[i].childNodes[0].removeChild(termekKuka)
             kosárGombok.removeChild(kosárModIgen)
             kosárGombok.removeChild(kosárModMégse)
-            kosárMódosít.removeAttribute("disabled","true")
-            kosárFizet.removeAttribute("disabled","true")
-            kosárÜrít.removeAttribute("disabled","true")
+            kosárMódosít.removeAttribute("hidden","true")
+            kosárFizet.removeAttribute("hidden","true")
+            kosárÜrít.removeAttribute("hidden","true")
             KosarLekeres()
             }}
 
@@ -770,7 +791,7 @@ async function KosarLekeres() {
                 let mitürít={
                     tartalom:1
                 }
-                AdatPost("/api/AdatlapLekeres/Kosarurites/",mitürít)
+                AdatPost("/api/AdatlapLekeres/Kosarurites/",mitürít,"DELETE")
                 KosarLekeres()
                 alert("Siker!")
 
@@ -800,8 +821,8 @@ function fioktorles(){
             document.getElementById("feedback").innerHTML="A mező nem tartalmazza a helyes szavat!"
         }
         else{
-            await AdatPost("/api/AdatlapLekeres/Fioktorles")
-            await AdatPost("/api/Kijelentkezes")
+            await AdatPost("/api/AdatlapLekeres/Fioktorles","","DELETE")
+            await AdatPost("/api/Kijelentkezes","","POST")
             window.location.href="/"
         }
         
@@ -839,8 +860,8 @@ async function fizetes(){
     let total=0
     //Termék Adatok
     let termékekList=document.createElement("div")
-    c.classList.add("row","justify-content-md-between","justify-content-sm-center")
-    termékekList.classList.add("col-12","col-lg-4","col-md-4","col-sm-12","bg-light","rounded","p-2","border","border-dark")
+    c.classList.add("row","justify-content-md-center","justify-content-sm-center","justify-content-lg-between")
+    termékekList.classList.add("col-12","col-lg-4","col-md-6","col-sm-12","bg-light","rounded","p-2","border","border-dark")
     let szoveg=document.createElement("div")
     szoveg.innerHTML="Termék Adatok"
     termékekList.appendChild(szoveg)
@@ -854,7 +875,7 @@ async function fizetes(){
     }
     //Számlázási Adatok
     let PayList=document.createElement("form")
-    PayList.classList.add("col-12","col-lg-4","col-md-4","col-sm-12","border","border-dark","bg-light","rounded","p-2","needs-validation")
+    PayList.classList.add("col-12","col-lg-4","col-md-6","col-sm-12","border","border-dark","bg-light","rounded","p-2","needs-validation")
     let payszoveg=document.createElement("div")
     payszoveg.innerHTML="Számlázási Adatok"
     //PayList.setAttribute("novalidate","true")
@@ -991,7 +1012,7 @@ async function fizetes(){
         }
         if (valid) {
             //Mivel valójában nem szállítunk semmit (meglepő), nem számít hogy mit küldünk fel az endpointra, csak az számí hogy helyes az adat
-            await AdatPost("/api/AdatlapLekeres/Fizetes",adat)
+            await AdatPost("/api/AdatlapLekeres/Fizetes",adat,"POST")
         }
         else{
             alert("Hiba történt!")
@@ -1043,6 +1064,7 @@ function visszaepites(){
         gombSáv.innerHTML=""
         let összJelző=document.getElementById("IdeKosár")
         összJelző.innerHTML=""
+        összJelző.classList.remove("ps-3")
         let c=document.getElementById("KosárFizetésGomb")
         c.innerHTML=""
         let termSzov=document.createElement("span")
