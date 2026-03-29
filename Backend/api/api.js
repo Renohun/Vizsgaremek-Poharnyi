@@ -1657,8 +1657,9 @@ router.get('/WebShop/TermeklekeresByNev/:nev', async (request, response) => {
             data: Nevlista
         });
     } catch (error) {
-        throw new Error(error);
         console.log(error);
+        throw new Error(error);
+        
         response.status(500).json({
             message: 'Hibás lekérés'
         });

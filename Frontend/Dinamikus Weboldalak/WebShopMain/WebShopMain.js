@@ -59,13 +59,9 @@ const Sliderek = async () => {
             alk.push(data.data[i].TermekAlkoholSzazalek);
         }
     }
-    console.log(ar);
-    console.log(alk);
     //nagyság szerinti rendezés
     ar.sort((a, b) => a - b);
     alk.sort((a, b) => a - b);
-    console.log(ar);
-    console.log(alk);
     slider1.setAttribute('min', ar[0]);
     slider1.setAttribute('max', ar[ar.length - 1]);
        slider1.setAttribute('value', ar[ar.length - 1]);
@@ -94,7 +90,6 @@ const Sliderek = async () => {
             slider1.value = ar[ar.length - 1];
         } else {
             slider1.value = output1.value;
-            console.log(slider1.value);
         }
     });
     output2.addEventListener('change', () => {
@@ -107,7 +102,6 @@ const Sliderek = async () => {
             slider2.value = alk[alk.length - 1];
         } else {
             slider2.value = output2.value;
-            console.log(slider2.value);
         }
     });
 };
@@ -228,15 +222,15 @@ const kartyaGen = async(data,hova)=>{
         oszlop.appendChild(kartyaMain)
 
         kartyaMain.addEventListener("click",()=>{
-            // itt továbbítjuk a termekoldalra
+            window.location.href = `/Termek/${data.data[i].TermekID}`
         })
 
         let img = document.createElement("img")
         const kartyaKep = await TermekKepLekeres(`/api/WebShop/Keplekeres/${data.data[i].TermekID}`)
-        console.log(kartyaKep)
+        
         const kepURL = URL.createObjectURL(kartyaKep)
         img.setAttribute("src",kepURL)
-        console.log(img)
+
         img.classList.add("card-img-top","kartyakep")
         kartyaMain.appendChild(img)
 
@@ -269,7 +263,7 @@ const kartyaGen = async(data,hova)=>{
         tipusertek.innerHTML = data.data[i].TermekKategoria;
         div1.appendChild(tipusertek)
         adatDiv.appendChild(div1)
-//szarmaza
+//szarmazas
         let div2 = document.createElement("div")
         div2.classList.add("kulondiv")
         let szarmazas = document.createElement("p")
@@ -318,15 +312,14 @@ const kereses = async ()=>{
         }
     else
         {
-            console.log(keresendoSzo)
             let KartyaHova = document.getElementById("kartyaSor")
             KartyaHova.textContent = "";
-            const data = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo.value}`);
+            const data = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo}`);
             if (data.data.length == 0) 
             {
                 alert("nincs ilyen Termék")
+                //window.location.reload();
             }
-            console.log(data);
             kartyaGen(data,KartyaHova)
         }
     
@@ -351,7 +344,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let UrtartalomSelect = document.getElementById('UrtartalomSelect');
     SelectFeltolt(data, OrszagSelect, MarkaSelect, KategoriaSelect,kiszerelesSelect,UrtartalomSelect);
     OrszagSelect.addEventListener('change', () => {
-        console.log(OrszagSelect.value);
+       
     });//alkohol ellernörzés
   
     let alkoholcsuszka = document.getElementById("alkoholTart")
@@ -436,7 +429,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         szuresiAdatok = {};
         
         kartyaGen(KuldData,KartyaHova)
-        console.log( KuldData)
+    
 
         
     })
