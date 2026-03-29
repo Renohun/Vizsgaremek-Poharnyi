@@ -104,7 +104,27 @@ const oldalGenerálás =  async () =>{
         let EgysegArHely = document.getElementById("LiterAr")
         let ar1Szazalek = LekertTermekek.termek[0].Ar/(LekertTermekek.termek[0].TermekUrtartalom*100)
       
-        EgysegArHely.innerHTML = "Literár: " + ar1Szazalek*100 + "Ft/l"
+        EgysegArHely.innerHTML = "Literár: " + Math.round(ar1Szazalek*100) + "Ft/l"
+    }
+    //vanEPolcon
+    let PolcLabelSzovegHely = document.getElementById("VaneSzoveg")
+    let PolcLabelHely = document.getElementById("VanePolcon")
+    if (LekertTermekek.termek[0].TermekKeszlet <= 5 && LekertTermekek.termek[0].TermekKeszlet > 0 ) 
+    {
+        PolcLabelHely.innerHTML = "Utolsó Darabok!"
+        PolcLabelHely.classList.add("Utolso")
+        console.log(PolcLabelHely)
+    }
+    else if(LekertTermekek.termek[0].TermekKeszlet > 5)
+    {
+        PolcLabelHely.innerHTML = "Raktáron!"
+        PolcLabelHely.classList.add("VanPolcon")
+          console.log(PolcLabelHely)
+    }
+    else{
+        PolcLabelHely.innerHTML = "Elfogyott!"
+        PolcLabelHely.classList.add("NincsPolcon")
+          console.log(PolcLabelHely)
     }
     
 

@@ -127,7 +127,7 @@ table,
     right: 18px;
     z-index: -1;
 }
-#VanePolcon {
+.VanPolcon {
     height: 30px;
     width: 100px;
     background-color: rgb(5, 228, 5);
@@ -138,6 +138,38 @@ table,
     color: aliceblue;
     margin-top: 15px;
     padding: 3px;
+    font-size:medium;
+}
+.Utolso {
+    height: 30px;
+    width: 140px;
+    padding: 10px;
+    background-color: rgb(251, 255, 0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    color: rgb(0, 0, 0);
+    margin-top: 15px;
+    padding: 3px;
+    font-size:medium;
+}
+.NincsPolcon {
+    height: 30px;
+    width: 100px;
+    background-color: rgb(180, 0, 0);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-items: flex-end;
+    color: aliceblue;
+    margin-top: 15px;
+    padding: 3px;
+    font-size:medium;
+}
+
+#sarga{
+    background-color: yellow;
 }
 #ar {
     margin-left: 12px;
