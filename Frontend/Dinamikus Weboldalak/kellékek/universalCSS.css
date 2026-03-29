@@ -5,3 +5,11 @@
 * {
     font-family: Roboto;
 }
+
+.badge{
+    font-weight: 500;
+}
+
+.img-fluid,.card-img-top{
+    height: 400px;
+}

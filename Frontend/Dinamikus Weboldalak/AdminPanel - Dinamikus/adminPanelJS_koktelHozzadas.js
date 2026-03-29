@@ -250,6 +250,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 koktelRecept.classList.add('hibasForm');
                 hibasFrom = true;
             }
+            let kepTarolas = new FormData();
+            if (
+                document.getElementById('koktelKepFeltoltes').files[0].length != 0 &&
+                (document.getElementById('koktelKepFeltoltes').files[0].type == 'image/jpeg' ||
+                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/png' ||
+                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/webp' ||
+                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/bmp')
+            ) {
+                kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
+            } else {
+                hibasFrom = true;
+            }
 
             if (!hibasFrom) {
                 let alkoholosEBool = false;
@@ -259,11 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 //onsole.log(document.getElementById('koktelKepFeltoltes').files[0]);
 
-                let kepTarolas = new FormData();
-                kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
                 //console.log(kepTarolas);
 
-                async () => {
+                (async () => {
                     const nevObj = { nev: koktelNev.value };
 
                     const ellenorzes = await POSTfetch(
@@ -293,13 +303,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
                         //alert(JSON.stringify(data));
-                        window.location.reload();
+                        var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                        modalElement.show();
+
+                        document.getElementById('modalText').innerText = 'Sikeres koktél feltöltés';
+
+                        document.getElementById('modalBtn').addEventListener('click', () => {
+                            modalElement.hide();
+                            window.location.reload();
+                        });
                     } else {
-                        alert('Mar van ilyen koktel');
+                        var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                        modalElement.show();
+
+                        document.getElementById('modalText').innerText = 'Már létezik ilyen koktél';
+
+                        document.getElementById('modalBtn').addEventListener('click', () => {
+                            modalElement.hide();
+                        });
                     }
-                };
+                })();
             } else {
-                alert('Adatok hianyoznak vagy hibasan vannak megadva');
+                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                modalElement.show();
+
+                document.getElementById('modalText').innerText = 'Adatok hiányoznak vag hibásan vannak megadva';
+
+                document.getElementById('modalBtn').addEventListener('click', () => {
+                    modalElement.hide();
+                });
             }
         } catch (err) {
             console.error(err);

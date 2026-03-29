@@ -166,12 +166,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             //console.log(rows.koktelok[i][0].jelentesIndokok[0][0].JelentesIndoka);
 
                             for (let j = 0; j < rows.felhasznalok[i][0].jelentesIndokok[0].length; j++) {
-                                let jelentesekIndokok = document.createElement('li');
-                                jelentesekIndokok.innerText =
-                                    rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                jelentesekLista.appendChild(jelentesekIndokok);
+                                if (rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
+                                    let jelentesekIndokok = document.createElement('li');
+                                    jelentesekIndokok.innerText =
+                                        rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                    jelentesekLista.appendChild(jelentesekIndokok);
+                                }
                             }
 
+                            if (jelentesekLista.children.length <= 0) {
+                                let jelentesUres = document.createElement('li');
+                                jelentesUres.innerText = 'Indok még nincsen megadva';
+                                jelentesekLista.appendChild(jelentesUres);
+                            }
                             cardBody.appendChild(jelentesekLista);
 
                             //Itt sztrokot kaptam...
@@ -351,11 +358,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             //console.log(rows.koktelok[i][0].jelentesIndokok[0][0].JelentesIndoka);
 
                             for (let j = 0; j < rows.koktelok[i][0].jelentesIndokok[0].length; j++) {
-                                let jelentesekIndokok = document.createElement('li');
-                                jelentesekIndokok.innerText = rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                jelentesekLista.appendChild(jelentesekIndokok);
+                                if (rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
+                                    let jelentesekIndokok = document.createElement('li');
+                                    jelentesekIndokok.innerText =
+                                        rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                    jelentesekLista.appendChild(jelentesekIndokok);
+                                }
                             }
 
+                            if (jelentesekLista.children.length <= 0) {
+                                let jelentesUres = document.createElement('li');
+                                jelentesUres.innerText = 'Indok még nincsen megadva';
+                                jelentesekLista.appendChild(jelentesUres);
+                            }
                             cardBody.appendChild(jelentesekLista);
 
                             let gombDiv = document.createElement('div');
@@ -472,9 +487,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             //console.log(rows.koktelok[i][0].jelentesIndokok[0][0].JelentesIndoka);
 
                             for (let j = 0; j < rows.kommentek[i][0].jelentesIndokok[0].length; j++) {
-                                let jelentesekIndokok = document.createElement('li');
-                                jelentesekIndokok.innerText = rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                jelentesekLista.appendChild(jelentesekIndokok);
+                                if (rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
+                                    let jelentesekIndokok = document.createElement('li');
+                                    jelentesekIndokok.innerText =
+                                        rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                    jelentesekLista.appendChild(jelentesekIndokok);
+                                }
+                            }
+                            if (jelentesekLista.children.length <= 0) {
+                                let jelentesUres = document.createElement('li');
+                                jelentesUres.innerText = 'Indok még nincsen megadva';
+                                jelentesekLista.appendChild(jelentesUres);
                             }
 
                             cardBody.appendChild(jelentesekLista);

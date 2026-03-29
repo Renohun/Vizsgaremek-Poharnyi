@@ -36,7 +36,11 @@ router.get('/Fooldal', (req, res) => {
 //Regisztracio - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Regisztráció/')));
 router.get('/Regisztralj', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Regisztráció/Regisztracio.html'));
+    if (req.cookies.auth_token == null) {
+        res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Regisztráció/Regisztracio.html'));
+    } else {
+        res.redirect('/');
+    }
 });
 
 //Bejelentkezes - Dinamikus
@@ -91,6 +95,10 @@ router.get('/Koktel/:koktelID', (req, res) => {
 });
 router.get('/KoktelHiba', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/nincsilyen.html'));
+});
+
+router.get('/jogosultsag', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/hibaOldalak/jogosultsag.html'));
 });
 
 //!API endpoints

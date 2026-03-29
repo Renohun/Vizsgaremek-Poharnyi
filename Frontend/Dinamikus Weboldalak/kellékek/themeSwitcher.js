@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     themeSwitcherBtn.addEventListener('click', () => {
         const currentTheme = document.getElementsByTagName('link');
-        hrefArr = [];
+        let hrefArr = [];
         for (let i = 0; i < currentTheme.length; i++) {
             const lastItem = currentTheme[i].href.split('/');
             hrefArr.push(lastItem[lastItem.length - 1]);

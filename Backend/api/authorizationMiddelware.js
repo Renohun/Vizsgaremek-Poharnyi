@@ -14,9 +14,8 @@ function AuthorizaitionMiddleware(req, res, next) {
         if (req.data && req.data.adminStatus == 1 && rows[0].Admin == 1) {
             next();
         } else {
-            res.status(403).json({
-                message: 'Nincs jogod'
-            });
+            //ehelyett majd egy koktelHiba szeru helyre kell atvinni a user-t
+            res.redirect('/jogosultsag');
         }
     });
 }

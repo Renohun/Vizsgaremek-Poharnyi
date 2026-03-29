@@ -66,7 +66,6 @@ const AdatPost = async (url, data) => {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('aqd');
     //új összetevő meghívására szolgáló gomb értékadása
     osszetevogomb = document.getElementById('osszetevogomb');
     //addeventlistener hozzáaadása
@@ -78,6 +77,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.reload();
     }
 
+    document.getElementById('Ujra').addEventListener('click', () => {
+        window.location.reload();
+    });
     megsegomb = document.getElementById('megse');
     megsegomb.addEventListener('click', megsefugv);
     //radiogombok értékének lekérése
@@ -108,9 +110,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('kala');
     });
     //adott pixelszám alatti classok addolasa
+    if (window.innerWidth < 992) {
+        document.getElementById('drop-area').classList.add('mx-auto');
+    } else if (window.innerWidth > 992) {
+        document.getElementById('drop-area').classList.remove('mx-auto');
+    }
     window.addEventListener('resize', () => {
         if (window.innerWidth < 992) {
             document.getElementById('drop-area').classList.add('mx-auto');
+        } else if (window.innerWidth > 992) {
+            document.getElementById('drop-area').classList.remove('mx-auto');
         }
     });
     document.getElementById('kuldes').addEventListener('click', AdatStorage);
@@ -363,11 +372,9 @@ const AdatStorage = async () => {
     //alap adatok kitöltésének ellenörzése
     if (document.getElementById('nev').value == '') {
         hiba = false;
-        // alert('ne hagyja üresen a koktél nevét!');
     }
     if (document.getElementById('mennyiseg').value == '') {
         hiba = false;
-        // alert('ne hagyja üresen a koktél mennyiségét!');
     }
 
     //képfeltöltés
@@ -382,14 +389,12 @@ const AdatStorage = async () => {
             inputFile.files[0].type != 'image/bmp' &&
             inputFile.files[0].type != 'image/webp'
         ) {
-            //alert('hibás formátum!');
             hiba = false;
         } else {
             kep.append('profilkep', inputFile.files[0]);
             kepUtvonal = await AdatPostKep('/api/AdatlapLekeres/KepFeltoltes', kep);
         }
     } else {
-        //alert('Kérem töltsön fel egy képet!');
         hiba = false;
     }
 
@@ -406,7 +411,6 @@ const AdatStorage = async () => {
     if (alkoholose == true) {
         if (document.getElementById('alap').value == '') {
             hiba = false;
-            //alert('ne hagyja üresen a koktél alapját!');
         }
     }
     //összetevők összeszedése
@@ -452,13 +456,11 @@ const AdatStorage = async () => {
 
     if (kinyertErobadgeList.length < 1) {
         //ellenörzi, hogy a felhasználó választott e erősséget
-        // alert('kérem válasszon erősséget!');
         hiba = false;
     }
     console.log(kinyertErobadgeList.length);
     if (KivalasztottIzek.length < 1) {
         //ellenörzi, hogy a felhasználó választott e ízt
-        alert('kérem válasszon ízt!');
         hiba = false;
     }
     let KoktelAdatok;
@@ -472,8 +474,7 @@ const AdatStorage = async () => {
         osszetevok: osszetevoLista,
         leiras: leiras,
         erosseg: elkuldottEro,
-        iz: KivalasztottIzek,
-        kepUtvonala: kepUtvonal.message
+        iz: KivalasztottIzek
     };
     console.log('asdfmiaeftuiaenftiuoejfgi');
     if (KivalasztottAllergenek.length > 0) {
@@ -483,16 +484,16 @@ const AdatStorage = async () => {
 
     //hibátlan kitöltés esetén elküldjük az értékeket
     if (hiba == true) {
+        KoktelAdatok.kepUtvonala = kepUtvonal.message;
         console.log(KoktelAdatok);
         data = await AdatPost('/api/Keszites/Feltoltes', KoktelAdatok);
-        //console.log(data);
     } else if (hiba == false) {
-        alert('kérem töltse ki a hiányzó adatokat');
+        //hibás kitöltés kezelése
         document.getElementById('Ujra').style.display = 'block';
         document.getElementById('hiba').style.display = 'block';
         document.getElementById('siker').setAttribute('hidden', true);
-        document.getElementById('elkuld').setAttribute('hidden', true);
         document.getElementById('visszaGomb').setAttribute('hidden', true);
+        document.getElementById('tovabb').setAttribute('hidden', true);
     }
     //uj koktel gomb funkcioja
     document.getElementById('visszaGomb').addEventListener('click', () => {
@@ -503,14 +504,4 @@ const AdatStorage = async () => {
         console.log(data);
         window.location.href = `Koktel/${data.feltoltottid}`;
     });
-    document.getElementById('Ujra').addEventListener('click', () => {
-        window.location.reload();
-    });
-
-    //Egy badge választási lehetoseg eseten:
-    /* if (KivalasztottEro.classList.contain"text-bg-dark")) {
-             KivalasztottEro.classList.remove("text-bg-dark")
-        }
-       
-        else{KivalasztottEro.classList.add("text-bg-dark")}*/
 };

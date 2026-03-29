@@ -30,6 +30,23 @@ async function POSTfetch(url, obj) {
     }
 }
 
+async function PATCHfetch(url) {
+    try {
+        const data = await fetch(url, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (data.ok) {
+            return await data.json();
+        } else {
+            throw new Error('Hiba tortent a POST fetchnel');
+        }
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 async function POSTKepLekeres(url) {
     try {
         const ertek = await fetch(url, {
@@ -46,8 +63,9 @@ async function POSTKepLekeres(url) {
     }
 }
 
-function atvitelKoktelra() {
+async function atvitelKoktelra() {
     const id = this.dataset.id;
+    await PATCHfetch(`http://127.0.0.1:3000/api/Koktelok/nepszeruseg/${id}`);
     window.location.href = `http://127.0.0.1:3000/Koktel/${id}`;
 }
 
@@ -260,7 +278,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const koktelok = await GETfetch(`http://127.0.0.1:3000/api/Koktelok/lekeres/${keresettKoktelNeve}`);
                 koktelRendereles(koktelok);
             } else {
-                alert('Nem adott meg nevet!');
+                const koktelok = await GETfetch('http://127.0.0.1:3000/api/Koktelok/lekeres');
+                //console.log(koktelok);
+                koktelRendereles(koktelok);
             }
         } catch (err) {
             console.error(err);

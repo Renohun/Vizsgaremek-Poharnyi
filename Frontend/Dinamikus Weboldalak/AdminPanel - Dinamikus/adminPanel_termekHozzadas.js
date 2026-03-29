@@ -44,36 +44,58 @@ async function GETfetch(url) {
     }
 }
 
+function inputFieldClear() {
+    const inputokFields = document.getElementsByName('termekFeltoltes')[1].children;
+    console.log(inputokFields);
+    console.log(typeof inputokFields);
+    for (let i = 2; i < inputokFields.length; i++) {
+        if (
+            inputokFields[i].tagName == 'INPUT' &&
+            (inputokFields[i].getAttribute('type') == 'text' || inputokFields[i].getAttribute('type') == 'number')
+        ) {
+            inputokFields[i].value = '';
+        } else if (inputokFields[i].tagName == 'TEXTAREA') {
+            inputokFields[i].value = '';
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     //alkohol valasztas eseten jelenjenek meg a megfelelo input mezok
     const termekKategoriaSelect = document.getElementById('termekKategoria');
     termekKategoriaSelect.addEventListener('change', () => {
-        const termekAlkoholMertekeLabel = document.getElementById('termekAlkoholLabel');
-        const termekAlkoholKoraLabel = document.getElementById('termekKoraLabel');
+        const urtartalomLabel = document.getElementById('termekUrtartalomLabel');
+        const urtartalomInput = document.getElementById('termekUrtartalom');
 
-        const termekAlkoholMerteke = document.getElementById('termekAlkohol');
-        const termekAlkoholKora = document.getElementById('termekKora');
-        if (
-            termekKategoriaSelect.value != 'Eszkozok' ||
-            termekKategoriaSelect.value != 'Pohar' ||
-            termekKategoriaSelect.value != 'Merch' ||
-            termekKategoriaSelect.value != 'Egyeb'
-        ) {
-            termekAlkoholKoraLabel.removeAttribute('hidden', 'true');
-            termekAlkoholMertekeLabel.removeAttribute('hidden', 'true');
-            termekAlkoholKora.removeAttribute('hidden', 'true');
-            termekAlkoholMerteke.removeAttribute('hidden', 'true');
+        const alkoholSzazalekLabel = document.getElementById('termekAlkoholLabel');
+        const alkoholSzazalekInput = document.getElementById('termekAlkohol');
 
-            document.getElementById('termekKora').removeAttribute('value');
-            document.getElementById('termekAlkohol').removeAttribute('value');
+        const alkoholKoraLabel = document.getElementById('termekKoraLabel');
+        const alkoholKoraInput = document.getElementById('termekKora');
+
+        //console.log(termekKategoriaSelect.value);
+        //legit retard vagyok ig, nem ertem hogy miert &&-sel mukodik csak miert nem ||-gyal
+        if (termekKategoriaSelect.value != 'Eszkozok' && termekKategoriaSelect.value != 'Merch') {
+            urtartalomLabel.removeAttribute('hidden');
+            urtartalomInput.removeAttribute('hidden');
+            if (termekKategoriaSelect.value != 'Pohar') {
+                alkoholSzazalekLabel.removeAttribute('hidden');
+                alkoholSzazalekInput.removeAttribute('hidden');
+                alkoholKoraLabel.removeAttribute('hidden');
+                alkoholKoraInput.removeAttribute('hidden');
+            } else {
+                alkoholSzazalekLabel.setAttribute('hidden', true);
+                alkoholSzazalekInput.setAttribute('hidden', true);
+                alkoholKoraLabel.setAttribute('hidden', true);
+                alkoholKoraInput.setAttribute('hidden', true);
+            }
         } else {
-            termekAlkoholKoraLabel.setAttribute('hidden', 'true');
-            termekAlkoholMertekeLabel.setAttribute('hidden', 'true');
-            termekAlkoholKora.setAttribute('hidden', 'true');
-            termekAlkoholMerteke.setAttribute('hidden', 'true');
-
-            document.getElementById('termekKora').setAttribute('value', '1');
-            document.getElementById('termekAlkohol').setAttribute('value', '1');
+            urtartalomInput.setAttribute('hidden', true);
+            urtartalomLabel.setAttribute('hidden', true);
+            alkoholSzazalekLabel.setAttribute('hidden', true);
+            alkoholSzazalekInput.setAttribute('hidden', true);
+            alkoholKoraLabel.setAttribute('hidden', true);
+            alkoholKoraInput.setAttribute('hidden', true);
         }
     });
 
@@ -98,10 +120,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await GETfetch(
                     `http://127.0.0.1:3000/api/AdminPanel/TermekLearazas/${kivalasztottTermek}/${learazas}`
                 );
-                console.log(data);
+                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                modalElement.show();
+
+                document.getElementById('modalText').innerText = 'Termék sikeresen leárazva ' + learazas + '%-kal!';
+
+                document.getElementById('modalBtn').addEventListener('click', () => {
+                    modalElement.hide();
+                });
             })();
         } else {
-            alert('Hianyzik a learazas erteke');
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = 'Leárazás értéke hiányzik!';
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
         }
     });
 
@@ -131,14 +167,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (formDiv.children[i].files[0] == undefined) {
                             hibasAdatok = true;
                         } else {
-                            let kepTarolas = new FormData();
-                            kepTarolas.append('profilkep', formDiv.children[i].files[0]);
-                            const kapottFajlNev = await POSTkepFeltoltes(
-                                'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
-                                kepTarolas
-                            );
+                            if (
+                                formDiv.children[i].files[0].length != 0 &&
+                                (formDiv.children[i].files[0].type == 'image/jpeg' ||
+                                    formDiv.children[i].files[0].type == 'image/png' ||
+                                    formDiv.children[i].files[0].type == 'image/bmp' ||
+                                    formDiv.children[i].files[0].type == 'image/webp')
+                            ) {
+                                let kepTarolas = new FormData();
+                                kepTarolas.append('profilkep', formDiv.children[i].files[0]);
+                                const kapottFajlNev = await POSTkepFeltoltes(
+                                    'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
+                                    kepTarolas
+                                );
 
-                            POSTobj.fajlNeve = kapottFajlNev.message;
+                                POSTobj.fajlNeve = kapottFajlNev.message;
+                            } else {
+                                hibasAdatok = true;
+                            }
                         }
 
                         //szoki kepfeltoltes
@@ -164,17 +210,40 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
             //alert(JSON.stringify(ellResult));
-
+            //MODALok megjelenitese
             if (ellResult.duplikacio == false) {
                 POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
-                const fetchAdat = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
-                alert('Sikeres termek hozzaadas');
+                const response = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
+                console.log(response);
+                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                modalElement.show();
+
+                document.getElementById('modalText').innerText = 'Termék sikeresen hozzáadva!';
+
+                document.getElementById('modalBtn').addEventListener('click', () => {
+                    modalElement.hide();
+                    inputFieldClear();
+                });
                 //console.log(fetchAdat);
             } else {
-                alert('Mar letezik ilyen nevu termek');
+                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                modalElement.show();
+
+                document.getElementById('modalText').innerText = 'Ilyen nevű koktél már létezik';
+
+                document.getElementById('modalBtn').addEventListener('click', () => {
+                    modalElement.hide();
+                });
             }
         } else {
-            alert('Hianyoznak adatok!');
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = 'Hiányoznak adatok!';
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
         }
     });
 });
