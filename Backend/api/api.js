@@ -1985,4 +1985,17 @@ router.get('/termek/lekeres/:id', async (request, response) => {
     }
 });
 
+router.get('/termek/KepLekeres/:id', async (request, response) => {
+    try {
+        const id = request.params.id;
+        const query = 'SELECT TermekKepUtvonal FROM webshoptermek WHERE termekID = ?';
+        const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
+        console.log(lekertTermek)
+       response.sendFile(path.join(__dirname, '..', 'images',lekertTermek[0].TermekKepUtvonal));
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
+    }
+});
+
 module.exports = router;

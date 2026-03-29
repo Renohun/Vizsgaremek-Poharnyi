@@ -96,6 +96,9 @@ router.get('/KoktelHiba', (req, res) => {
 router.get('/Termek/:termekID', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/TermekOldal/TermekOldal.html'));
 });
+router.get('/HianyzoTermek', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/TermekOldal/NincsIlyenTermek.html'));
+});
 //!API endpoints
 app.use('/', router);
 const endpoints = require('./api/api.js');
