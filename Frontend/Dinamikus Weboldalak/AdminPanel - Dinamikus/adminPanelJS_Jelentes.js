@@ -119,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 'col-lg-6',
                                 'col-xl-3',
                                 'col-xxl-3',
-                                'h-100',
                                 'align-self-stretch',
                                 'mb-1'
                             );
@@ -127,15 +126,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             jelentesekSor.appendChild(ujOszlop);
 
                             let margoDiv = document.createElement('div');
-                            margoDiv.classList.add('mb-1', 'h-100');
+                            margoDiv.classList.add('mb-1');
                             ujOszlop.appendChild(margoDiv);
 
                             let cardDiv = document.createElement('div');
-                            cardDiv.classList.add('card', 'h-100');
+                            cardDiv.classList.add('card');
                             margoDiv.appendChild(cardDiv);
 
                             let cardBody = document.createElement('div');
-                            cardBody.classList.add('card-body');
+                            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
                             cardDiv.appendChild(cardBody);
 
                             let titleH4 = document.createElement('h4');
@@ -264,7 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 'col-lg-6',
                                 'col-xl-3',
                                 'col-xxl-3',
-                                'h-100',
                                 'mb-1'
                             );
                             jelentesekSor.appendChild(ujOszlop);
@@ -275,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ujOszlop.appendChild(margoDiv);
 
                             let cardDiv = document.createElement('div');
-                            cardDiv.classList.add('card', 'h-100');
+                            cardDiv.classList.add('card', 'koktelCard');
                             margoDiv.appendChild(cardDiv);
 
                             //console.log(rows.koktelok[i][0].KoktélID);
