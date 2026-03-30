@@ -7,10 +7,11 @@ const authenticationMiddleware = require('./authenticationMiddleware.js');
 const authorizationMiddelware = require('./authorizationMiddelware.js');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-
+const mysql = require('mysql2');
 const path = require('path');
 const fajlkezelo = require('fs/promises');
-const { error } = require('console');
+const { error, log } = require('console');
+const { blob } = require('stream/consumers');
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -2041,3 +2042,220 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
 });
 
 module.exports = router;
+//
+//
+//
+//
+// WebshopMain
+//
+//
+//
+//
+router.post('/Webshop/KosarKuldes', authenticationMiddleware, async(request,response)=>{
+    try {
+        
+    } catch (error) {
+        console.log(error)
+    }
+
+})
+
+router.get('/WebShop/TermekLekeres', async (request, response) => {
+    try {
+        const query = 'SELECT * FROM webshoptermek';
+        const [termekek] = await DBconnetion.promise().query(query);
+        response.status(200).json({
+            data: termekek
+        });
+    } catch (error) {
+        throw new Error(error);
+        console.log(error);
+        response.status(500).json({
+            message: 'Hibás lekérés'
+        });
+    }
+});
+
+router.get('/WebShop/TermeklekeresByNev/:nev', async (request, response) => {
+    try {
+        const nev = request.params.nev;
+        console.log(nev)
+        const query = 'SELECT * FROM webshoptermek';
+        let Nevlista = []
+        const [termekek] = await DBconnetion.promise().query(query);
+        for (let i = 0; i < termekek.length; i++) {
+            if (termekek[i].TermekCim.includes(nev)) 
+            {
+                Nevlista.push(termekek[i])    
+            }
+            }
+        response.status(200).json({
+            data: Nevlista
+        });
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+        
+        response.status(500).json({
+            message: 'Hibás lekérés'
+        });
+    }
+});
+
+router.get('/Webshop/Keplekeres/:id', async (request, response) => {
+    try {
+        const { id } = request.params;
+        const query = 'SELECT  TermekKepUtvonal FROM webshoptermek WHERE TermekID = ?';
+        const [termekek] = await DBconnetion.promise().query(query, [id]);
+        console.log(termekek[0].TermekKepUtvonal);
+        response.sendFile(path.join(__dirname, '..', 'images', termekek[0].TermekKepUtvonal));
+    } catch (error) {
+        throw new Error(error);
+        console.log(error);
+        response.status(500).json({
+            message: 'hiba'
+        });
+    }
+});
+
+router.post('/Webshop/szures', async (request, response) => {
+    try {
+        const feltetelek = request.body;
+        let query = 'SELECT * FROM webshoptermek WHERE';
+        console.log(feltetelek);
+        let whereErtekek;
+        const elfogadott = ['csokkeno', 'novekvo', '-', 'TermekCim'];
+        let ertekLista = [];
+        let OrderBy;
+        let OrderByErtek;
+        for (const item of Object.entries(feltetelek)) {
+            if (item[0] == 'MaxAr') {
+                query += ' Ar <= ? AND';
+            } else if (item[0] == 'MaxAlk') {
+                query += ' TermekAlkoholSzazalek <= ? AND';
+            } else if (item[0] == 'TermekKategoria') {
+                query += ' TermekKategoria = ? AND';
+            } else if (item[0] == 'MaxAlk') {
+                query += ' TermekUrtartalom = ? AND';
+            } else if (item[0] == 'rendezes') {
+                if (elfogadott.includes(item[1])) {
+                    if (item[1] == 'novekvo') {
+                        OrderBy = ` ORDER BY Ar ASC`;
+                    } else if (item[1] == 'csokkeno') {
+                        OrderBy = ` ORDER BY Ar DESC`;
+                    } else if (item[1] == 'TermekCim') {
+                        OrderBy = ` ORDER BY TermekCim ASC`;
+                    } else if (item[1] == '-') {
+                        OrderBy = ` ORDER BY TermekId ASC`;
+                    }
+                } else {
+                    throw new Error('Rendezéshiba');
+                }
+            } else if (item[0] == 'akcio') {
+                query += ' TermekDiscount is NOT NULL AND';
+            } else {
+                query += ` ${item[0]} like ? AND`;
+            }
+
+            if (item[0] != 'rendezes') {
+                ertekLista.push(item[1]);
+            }
+        }
+
+        console.log(query);
+        // a query utolso 3 elemenek (AND) levágása
+        query = query.slice(query[0], query.length - 4);
+
+        query += OrderBy;
+
+        // console.log(OrderByErtek)
+        console.log(query);
+        for (let i = 0; i < ertekLista.length; i++) {
+            console.log(ertekLista[i]);
+        }
+
+        /* TEST
+        const sql = mysql.format(query, [ertekLista[0]]);
+            console.log(sql);
+            console.log(typeof ertekLista[0]);
+            console.log('2') 
+        */
+
+       //SZÉPÍTENI KELL!!!
+
+        let szurtTermekek;
+        if (ertekLista.length == 1) {
+            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0]]);
+        } else if (ertekLista.length == 2) {
+            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], ertekLista[1]]);
+        } else if (ertekLista.length == 3) {
+            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], ertekLista[1], ertekLista[2]]);
+        } else if (ertekLista.length == 4) {
+            console.log('4')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3]
+            ]);
+        } else if (ertekLista.length == 5) {
+            console.log('5')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],
+                ertekLista[4]
+            ]);
+        } else if (ertekLista.length == 6) {
+            console.log('6')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],
+                ertekLista[4],
+                ertekLista[5]
+            ]);
+        } else if (ertekLista.length == 7) {
+            console.log('7')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],
+                ertekLista[4],
+                ertekLista[5],
+                ertekLista[6]
+            ]);
+        } else if (ertekLista.length == 8) {
+            console.log('8')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],
+                ertekLista[4],
+                ertekLista[5],
+                ertekLista[6],
+                ertekLista[7]
+            ]);
+        } else if (ertekLista.length == 9) {
+            console.log('9')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],
+                ertekLista[4],
+                ertekLista[5],
+                ertekLista[6],
+                ertekLista[7],
+                ertekLista[8]
+            ]);
+        }
+
+        response.status(200).json({
+            data: szurtTermekek
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message: 'hiba'
+        });
+    }
+});

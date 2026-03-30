@@ -1,0 +1,208 @@
+#main {
+    width: 90%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    justify-content: center;
+}
+#szuresek {
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    margin: auto;
+}
+#kereses {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#NevKereses {
+    padding: 2px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 80%;
+    background: #f1f1f1;
+}
+.formBtn {
+    float: left;
+    width: 10%;
+    padding: 2px;
+    background: #f5fbff;
+    color: rgb(80, 80, 80);
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none;
+    cursor: pointer;
+}
+#szuresGomb {
+    width: 60px;
+}
+#szures {
+    width: 80%;
+    margin: auto;
+}
+
+/*slider*/
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /*appearance: none;*/
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #04aa6d;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #04aa6d;
+    cursor: pointer;
+}
+#maxAlk {
+    width: 50px;
+}
+#maxAr {
+    width: 125px;
+}
+#alkoholTart {
+    margin-top: 15px;
+}
+/*Száramazasi hely*/
+
+.eltunt{display: none;}
+/*Rendezes*/
+/*selectek tulajdonsagai*/
+.selekt{
+    margin-top: 15px;
+}
+.selektdiv{
+display: flex;
+    flex-direction: column;
+} 
+
+/*akciose*/
+#Akciose {
+    margin-top: 15px;
+}
+
+#AkcioSelectDiv {
+    display: flex;
+}
+#AkcioseCheck {
+    margin-left: 5px;
+}
+/*Kuldes*/
+#kuldes{
+    margin-top: 15px;
+}
+/*kártyák*/
+.kartya{
+    height: 100%    ;
+}
+
+.kartya:has(.kartyakep:hover){
+    border: rgb(48, 48, 48) 2px solid;
+}
+.kartya:has(.kartyaBody:hover){ /*:has - css pseudo class - egy parent elemet tudunk változtatni, ha valamelyik childrenjével történik egy esemény - stackoverflow*/
+    border: rgb(48, 48, 48) 2px solid;
+}
+.kartyaCim{
+    height: 40px;
+}
+.adatDiv{
+    margin-top: 20px;
+}
+.ar{
+    margin-top: 20px;
+}
+#AkciosAr{
+   color: red   ;
+}
+#Akcios{
+    text-decoration: line-through;
+}
+.kulondiv{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 0.1px black solid;
+    margin: 0px;
+    padding: 0px;
+    height: 25px;
+}
+#kulondiv3{
+    border: none;
+}
+.kuloncim{
+    margin:0px ;
+    padding: 0px;
+}
+.kulonertek{
+    margin: 0px;
+    padding: 0px;
+}
+.kartyaGomb{
+    width: 95%;
+    background-color: #04aa6d;
+    margin: auto;
+    margin-bottom: 10px;
+}
+/*Oldal méretezése*/
+@media only screen and (max-width: 425px) {
+    #maxAr {
+        width: 100px;
+    }
+    #AlkLabel {
+        font-size: small;
+    }
+    #ArLabel {
+        font-size: small;
+    }
+}
+@media (max-width: 500px) {
+/*https://chatgpt.com/share/69ca7722-d10c-832a-b38e-de633fdb67f1*/
+    #kartyaSor > div {
+        flex: 0 0 90%;
+        max-width: 90%;
+    }
+
+    .kartya {
+        width: 90%;
+        margin: auto;
+    }
+
+    .kartyaCim {
+        font-size: 14px;
+        height: auto;
+    }
+
+    .kulondiv {
+        font-size: 12px;
+    }
+
+    .ar {
+        font-size: 14px;
+    }
+
+    .kartyaGomb {
+        font-size: 14px;
+        padding: 6px;
+    }
+}

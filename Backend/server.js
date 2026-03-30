@@ -58,7 +58,10 @@ router.get('/Keszites', (req, res) => {
         res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/NewCocktail.html'));
     }
 });
-
+//WebShop
+router.get('/WebShop', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/WebShopMain/WebShopMain.html'));
+});
 //Kijelentkezes
 //TODO POST-ra atirni
 router.get('/Kijelentkezes', authenticationMiddleware, (req, res) => {
