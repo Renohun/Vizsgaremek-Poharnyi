@@ -41,6 +41,24 @@ router.get('/test', (req, res) => {
         }
     });
 });
+
+async function kepculling(){
+    const felhkep="SELECT ProfilkepUtvonal FROM felhasználó;SELECT BoritoKepUtvonal FROM koktél;SELECT TermekKepUtvonal FROM webshoptermek"
+    let sqlkepek=await lekeres(felhkep)
+    let kepek=[]
+    for (let i = 0; i < sqlkepek.length; i++) {
+        sqlkepek[i].forEach(element => {
+            kepek.push(Object.values(element)[0])
+        });
+    } 
+    let mappa=await fajlkezelo.readdir(path.join(__dirname, '../images/'))
+    for (let i = 0; i < mappa.length; i++) {
+        if (!(kepek.includes(mappa[i]))) {
+            fajlkezelo.rm(path.join(__dirname, '../images/',mappa[i]))
+        }
+    }
+}
+
 //Koktelok vegpontok
 router.post('/sutiJelenlete', (req, res) => {
     if (!req.cookies.auth_token) {
@@ -812,7 +830,7 @@ router.post(
     }
 );
 
-router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, (req, res) => {
+router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, async(req, res) => {
     try {
         const payload = jwt.decode(req.cookies.auth_token);
         console.log(req.body);
@@ -890,6 +908,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
             });
         });
         res.status(200).json({ message: 'Sikeres koktel feltoltes' });
+        await kepculling()
     } catch (err) {
         console.log(err);
     }
@@ -1029,6 +1048,7 @@ router.post('/AdminPanel/TermekFeltoltes', async (req, res) => {
                     termekAra
                 ]);
                 res.status(200).json({ message: 'Termek hozzadva sikeresen' });
+                await kepculling()
             }
         }
     } catch (error) {
@@ -1344,7 +1364,8 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
+
+router.delete('/AdatlapLekeres/Kosarurites', async (request, response) => {
     let mit = jwt.decode(request.cookies.auth_token).userID;
     let MelyikKosár = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
     let MelyikKosárAz;
@@ -1366,7 +1387,9 @@ router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
         });
     }
 });
-router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
+
+
+router.delete('/AdatlapLekeres/TermekUrites', async (request, response) => {
     let mit = request.body.termék;
     let honnan = await lekeres(
         'SELECT SessionID FROM kosár WHERE UserID LIKE ?',
@@ -1385,7 +1408,9 @@ router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
         });
     }
 });
-router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
+
+
+router.patch('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     let mit = request.body.termék;
     let honnan = await lekeres(
         'SELECT SessionID FROM kosár WHERE UserID LIKE ?',
@@ -1408,7 +1433,8 @@ router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
+
+router.delete('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     let ki = request.body.id;
     let mit = jwt.decode(request.cookies.auth_token).userID;
     let milyen = request.body.tipus;
@@ -1437,7 +1463,8 @@ router.post('/AdatlapLekeres/KepFeltoltes', fileStorage.array('profilkep'), asyn
         });
     }
 });
-router.post('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response) => {
+
+router.get('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response) => {
     try {
         let melyik = request.params.melyik;
         let kepkereses = 'SELECT BoritoKepUtvonal FROM Koktél WHERE KoktélID LIKE ?';
@@ -1448,7 +1475,7 @@ router.post('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response
     }
 });
 
-router.post('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response) => {
+router.get('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response) => {
     try {
         let melyik = request.params.melyik;
         let kepkereses = 'SELECT TermekKepUtvonal FROM WebshopTermek WHERE TermekID LIKE ?';
@@ -1459,7 +1486,7 @@ router.post('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response
     }
 });
 
-router.post('/AdatlapLekeres/KepLekeres/', async (request, response) => {
+router.get('/AdatlapLekeres/KepLekeres/', async (request, response) => {
     try {
         let profil = jwt.decode(request.cookies.auth_token).userID;
         let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
@@ -1493,24 +1520,46 @@ router.post('/Koktelok/KepLekeres', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
+
+router.put('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     try {
+        let hiba=false
+        let tomb =""
         let adatmodositas = 'UPDATE felhasználó SET Felhasználónév=?,Email=?';
-        let tomb = `${request.body.Felhasználónév},${request.body.Email}`;
-        let profil = jwt.decode(request.cookies.auth_token).userID;
-        if (request.body.Jelszó != 'undefined') {
-            adatmodositas += ',Jelszó=?';
-            tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
+        if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.Email)&&/^[a-zA-Z0-9_]{2,30}$/.test(request.body.Felhasználónév)) {
+            tomb = `${request.body.Felhasználónév},${request.body.Email}`;
         }
-        if (request.body.KépÚtvonal != undefined) {
+        else{
+            hiba=true
+        }
+        let profil = jwt.decode(request.cookies.auth_token).userID;
+        if (request.body.Jelszó != 'undefined'&&hiba==false) {
+            if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.Jelszó)) {
+                adatmodositas += ',Jelszó=?';
+                tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
+            }
+            else{
+                hiba=true
+            }
+        }
+        if (request.body.KépÚtvonal != undefined&&hiba==false) {
             adatmodositas += ',ProfilKepUtvonal=?';
             tomb += `,${request.body.KépÚtvonal}`;
         }
         adatmodositas += ` WHERE FelhID LIKE ${profil}`;
-        await lekeres(adatmodositas, tomb.split(','));
-        response.status(200).json({
-            message: 'Siker!'
-        });
+        if (hiba==false) {
+            await lekeres(adatmodositas, tomb.split(','));
+            await kepculling()
+            response.status(200).json({
+                message: 'Siker!'
+            });
+        }
+        else{
+            response.status(500).json({
+                message: 'Hibás adat!'
+            });
+        }
+        
     } catch (error) {
         console.log(error);
         response.status(500).json({
@@ -1519,7 +1568,7 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Fioktorles', async (request, response) => {
+router.delete('/AdatlapLekeres/Fioktorles', async (request, response) => {
     try {
         const FelhasznaloTorles = 'DELETE FROM felhasználó WHERE FelhID LIKE ?';
         const ErtekTorles = 'DELETE FROM ertekeles WHERE Keszito LIKE ?';

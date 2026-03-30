@@ -1,16 +1,16 @@
 
 INSERT INTO Felhasználó(Felhasználónév,Email,Jelszó)
 VALUES
-("Benczik Marcell","benczik.marci@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$aHw3kmpIBeoIUUgnd637sQ$KJ2Jdyx6oPAEYzMPNx/OfKIOdsRp88kPRuRMtqfzsWY"),
-("Legnagyobb Mudfield Fan","davidhoki@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
+("BenczikMarcell","benczik.marci@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$aHw3kmpIBeoIUUgnd637sQ$KJ2Jdyx6oPAEYzMPNx/OfKIOdsRp88kPRuRMtqfzsWY"),
+("LegnagyobbMudfieldFan","davidhoki@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
 ("RenoHUN","kornelbettes@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
-("A Magyar Daredevil","katai-nemeth-vilmos@tisza.hu","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
-("Kovácsovics Máté","matekovacsovics_mudfield@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
+("AMagyarDaredevil","katai-nemeth-vilmos@tisza.hu","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
+("KovácsovicsMáté","matekovacsovics_mudfield@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
 ("sebi2ga121","sebi2ga121@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
-("Spence Buder","bestbud@spencer.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
+("SpenceBuder","bestbud@spencer.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
 ("fishfishfishfish","ilovefish@fish.fish","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
-("Deutch Tamás","deutchtamas@kormany.hu","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
-("Walton Goggins","waltongoggingshollywood@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
+("DeutchTamás","deutchtamas@kormany.hu","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
+("WaltonGoggins","waltongoggingshollywood@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o"),
 ("poharnyiAdmin", "poharnyiAdmin@gmail.com", "$argon2id$v=19$m=65536,t=3,p=4$aHw3kmpIBeoIUUgnd637sQ$KJ2Jdyx6oPAEYzMPNx/OfKIOdsRp88kPRuRMtqfzsWY")
 ;
 UPDATE `felhasználó` SET `Admin` = '1' WHERE `felhasználó`.`FelhID` = 1;
@@ -18,22 +18,22 @@ UPDATE `felhasználó` SET `Admin` = '1' WHERE `felhasználó`.`FelhID` = 11;
 
 INSERT INTO Felhasználó(Felhasználónév,Email,Jelszó,ProfilKepUtvonal)
 VALUES
-("Balu a Fotomaniakus","imadomafurryket@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o","dog.png");
+("BaluaFotomaniakus","imadomafurryket@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o","dog.png");
 INSERT INTO Koktél(Keszito,KoktelCim,Recept,Alkoholos,Alap,Közösségi,AlapMennyiseg)
 VALUES
-(1,"Citrom Húzó","Egy felespohárt töltsünk félig Ouzo-val, majd facsarjunk bele egy kis citromot",true,"Ouzou",false,50),
+(1,"Citrom Húzó","Egy felespohárt töltsünk félig Ouzo-val, majd facsarjunk bele egy kis citromot",true,"Ouzou",false,10),
 (2,"Martini","nem fogom leírni kézzel a receptet",true,"Gin",false,50),
-(2,"A Bánat Eloszlatója","Tötsünk egy 0.5L-es poharat a tetejéig Jack Danielsel",true,"Jack Daniels",false,50),
+(2,"A Bánat Eloszlatója","Tötsünk egy 0.5L-es poharat a tetejéig Jack Danielsel",true,"Jack Daniels",false,500),
 (3,"Sommersby Light","Almalevet keverjunk ossze ketszer annyi szodavizzel",true,"Almalé",false,45),
-(1,"Diétás Drakula","Tötsünk egy 0.5L-es pohárba tetszőleges mennyiségű szörpot, majd facsarjunk bele egy kis grapefruitot. Tálaljuk egy meggyel a tetején.",true,"Meggyszörp",false,50),
-(6,"Mennyei Elixir","200ml Szentelt vízhez adjunk hozzá 80mlnyi almalevet a jó és a rossz tudás fájáról és 100mlnyi Isten Vére bort és tálaljuk 3 kocka jéggel. Kivállóan illik egy szelet kovásztalan kenyérhez és szárított halhoz.",false,"Szentelt Víz",true,50),
-(4,"Daredevil","30ml rumot töltsünk egy pohárba amiben jég van, majd töltsünk rá 150ml narancslevet,75ml ananász és vörösáfonya lét, majd keverjük el és tálaljuk mentalevéllel.",true,"Rum",true,50),
-(10,"Hideg Fúzió","15ml everclearhez adjunk hozzá 10ml kék curacao-t és 5ml Ouzout.",true,"Everclear",true,50),
-(8,"Halászlé","20ml Sakehoz adjunk hozzá 40ml Gint és 1ml halsűrítményt",true,"Sake",true,50),
-(10,"Anti-Feral Serum","20ml Uborkaléhez adjunk 80ml sima Monstert",false,"Uborkalé",true,50),
+(1,"Diétás Drakula","Tötsünk egy 0.5L-es pohárba tetszőleges mennyiségű szörpot, majd facsarjunk bele egy kis grapefruitot. Tálaljuk egy meggyel a tetején.",true,"Meggyszörp",false,300),
+(6,"Mennyei Elixir","200ml Szentelt vízhez adjunk hozzá 80mlnyi almalevet a jó és a rossz tudás fájáról és 100mlnyi Isten Vére bort és tálaljuk 3 kocka jéggel. Kivállóan illik egy szelet kovásztalan kenyérhez és szárított halhoz.",false,"Szentelt Víz",true,380),
+(4,"Daredevil","30ml rumot töltsünk egy pohárba amiben jég van, majd töltsünk rá 150ml narancslevet,75ml ananász és vörösáfonya lét, majd keverjük el és tálaljuk mentalevéllel.",true,"Rum",true,255),
+(10,"Hideg Fúzió","15ml everclearhez adjunk hozzá 10ml kék curacao-t és 5ml Ouzout.",true,"Everclear",true,30),
+(8,"Halászlé","20ml Sakehoz adjunk hozzá 40ml Gint és 1ml halsűrítményt",true,"Sake",true,61),
+(10,"Anti-Feral Serum","20ml Uborkaléhez adjunk 80ml sima Monstert",false,"Uborkalé",true,100),
 (9,"Folyékony Kokain","Everclearhez adjunk egy kis speedet",true,"Everclear",true,50),
-(1,"Silverhand","20ml Tequillahoz adjunk hozzá egy kiskanálnyi sört, és egy félkanálnyi csípőst.",true,"Tequilla",false,50),
-(5,"Sárrét","15ml Csokilikőrhöz adjunk hozzá 15ml Fahéjjas Jack Danielst és öntsük fel Fehér Monsterrel",true,"Csokilikőr",false,50)
+(1,"Silverhand","20ml Tequillahoz adjunk hozzá egy kiskanálnyi sört, és egy félkanálnyi csípőst.",true,"Tequilla",false,20),
+(5,"Sárrét","15ml Csokilikőrhöz adjunk hozzá 15ml Fahéjjas Jack Danielst és öntsük fel Fehér Monsterrel",true,"Csokilikőr",false,130)
 ;
 
 INSERT INTO Komment(Keszito,HovaIrták,Tartalom,MilyenDologhoz)
@@ -81,11 +81,11 @@ VALUES
 (3,"Jack Daniels",500,"Ml"),
 (4,"Almalé",15, "Ml"),
 (4,"Szodaviz",30, "Ml"),
-(5,"Meggyszörp",20,"Ml"),
-(5,"Grapefruitlé",15,"Ml"),
+(5,"Meggyszörp",250,"Ml"),
+(5,"Grapefruitlé",50,"Ml"),
 (5,"Meggy",1,"Darab"),
 (6,"Szentelt Víz",200,"Ml"),
-(6,"Isten Vére bor",50,"Ml"),
+(6,"Isten Vére bor",100,"Ml"),
 (6,"Almalé",80,"Ml"),
 (7,"Rum",30,"Ml"),
 (7,"Narancslé",150,"Ml"),
