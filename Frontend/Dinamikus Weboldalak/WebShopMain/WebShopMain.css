@@ -3,7 +3,6 @@
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    background-color: aqua;
     align-self: center;
     justify-self: center;
     justify-content: center;
@@ -98,25 +97,12 @@
 display: flex;
     flex-direction: column;
 } 
-/*Kis
-#Rendezes {
-    margin-top: 15px;
-}
-#RendezesSelectDiv {
-    display: flex;
-    flex-direction: column;
-}
-#Rendezes {
-    margin-top: 15px;
-}
-#RendezesSelectDiv {
-    display: flex;
-    flex-direction: column;
-}
+
 /*akciose*/
 #Akciose {
     margin-top: 15px;
 }
+
 #AkcioSelectDiv {
     display: flex;
 }
@@ -131,7 +117,11 @@ display: flex;
 .kartya{
     height: 100%    ;
 }
-.kartya:hover{
+
+.kartya:has(.kartyakep:hover){
+    border: rgb(48, 48, 48) 2px solid;
+}
+.kartya:has(.kartyaBody:hover){ /*:has - css pseudo class - egy parent elemet tudunk változtatni, ha valamelyik childrenjével történik egy esemény - stackoverflow*/
     border: rgb(48, 48, 48) 2px solid;
 }
 .kartyaCim{
@@ -142,6 +132,12 @@ display: flex;
 }
 .ar{
     margin-top: 20px;
+}
+#AkciosAr{
+   color: red   ;
+}
+#Akcios{
+    text-decoration: line-through;
 }
 .kulondiv{
     display: flex;
@@ -163,8 +159,10 @@ display: flex;
     padding: 0px;
 }
 .kartyaGomb{
-    width: 100%;
-    background-color: #04aa6d
+    width: 95%;
+    background-color: #04aa6d;
+    margin: auto;
+    margin-bottom: 10px;
 }
 /*Oldal méretezése*/
 @media only screen and (max-width: 425px) {
@@ -178,4 +176,33 @@ display: flex;
         font-size: small;
     }
 }
+@media (max-width: 500px) {
+/*https://chatgpt.com/share/69ca7722-d10c-832a-b38e-de633fdb67f1*/
+    #kartyaSor > div {
+        flex: 0 0 90%;
+        max-width: 90%;
+    }
 
+    .kartya {
+        width: 90%;
+        margin: auto;
+    }
+
+    .kartyaCim {
+        font-size: 14px;
+        height: auto;
+    }
+
+    .kulondiv {
+        font-size: 12px;
+    }
+
+    .ar {
+        font-size: 14px;
+    }
+
+    .kartyaGomb {
+        font-size: 14px;
+        padding: 6px;
+    }
+}

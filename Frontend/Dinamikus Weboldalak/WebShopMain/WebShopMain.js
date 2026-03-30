@@ -209,7 +209,7 @@ const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
 };
 //Kártya Generálás
 const kartyaGen = async(data,hova)=>{
-
+    console.log(data)
     for (let i = 0; i < data.data.length; i++) {
         const oszlop = document.createElement('div');
         oszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
@@ -221,12 +221,14 @@ const kartyaGen = async(data,hova)=>{
         kartyaMain.setAttribute("id",`kartya${i}`)
         oszlop.appendChild(kartyaMain)
 
-        kartyaMain.addEventListener("click",()=>{
-            window.location.href = `/Termek/${data.data[i].TermekID}`
-        })
+       
 
         let img = document.createElement("img")
         const kartyaKep = await TermekKepLekeres(`/api/WebShop/Keplekeres/${data.data[i].TermekID}`)
+
+         img.addEventListener("click",()=>{
+            window.location.href = `/Termek/${data.data[i].TermekID}`
+        })
         
         const kepURL = URL.createObjectURL(kartyaKep)
         img.setAttribute("src",kepURL)
@@ -238,6 +240,10 @@ const kartyaGen = async(data,hova)=>{
         KartyaBody.classList.add("card-body","kartyaBody")
         KartyaBody.setAttribute("id",`KartyaBody${i}`)
         kartyaMain.appendChild(KartyaBody)
+        
+        KartyaBody.addEventListener("click",()=>{
+            window.location.href = `/Termek/${data.data[i].TermekID}`
+        })
 
         let KartyaCim = document.createElement("h5")
         KartyaCim.classList.add("card-title","kartyaCim")
@@ -289,17 +295,30 @@ const kartyaGen = async(data,hova)=>{
         div3.appendChild(markaErtek)
         adatDiv.appendChild(div3)
         
-
         let ar = document.createElement("h4")
         ar.classList.add("ar")
         ar.setAttribute("id",`${i}kartyaId`)
         ar.innerHTML = data.data[i].Ar + "Ft"
         adatDiv.appendChild(ar)
 
+        if (data.data[i].TermekDiscount != null) 
+        {
+            ar.style.textDecoration="line-through"
+            let AkciosAr = (data.data[i].Ar/100)*(100-data.data[i].TermekDiscount)
+            console.log(AkciosAr)
+            let AkciosArHely = document.createElement("h5")
+            AkciosArHely.innerHTML = AkciosAr + "Ft"
+            AkciosArHely.style.color ="red"
+            adatDiv.appendChild(AkciosArHely)
+        }
+        
+
+        
+
         let kosarba = document.createElement("button")
         kosarba.classList.add("btn","kartyaGomb")
         kosarba.innerHTML = "kosárba"
-        adatDiv.appendChild(kosarba)
+        kartyaMain.appendChild(kosarba)
 
     }
 }

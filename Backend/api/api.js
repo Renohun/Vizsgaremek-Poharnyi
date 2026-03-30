@@ -1744,6 +1744,9 @@ router.post('/Webshop/szures', async (request, response) => {
             console.log(typeof ertekLista[0]);
             console.log('2') 
         */
+
+       //SZÉPÍTENI KELL!!!
+       
         let szurtTermekek;
         if (ertekLista.length == 1) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0]]);
