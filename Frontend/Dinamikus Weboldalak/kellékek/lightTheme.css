@@ -2,6 +2,15 @@ body {
     background-color: rgb(223, 223, 223);
     color: black;
 }
+#koktelurlap {
+    background-color: rgb(223, 223, 223);
+    color: black;
+}
+#osszetevoDiv {
+    background-color: rgb(179, 179, 179);
+    padding: 10px;
+    border-radius: 5px;
+}
 .hatter {
     background-color: rgb(146, 197, 7);
 }

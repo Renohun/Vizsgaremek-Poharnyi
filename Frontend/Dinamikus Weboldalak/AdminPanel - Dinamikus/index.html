@@ -72,7 +72,7 @@
         </nav>
         <div class="container-fluid">
             <div class="row">
-                <div class="d-flex flex-column col-md-3 col-sm-3 col-lg-2 col-xl-1 col-3 vh-100 shadow" id="Sidebar">
+                <div class="d-flex flex-column col-md-3 col-sm-4 col-lg-2 col-xl-1 col-4 vh-100 shadow" id="Sidebar">
                     <div class="mb-auto mt-auto">
                         <p class="text-dark fs-5 sideBarGomb" name="jelentesekKezelese">Jelenetesek Kezelese</p>
                     </div>
@@ -83,30 +83,30 @@
                         <p class="text-dark fs-5 sideBarGomb" name="termekFeltoltes">Termek Kezeles</p>
                     </div>
                 </div>
-                <div name="jelentesekKezelese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5">
+                <div name="jelentesekKezelese" class="col-md-9 col-sm-8 col-lg-10 col-xl-11 col-8 mt-5">
                     <div class="row d-flex justify-content-around flex-row">
                         <input
                             type="button"
                             id="felhasznalokJelentesei"
                             value="Felhasznalok"
-                            class="btn btn-success text-white p-3 col-3 mb-5 shadow-sm"
+                            class="btn btn-success text-white p-3 col-9 col-sm-3 mb-5 shadow-sm"
                         />
                         <input
                             type="button"
                             id="koktelokJelentesei"
                             value="Koktelok"
-                            class="btn btn-success text-white p-3 col-3 mb-5 shadow-sm"
+                            class="btn btn-success text-white p-3 col-9 col-sm-3 mb-5 shadow-sm"
                         />
                         <input
                             type="button"
                             id="kommentekJelentesei"
                             value="Kommentek"
-                            class="btn btn-success text-white p-3 col-3 mb-5 shadow-sm"
+                            class="btn btn-success text-white p-3 col-9 col-sm-3 mb-5 shadow-sm"
                         />
                     </div>
                     <div class="row d-flex align-items-stretch" id="jelentesekCard"></div>
                 </div>
-                <div hidden="true" name="koktelokKezelese" class="col-md-9 col-sm-9 col-lg-10 col-xl-11 col-9 mt-5">
+                <div hidden="true" name="koktelokKezelese" class="col-md-9 col-sm-8 col-lg-10 col-xl-11 col-8 mt-5">
                     <div class="container-fluid d-flex row flex-column">
                         <h4>Koktél feltoltés</h4>
                         <input type="file" class="form-control ms-2 mb-3" id="koktelKepFeltoltes" required />
@@ -220,7 +220,7 @@
                         />
                     </div>
                 </div>
-                <div name="termekFeltoltes" class="col-sm-9 col-lg-10 col-xl-11 col-9 mt-5" hidden="true">
+                <div name="termekFeltoltes" class="col-sm-8 col-md-9 col-lg-10 col-xl-11 col-8 mt-5" hidden="true">
                     <div class="container-fluid d-flex flex-column">
                         <!--nev, leiras, kiszereles, keszlet, kep, kategoria, marka,  szarmazas(orszag), alkohol szazalek, kora?, ar-->
                         <!--learazashoz egy extra resz ahol nev alapu kereses alapjan lehet allitani a learazas osszeget-->

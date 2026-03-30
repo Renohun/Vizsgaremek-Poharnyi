@@ -76,7 +76,7 @@ function koktelRendereles(koktelok) {
     koktelok.koktelokAdat.forEach((koktel) => {
         if (koktel != null) {
             const divMB = document.createElement('div');
-            divMB.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
+            divMB.classList.add('col-12', 'col-sm-6', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
             DOMsor.appendChild(divMB);
 
             const cardDiv = document.createElement('div');

@@ -113,8 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             let ujOszlop = document.createElement('div');
                             ujOszlop.classList.add(
-                                'col-8',
-                                'col-sm-7',
+                                'col-12',
+                                'col-sm-6',
                                 'col-md-6',
                                 'col-lg-6',
                                 'col-xl-3',
@@ -308,8 +308,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             console.log(rows.koktelok[i]);
                             let ujOszlop = document.createElement('div');
                             ujOszlop.classList.add(
-                                'col-8',
-                                'col-sm-7',
+                                'col-12',
+                                'col-sm-6',
                                 'col-md-6',
                                 'col-lg-6',
                                 'col-xl-3',
@@ -504,8 +504,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     while (sorokHossza % 4 != 0) {
                         let ujOszlop = document.createElement('div');
                         ujOszlop.classList.add(
-                            'col-8',
-                            'col-sm-7',
+                            'col-12',
+                            'col-sm-6',
                             'col-md-6',
                             'col-lg-6',
                             'col-xl-3',
@@ -541,8 +541,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (i % 2 != 0) {
                             let ujOszlop = document.createElement('div');
                             ujOszlop.classList.add(
-                                'col-8',
-                                'col-sm-7',
+                                'col-12',
+                                'col-sm-6',
                                 'col-md-6',
                                 'col-lg-6',
                                 'col-xl-3',
