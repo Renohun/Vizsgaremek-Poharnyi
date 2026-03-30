@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 //Authenticator Middleware
 function AuthMiddleware(req, res, next) {
     const token = req.cookies.auth_token;
-    console.log('Auth: ' + JSON.stringify(jwt.decode(token)));
+    //console.log('Auth: ' + JSON.stringify(jwt.decode(token)));
 
     if (token == undefined) {
         res.redirect('/LepjBe');

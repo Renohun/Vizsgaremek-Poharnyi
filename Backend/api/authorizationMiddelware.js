@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 function AuthorizaitionMiddleware(req, res, next) {
     const query = 'SELECT Admin FROM felhasználó WHERE FelhID LIKE ?';
-    console.log('Jogositas: ' + JSON.stringify(jwt.decode(req.cookies.auth_token)));
+    //console.log('Jogositas: ' + JSON.stringify(jwt.decode(req.cookies.auth_token)));
 
     DBconnetion.query(query, [req.data.userID], (err, rows) => {
         if (err) {

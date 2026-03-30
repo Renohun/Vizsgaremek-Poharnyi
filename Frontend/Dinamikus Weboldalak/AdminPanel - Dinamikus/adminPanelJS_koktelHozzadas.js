@@ -49,14 +49,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (vanEMar == false) {
             jelvenyTombObj.push(jelvenyObj);
-            this.classList.remove('btn-info');
-            this.classList.add('btn-primary');
+            this.classList.remove('btn-success');
+            this.classList.add('sotetites');
         } else {
             //torolje a mar ilyen eltarolt jelvenyt
             jelvenyTombObj.splice(index, 1);
 
-            this.classList.add('btn-info');
-            this.classList.remove('btn-primary');
+            this.classList.remove('sotetites');
+            this.classList.add('btn-success');
         }
         console.log(jelvenyTombObj);
     }
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gomb.setAttribute('type', 'button');
             gomb.setAttribute('value', data.allergenek[i].JelvényNeve);
             gomb.dataset.kategoria = 'allergen';
-            gomb.classList.add('btn', 'btn-info');
+            gomb.classList.add('btn', 'btn-success', 'shadow-sm', 'w-100');
             //once, hogy megveletlenul se keruljon fel tobb EventListener egy Elementre, hiszen akkor tobbszor futna le az fv.
             gomb.addEventListener('click', osszetevoGombListener);
             koktelAllergenekSelect.appendChild(gomb);
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gomb.setAttribute('type', 'button');
             gomb.setAttribute('value', data.erossegek[i].JelvényNeve);
             gomb.dataset.kategoria = 'erosseg';
-            gomb.classList.add('btn', 'btn-info');
+            gomb.classList.add('btn', 'btn-success', 'shadow-sm', 'w-100');
             gomb.addEventListener('click', osszetevoGombListener);
             koktelErossegeSelect.appendChild(gomb);
         }
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gomb.setAttribute('type', 'button');
             gomb.setAttribute('value', data.izek[i].JelvényNeve);
             gomb.dataset.kategoria = 'iz';
-            gomb.classList.add('btn', 'btn-info');
+            gomb.classList.add('btn', 'btn-success', 'shadow-sm', 'w-100');
             gomb.addEventListener('click', osszetevoGombListener);
             koktelIzeSelect.appendChild(gomb);
         }

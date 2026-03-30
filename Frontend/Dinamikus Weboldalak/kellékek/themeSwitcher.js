@@ -50,10 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
             currentTheme[poz].setAttribute('href', folderPath);
             //Itt mentem el a azt hogy mire valtottam a temat, igy majd ha script megleszhivva ujra, akkor mar lesz mentve a localstorage-ba igy mi majd meglesz nezve hogy mi van elmentve
             localStorage.setItem('Theme', 'DarkTheme');
+            //light temat kell beallitani icon-nak
+            const img = document.getElementById('themeSwitcherimg');
+            img.setAttribute('src', '../kellékek/831682.png');
         } else {
             folderPath += 'lightTheme.css';
             currentTheme[poz].setAttribute('href', folderPath);
-
+            const img = document.getElementById('themeSwitcherimg');
+            img.setAttribute('src', '../kellékek/free-moon-icon-2304-thumb.png');
             // detto
             localStorage.setItem('Theme', 'LightTheme');
         }
