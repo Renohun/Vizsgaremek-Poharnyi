@@ -1624,6 +1624,15 @@ module.exports = router;
 //
 //
 //
+router.post('/Webshop/KosarKuldes', authenticationMiddleware, async(request,response)=>{
+    try {
+        
+    } catch (error) {
+        console.log(error)
+    }
+
+})
+
 router.get('/WebShop/TermekLekeres', async (request, response) => {
     try {
         const query = 'SELECT * FROM webshoptermek';
@@ -1746,7 +1755,7 @@ router.post('/Webshop/szures', async (request, response) => {
         */
 
        //SZÉPÍTENI KELL!!!
-       
+
         let szurtTermekek;
         if (ertekLista.length == 1) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0]]);
