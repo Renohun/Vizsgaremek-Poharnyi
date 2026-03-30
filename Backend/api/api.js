@@ -2253,13 +2253,33 @@ router.post('/Webshop/szures', async (request, response) => {
     }
 });
 
-router.post('/Webshop/KosarKuldes', authenticationMiddleware, async(request,response)=>{
-    try {
-        
-    } catch (error) {
-        console.log(error)
-    }
+router.post('/Webshop/KosarKuldes/:id', async(request,response)=>{
+     if (request.cookies.auth_token != null) 
+        {
+           try {
+                const id = request.params.id;
+                const mennyiseg = 1;
+                const ArLekeres = "SELECT Ar FROM webshoptermek WHERE TermekID = ?"
+                response.status(200).json({
+                    asd:"asd"
+                })
+              } 
+         catch (error) 
+         {
+            console.log(error)
+            response.status(500).json
+            ({
+                asd:"asd"
+             })
+        }
 
+    } 
+    else {
+    response.status(200).json({
+                    bejel:"jelentkezz be"
+                })
+        }
+   
 })
 
 module.exports = router;
