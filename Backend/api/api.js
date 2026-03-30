@@ -2041,7 +2041,8 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
     }
 });
 
-module.exports = router;
+
+
 //
 //
 //
@@ -2051,14 +2052,6 @@ module.exports = router;
 //
 //
 //
-router.post('/Webshop/KosarKuldes', authenticationMiddleware, async(request,response)=>{
-    try {
-        
-    } catch (error) {
-        console.log(error)
-    }
-
-})
 
 router.get('/WebShop/TermekLekeres', async (request, response) => {
     try {
@@ -2259,3 +2252,14 @@ router.post('/Webshop/szures', async (request, response) => {
         });
     }
 });
+
+router.post('/Webshop/KosarKuldes', authenticationMiddleware, async(request,response)=>{
+    try {
+        
+    } catch (error) {
+        console.log(error)
+    }
+
+})
+
+module.exports = router;
