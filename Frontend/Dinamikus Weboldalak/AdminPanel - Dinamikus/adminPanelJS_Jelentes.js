@@ -167,13 +167,31 @@ document.addEventListener('DOMContentLoaded', () => {
                             let jelentesekLista = document.createElement('ul');
                             //console.log(rows.koktelok[i][0].jelentesIndokok[0][0].JelentesIndoka);
 
-                            for (let j = 0; j < rows.felhasznalok[i][0].jelentesIndokok[0].length; j++) {
-                                if (rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
-                                    let jelentesekIndokok = document.createElement('li');
-                                    jelentesekIndokok.innerText =
-                                        rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                    jelentesekLista.appendChild(jelentesekIndokok);
+                            if (rows.felhasznalok[i][0].jelentesIndokok[0].length < 3) {
+                                for (let j = 0; j < rows.felhasznalok[i][0].jelentesIndokok[0].length; j++) {
+                                    if (rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
+                                        let jelentesekIndokok = document.createElement('li');
+                                        jelentesekIndokok.innerText =
+                                            rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                        jelentesekLista.appendChild(jelentesekIndokok);
+                                    }
                                 }
+                            } else if (rows.felhasznalok[i][0].jelentesIndokok[0].length >= 3) {
+                                for (let j = 0; j < 3; j++) {
+                                    if (rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
+                                        let jelentesekIndokok = document.createElement('li');
+                                        jelentesekIndokok.innerText =
+                                            rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                        jelentesekLista.appendChild(jelentesekIndokok);
+                                    }
+                                }
+
+                                const jelentesXIndok = document.createElement('li');
+                                jelentesXIndok.innerText =
+                                    'Tovabbi ' +
+                                    parseInt(rows.felhasznalok[i][0].jelentesIndokok[0].length - 3) +
+                                    ' jelentes...';
+                                jelentesekLista.appendChild(jelentesXIndok);
                             }
 
                             if (jelentesekLista.children.length <= 0) {
