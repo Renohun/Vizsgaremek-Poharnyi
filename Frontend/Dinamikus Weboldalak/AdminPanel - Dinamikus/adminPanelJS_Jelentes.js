@@ -166,22 +166,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             let jelentesekLista = document.createElement('ul');
                             //console.log(rows.koktelok[i][0].jelentesIndokok[0][0].JelentesIndoka);
-
+                            //rows.felhasznalok[i][0].jelentesIndokok[0].length avagy hany indok van
+                            //rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka maga az indok
                             if (rows.felhasznalok[i][0].jelentesIndokok[0].length < 3) {
                                 for (let j = 0; j < rows.felhasznalok[i][0].jelentesIndokok[0].length; j++) {
                                     if (rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
-                                        let jelentesekIndokok = document.createElement('li');
-                                        jelentesekIndokok.innerText =
-                                            rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                        jelentesekLista.appendChild(jelentesekIndokok);
+                                        let indokArr =
+                                            rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
+                                        console.log(indokArr.length);
+
+                                        if (indokArr.length < 8) {
+                                            let jelentesekIndokok = document.createElement('li');
+                                            jelentesekIndokok.innerText =
+                                                rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        } else if (indokArr.length >= 8) {
+                                            console.log('beleptem ide');
+
+                                            let indokString = '';
+                                            for (let k = 0; k < 8; k++) {
+                                                indokString += indokArr[k];
+                                            }
+                                            let jelentesekIndokok = document.createElement('li');
+                                            indokString + '...';
+                                            jelentesekIndokok.innerText = indokString;
+                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        }
                                     }
                                 }
                             } else if (rows.felhasznalok[i][0].jelentesIndokok[0].length >= 3) {
                                 for (let j = 0; j < 3; j++) {
-                                    if (rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
+                                    let indokArr =
+                                        rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
+                                    console.log(indokArr.length);
+
+                                    if (indokArr.length < 8) {
                                         let jelentesekIndokok = document.createElement('li');
                                         jelentesekIndokok.innerText =
                                             rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                        jelentesekLista.appendChild(jelentesekIndokok);
+                                    } else if (indokArr.length >= 8) {
+                                        //console.log('beleptem ide');
+
+                                        let indokString = '';
+                                        for (let k = 0; k < 8; k++) {
+                                            indokString += ' ' + indokArr[k];
+                                        }
+                                        let jelentesekIndokok = document.createElement('li');
+                                        indokString += '...';
+                                        jelentesekIndokok.innerText = indokString;
                                         jelentesekLista.appendChild(jelentesekIndokok);
                                     }
                                 }
