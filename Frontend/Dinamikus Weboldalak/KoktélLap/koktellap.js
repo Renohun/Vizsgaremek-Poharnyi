@@ -36,7 +36,7 @@ const AdatLekeres=async(url)=>{
 }
 const AdatLekeresKep=async(url)=>{
     const valasz=await fetch(url,{
-        method:"POST",
+        method:"GET",
         headers:{"Content-Type":"image/jpg"}
     })
     if (valasz.ok) {
@@ -44,9 +44,9 @@ const AdatLekeresKep=async(url)=>{
     }
 }
 
-const AdatKuldes=async(url,adat)=>{
+const AdatKuldes=async(url,adat,tipus)=>{
     const valasz=await fetch(url,{
-        method:"POST",
+        method:tipus,
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(adat)
     })
@@ -289,7 +289,7 @@ async function Kommentkuldes() {
         Koktél:koktel[koktel.length-1]
     }
     //Elküldjük a kommentet a backendre
-    await AdatKuldes(`/api/Koktel/SendKomment`,tartalom)
+    await AdatKuldes(`/api/Koktel/SendKomment`,tartalom,"POST")
     //Úrjatöltjük az oldlat
     Betoltes()
 }
@@ -329,7 +329,7 @@ async function jelentes(mit,tipus,kit) {
         }
 
         //ezeket elküldjük az endpointra, ahol feldolgozzuk és a választ eltároljuk
-        const jelentesSend=await AdatKuldes(`/api/Koktel/SendJelentes`,adatok)
+        const jelentesSend=await AdatKuldes(`/api/Koktel/SendJelentes`,adatok,"POST")
 
         //Ha nincs hiba
         if (jelentesSend.message==false) {
@@ -379,19 +379,19 @@ function Obfuszkacio(){
 function torles(id){
     document.getElementById("KoktDel").value="Koktél Törlése"
     document.getElementById("KoktDel").addEventListener("click",async()=>{
-        await AdatKuldes("/api/Koktel/DeleteKoktel",{id:id})
+        await AdatKuldes("/api/Koktel/DeleteKoktel",{id:id},"DELETE")
         window.location.reload()
     })
 }
 
 async function kommentTorles(id){
-     await AdatKuldes("/api/Koktel/DeleteKomment",{id:id})
+     await AdatKuldes("/api/Koktel/DeleteKomment",{id:id},"DELETE")
      Betoltes()
      
 }
 
 async function kedveles(id) {
-    await AdatKuldes("/api/Koktel/SendKedvenc",{Koktél:id})
+    await AdatKuldes("/api/Koktel/SendKedvenc",{Koktél:id},"POST")
     Betoltes()
 }
 
@@ -461,7 +461,7 @@ function ertekeles(ertekelteE,mennyire) {
                 return valaszott.value=="★"
             }) 
             //Aminek a hosszát elküljük a backendre a koktél idjével
-            await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:a.length,Koktél:koktel[koktel.length-1]})
+            await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:a.length,Koktél:koktel[koktel.length-1]},"POST")
             //és újratöltjük az oldalt hogy ne adhasson új értékelést
             Betoltes()
         },{once:true})

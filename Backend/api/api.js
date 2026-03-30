@@ -1510,7 +1510,7 @@ router.post('/AdminPanel/KepLekeres/:id', async (request, response) => {
     }
 });
 
-router.post('/Koktelok/KepLekeres', async (request, response) => {
+router.get('/Koktelok/KepLekeres', async (request, response) => {
     try {
         let profil = jwt.decode(request.cookies.auth_token).userID;
         let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
@@ -1782,7 +1782,7 @@ router.post('/Koktel/SendKedvenc', async (request, response) => {
     });
 });
 
-router.post('/Koktel/DeleteKomment', async (request, response) => {
+router.delete('/Koktel/DeleteKomment', async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE KommentID LIKE ?';
     const JelentesLekeres =
         'SELECT JelentesID from jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?';
@@ -1802,7 +1802,7 @@ router.post('/Koktel/DeleteKomment', async (request, response) => {
     });
 });
 
-router.post('/Koktel/DeleteKoktel', async (request, response) => {
+router.delete('/Koktel/DeleteKoktel', async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const ErtekelesTorles = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const JelentesLekeres =
@@ -1909,7 +1909,7 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
     }
 });
 
-router.post('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
+router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
     try {
         response.sendFile(path.join(__dirname, '..', 'images', request.params.utvonal));
     } catch (error) {
