@@ -10,6 +10,7 @@ const multer = require('multer');
 
 const path = require('path');
 const fajlkezelo = require('fs/promises');
+const { error } = require('console');
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -40,6 +41,24 @@ router.get('/test', (req, res) => {
         }
     });
 });
+
+async function kepculling(){
+    const felhkep="SELECT ProfilkepUtvonal FROM felhasználó;SELECT BoritoKepUtvonal FROM koktél;SELECT TermekKepUtvonal FROM webshoptermek"
+    let sqlkepek=await lekeres(felhkep)
+    let kepek=[]
+    for (let i = 0; i < sqlkepek.length; i++) {
+        sqlkepek[i].forEach(element => {
+            kepek.push(Object.values(element)[0])
+        });
+    } 
+    let mappa=await fajlkezelo.readdir(path.join(__dirname, '../images/'))
+    for (let i = 0; i < mappa.length; i++) {
+        if (!(kepek.includes(mappa[i]))) {
+            fajlkezelo.rm(path.join(__dirname, '../images/',mappa[i]))
+        }
+    }
+}
+
 //Koktelok vegpontok
 router.post('/sutiJelenlete', (req, res) => {
     if (!req.cookies.auth_token) {
@@ -385,32 +404,47 @@ router.post('/regisztracio', async (request, response) => {
     try {
         //console.log(request.body);
 
-        const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
+        if (request.body.jelszo == request.body.jelszoIsmet) {
+            if (
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.email) &&
+                /^[a-zA-Z0-9_]{2,30}$/.test(request.body.felhaszanaloNev) &&
+                /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.jelszo) &&
+                request.body.ASZF
+            ) {
+                const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
 
-        felhasznaloObjReg = {
-            email: request.body.email,
-            felhasznaloNev: request.body.felhasznaloNev,
-            jelszo: hashed
-        };
+                const felhasznaloObjReg = {
+                    email: request.body.email,
+                    felhasznaloNev: request.body.felhasznaloNev,
+                    jelszo: hashed
+                };
 
-        //console.log(felhasznaloObjReg.jelszo);
+                const duplikacioEll = 'SELECT FelhID FROM felhasználó WHERE Felhasználónév LIKE ? OR Email LIKE ?';
 
-        const sqlQuery = 'INSERT INTO felhasználó (Felhasználónév, Email, Jelszó) VALUES (?,?,?)';
+                const [rows] = await DBconnetion.promise().query(duplikacioEll, [
+                    felhasznaloObjReg.felhasznaloNev,
+                    felhasznaloObjReg.email
+                ]);
 
-        DBconnetion.query(
-            sqlQuery,
-            [felhasznaloObjReg.felhasznaloNev, felhasznaloObjReg.email, felhasznaloObjReg.jelszo],
-            (err, result) => {
-                if (err) {
-                    response.status(500).json({
-                        message: 'Hiba tortent adat feltoltesnel!' + err
-                    });
-                } else {
-                    response.status(200).json({
-                        message: 'Sikeres regisztracio!',
-                        result: result.insertId
-                    });
-                    /*
+                if (rows.length == 0) {
+                    const sqlQuery = 'INSERT INTO felhasználó (Felhasználónév, Email, Jelszó) VALUES (?,?,?)';
+
+                    DBconnetion.query(
+                        sqlQuery,
+                        [felhasznaloObjReg.felhasznaloNev, felhasznaloObjReg.email, felhasznaloObjReg.jelszo],
+                        (err, result) => {
+                            if (err) {
+                                response.status(500).json({
+                                    message: 'Hiba tortent adat feltoltesnel!' + err
+                                });
+                            } else {
+                                response.status(200).json({
+                                    megEgyezik: false,
+                                    kriterium: false,
+                                    duplikacio: false,
+                                    sikeres: true
+                                });
+                                /*
                     console.log(
                         'Adatok melyek felettek toltve: ' +
                             felhasznaloObjReg.felhasznaloNev +
@@ -419,9 +453,22 @@ router.post('/regisztracio', async (request, response) => {
                             ' ' +
                             felhasznaloObjReg.jelszo
                     );*/
+                            }
+                        }
+                    );
+                } else {
+                    response
+                        .status(200)
+                        .json({ megEgyezik: false, kriterium: false, duplikacio: true, sikeres: false });
                 }
+            } else {
+                response.status(200).json({ megEgyezik: false, kriterium: true, duplikacio: false, sikeres: false });
             }
-        );
+        } else {
+            response.status(200).json({ megEgyezik: true, kriterium: false, duplikacio: false, sikeres: false });
+        }
+
+        //console.log(felhasznaloObjReg.jelszo);
     } catch (err) {
         console.log('Valamilyen extra hiba tortent: ' + err);
         response.status(500).json({
@@ -438,61 +485,74 @@ router.post('/belepes', (request, response) => {
             felhasznalo: request.body.felhasznalo,
             jelszo: request.body.jelszo
         };
-        const sqlQuery = 'SELECT FelhID, Email, Jelszó, Admin FROM felhasználó WHERE Email LIKE ?';
 
-        DBconnetion.query(sqlQuery, [felhasznaloObj.felhasznalo], async (err, rows) => {
-            if (err) {
-                response.status(500).json({
-                    message: 'Adatbazissal kapcsolatos hiba!'
-                });
-            } else {
-                //ez az adatbazisbol kapott felhasznaloi sor
-                //console.log(rows);
+        //kriterium ellenorzes -- min / max hozzatetele
+        if (
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(felhasznaloObj.felhasznalo) &&
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{2,}$/.test(felhasznaloObj.jelszo)
+        ) {
+            const sqlQuery = 'SELECT FelhID, Email, Jelszó, Admin FROM felhasználó WHERE Email LIKE ?';
 
-                const felhasznaloDB = rows[0];
-                //console.log(felhasznaloDB);
-
-                if (felhasznaloDB == undefined) {
-                    response.status(200).json({ message: 'Hibas email! Avagy nem letezik ilyen felhasznalo' });
+            DBconnetion.query(sqlQuery, [felhasznaloObj.felhasznalo], async (err, rows) => {
+                if (err) {
+                    response.status(500).json({
+                        message: 'Adatbazissal kapcsolatos hiba!',
+                        error: err
+                    });
                 } else {
-                    //megnezi az argon package ellenorzi hogy az eltarolt jelszo megegyezik a beirt jelszoval
-                    const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
-                    if (jelszoEll) {
-                        //web token letrehozasa
-                        //console.log('Adatbazis: ' + felhasznaloDB.FelhID);
-                        //console.log('Adatbazis: ' + felhasznaloDB.Admin);
-                        //console.log(felhasznaloObj);
+                    //ez az adatbazisbol kapott felhasznaloi sor
+                    //console.log(rows);
 
-                        const WebToken = JWT.sign(
-                            {
-                                userID: felhasznaloDB.FelhID,
-                                adminStatus: felhasznaloDB.Admin
-                            },
-                            process.env.JWT_SECRET,
-                            {
-                                expiresIn: '1h'
-                            }
-                        );
+                    const felhasznaloDB = rows[0];
+                    //console.log(felhasznaloDB);
 
-                        //sutibe valo betetele
-                        response.cookie('auth_token', WebToken, {
-                            httpOnly: true,
-                            sameSite: 'none',
-                            secure: true,
-                            path: '/'
-                        });
-
-                        response.status(200).json({ message: 'sikeres bejelentkezes' });
+                    if (felhasznaloDB == undefined) {
+                        response.status(200).json({ kriterium: false, hiba: true, sikeres: false });
                     } else {
-                        response.status(200).json({
-                            message: 'Hibas jelszo'
-                        });
+                        //megnezi az argon package ellenorzi hogy az eltarolt jelszo megegyezik a beirt jelszoval
+                        const jelszoEll = await argon.verify(felhasznaloDB.Jelszó, felhasznaloObj.jelszo);
+                        if (jelszoEll) {
+                            //web token letrehozasa
+                            //console.log('Adatbazis: ' + felhasznaloDB.FelhID);
+                            //console.log('Adatbazis: ' + felhasznaloDB.Admin);
+                            //console.log(felhasznaloObj);
+
+                            const WebToken = JWT.sign(
+                                {
+                                    userID: felhasznaloDB.FelhID,
+                                    adminStatus: felhasznaloDB.Admin
+                                },
+                                process.env.JWT_SECRET,
+                                {
+                                    expiresIn: '1h'
+                                }
+                            );
+
+                            //sutibe valo betetele
+                            response.cookie('auth_token', WebToken, {
+                                httpOnly: true,
+                                sameSite: 'none',
+                                secure: true,
+                                path: '/'
+                            });
+
+                            response.status(200).json({ kriterium: false, hiba: false, sikeres: true });
+                        } else {
+                            response.status(200).json({
+                                kriterium: false,
+                                hiba: true,
+                                sikeres: false
+                            });
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            response.status(200).json({ kriterium: true, hiba: false, sikeres: false });
+        }
     } catch (err) {
-        console.log('Valami egyeb hiba tortent: ' + err);
+        console.error(err);
+        response.status(500).json({ message: 'Hiba van a vegpontban', error: err });
     }
 });
 //
@@ -770,7 +830,7 @@ router.post(
     }
 );
 
-router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, (req, res) => {
+router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, async(req, res) => {
     try {
         const payload = jwt.decode(req.cookies.auth_token);
         console.log(req.body);
@@ -848,6 +908,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
             });
         });
         res.status(200).json({ message: 'Sikeres koktel feltoltes' });
+        await kepculling()
     } catch (err) {
         console.log(err);
     }
@@ -987,6 +1048,7 @@ router.post('/AdminPanel/TermekFeltoltes', async (req, res) => {
                     termekAra
                 ]);
                 res.status(200).json({ message: 'Termek hozzadva sikeresen' });
+                await kepculling()
             }
         }
     } catch (error) {
@@ -1276,13 +1338,12 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     //Lekérdezés
     try {
         kosar = await lekeres(KosarLekeres, vasarlo);
-        if (kosar.length == 0) {
+        kosartermekek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
+        if (kosartermekek.length == 0) {
             response.status(200).json({
                 message: 'Üres Kosár'
             });
         } else {
-            kosartermekek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
-
             for (let i = 0; i < kosartermekek.length; i++) {
                 let temp = await lekeres(TermekLekeres, kosartermekek[i].TermekID);
                 termekek.push(temp[0]);
@@ -1303,7 +1364,8 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
+
+router.delete('/AdatlapLekeres/Kosarurites', async (request, response) => {
     let mit = jwt.decode(request.cookies.auth_token).userID;
     let MelyikKosár = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
     let MelyikKosárAz;
@@ -1325,7 +1387,9 @@ router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
         });
     }
 });
-router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
+
+
+router.delete('/AdatlapLekeres/TermekUrites', async (request, response) => {
     let mit = request.body.termék;
     let honnan = await lekeres(
         'SELECT SessionID FROM kosár WHERE UserID LIKE ?',
@@ -1344,7 +1408,9 @@ router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
         });
     }
 });
-router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
+
+
+router.patch('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     let mit = request.body.termék;
     let honnan = await lekeres(
         'SELECT SessionID FROM kosár WHERE UserID LIKE ?',
@@ -1367,7 +1433,8 @@ router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
+
+router.delete('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     let ki = request.body.id;
     let mit = jwt.decode(request.cookies.auth_token).userID;
     let milyen = request.body.tipus;
@@ -1396,7 +1463,8 @@ router.post('/AdatlapLekeres/KepFeltoltes', fileStorage.array('profilkep'), asyn
         });
     }
 });
-router.post('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response) => {
+
+router.get('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response) => {
     try {
         let melyik = request.params.melyik;
         let kepkereses = 'SELECT BoritoKepUtvonal FROM Koktél WHERE KoktélID LIKE ?';
@@ -1407,7 +1475,7 @@ router.post('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response
     }
 });
 
-router.post('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response) => {
+router.get('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response) => {
     try {
         let melyik = request.params.melyik;
         let kepkereses = 'SELECT TermekKepUtvonal FROM WebshopTermek WHERE TermekID LIKE ?';
@@ -1418,7 +1486,7 @@ router.post('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response
     }
 });
 
-router.post('/AdatlapLekeres/KepLekeres/', async (request, response) => {
+router.get('/AdatlapLekeres/KepLekeres/', async (request, response) => {
     try {
         let profil = jwt.decode(request.cookies.auth_token).userID;
         let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
@@ -1452,24 +1520,46 @@ router.post('/Koktelok/KepLekeres', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
+
+router.put('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     try {
+        let hiba=false
+        let tomb =""
         let adatmodositas = 'UPDATE felhasználó SET Felhasználónév=?,Email=?';
-        let tomb = `${request.body.Felhasználónév},${request.body.Email}`;
-        let profil = jwt.decode(request.cookies.auth_token).userID;
-        if (request.body.Jelszó != 'undefined') {
-            adatmodositas += ',Jelszó=?';
-            tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
+        if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.Email)&&/^[a-zA-Z0-9_]{2,30}$/.test(request.body.Felhasználónév)) {
+            tomb = `${request.body.Felhasználónév},${request.body.Email}`;
         }
-        if (request.body.KépÚtvonal != undefined) {
+        else{
+            hiba=true
+        }
+        let profil = jwt.decode(request.cookies.auth_token).userID;
+        if (request.body.Jelszó != 'undefined'&&hiba==false) {
+            if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.Jelszó)) {
+                adatmodositas += ',Jelszó=?';
+                tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
+            }
+            else{
+                hiba=true
+            }
+        }
+        if (request.body.KépÚtvonal != undefined&&hiba==false) {
             adatmodositas += ',ProfilKepUtvonal=?';
             tomb += `,${request.body.KépÚtvonal}`;
         }
         adatmodositas += ` WHERE FelhID LIKE ${profil}`;
-        await lekeres(adatmodositas, tomb.split(','));
-        response.status(200).json({
-            message: 'Siker!'
-        });
+        if (hiba==false) {
+            await lekeres(adatmodositas, tomb.split(','));
+            await kepculling()
+            response.status(200).json({
+                message: 'Siker!'
+            });
+        }
+        else{
+            response.status(500).json({
+                message: 'Hibás adat!'
+            });
+        }
+        
     } catch (error) {
         console.log(error);
         response.status(500).json({
@@ -1478,7 +1568,7 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Fioktorles', async (request, response) => {
+router.delete('/AdatlapLekeres/Fioktorles', async (request, response) => {
     try {
         const FelhasznaloTorles = 'DELETE FROM felhasználó WHERE FelhID LIKE ?';
         const ErtekTorles = 'DELETE FROM ertekeles WHERE Keszito LIKE ?';
@@ -1813,20 +1903,18 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
     } catch (error) {
         console.log(error);
         response.status(500).json({
-            message:"Hiba!"
-        })
+            message: 'Hiba!'
+        });
     }
 });
 
-router.post("/Koktel/KommenteloKepLekeres/:utvonal",async(request,response)=>{
+router.post('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
     try {
         response.sendFile(path.join(__dirname, '..', 'images', request.params.utvonal));
-    } 
-    catch (error) {
+    } catch (error) {
         console.log(error);
-        
     }
-})
+});
 //
 //
 //
