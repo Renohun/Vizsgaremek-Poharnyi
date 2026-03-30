@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             cardDiv.appendChild(imgTag);
 
                             let cardBody = document.createElement('div');
-                            cardBody.classList.add('card-body');
+                            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
                             cardDiv.appendChild(cardBody);
 
                             let titleH4 = document.createElement('h4');
@@ -556,11 +556,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             ujOszlop.appendChild(margoDiv);
 
                             let cardDiv = document.createElement('div');
-                            cardDiv.classList.add('card', 'h-100');
+                            cardDiv.classList.add('card', 'kommentCard');
                             margoDiv.appendChild(cardDiv);
 
                             let cardBody = document.createElement('div');
-                            cardBody.classList.add('card-body');
+                            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
                             cardDiv.appendChild(cardBody);
 
                             let titleH4 = document.createElement('h4');
@@ -580,6 +580,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             let separator2 = document.createElement('hr');
                             cardBody.appendChild(separator2);
+
+                            let jelentesContainer = document.createElement('div');
+                            jelentesContainer.classList.add('d-flex', 'flex-column', 'justify-content-start');
 
                             let jelentesHeader = document.createElement('h4');
                             jelentesHeader.innerText = 'Jelentes indokai:';
@@ -650,8 +653,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 jelentesUres.innerText = 'Indok még nincsen megadva';
                                 jelentesekLista.appendChild(jelentesUres);
                             }
-
-                            cardBody.appendChild(jelentesekLista);
+                            jelentesContainer.appendChild(jelentesHeader);
+                            jelentesContainer.appendChild(jelentesekLista);
+                            cardBody.appendChild(jelentesContainer);
 
                             let gombDiv = document.createElement('div');
                             gombDiv.classList.add('d-flex', 'justify-content-between');
