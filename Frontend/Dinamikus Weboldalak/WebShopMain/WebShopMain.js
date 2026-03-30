@@ -322,7 +322,6 @@ const kartyaGen = async(data,hova)=>{
         {
             ar.style.textDecoration="line-through"
             let AkciosAr = (data.data[i].Ar/100)*(100-data.data[i].TermekDiscount)
-            console.log(AkciosAr)
             let AkciosArHely = document.createElement("h5")
             AkciosArHely.innerHTML = AkciosAr + "Ft"
             AkciosArHely.style.color ="red"
@@ -338,9 +337,15 @@ const kartyaGen = async(data,hova)=>{
         kartyaMain.appendChild(kosarba)
         
         kosarba.addEventListener("click", async ()=>{
-            
-         const kosár = await KosarPost(`/api/WebShop/KosarKuldes/${data.data[i].TermekId}`);
-         console.log(kosár)
+         const kosár = await KosarPost(`/api/WebShop/KosarKuldes/${data.data[i].TermekID}`);
+         if (kosár.hiba == "bejel" )
+         {
+            alert("Kérem jelentkezzen be a kosárba rakáshoz!")
+         }
+         if(kosár.siker = 1)
+            {
+                alert("Sikeresen kosárba rakta a terméket!")
+            }
         })
 
     }
