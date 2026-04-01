@@ -1,6 +1,7 @@
 
 
 
+
 const TermekLekeres = async (url) => {
     try {
         const valasz = await fetch(url);
@@ -11,6 +12,22 @@ const TermekLekeres = async (url) => {
         throw new Error(error);
     }
 };
+
+
+const KosarPost = async (url) => {
+    try {
+        const valasz = await fetch(url,({
+            method: "POST",
+            headers:{"Content-type":'image/jpeg'}
+        }));
+        if (valasz.ok) {
+            return valasz.json();
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 const TermekKepLekeres = async (url) => {
     try {
         const valasz = await fetch(url,{
@@ -305,7 +322,6 @@ const kartyaGen = async(data,hova)=>{
         {
             ar.style.textDecoration="line-through"
             let AkciosAr = (data.data[i].Ar/100)*(100-data.data[i].TermekDiscount)
-            console.log(AkciosAr)
             let AkciosArHely = document.createElement("h5")
             AkciosArHely.innerHTML = AkciosAr + "Ft"
             AkciosArHely.style.color ="red"
@@ -319,6 +335,18 @@ const kartyaGen = async(data,hova)=>{
         kosarba.classList.add("btn","kartyaGomb")
         kosarba.innerHTML = "kosárba"
         kartyaMain.appendChild(kosarba)
+        
+        kosarba.addEventListener("click", async ()=>{
+         const kosár = await KosarPost(`/api/WebShop/KosarKuldes/${data.data[i].TermekID}`);
+         if (kosár.hiba == "bejel" )
+         {
+            alert("Kérem jelentkezzen be a kosárba rakáshoz!")
+         }
+         if(kosár.siker = 1)
+            {
+                alert("Sikeresen kosárba rakta a terméket!")
+            }
+        })
 
     }
 }
