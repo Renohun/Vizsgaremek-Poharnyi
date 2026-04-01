@@ -18,9 +18,6 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("Velemeny").innerHTML="Komment írásához és a Koktél Értékeléséhez lépj be!"
         //Leromboljuk a jelentési gombokat, visszaélés elkerülése érdekében
         Obfuszkacio()
-        document.getElementById("KoktJel").setAttribute("type","")
-        document.getElementById("KoktJel").classList.remove("btn","text-danger")
-        document.getElementById("KoktJel").setAttribute("hidden","true")
         document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
         document.getElementById("header").removeChild(document.getElementById("KoktJel"))
     }
