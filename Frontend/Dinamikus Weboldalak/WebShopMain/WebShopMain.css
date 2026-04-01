@@ -164,6 +164,11 @@ display: flex;
     margin: auto;
     margin-bottom: 10px;
 }
+/*Pagination*/
+#pagination{
+    display: flex;
+    justify-content: center;
+}
 /*Oldal méretezése*/
 @media only screen and (max-width: 425px) {
     #maxAr {

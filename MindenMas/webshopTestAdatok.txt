@@ -1,0 +1,115 @@
+
+INSERT INTO WebshopTermek
+(TermekCim,TermekLeiras,TermekKiszereles,TermekUrtartalom,TermekKeszlet,TermekKepUtvonal,TermekKategoria,TermekMarka,TermekSzarmazas,TermekAlkoholSzazalek,Ar)
+VALUES
+("Absolut Vodka","Prémium svéd vodka, tiszta forrásvízből és gondosan válogatott búzából készítve. Lágy, kiegyensúlyozott ízvilága miatt kiváló koktélalap, de önmagában is élvezetes.",1,0.7,150,"what.webp","Vodka","Absolut","Svédország",40,6500),
+("Finlandia Vodka","Finn prémium vodka, kristálytiszta gleccservíz felhasználásával készítve. Friss, tiszta ízvilág jellemzi, ideális koktélokhoz és tisztán fogyasztva is.",1,0.7,120,"what.webp","Vodka","Finlandia","Finnország",40,6200),
+("Grey Goose","Francia luxus vodka, kiváló minőségű alapanyagokból készítve. Selymes textúra és elegáns ízvilág teszi különlegessé.",1,0.7,80,"what.webp","Vodka","Grey Goose","Franciaország",40,14500),
+("Smirnoff Red","Világszerte ismert vodka, semleges ízével tökéletes választás koktélok készítéséhez.",1,0.7,200,"what.webp","Vodka","Smirnoff","UK",37.5,5500),
+
+("Jameson Irish Whiskey","Háromszorosan lepárolt ír whiskey, lágy és enyhén édeskés ízjegyekkel. Kiváló választás kezdőknek és haladóknak egyaránt.",1,0.7,180,"what.webp","Whisky","Jameson","Írország",40,7200),
+("Ballantines Finest","Klasszikus skót blended whisky, kiegyensúlyozott ízzel és enyhe fűszerességgel.",1,0.7,160,"what.webp","Whisky","Ballantines","Skócia",40,6800),
+("Chivas Regal 12","12 évig érlelt prémium skót whisky, gazdag, mézes és vaníliás aromákkal.",1,0.7,90,"what.webp","Whisky","Chivas","Skócia",40,12500),
+("Johnnie Walker Red","Intenzív karakterű blended whisky, füstös és fűszeres jegyekkel.",1,0.7,140,"what.webp","Whisky","Johnnie Walker","Skócia",40,7000),
+
+("Bacardi Carta Blanca","Könnyed fehér rum, amely ideális mojito és daiquiri koktélokhoz. Finom vaníliás jegyekkel rendelkezik.",1,0.7,170,"what.webp","Rum","Bacardi","Kuba",37.5,5800),
+("Captain Morgan Spiced","Fűszeres rum, amely gazdag ízvilágával különleges koktélok alapja lehet.",1,0.7,150,"what.webp","Rum","Captain Morgan","Jamaica",35,6000),
+("Havana Club 3","Kubai fehér rum, friss és gyümölcsös jegyekkel. Klasszikus koktélokhoz ideális.",1,0.7,130,"what.webp","Rum","Havana Club","Kuba",40,6200),
+
+("Beefeater Gin","London dry gin, citrusos és gyógynövényes karakterrel. Klasszikus gin-tonichoz tökéletes.",1,0.7,140,"what.webp","Gin","Beefeater","Anglia",40,6000),
+("Bombay Sapphire","Prémium gin 10 különleges növényi összetevővel. Elegáns és friss ízvilág.",1,0.7,110,"what.webp","Gin","Bombay","Anglia",40,9500),
+("Tanqueray","Klasszikus gin erőteljes borókás aromákkal. Koktélokhoz ideális.",1,0.7,120,"what.webp","Gin","Tanqueray","Anglia",43.1,8900),
+
+("Jose Cuervo Silver","Friss, tiszta ízű tequila, amely kék agávéból készül. Shotként és koktélokhoz is kiváló.",1,0.7,100,"what.webp","Tequila","Jose Cuervo","Mexikó",38,7000),
+("Olmeca Gold","Arany tequila enyhén karamellás jegyekkel. Lágyabb ízvilágú.",1,0.7,120,"what.webp","Tequila","Olmeca","Mexikó",38,7500),
+
+("Baileys Irish Cream","Krémes likőr, amely az ír whiskey és tejszín tökéletes kombinációja. Kávéhoz és desszertekhez ideális.",1,0.7,130,"what.webp","Likor","Baileys","Írország",17,6500),
+("Jägermeister","Gyógynövény alapú likőr 56 különböző összetevővel. Jéghidegen a legjobb.",1,0.7,140,"what.webp","Likor","Jägermeister","Németország",35,6200),
+("Malibu","Kókusz ízű likőr, amely trópusi hangulatot kölcsönöz koktéloknak.",1,0.7,110,"what.webp","Likor","Malibu","Karib",21,5800),
+("Unicum","Hagyományos magyar keserű likőr, gazdag gyógynövényes ízvilággal.",1,0.7,200,"what.webp","Likor","Zwack","Magyarország",40,7000),
+
+("Tokaji Aszú 5 puttonyos","Világhírű desszertbor mézes és aszalt gyümölcsös aromákkal.",1,0.5,60,"what.webp","Bor","Tokaji","Magyarország",12,15000),
+("Egri Bikavér","Magyar vörösbor, gazdag és fűszeres karakterrel.",1,0.75,150,"what.webp","Bor","Egri","Magyarország",13,3500),
+("Villányi Cabernet","Testes vörösbor, intenzív gyümölcsös aromákkal.",1,0.75,140,"what.webp","Bor","Villányi","Magyarország",13.5,4200),
+
+("Törley Pezsgő","Friss és gyümölcsös pezsgő, ünnepi alkalmakhoz.",1,0.75,180,"what.webp","Pezsgo","Törley","Magyarország",11.5,2800),
+("Moet & Chandon","Prémium francia pezsgő elegáns buborékokkal.",1,0.75,70,"what.webp","Pezsgo","Moet","Franciaország",12,18000),
+
+("Strongbow Apple","Almás cider frissítő, enyhén savanykás ízzel.",1,0.5,200,"what.webp","Cider","Strongbow","UK",4.5,900),
+("Somersby Pear","Körtés cider, könnyed és üdítő ital.",1,0.5,180,"what.webp","Cider","Somersby","Dánia",4.5,950),
+
+("Málnaszörp","Intenzív málna ízű szirup koktélokhoz és limonádékhoz.",1,0.7,100,"what.webp","Szirup","Monin","Franciaország",0,3500),
+("Karamell szirup","Édes karamell ízű szirup, kávékhoz és koktélokhoz.",1,0.7,90,"what.webp","Szirup","Monin","Franciaország",0,3500),
+
+("Barack Pálinka","Magyar pálinka érett gyümölcsből, intenzív aromákkal.",1,0.5,120,"what.webp","Palinka","Agárdi","Magyarország",40,8500),
+("Szilva Pálinka","Hagyományos magyar pálinka, telt ízvilággal.",1,0.5,130,"what.webp","Palinka","Rézangyal","Magyarország",40,8200),
+
+("Hennessy VS","Francia konyak, tölgyfahordós érleléssel.",1,0.7,90,"what.webp","Konyak","Hennessy","Franciaország",40,14000),
+("Martell VS","Elegáns konyak, lágy ízvilággal.",1,0.7,80,"what.webp","Konyak","Martell","Franciaország",40,13500),
+
+("Shot pohár","Klasszikus feles pohár röviditalokhoz.",1,0.05,300,"what.webp","Pohar","Basic","Kína",0,500),
+("Whiskey pohár","Masszív üvegpohár whiskyhez.",1,0.3,200,"what.webp","Pohar","Riedel","Ausztria",0,2500),
+
+("Shaker","Professzionális koktél shaker otthoni és bár használatra.",1,0,150,"what.webp","Merch","BarPro","USA",0,4500),
+("Jigger","Mérőeszköz pontos adagoláshoz koktéloknál.",1,0,180,"what.webp","Merch","BarPro","USA",0,2000),
+
+("Absinthe","Magas alkoholtartalmú ital ánizsos ízvilággal.",1,0.7,50,"what.webp","Egyeb","La Fee","Franciaország",55,16000),
+("Sake","Japán rizsbor, könnyed és enyhén édeskés ízzel.",1,0.5,80,"what.webp","Egyeb","Gekkeikan","Japán",15,6000),
+("Mead","Mézből készült ital, különleges aromákkal.",1,0.5,60,"what.webp","Egyeb","Viking","Norvégia",12,7000),
+("Grappa","Olasz törkölypálinka, erőteljes karakterrel.",1,0.5,70,"what.webp","Egyeb","Nonino","Olaszország",40,9000),
+
+("Corona Extra","Mexikói világos sör, frissítő citrusos jegyekkel.",1,0.33,300,"what.webp","Sor","Corona","Mexikó",4.5,700),
+("Heineken","Világos lager sör kiegyensúlyozott ízzel.",1,0.5,350,"what.webp","Sor","Heineken","Hollandia",5,800),
+("Dreher","Magyar lager sör, könnyed karakterrel.",1,0.5,400,"what.webp","Sor","Dreher","Magyarország",4.5,600),
+("Guinness","Krémes barna sör, pörkölt aromákkal.",1,0.44,200,"what.webp","Sor","Guinness","Írország",4.2,1200),
+
+("Aperol","Narancsos aperitif, Aperol Spritz alapja.",1,0.7,140,"what.webp","Likor","Aperol","Olaszország",11,6000),
+("Campari","Keserű aperitif komplex gyógynövényes ízzel.",1,0.7,130,"what.webp","Likor","Campari","Olaszország",25,6500),
+
+("Red Bull","Energiaital, gyakran koktélokhoz használva.",1,0.25,500,"what.webp","Egyeb","Red Bull","Ausztria",0,600),
+("Tonic Water","Frissítő ital gin-tonichoz.",1,0.25,450,"what.webp","Egyeb","Schweppes","UK",0,500);
+INSERT INTO WebshopTermek
+(TermekCim,TermekLeiras,TermekKiszereles,TermekUrtartalom,TermekKeszlet,TermekKepUtvonal,TermekKategoria,TermekMarka,TermekSzarmazas,TermekAlkoholSzazalek,Ar)
+VALUES
+("Belvedere Vodka","Lengyel prémium vodka, kiváló minőségű rozsból készítve. Selymes és tiszta ízvilág jellemzi.",1,0.7,90,"what.webp","Vodka","Belvedere","Lengyelország",40,13500),
+("Ciroc Vodka","Szőlő alapú prémium vodka, amely különleges, enyhén gyümölcsös karakterrel rendelkezik.",1,0.7,70,"what.webp","Vodka","Ciroc","Franciaország",40,14000),
+
+("Jack Daniels Honey","Mézes ízesítésű amerikai whiskey, lágy és édeskés karakterrel.",1,0.7,120,"what.webp","Whisky","Jack Daniels","USA",35,8500),
+("Glenfiddich 12","12 éves single malt whisky, gyümölcsös és enyhén fás jegyekkel.",1,0.7,80,"what.webp","Whisky","Glenfiddich","Skócia",40,15500),
+
+("Kraken Rum","Sötét, fűszeres rum gazdag vaníliás és karamellás aromákkal.",1,0.7,90,"what.webp","Rum","Kraken","Karib",40,7800),
+("Diplomatico Reserva","Prémium venezuelai rum, komplex és édeskés ízvilággal.",1,0.7,60,"what.webp","Rum","Diplomatico","Venezuela",40,16500),
+
+("Hendricks Gin","Különleges gin uborka és rózsa aromával, egyedi ízvilággal.",1,0.7,75,"what.webp","Gin","Hendricks","Skócia",41.4,12000),
+("Monkey 47","Német prémium gin 47 növényi összetevővel, komplex aromával.",1,0.5,60,"what.webp","Gin","Monkey 47","Németország",47,16000),
+
+("Patron Silver","Prémium tequila 100% agávéból, tiszta és friss ízvilággal.",1,0.7,70,"what.webp","Tequila","Patron","Mexikó",40,18000),
+("Don Julio Blanco","Elegáns tequila citrusos jegyekkel és lágy lecsengéssel.",1,0.7,65,"what.webp","Tequila","Don Julio","Mexikó",38,17500),
+
+("Kahlua","Kávélikőr gazdag aromákkal, tökéletes White Russian koktélhoz.",1,0.7,110,"what.webp","Likor","Kahlua","Mexikó",20,6500),
+("Disaronno","Olasz mandulalikőr édeskés, marcipános ízzel.",1,0.7,95,"what.webp","Likor","Disaronno","Olaszország",28,7000),
+
+("Chardonnay","Száraz fehérbor friss gyümölcsös aromákkal.",1,0.75,130,"what.webp","Bor","Francia Borászat","Franciaország",13,4200),
+("Sauvignon Blanc","Friss és savas fehérbor citrusos jegyekkel.",1,0.75,120,"what.webp","Bor","Újvilág Borászat","Új-Zéland",12.5,4500),
+
+("Prosecco","Olasz habzóbor könnyed, gyümölcsös ízvilággal.",1,0.75,140,"what.webp","Pezsgo","Martini","Olaszország",11,4000),
+
+("Rekorder Cider","Magasabb alkoholtartalmú almás cider intenzív ízzel.",1,0.5,100,"what.webp","Cider","Rekorder","Svédország",6,1200),
+
+("Grenadine szirup","Gránátalma ízű szirup koktélokhoz, élénk színt ad az italoknak.",1,0.7,90,"what.webp","Szirup","Monin","Franciaország",0,3500),
+
+("Körte Pálinka","Gyümölcsös magyar pálinka, lágy és aromás ízzel.",1,0.5,110,"what.webp","Palinka","Agárdi","Magyarország",40,8300),
+
+("Remy Martin VSOP","Prémium francia konyak, hosszú érleléssel és gazdag aromával.",1,0.7,70,"what.webp","Konyak","Remy Martin","Franciaország",40,18500),
+
+("Borospohár","Elegáns üvegpohár borok felszolgálására.",1,0.35,180,"what.webp","Pohar","Riedel","Ausztria",0,3000),
+
+("Koktél kanál","Hosszú nyelű kanál koktélok keveréséhez.",1,0,200,"what.webp","Merch","BarPro","USA",0,1500),
+("Jégvödör","Stílusos jégtartó italok hűtéséhez.",1,0,120,"what.webp","Merch","BarPro","USA",0,3500),
+
+("Pisco","Dél-amerikai szőlőpárlat, friss és gyümölcsös karakterrel.",1,0.7,60,"what.webp","Egyeb","Capel","Chile",40,9000),
+("Arak","Közel-keleti ánizsos ital, vízzel hígítva fogyasztják.",1,0.7,50,"what.webp","Egyeb","Ksarak","Libanon",53,11000),
+
+("Leffe Blonde","Belga apátsági sör, enyhén édeskés és fűszeres ízzel.",1,0.33,180,"what.webp","Sor","Leffe","Belgium",6.6,900),
+("Paulaner Weissbier","Német búzasör, frissítő és gyümölcsös karakterrel.",1,0.5,200,"what.webp","Sor","Paulaner","Németország",5.5,950);
+("Lagavulin 16","16 évig érlelt skót single malt whisky, intenzív füstös és tőzeges karakterrel. Mély, komplex ízvilága miatt az egyik legkedveltebb Islay whisky a rajongók körében.",1,0.7,50,"what.webp","Whisky","Lagavulin","Skócia",43,22000)

@@ -12,6 +12,7 @@ const path = require('path');
 const fajlkezelo = require('fs/promises');
 const { error, log } = require('console');
 const { blob } = require('stream/consumers');
+const { hostname } = require('os');
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -2052,16 +2053,54 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
 //
 //
 //
-
 router.get('/WebShop/TermekLekeres', async (request, response) => {
     try {
         const query = 'SELECT * FROM webshoptermek';
+        //console.log(limit)
         const [termekek] = await DBconnetion.promise().query(query);
+        
         response.status(200).json({
-            data: termekek
+            data: termekek,
         });
     } catch (error) {
-        throw new Error(error);
+        console.log(error);
+        response.status(500).json({
+            message: 'Hibás lekérés'
+        });
+    }
+});
+
+router.get('/WebShop/HosszLekeres', async (request, response) => {
+    try {
+        const query = 'SELECT COUNT(TermekID) AS "hossz" FROM webshoptermek';
+        //console.log(limit)
+        const [hossz] = await DBconnetion.promise().query(query);
+        
+        response.status(200).json({
+            data: hossz[0].hossz,
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message: 'Hibás lekérés'
+        });
+    }
+});
+
+router.get('/WebShop/TermekLekeresPag', async (request, response) => {
+    try {
+        const query = 'SELECT * FROM webshoptermek LIMIT ? OFFSET ?';
+        const Lengthquery = 'SELECT COUNT(TermekID) FROM webshoptermek';
+        const limit = parseInt(request.query.limit);
+        const offset = parseInt(request.query.offset);
+        console.log(offset)
+        const [termekek] = await DBconnetion.promise().query(query,[limit,offset]);
+        
+        response.status(200).json({
+            data: termekek,
+        });
+    } catch (error) {
+        
         console.log(error);
         response.status(500).json({
             message: 'Hibás lekérés'

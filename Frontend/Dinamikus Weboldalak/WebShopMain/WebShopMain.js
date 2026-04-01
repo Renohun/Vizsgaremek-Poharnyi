@@ -371,9 +371,25 @@ const kereses = async ()=>{
         }
     
 }
+const pagination = async(jelenOldal)=>{
+    const hossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
+    const limit = 16
+    let offset = (jelenOldal-1) * limit;
+    console.log(offset)
+    
+   
+    let oldalszam = hossz.data/16
+    const data = await TermekLekeres(`/api/WebShop/TermekLekeresPag?limit=${16}&offset=${offset}`);
+    console.log(data)
+    return data;
+
+}
 document.addEventListener('DOMContentLoaded', async () => {
     //összes termék lekérése
-    const data = await TermekLekeres('/api/WebShop/TermekLekeres');
+    //pagination()
+    const data =  await pagination(1);
+   //const data = await TermekLekeres(`/api/WebShop/TermekLekeresPag?limit=${16}&offset=${0}`);
+    console.log(data)
     
     //kártyák generálása
     let KartyaHova = document.getElementById("kartyaSor")
@@ -383,13 +399,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     Sliderek();
     
     //Selectek feltöltése
+     const dataSzures = await TermekLekeres(`/api/WebShop/TermekLekeres`);
     let OrszagSelect = document.getElementById('OrszagSelect');
     let MarkaSelect = document.getElementById('MarkaSelect');
     let KategoriaSelect = document.getElementById('KategoriaSelect');
     let RendezesSelect = document.getElementById('RendezesSelect');
     let kiszerelesSelect = document.getElementById('KiszerelesSelect');
     let UrtartalomSelect = document.getElementById('UrtartalomSelect');
-    SelectFeltolt(data, OrszagSelect, MarkaSelect, KategoriaSelect,kiszerelesSelect,UrtartalomSelect);
+    SelectFeltolt(dataSzures, OrszagSelect, MarkaSelect, KategoriaSelect,kiszerelesSelect,UrtartalomSelect);
     OrszagSelect.addEventListener('change', () => {
        
     });//alkohol ellernörzés
