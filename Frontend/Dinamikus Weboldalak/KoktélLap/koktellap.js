@@ -21,10 +21,8 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("KoktJel").setAttribute("type","")
         document.getElementById("KoktJel").classList.remove("btn","text-danger")
         document.getElementById("KoktJel").setAttribute("hidden","true")
-
-        document.getElementById("FelhJel").setAttribute("id","")
-        document.getElementById("KoktJel").setAttribute("id","")
-        
+        document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
+        document.getElementById("header").removeChild(document.getElementById("KoktJel"))
     }
 })
 
@@ -252,7 +250,6 @@ async function Betoltes() {
     if (koktélAdat.UgyanazE&&megtortentemar==false) {
         //ne tudja jelenteni magát
         Obfuszkacio()
-        document.getElementById("FelhJel").setAttribute("id","")
         //A koktélt azonban ki tudja törölni
         document.getElementById("KoktJel").setAttribute("id","KoktDel")
         torles(koktélAdat.KoktélID)
@@ -371,6 +368,7 @@ function Obfuszkacio(){
         document.getElementById("FelhJel").setAttribute("type","")
         document.getElementById("FelhJel").classList.remove("btn","text-danger")
         document.getElementById("FelhJel").setAttribute("hidden","true")
+        document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
     }
     megtortentemar=true
 
