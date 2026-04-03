@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("komment").addEventListener("keyup",()=>{
                 document.getElementById("szam").innerHTML=document.getElementById("komment").value.length
         })
+        document.getElementById("Velemeny").classList.add("shadow-sm","p-2","koktelshadow")
     }
     //ha nincs
     else{
@@ -18,13 +19,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("Velemeny").innerHTML="Komment írásához és a Koktél Értékeléséhez lépj be!"
         //Leromboljuk a jelentési gombokat, visszaélés elkerülése érdekében
         Obfuszkacio()
-        document.getElementById("KoktJel").setAttribute("type","")
-        document.getElementById("KoktJel").classList.remove("btn","text-danger")
-        document.getElementById("KoktJel").setAttribute("hidden","true")
-
-        document.getElementById("FelhJel").setAttribute("id","")
-        document.getElementById("KoktJel").setAttribute("id","")
-        
+        document.getElementById("header").removeChild(document.getElementById("KoktJel"))
     }
 })
 
@@ -36,7 +31,7 @@ const AdatLekeres=async(url)=>{
 }
 const AdatLekeresKep=async(url)=>{
     const valasz=await fetch(url,{
-        method:"POST",
+        method:"GET",
         headers:{"Content-Type":"image/jpg"}
     })
     if (valasz.ok) {
@@ -44,9 +39,9 @@ const AdatLekeresKep=async(url)=>{
     }
 }
 
-const AdatKuldes=async(url,adat)=>{
+const AdatKuldes=async(url,adat,tipus)=>{
     const valasz=await fetch(url,{
-        method:"POST",
+        method:tipus,
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(adat)
     })
@@ -133,6 +128,14 @@ async function Betoltes() {
     
     //Kommentek létrehozása
     let KommentekHelye=document.getElementById("Kommentek")
+    console.log(kommentAdat.length);
+    
+    if (KommentekHelye.classList.contains("koktelshadow")==false&&kommentAdat.length!=0) {
+        KommentekHelye.classList.add("koktelshadow")
+    }
+    if (kommentAdat.length==0) {
+        KommentekHelye.classList.remove("koktelshadow","p-2")
+    }
     KommentekHelye.innerHTML=""
     //Visszafele számolunk, így a legújjabb van felül
     for (let i = kommentAdat.length-1; i > -1 ; i--) {
@@ -173,6 +176,9 @@ async function Betoltes() {
         KommentTartalom.classList.add("w-100","komment")
         KommentTartalom.innerHTML=kommentAdat[i].Tartalom
         
+
+        //
+        Komment.classList.add("kommentdiv")
         //Kitaláljuk mikor regisztrált a kommentelő
         if (jelenDate.getFullYear()!=KommIroRegDate[0]) {
             KommentIroTagsag.innerText+=` - ${jelenDate.getFullYear()-KommIroRegDate[0]} Éve Tag`
@@ -252,7 +258,6 @@ async function Betoltes() {
     if (koktélAdat.UgyanazE&&megtortentemar==false) {
         //ne tudja jelenteni magát
         Obfuszkacio()
-        document.getElementById("FelhJel").setAttribute("id","")
         //A koktélt azonban ki tudja törölni
         document.getElementById("KoktJel").setAttribute("id","KoktDel")
         torles(koktélAdat.KoktélID)
@@ -289,7 +294,7 @@ async function Kommentkuldes() {
         Koktél:koktel[koktel.length-1]
     }
     //Elküldjük a kommentet a backendre
-    await AdatKuldes(`/api/Koktel/SendKomment`,tartalom)
+    await AdatKuldes(`/api/Koktel/SendKomment`,tartalom,"POST")
     //Úrjatöltjük az oldlat
     Betoltes()
 }
@@ -329,7 +334,7 @@ async function jelentes(mit,tipus,kit) {
         }
 
         //ezeket elküldjük az endpointra, ahol feldolgozzuk és a választ eltároljuk
-        const jelentesSend=await AdatKuldes(`/api/Koktel/SendJelentes`,adatok)
+        const jelentesSend=await AdatKuldes(`/api/Koktel/SendJelentes`,adatok,"POST")
 
         //Ha nincs hiba
         if (jelentesSend.message==false) {
@@ -371,6 +376,7 @@ function Obfuszkacio(){
         document.getElementById("FelhJel").setAttribute("type","")
         document.getElementById("FelhJel").classList.remove("btn","text-danger")
         document.getElementById("FelhJel").setAttribute("hidden","true")
+        document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
     }
     megtortentemar=true
 
@@ -379,19 +385,19 @@ function Obfuszkacio(){
 function torles(id){
     document.getElementById("KoktDel").value="Koktél Törlése"
     document.getElementById("KoktDel").addEventListener("click",async()=>{
-        await AdatKuldes("/api/Koktel/DeleteKoktel",{id:id})
+        await AdatKuldes("/api/Koktel/DeleteKoktel",{id:id},"DELETE")
         window.location.reload()
     })
 }
 
 async function kommentTorles(id){
-     await AdatKuldes("/api/Koktel/DeleteKomment",{id:id})
+     await AdatKuldes("/api/Koktel/DeleteKomment",{id:id},"DELETE")
      Betoltes()
      
 }
 
 async function kedveles(id) {
-    await AdatKuldes("/api/Koktel/SendKedvenc",{Koktél:id})
+    await AdatKuldes("/api/Koktel/SendKedvenc",{Koktél:id},"POST")
     Betoltes()
 }
 
@@ -461,7 +467,7 @@ function ertekeles(ertekelteE,mennyire) {
                 return valaszott.value=="★"
             }) 
             //Aminek a hosszát elküljük a backendre a koktél idjével
-            await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:a.length,Koktél:koktel[koktel.length-1]})
+            await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:a.length,Koktél:koktel[koktel.length-1]},"POST")
             //és újratöltjük az oldalt hogy ne adhasson új értékelést
             Betoltes()
         },{once:true})
