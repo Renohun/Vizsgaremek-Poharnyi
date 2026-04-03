@@ -45,7 +45,6 @@ body {
 }
 /*Koktelok weboldal*/
 #keresofelulet{
-    margin-top: 20px;
     background-color: rgb(65, 65, 65);
     border-radius: 5px;
     padding-bottom: 20px;
@@ -69,6 +68,13 @@ body {
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 5px;
+}
+
+.dark>div.bg-light{
+    background-color: rgb(65, 65, 65)!important;
+}
+.dark>form.bg-light{
+    background-color: rgb(65, 65, 65)!important;
 }
 
 /*Koktél Hiba*/
@@ -101,10 +107,10 @@ body {
 #osszetevoDiv{
     background-color: rgb(124, 124, 124);/*rgb(175, 137, 90);*/
     color: white;
-    padding: 10px;
-    border-radius: 5px;
 }
-
+#osszetevoDiv>div{
+    width: 100%;
+}
 /*Belepes*/
 
 
