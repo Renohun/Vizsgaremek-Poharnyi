@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("komment").addEventListener("keyup",()=>{
                 document.getElementById("szam").innerHTML=document.getElementById("komment").value.length
         })
+        document.getElementById("Velemeny").classList.add("shadow-sm","p-2","koktelshadow")
     }
     //ha nincs
     else{
@@ -127,6 +128,14 @@ async function Betoltes() {
     
     //Kommentek létrehozása
     let KommentekHelye=document.getElementById("Kommentek")
+    console.log(kommentAdat.length);
+    
+    if (KommentekHelye.classList.contains("koktelshadow")==false&&kommentAdat.length!=0) {
+        KommentekHelye.classList.add("koktelshadow")
+    }
+    if (kommentAdat.length==0) {
+        KommentekHelye.classList.remove("koktelshadow","p-2")
+    }
     KommentekHelye.innerHTML=""
     //Visszafele számolunk, így a legújjabb van felül
     for (let i = kommentAdat.length-1; i > -1 ; i--) {
@@ -167,6 +176,9 @@ async function Betoltes() {
         KommentTartalom.classList.add("w-100","komment")
         KommentTartalom.innerHTML=kommentAdat[i].Tartalom
         
+
+        //
+        Komment.classList.add("kommentdiv")
         //Kitaláljuk mikor regisztrált a kommentelő
         if (jelenDate.getFullYear()!=KommIroRegDate[0]) {
             KommentIroTagsag.innerText+=` - ${jelenDate.getFullYear()-KommIroRegDate[0]} Éve Tag`
