@@ -113,3 +113,14 @@ VALUES
 ("Leffe Blonde","Belga apátsági sör, enyhén édeskés és fűszeres ízzel.",1,0.33,180,"what.webp","Sor","Leffe","Belgium",6.6,900),
 ("Paulaner Weissbier","Német búzasör, frissítő és gyümölcsös karakterrel.",1,0.5,200,"what.webp","Sor","Paulaner","Németország",5.5,950);
 ("Lagavulin 16","16 évig érlelt skót single malt whisky, intenzív füstös és tőzeges karakterrel. Mély, komplex ízvilága miatt az egyik legkedveltebb Islay whisky a rajongók körében.",1,0.7,50,"what.webp","Whisky","Lagavulin","Skócia",43,22000)
+
+("Zacapa 23","Prémium guatemalai rum, amely 23 évig érlelt keverékekből készül. Gazdag karamellás, csokoládés és fűszeres jegyek jellemzik.",1,0.7,60,"what.webp","Rum","Zacapa","Guatemala",40,21000),
+("Talisker 10","Skót single malt whisky, tengeri sós és füstös karakterrel. Különleges ízvilága a Skye-szigetről származik.",1,0.7,70,"what.webp","Whisky","Talisker","Skócia",45.8,16000),
+("Eristoff Vodka","Megfizethető árú vodka, tiszta és semleges ízvilággal. Ideális koktélok alapjához.",1,0.7,150,"what.webp","Vodka","Eristoff","Grúzia",37.5,4800),
+("Southern Comfort","Amerikai whiskey alapú likőr, enyhén gyümölcsös és fűszeres ízjegyekkel.",1,0.7,100,"what.webp","Likor","Southern Comfort","USA",35,6200),
+("Cointreau","Narancslikőr, amely elengedhetetlen alapanyaga számos klasszikus koktélnak, mint például a Margarita.",1,0.7,90,"what.webp","Likor","Cointreau","Franciaország",40,8500),
+("Martini Bianco","Édeskés vermut vaníliás és gyógynövényes aromákkal. Aperitifként vagy koktélokban is kiváló.",1,0.75,120,"what.webp","Likor","Martini","Olaszország",15,4500),
+("Blue Curacao szirup","Narancs ízű, élénk kék színű szirup koktélokhoz. Látványos italok készítéséhez ideális.",1,0.7,80,"what.webp","Szirup","Monin","Franciaország",0,3600),
+("Mangó Pálinka","Különleges, egzotikus gyümölcsből készült pálinka, intenzív és édeskés aromákkal.",1,0.5,70,"what.webp","Palinka","Agárdi","Magyarország",40,9200),
+("Highball pohár","Magas falú pohár long drink koktélokhoz, elegáns és praktikus kialakítással.",1,0.35,160,"what.webp","Pohar","Riedel","Ausztria",0,2800),
+("Koktél szűrő","Rozsdamentes acélból készült eszköz, amely segít a koktélok tiszta kitöltésében.",1,0,140,"what.webp","Merch","BarPro","USA",0,2200)

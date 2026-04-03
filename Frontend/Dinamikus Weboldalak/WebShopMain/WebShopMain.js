@@ -371,29 +371,85 @@ const kereses = async ()=>{
         }
     
 }
-const pagination = async(jelenOldal)=>{
+//a két pagination fuggvenyhez szükséges globális változok
+const limit = 16
+let jelenlegiOldal = 1;
+
+ const paginationHely = document.getElementById("pagination")
+ 
+
+
+const TermekBetoltes = async (jelenOldal = 1) => {
+    jelenlegiOldal = jelenOldal;
+
+    let KartyaHova = document.getElementById("kartyaSor");
+    KartyaHova.innerHTML = "";
+
     const hossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
-    const limit = 16
-    let offset = (jelenOldal-1) * limit;
-    console.log(offset)
-    
-   
-    let oldalszam = hossz.data/16
-    const data = await TermekLekeres(`/api/WebShop/TermekLekeresPag?limit=${16}&offset=${offset}`);
-    console.log(data)
+    let oldalszam = Math.ceil(hossz.data / limit);
+
+    let offset = (jelenOldal - 1) * limit;
+
+    const data = await TermekLekeres(
+        `/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`
+    );
+
+    await kartyaGen(data, KartyaHova);
+
+    PaginationGombok(oldalszam);
+
+    window.location.hash = `page${jelenOldal}`;
+
     return data;
+};
+
+const gombHozzaAdas = (hova, oldalszam)=>{
+
+    const PagGomb = document.createElement("button");
+    PagGomb.innerHTML = oldalszam;
+    PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam))
+    hova.appendChild(PagGomb)
+}
+
+ const PaginationGombok = async()=>{
+    const hossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
+    let oldalszam = Math.round(hossz.data/16)
+    const paginationHely = document.getElementById("pagination")
+    paginationHely.innerHTML = "";
+    const gombszam = 5;
+    let elsogomb = Math.max(1,jelenlegiOldal-2)
+    let utolsoGomb = Math.min(oldalszam, jelenlegiOldal + 2)
+
+    //első oldal a gombok között
+     if (elsogomb > 1) {
+        gombHozzaAdas(paginationHely, 1);
+       if (elsogomb > 1) {
+            paginationHely.append("...");
+        }
+    }
+    //köztes oldalak
+    for (let i = elsogomb; i <= utolsoGomb; i++) 
+        {
+         gombHozzaAdas(paginationHely,i)
+        }
+    //uolso oldal
+   if (utolsoGomb<oldalszam) 
+        {
+            if(utolsoGomb < oldalszam){
+                paginationHely.append("...")
+            }
+        }
 
 }
+
 document.addEventListener('DOMContentLoaded', async () => {
     //összes termék lekérése
     //pagination()
-    const data =  await pagination(1);
+    const data =  await TermekBetoltes();
    //const data = await TermekLekeres(`/api/WebShop/TermekLekeresPag?limit=${16}&offset=${0}`);
     console.log(data)
     
     //kártyák generálása
-    let KartyaHova = document.getElementById("kartyaSor")
-    kartyaGen(data,KartyaHova)
 
     //sliderek Feltöltése
     Sliderek();
