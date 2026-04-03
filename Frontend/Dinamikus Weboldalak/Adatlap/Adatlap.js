@@ -838,8 +838,8 @@ async function fizetes(){
     gombSáv.innerHTML=""
     let összJelző=document.getElementById("IdeKosár")
     összJelző.innerHTML=""
-    let c=document.getElementById("KosárFizetésGomb")
-    c.innerHTML=""
+    let gombok=document.getElementById("KosárFizetésGomb")
+    gombok.innerHTML=""
 
     let gomb=document.createElement("input")
     let kosar=await AdatGet("/api/AdatlapLekeres/Kosar")
@@ -856,11 +856,11 @@ async function fizetes(){
         KosarLekeres()
     })
     gombSáv.appendChild(gomb)
-    c.classList.add("mt-2")
+    gombok.classList.add("mt-2","dark")
     let total=0
     //Termék Adatok
     let termékekList=document.createElement("div")
-    c.classList.add("row","justify-content-md-center","justify-content-sm-center","justify-content-lg-between")
+    gombok.classList.add("row","justify-content-md-center","justify-content-sm-center","justify-content-lg-between")
     termékekList.classList.add("col-12","col-lg-4","col-md-6","col-sm-12","bg-light","rounded","p-2","border","border-dark")
     let szoveg=document.createElement("div")
     szoveg.innerHTML="Termék Adatok"
@@ -1051,8 +1051,8 @@ async function fizetes(){
     
 
     //PayList.appendChild()
-    c.appendChild(termékekList)
-    c.appendChild(PayList)
+    gombok.appendChild(termékekList)
+    gombok.appendChild(PayList)
     összJelző.innerHTML=`Összesen: ${total} Ft`
     összJelző.classList.add("ps-3")
     //await AdatPost()
@@ -1065,8 +1065,9 @@ function visszaepites(){
         let összJelző=document.getElementById("IdeKosár")
         összJelző.innerHTML=""
         összJelző.classList.remove("ps-3")
-        let c=document.getElementById("KosárFizetésGomb")
-        c.innerHTML=""
+        let gombok=document.getElementById("KosárFizetésGomb")
+        gombok.innerHTML=""
+        gombok.classList.remove("mt-2","dark")
         let termSzov=document.createElement("span")
         termSzov.innerHTML="A Kosárban lévő termékek"
         termSzov.classList.add("fs-3","align-middle")

@@ -138,6 +138,15 @@ async function Betoltes() {
     }
     KommentekHelye.innerHTML=""
     //Visszafele számolunk, így a legújjabb van felül
+    if (kommentAdat.length==0) {
+        KommentekHelye.classList.add("p-0")
+    }
+    else{
+        if (KommentekHelye.classList.contains("p-0")) {
+            KommentekHelye.classList.remove("p-0")
+        }
+
+    }
     for (let i = kommentAdat.length-1; i > -1 ; i--) {
 
         //elemek létrehozása
@@ -184,7 +193,7 @@ async function Betoltes() {
             KommentIroTagsag.innerText+=` - ${jelenDate.getFullYear()-KommIroRegDate[0]} Éve Tag`
         }
         else if(jelenDate.getMonth()+1!=KommIroRegDate[1]){
-            KommentIroTagsag.innerText+=` - ${jelenDate.getMonth()-KommIroRegDate[1]} Hónapja Tag`
+            KommentIroTagsag.innerText+=` - ${jelenDate.getMonth()-KommIroRegDate[1]+1} Hónapja Tag`
         }
         else{
             KommentIroTagsag.innerText+=` - ${jelenDate.getDate()-KommIroRegDate[2]} Napja Tag`
@@ -413,6 +422,7 @@ function ertekeles(ertekelteE,mennyire) {
         }
         //És kikapcsoljuk a kattintást
         ertek.forEach(csillag => {
+            csillag.classList.add("star")
             csillag.setAttribute("disabled","")
         });
         //És kitöröljük a gombot amivel lehet küldeni
@@ -425,6 +435,7 @@ function ertekeles(ertekelteE,mennyire) {
         let kattint=false
         //Csillagonként
         ertek.forEach(csillag => {
+            csillag.classList.add("star")
             //Ha rákattintunk egy csillagra
             csillag.addEventListener("click",()=>{
                 //kikapcsoljuk a hover funkciókat

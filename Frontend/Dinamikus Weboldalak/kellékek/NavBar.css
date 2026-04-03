@@ -34,3 +34,23 @@ div > li {
     height: 50px;
     width: 50px;
 }
+.hatter{
+    background-color: #9acd32;
+    border-bottom-right-radius: 5px;
+}
+.navbar-nav > div > .dropdown-menu {
+    background-color: #9acd32;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top: 0px;
+    border-color: #9acd32;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    --bs-dropdown-link-hover-bg: #a7e727;
+
+}
+.navbar-nav > div > .dropdown-menu > li > a {
+    text-decoration: none;
+    /*color: rgb(28, 180, 28);*/
+    color: black;
+}
