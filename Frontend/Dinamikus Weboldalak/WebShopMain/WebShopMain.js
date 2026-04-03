@@ -406,7 +406,13 @@ const TermekBetoltes = async (jelenOldal = 1) => {
 const gombHozzaAdas = (hova, oldalszam)=>{
 
     const PagGomb = document.createElement("button");
-    PagGomb.innerHTML = oldalszam;
+    PagGomb.classList.add("PageGomb")
+    PagGomb.innerHTML = oldalszam;  
+    if (oldalszam === jelenlegiOldal) {
+        PagGomb.style.fontWeight = "bold";
+     PagGomb.style.backgroundColor = "#c2c2c2";
+    }
+
     PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam))
     hova.appendChild(PagGomb)
 }
