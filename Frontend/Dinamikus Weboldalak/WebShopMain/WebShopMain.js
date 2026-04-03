@@ -379,28 +379,44 @@ let jelenlegiOldal = 1;
  
 
 
-const TermekBetoltes = async (jelenOldal = 1) => {
+const TermekBetoltes = async (jelenOldal = 1, szurtE = false, szuresiAdatok) => {
     jelenlegiOldal = jelenOldal;
 
     let KartyaHova = document.getElementById("kartyaSor");
     KartyaHova.innerHTML = "";
 
-    const hossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
+    let hossz;
+    if (szurtE == false) {
+       hossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
+    }
+    else if(szurtE == true){
+        hossz = szurtHossz;
+    }    
     let oldalszam = Math.ceil(hossz.data / limit);
 
     let offset = (jelenOldal - 1) * limit;
 
-    const data = await TermekLekeres(
-        `/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`
-    );
 
-    await kartyaGen(data, KartyaHova);
+    if (!szurtE) 
+        {
+         const  data = await TermekLekeres( `/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`);
+          await kartyaGen(data, KartyaHova);
+        }
+    else if(szurtE == true)
+        {
+         const  szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`,szuresiAdatok)
+          await kartyaGen(szurtdata, KartyaHova);
+        }
+   
+
+
+   
 
     PaginationGombok(oldalszam);
 
     window.location.hash = `page${jelenOldal}`;
 
-    return data;
+   
 };
 
 const gombHozzaAdas = (hova, oldalszam)=>{
@@ -507,7 +523,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let szuresiAdatok = {};
     SzuresGomb.addEventListener("click", async ()=>
     {
-        KartyaHova.innerHTML = ""
+        //KartyaHova.innerHTML = ""
         let arSlider = document.getElementById('arRange');
         let alkoholSlider = document.getElementById('AlkRange');
         
@@ -554,7 +570,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const KuldData = await SzuresPost("/api/Webshop/szures",szuresiAdatok)
         szuresiAdatok = {};
         
-        kartyaGen(KuldData,KartyaHova)
+        //kartyaGen(KuldData,KartyaHova)
+        TermekBetoltes(1,true,szuresiAdatok)
     
 
         
