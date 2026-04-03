@@ -1,7 +1,4 @@
-
-
-
-
+//FETCK-ek
 const TermekLekeres = async (url) => {
     try {
         const valasz = await fetch(url);
@@ -60,7 +57,15 @@ const SzuresPost=async(url,data)=>{
         console.error(error)
     }
 }
-//? Sliderek alapértékének beállítása
+
+//
+//
+//
+//Sliderek és selectek feltöltése
+//
+//
+//
+
 const Sliderek = async () => {
     var slider1 = document.getElementById('arRange');
     var output1 = document.getElementById('maxAr');
@@ -224,7 +229,13 @@ const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
             Select5.appendChild(option); 
         }
 };
+
+//
+//
 //Kártya Generálás
+//
+//
+
 const kartyaGen = async(data,hova)=>{
     console.log(data)
     for (let i = 0; i < data.data.length; i++) {
@@ -232,13 +243,10 @@ const kartyaGen = async(data,hova)=>{
         oszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
         hova.appendChild(oszlop);
 
-
         let kartyaMain = document.createElement("div")
         kartyaMain.classList.add("card","kartya")
         kartyaMain.setAttribute("id",`kartya${i}`)
         oszlop.appendChild(kartyaMain)
-
-       
 
         let img = document.createElement("img")
         const kartyaKep = await TermekKepLekeres(`/api/WebShop/Keplekeres/${data.data[i].TermekID}`)
@@ -328,9 +336,6 @@ const kartyaGen = async(data,hova)=>{
             adatDiv.appendChild(AkciosArHely)
         }
         
-
-        
-
         let kosarba = document.createElement("button")
         kosarba.classList.add("btn","kartyaGomb")
         kosarba.innerHTML = "kosárba"
@@ -339,9 +344,9 @@ const kartyaGen = async(data,hova)=>{
         kosarba.addEventListener("click", async ()=>{
          const kosár = await KosarPost(`/api/WebShop/KosarKuldes/${data.data[i].TermekID}`);
          if (kosár.hiba == "bejel" )
-         {
-            alert("Kérem jelentkezzen be a kosárba rakáshoz!")
-         }
+            {
+                alert("Kérem jelentkezzen be a kosárba rakáshoz!")
+            }
          if(kosár.siker = 1)
             {
                 alert("Sikeresen kosárba rakta a terméket!")
@@ -350,7 +355,11 @@ const kartyaGen = async(data,hova)=>{
 
     }
 }
+
+//
 //Keresés
+//
+
 const kereses = async ()=>{
     const keresendoSzo = document.getElementById("NevKereses").value
     if (keresendoSzo == "") 
@@ -371,15 +380,72 @@ const kereses = async ()=>{
         }
     
 }
+
+//
+//szűrési adatok kinyerése
+//
+
+async function szures() {
+    let OrszagSelect = document.getElementById('OrszagSelect');
+    let MarkaSelect = document.getElementById('MarkaSelect');
+    let KategoriaSelect = document.getElementById('KategoriaSelect');
+    let RendezesSelect = document.getElementById('RendezesSelect');
+    let kiszerelesSelect = document.getElementById('KiszerelesSelect');
+    let UrtartalomSelect = document.getElementById('UrtartalomSelect');
+    let szuresiAdatok = {};
+    //KartyaHova.innerHTML = ""
+    let arSlider = document.getElementById('arRange');
+    let alkoholSlider = document.getElementById('AlkRange');
+
+    //max ár hozzaadasa
+    szuresiAdatok.MaxAr = arSlider.value;
+    //max alkoholtartalom hozáaadása
+    if (KategoriaSelect.value == "alkohol") {
+        szuresiAdatok.MaxAlk = alkoholSlider.value;
+    }
+    //selectek hozzáadása
+    if (OrszagSelect.value != "-") {
+        szuresiAdatok.TermekSzarmazas = OrszagSelect.value;
+    }
+
+    if (MarkaSelect.value != "-") {
+        szuresiAdatok.TermekMarka = MarkaSelect.value;
+    }
+
+    if (KategoriaSelect.value != "-") {
+        szuresiAdatok.TermekKategoria = KategoriaSelect.value;
+    }
+
+    if (kiszerelesSelect.value != "-") {
+        szuresiAdatok.TermekKiszereles = kiszerelesSelect.value;
+    }
+
+    if (UrtartalomSelect.value != "-") {
+        szuresiAdatok.TermekUrtartalom = UrtartalomSelect.value;
+    }
+    //akcios-e?
+    let akcio = document.getElementById("AkcioseCheck");
+    if (akcio.checked == true) {
+        szuresiAdatok.akcio = true;
+    }
+    szuresiAdatok.rendezes = RendezesSelect.value;
+    return szuresiAdatok;
+}
+
+//
+//
+// PAGINATION
+//
+//
+
 //a két pagination fuggvenyhez szükséges globális változok
 const limit = 16
 let jelenlegiOldal = 1;
 
  const paginationHely = document.getElementById("pagination")
  
+ const TermekBetoltes = async (jelenOldal = 1, szurtE = false, szuresiAdatok) => {
 
-
-const TermekBetoltes = async (jelenOldal = 1, szurtE = false, szuresiAdatok) => {
     jelenlegiOldal = jelenOldal;
 
     let KartyaHova = document.getElementById("kartyaSor");
@@ -387,12 +453,17 @@ const TermekBetoltes = async (jelenOldal = 1, szurtE = false, szuresiAdatok) => 
 
     let hossz;
     if (szurtE == false) {
-       hossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
+       TermekHossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
+       hossz = TermekHossz.data
     }
     else if(szurtE == true){
-        hossz = szurtHossz;
+        const  szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`,szuresiAdatok)
+        console.log(szurtDataHossz)
+        let SzurtHossz = szurtDataHossz.hossz
+        hossz = SzurtHossz;
     }    
-    let oldalszam = Math.ceil(hossz.data / limit);
+    
+    let oldalszam = Math.ceil(hossz / limit);
 
     let offset = (jelenOldal - 1) * limit;
 
@@ -401,58 +472,83 @@ const TermekBetoltes = async (jelenOldal = 1, szurtE = false, szuresiAdatok) => 
         {
          const  data = await TermekLekeres( `/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`);
           await kartyaGen(data, KartyaHova);
+            PaginationGombok(false);
         }
     else if(szurtE == true)
         {
          const  szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`,szuresiAdatok)
           await kartyaGen(szurtdata, KartyaHova);
+          console.log(oldalszam)
+            PaginationGombok(true,szuresiAdatok);
         }
-   
-
-
-   
-
-    PaginationGombok(oldalszam);
+  
 
     window.location.hash = `page${jelenOldal}`;
 
    
 };
 
-const gombHozzaAdas = (hova, oldalszam)=>{
+const gombHozzaAdas = (hova, oldalszam,szurtE ,szuresiAdatok)=>{
 
     const PagGomb = document.createElement("button");
     PagGomb.classList.add("PageGomb")
     PagGomb.innerHTML = oldalszam;  
+
     if (oldalszam === jelenlegiOldal) {
         PagGomb.style.fontWeight = "bold";
-     PagGomb.style.backgroundColor = "#c2c2c2";
+        PagGomb.style.backgroundColor = "#c2c2c2";
     }
-
-    PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam))
-    hova.appendChild(PagGomb)
+    if (!szurtE) 
+    {
+        PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam))
+        hova.appendChild(PagGomb)
+    }
+    else if(szurtE)
+        {
+            PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam,true,szuresiAdatok))
+            hova.appendChild(PagGomb)
+        }
+   
 }
 
- const PaginationGombok = async()=>{
-    const hossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
-    let oldalszam = Math.round(hossz.data/16)
+ const PaginationGombok = async(SzurtE,szuresiAdatok)=>{
+    //oldalhosszok
+    let hossz;
+    let szures;
+    if (SzurtE == false) 
+        {
+            const  TermekHossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
+            hossz = TermekHossz.data
+             szures = false
+        }
+    else if(SzurtE == true)
+        {
+            const  szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`,szuresiAdatok)
+             console.log(szurtDataHossz)
+             hossz = szurtDataHossz.hossz
+             szures = true;
+        }
+    
+
+    let oldalszam = Math.ceil(hossz/16)
     const paginationHely = document.getElementById("pagination")
     paginationHely.innerHTML = "";
-    const gombszam = 5;
     let elsogomb = Math.max(1,jelenlegiOldal-2)
     let utolsoGomb = Math.min(oldalszam, jelenlegiOldal + 2)
 
     //első oldal a gombok között
-     if (elsogomb > 1) {
-        gombHozzaAdas(paginationHely, 1);
-       if (elsogomb > 1) {
+     if (elsogomb > 1) 
+        {
+        gombHozzaAdas(paginationHely, 1,szures,szuresiAdatok);
+       if (elsogomb > 1)
+        {
             paginationHely.append("...");
         }
     }
     //köztes oldalak
     for (let i = elsogomb; i <= utolsoGomb; i++) 
         {
-         gombHozzaAdas(paginationHely,i)
+         gombHozzaAdas(paginationHely,i,szures,szuresiAdatok)
         }
     //uolso oldal
    if (utolsoGomb<oldalszam) 
@@ -465,13 +561,8 @@ const gombHozzaAdas = (hova, oldalszam)=>{
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    //összes termék lekérése
-    //pagination()
+    //első 16 termék lekérése
     const data =  await TermekBetoltes();
-   //const data = await TermekLekeres(`/api/WebShop/TermekLekeresPag?limit=${16}&offset=${0}`);
-    console.log(data)
-    
-    //kártyák generálása
 
     //sliderek Feltöltése
     Sliderek();
@@ -513,67 +604,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     } )
    
     //Név Szerinti Keresés
-        let keresoGomb = document.getElementById("keresesBtn")
-        keresoGomb.addEventListener("click",kereses)
+    let keresoGomb = document.getElementById("keresesBtn")
+    keresoGomb.addEventListener("click",kereses)
 
-    //
-    //szuresi adatok osszegyujtese
-    //
+   
+    //szűrés meghívása
     let SzuresGomb = document.getElementById("kuldesGomb")
-    let szuresiAdatok = {};
     SzuresGomb.addEventListener("click", async ()=>
     {
-        //KartyaHova.innerHTML = ""
-        let arSlider = document.getElementById('arRange');
-        let alkoholSlider = document.getElementById('AlkRange');
         
-        //max ár hozzaadasa
-        szuresiAdatok.MaxAr = arSlider.value
-        //max alkoholtartalom hozáaadása
-        if(KategoriaSelect.value == "alkohol")
-        {
-            szuresiAdatok.MaxAlk = alkoholSlider.value
-        }
-        //selectek hozzáadása
-        if (OrszagSelect.value != "-") 
-        {
-            szuresiAdatok.TermekSzarmazas = OrszagSelect.value    
-        }
-
-        if (MarkaSelect.value != "-") 
-        {
-            szuresiAdatok.TermekMarka = MarkaSelect.value    
-        }
-
-        if (KategoriaSelect.value != "-") 
-        {
-            szuresiAdatok.TermekKategoria = KategoriaSelect.value    
-        }
-
-        if (kiszerelesSelect.value != "-") 
-        {
-            szuresiAdatok.TermekKiszereles = kiszerelesSelect.value    
-        }
-
-        if (UrtartalomSelect.value != "-") 
-        {
-            szuresiAdatok.TermekUrtartalom = UrtartalomSelect.value    
-        }
-        //akcios-e?
-        let akcio = document.getElementById("AkcioseCheck")
-        if (akcio.checked == true) 
-        {
-            szuresiAdatok.akcio = true    
-        }
-        //rendezes
-       szuresiAdatok.rendezes = RendezesSelect.value    
-        const KuldData = await SzuresPost("/api/Webshop/szures",szuresiAdatok)
+        const adatok = szures()
+        console.log(await adatok)
+        TermekBetoltes(1,true,await adatok)
         szuresiAdatok = {};
-        
-        //kartyaGen(KuldData,KartyaHova)
-        TermekBetoltes(1,true,szuresiAdatok)
-    
-
         
     })
     

@@ -2158,7 +2158,6 @@ router.post('/Webshop/szures', async (request, response) => {
         const offset = parseInt(request.query.offset);
         const feltetelek = request.body;
         let query = 'SELECT * FROM webshoptermek WHERE';
-        console.log(feltetelek);
         let whereErtekek;
         const elfogadott = ['csokkeno', 'novekvo', '-', 'TermekCim'];
         let ertekLista = [];
@@ -2197,16 +2196,13 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista.push(item[1]);
             }
         }
-
-        console.log(query);
         // a query utolso 3 elemenek (AND) levágása
         query = query.slice(query[0], query.length - 4);
 
         query += OrderBy;
-        let limitoffset = "LIMIT ? OFFSET ?"
+        let limitoffset = " LIMIT ? OFFSET ?"
         query += limitoffset
         // console.log(OrderByErtek)
-        console.log(query);
         for (let i = 0; i < ertekLista.length; i++) {
             console.log(ertekLista[i]);
         }
@@ -2285,10 +2281,9 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[8],limit,offset
             ]);
         }
-
         response.status(200).json({
             data: szurtTermekek,
-            hossz: szurtTermekek.length
+            hossz : szurtTermekek.length
         });
     } catch (error) {
         console.log(error);
