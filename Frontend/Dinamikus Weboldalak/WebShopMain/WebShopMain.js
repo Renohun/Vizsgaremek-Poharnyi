@@ -356,30 +356,6 @@ const kartyaGen = async(data,hova)=>{
     }
 }
 
-//
-//Keresés
-//
-
-const kereses = async ()=>{
-    const keresendoSzo = document.getElementById("NevKereses").value
-    if (keresendoSzo == "") 
-        {
-            alert("Töltse Ki a keresőmezőt!")
-        }
-    else
-        {
-            let KartyaHova = document.getElementById("kartyaSor")
-            KartyaHova.textContent = "";
-            const data = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo}`);
-            if (data.data.length == 0) 
-            {
-                alert("nincs ilyen Termék")
-                //window.location.reload();
-            }
-            kartyaGen(data,KartyaHova)
-        }
-    
-}
 
 //
 //szűrési adatok kinyerése
@@ -433,6 +409,37 @@ async function szures() {
 }
 
 //
+//Keresés
+//
+
+const kereses = async ()=>{
+    const keresendoSzo = document.getElementById("NevKereses").value
+    if (keresendoSzo == "") 
+        {
+            alert("Töltse Ki a keresőmezőt!")
+        }
+    else
+        {
+            let KartyaHova = document.getElementById("kartyaSor")
+            KartyaHova.textContent = "";
+            const data = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo}`);
+            const dataHossz = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo}`);
+            if (data.data.length == 0) 
+            {
+                alert("nincs ilyen Termék")
+                //window.location.reload();
+            }
+            else
+            {
+                TermekBetoltes(1,dataHossz)
+            }
+        }
+    
+}
+
+
+
+//
 //
 // PAGINATION
 //
@@ -444,24 +451,13 @@ let jelenlegiOldal = 1;
 
  const paginationHely = document.getElementById("pagination")
  
- const TermekBetoltes = async (jelenOldal = 1, szurtE = false, szuresiAdatok) => {
-
+ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdatok) => {
+console.log(hossz)
     jelenlegiOldal = jelenOldal;
 
     let KartyaHova = document.getElementById("kartyaSor");
     KartyaHova.innerHTML = "";
-
-    let hossz;
-    if (szurtE == false) {
-       TermekHossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
-       hossz = TermekHossz.data
-    }
-    else if(szurtE == true){
-        const  szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`,szuresiAdatok)
-        console.log(szurtDataHossz)
-        let SzurtHossz = szurtDataHossz.hossz
-        hossz = SzurtHossz;
-    }    
+ 
     
     let oldalszam = Math.ceil(hossz / limit);
 
@@ -472,14 +468,14 @@ let jelenlegiOldal = 1;
         {
          const  data = await TermekLekeres( `/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`);
           await kartyaGen(data, KartyaHova);
-            PaginationGombok(false);
+            PaginationGombok(false,hossz);
         }
     else if(szurtE == true)
         {
          const  szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`,szuresiAdatok)
           await kartyaGen(szurtdata, KartyaHova);
           console.log(oldalszam)
-            PaginationGombok(true,szuresiAdatok);
+            PaginationGombok(true,hossz,szuresiAdatok);
         }
   
 
@@ -488,7 +484,7 @@ let jelenlegiOldal = 1;
    
 };
 
-const gombHozzaAdas = (hova, oldalszam,szurtE ,szuresiAdatok)=>{
+const gombHozzaAdas = (hova, oldalszam,szurtE,szuresiAdatok,hossz)=>{
 
     const PagGomb = document.createElement("button");
     PagGomb.classList.add("PageGomb")
@@ -498,48 +494,35 @@ const gombHozzaAdas = (hova, oldalszam,szurtE ,szuresiAdatok)=>{
         PagGomb.style.fontWeight = "bold";
         PagGomb.style.backgroundColor = "#c2c2c2";
     }
+
     if (!szurtE) 
     {
-        PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam))
+        PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam,hossz))
         hova.appendChild(PagGomb)
     }
     else if(szurtE)
         {
-            PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam,true,szuresiAdatok))
+            PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam,hossz,true,szuresiAdatok))
             hova.appendChild(PagGomb)
         }
    
 }
 
- const PaginationGombok = async(SzurtE,szuresiAdatok)=>{
+ const PaginationGombok = async(SzurtE,hossz,szuresiAdatok)=>{
     //oldalhosszok
-    let hossz;
-    let szures;
-    if (SzurtE == false) 
-        {
-            const  TermekHossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
-            hossz = TermekHossz.data
-             szures = false
-        }
-    else if(SzurtE == true)
-        {
-            const  szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`,szuresiAdatok)
-             console.log(szurtDataHossz)
-             hossz = szurtDataHossz.hossz
-             szures = true;
-        }
     
 
     let oldalszam = Math.ceil(hossz/16)
     const paginationHely = document.getElementById("pagination")
     paginationHely.innerHTML = "";
+
     let elsogomb = Math.max(1,jelenlegiOldal-2)
     let utolsoGomb = Math.min(oldalszam, jelenlegiOldal + 2)
 
     //első oldal a gombok között
      if (elsogomb > 1) 
         {
-        gombHozzaAdas(paginationHely, 1,szures,szuresiAdatok);
+        gombHozzaAdas(paginationHely, 1,SzurtE,szuresiAdatok,hossz);
        if (elsogomb > 1)
         {
             paginationHely.append("...");
@@ -548,7 +531,7 @@ const gombHozzaAdas = (hova, oldalszam,szurtE ,szuresiAdatok)=>{
     //köztes oldalak
     for (let i = elsogomb; i <= utolsoGomb; i++) 
         {
-         gombHozzaAdas(paginationHely,i,szures,szuresiAdatok)
+         gombHozzaAdas(paginationHely,i,SzurtE,szuresiAdatok,hossz)
         }
     //uolso oldal
    if (utolsoGomb<oldalszam) 
@@ -556,13 +539,21 @@ const gombHozzaAdas = (hova, oldalszam,szurtE ,szuresiAdatok)=>{
             if(utolsoGomb < oldalszam){
                 paginationHely.append("...")
             }
+            gombHozzaAdas(paginationHely, oldalszam,SzurtE,szuresiAdatok,hossz);
         }
 
 }
 
+//  
+//
+// OLDAL BETÖLTÉSE ESTÉN LEFUTÓ KÓD
+//
+//
+
 document.addEventListener('DOMContentLoaded', async () => {
     //első 16 termék lekérése
-    const data =  await TermekBetoltes();
+     TermekHossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
+    const data =  await TermekBetoltes(1,TermekHossz.data);
 
     //sliderek Feltöltése
     Sliderek();
@@ -612,10 +603,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     let SzuresGomb = document.getElementById("kuldesGomb")
     SzuresGomb.addEventListener("click", async ()=>
     {
-        
         const adatok = szures()
         console.log(await adatok)
-        TermekBetoltes(1,true,await adatok)
+        const  szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`,await adatok)
+        TermekBetoltes(1,szurtDataHossz.hossz,true,await adatok)
         szuresiAdatok = {};
         
     })
