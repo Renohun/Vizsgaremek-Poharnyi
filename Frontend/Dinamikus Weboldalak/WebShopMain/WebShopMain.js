@@ -257,7 +257,6 @@ const kartyaGen = async(data,hova)=>{
         
         const kepURL = URL.createObjectURL(kartyaKep)
         img.setAttribute("src",kepURL)
-
         img.classList.add("card-img-top","kartyakep")
         kartyaMain.appendChild(img)
 
@@ -358,7 +357,7 @@ const kartyaGen = async(data,hova)=>{
 
 
 //
-//szűrési adatok kinyerése
+//  szűrési adatok kinyerése
 //
 
 async function szures() {
@@ -414,6 +413,7 @@ async function szures() {
 
 const kereses = async ()=>{
     const keresendoSzo = document.getElementById("NevKereses").value
+    console.log(keresendoSzo)
     if (keresendoSzo == "") 
         {
             alert("Töltse Ki a keresőmezőt!")
@@ -422,22 +422,20 @@ const kereses = async ()=>{
         {
             let KartyaHova = document.getElementById("kartyaSor")
             KartyaHova.textContent = "";
-            const data = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo}`);
-            const dataHossz = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo}`);
-            if (data.data.length == 0) 
+            
+            const dataHossz = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${1000}&offset=${0}`);
+             
+            if (dataHossz.data.length == 0) 
             {
                 alert("nincs ilyen Termék")
                 //window.location.reload();
             }
             else
             {
-                TermekBetoltes(1,dataHossz)
+                TermekBetoltes(1,dataHossz.data.length,false ,"",true)
             }
         }
-    
 }
-
-
 
 //
 //
@@ -451,8 +449,7 @@ let jelenlegiOldal = 1;
 
  const paginationHely = document.getElementById("pagination")
  
- const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdatok) => {
-console.log(hossz)
+ const TermekBetoltes = async (jelenOldal = 1, hossz,szurtE = false, szuresiAdatok,NevSzerinti) => {
     jelenlegiOldal = jelenOldal;
 
     let KartyaHova = document.getElementById("kartyaSor");
@@ -464,27 +461,31 @@ console.log(hossz)
     let offset = (jelenOldal - 1) * limit;
 
 
-    if (!szurtE) 
+    if (!szurtE && !NevSzerinti) 
         {
          const  data = await TermekLekeres( `/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`);
           await kartyaGen(data, KartyaHova);
             PaginationGombok(false,hossz);
         }
-    else if(szurtE == true)
+    else if(szurtE == true  && !NevSzerinti)
         {
          const  szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`,szuresiAdatok)
           await kartyaGen(szurtdata, KartyaHova);
           console.log(oldalszam)
             PaginationGombok(true,hossz,szuresiAdatok);
+           
         }
-  
-
+    else if(NevSzerinti == true && !szurtE)
+        {
+            const keresendoSzo = document.getElementById("NevKereses").value
+            const data = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${limit}&offset=${offset}`);
+            await kartyaGen(data, KartyaHova);
+            PaginationGombok(false,hossz,"",true);
+        }
     window.location.hash = `page${jelenOldal}`;
-
-   
 };
 
-const gombHozzaAdas = (hova, oldalszam,szurtE,szuresiAdatok,hossz)=>{
+const gombHozzaAdas = (hova,oldalszam,szurtE,szuresiAdatok,hossz,NevSzerinti)=>{
 
     const PagGomb = document.createElement("button");
     PagGomb.classList.add("PageGomb")
@@ -495,20 +496,25 @@ const gombHozzaAdas = (hova, oldalszam,szurtE,szuresiAdatok,hossz)=>{
         PagGomb.style.backgroundColor = "#c2c2c2";
     }
 
-    if (!szurtE) 
+    if (!szurtE && !NevSzerinti) 
     {
         PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam,hossz))
         hova.appendChild(PagGomb)
     }
-    else if(szurtE)
+    else if(szurtE && !NevSzerinti)
         {
             PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam,hossz,true,szuresiAdatok))
+            hova.appendChild(PagGomb)
+        }
+    else if(NevSzerinti && !szurtE)
+        {
+            PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam,hossz,false,"",true))
             hova.appendChild(PagGomb)
         }
    
 }
 
- const PaginationGombok = async(SzurtE,hossz,szuresiAdatok)=>{
+ const PaginationGombok = async(SzurtE,hossz,szuresiAdatok,NevSzerinti)=>{
     //oldalhosszok
     
 
@@ -522,7 +528,7 @@ const gombHozzaAdas = (hova, oldalszam,szurtE,szuresiAdatok,hossz)=>{
     //első oldal a gombok között
      if (elsogomb > 1) 
         {
-        gombHozzaAdas(paginationHely, 1,SzurtE,szuresiAdatok,hossz);
+        gombHozzaAdas(paginationHely, 1,SzurtE,szuresiAdatok,hossz,NevSzerinti);
        if (elsogomb > 1)
         {
             paginationHely.append("...");
@@ -531,7 +537,7 @@ const gombHozzaAdas = (hova, oldalszam,szurtE,szuresiAdatok,hossz)=>{
     //köztes oldalak
     for (let i = elsogomb; i <= utolsoGomb; i++) 
         {
-         gombHozzaAdas(paginationHely,i,SzurtE,szuresiAdatok,hossz)
+         gombHozzaAdas(paginationHely,i,SzurtE,szuresiAdatok,hossz,NevSzerinti)
         }
     //uolso oldal
    if (utolsoGomb<oldalszam) 
@@ -539,9 +545,8 @@ const gombHozzaAdas = (hova, oldalszam,szurtE,szuresiAdatok,hossz)=>{
             if(utolsoGomb < oldalszam){
                 paginationHely.append("...")
             }
-            gombHozzaAdas(paginationHely, oldalszam,SzurtE,szuresiAdatok,hossz);
+            gombHozzaAdas(paginationHely, oldalszam,SzurtE,szuresiAdatok,hossz,NevSzerinti);
         }
-
 }
 
 //  

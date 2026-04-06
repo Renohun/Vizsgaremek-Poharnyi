@@ -2094,7 +2094,6 @@ router.get('/WebShop/TermekLekeresPag', async (request, response) => {
         const Lengthquery = 'SELECT COUNT(TermekID) FROM webshoptermek';
         const limit = parseInt(request.query.limit);
         const offset = parseInt(request.query.offset);
-        console.log(offset)
         const [termekek] = await DBconnetion.promise().query(query,[limit,offset]);
         
         response.status(200).json({
@@ -2111,23 +2110,20 @@ router.get('/WebShop/TermekLekeresPag', async (request, response) => {
 
 router.get('/WebShop/TermeklekeresByNev/:nev', async (request, response) => {
     try {
+        const limit = parseInt(request.query.limit);
+        const offset = parseInt(request.query.offset);
+        
         const nev = request.params.nev;
-        console.log(nev)
-        const query = 'SELECT * FROM webshoptermek';
-        let Nevlista = []
-        const [termekek] = await DBconnetion.promise().query(query);
-        for (let i = 0; i < termekek.length; i++) {
-            if (termekek[i].TermekCim.includes(nev)) 
-            {
-                Nevlista.push(termekek[i])    
-            }
-            }
+       
+        const query = "SELECT * FROM webshoptermek WHERE TermekCim like ? LIMIT ? OFFSET ?";
+        
+        const [termekek] = await DBconnetion.promise().query(query,[`%${nev}%`,limit,offset]);
+          
         response.status(200).json({
-            data: Nevlista
+            data: termekek
         });
     } catch (error) {
         console.log(error);
-        throw new Error(error);
         
         response.status(500).json({
             message: 'Hibás lekérés'
@@ -2143,7 +2139,6 @@ router.get('/Webshop/Keplekeres/:id', async (request, response) => {
         console.log(termekek[0].TermekKepUtvonal);
         response.sendFile(path.join(__dirname, '..', 'images', termekek[0].TermekKepUtvonal));
     } catch (error) {
-        throw new Error(error);
         console.log(error);
         response.status(500).json({
             message: 'hiba'
