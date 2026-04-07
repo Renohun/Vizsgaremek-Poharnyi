@@ -164,6 +164,18 @@ display: flex;
     margin: auto;
     margin-bottom: 10px;
 }
+/*Pagination*/
+#pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.PageGomb{
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+
+}
 /*Oldal méretezése*/
 @media only screen and (max-width: 425px) {
     #maxAr {

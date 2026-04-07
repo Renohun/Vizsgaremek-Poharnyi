@@ -1,1 +1,3 @@
-GET http://127.0.0.1:3000/api/WebShop/TermeklekeresByNev/J
+GET http://127.0.0.1:3000/api/WebShop/TermekLekeres?limit=2
+###
+GET http://127.0.0.1:3000/api/WebShop/HosszLekeres
