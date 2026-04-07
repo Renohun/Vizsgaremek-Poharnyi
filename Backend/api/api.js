@@ -1974,8 +1974,12 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
 router.get('/termek/lekeres/:id', async (request, response) => {
     try {
         const id = request.params.id;
+        const userID = jwt.decode(request.cookies.auth_token).userID;
         const query = 'SELECT * FROM webshoptermek WHERE termekID = ?';
+        const ErtekeltE = "SELECT * FROM ertekeles WHERE MilyenDologhoz = ? HovaIrták = ? AND Keszito = ?"
         const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
+        const [ertekeltE] = await DBconnetion.promise().query(ErtekeltE,[])
+
         response.status(200).json({
             termek: lekertTermek
         });
@@ -1987,6 +1991,7 @@ router.get('/termek/lekeres/:id', async (request, response) => {
 
 router.get('/termek/KepLekeres/:id', async (request, response) => {
     try {
+       
         const id = request.params.id;
         const query = 'SELECT TermekKepUtvonal FROM webshoptermek WHERE termekID = ?';
         const [lekertTermek] = await DBconnetion.promise().query(query, [id]);

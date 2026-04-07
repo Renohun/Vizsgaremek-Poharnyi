@@ -126,7 +126,7 @@ const oldalGenerálás =  async () =>{
         PolcLabelHely.classList.add("NincsPolcon")
           console.log(PolcLabelHely)
     }
-    
+    //Ertekeles
 
 }
 
