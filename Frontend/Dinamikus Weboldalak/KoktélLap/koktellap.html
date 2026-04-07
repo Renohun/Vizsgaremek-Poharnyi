@@ -63,7 +63,7 @@
             </div>
         </nav>
             <div  class="container">
-                <div class="border-bottom border-2 border-dark text-center">
+                <div class="border-bottom border-2 border-dark text-center" id="header">
                     <h1><span id="Cimsor" class="ps-4"></span><span id="fav"></span></h1>
                     <span id="kokteldate"></span>
                     <div id="badgek">
@@ -72,12 +72,12 @@
                     <input type="button" id="KoktJel" class="btn text-danger border-0" value="Koktél Jelentése">
                 </div>
                 <div class="row border-bottom border-2 border-dark pb-3">
-                    <p class="fs-4">Készítette: <img src="" id="keszKep"> <span id="Madeby"></span> <span id="Tagsag" class="text-primary"></span><input type="button" id="FelhJel"  class="btn text-danger border-0" value="Jelentés"> </p>
+                    <p class="fs-4" id="maker">Készítette: <img src="" id="keszKep"> <span id="Madeby"></span> <span id="Tagsag" class="text-primary"></span><input type="button" id="FelhJel"  class="btn text-danger border-0" value="Jelentés"> </p>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 row">
-                            <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid col-12 col-sm-5 col-md-5 col-lg-5 rounded">
-                            <div class="ps-4 flex-column col-12 col-sm-7 col-md-7 col-lg-7">
+                            <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid col-12 col-sm-6 col-md-6 col-lg-6 rounded">
+                            <div class="ps-4 flex-column col-12 col-sm-6 col-md-6 col-lg-6">
                                 <label for="mennyiseg">Hány ml-nyit szeretne készíteni</label>
-                                <input type="number" id="mennyiseg" step="10" class="form-control" min="0">
+                                <input type="number" id="mennyiseg" step="5" class="form-control" min="0">
                                 <span class="fs-4">Összetevők</span>
                                 <ul id="Ossztev">
                                 </ul>
@@ -116,7 +116,7 @@
                     <div class="row mt-2">
                         <h1 class="border-bottom border-2 border-dark text-center">Kommentek</h1>
                     </div>
-                    <div id="Kommentek">
+                    <div id="Kommentek" class="shadow-lg p-2">
 
                     </div>
                 </div>
