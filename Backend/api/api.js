@@ -1972,21 +1972,32 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
 //
 
 router.get('/termek/lekeres/:id', async (request, response) => {
-    try {
-        const id = request.params.id;
-        const userID = jwt.decode(request.cookies.auth_token).userID;
-        const query = 'SELECT * FROM webshoptermek WHERE termekID = ?';
-        const ErtekeltE = "SELECT * FROM ertekeles WHERE MilyenDologhoz = ? HovaIrták = ? AND Keszito = ?"
-        const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
-        const [ertekeltE] = await DBconnetion.promise().query(ErtekeltE,[])
-
-        response.status(200).json({
-            termek: lekertTermek
-        });
-    } catch (error) {
-        console.log(error);
-        response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
-    }
+    
+        try {
+            const id = request.params.id;
+           
+            const query = 'SELECT * FROM webshoptermek WHERE termekID = ?';
+            const ErtekeltE = "SELECT * FROM ertekeles WHERE MilyenDologhoz = ? AND HovaIrták = ? AND Keszito = ?"
+            const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
+            let ertekeltE
+            if (request.cookies.auth_token != null) //be van e jelentkezve a felhasználó
+                {
+                    const userID = jwt.decode(request.cookies.auth_token).userID;
+                    [ertekeltE] = await DBconnetion.promise().query(ErtekeltE,["Termék",id,userID])
+                }
+            else
+                {   
+                    ertekeltE = "nincsBejel"
+                }
+            response.status(200).json({
+                termek: lekertTermek,
+                ertekelt : ertekeltE
+            });
+        } catch (error) {
+            console.log(error);
+            response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
+        }
+    
 });
 
 router.get('/termek/KepLekeres/:id', async (request, response) => {
@@ -2002,5 +2013,27 @@ router.get('/termek/KepLekeres/:id', async (request, response) => {
         response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
     }
 });
+
+router.post("/termek/ErtekelesKuldes/",async(request,response)=>
+{
+    try {
+        const userID = jwt.decode(request.cookies.auth_token).userID;
+        const TermekId = request.body.Tid
+        const Ertek = request.body.ertek
+        const query = "INSERT INTO ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)"
+        const [ElkuldottErtekeles] = await DBconnetion.promise().query(query,[userID,TermekId,"Termék",Ertek])
+        console.log(TermekId, Ertek)
+        response.status(200).json({
+            ErtekelesId: ElkuldottErtekeles.insertId
+        })
+    } catch (error) {
+        console.log(error)
+        response.status(500).json({
+            hiba: error
+        })
+    }
+   
+    
+})
 
 module.exports = router;

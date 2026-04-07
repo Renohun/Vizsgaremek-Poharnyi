@@ -12,7 +12,16 @@ async function GETfetch(url) {
         throw new Error(err);
     }
 }
-
+const PostFetch=async(url,object)=>{
+    const valasz=await fetch(url,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(object)
+    })
+    if (valasz.ok) {
+        return valasz.json()
+    }
+}
 const TermekKepLekeres=async(url)=>{
     try {
         const valasz=await fetch(url,{
@@ -127,7 +136,89 @@ const oldalGenerálás =  async () =>{
           console.log(PolcLabelHely)
     }
     //Ertekeles
+    //Ellenorizzuk, hogy a felhasznalo ertekelt e mar
+    let ertekelesSzam;
+    if (LekertTermekek.ertekelt.length == 0) 
+    {
+        ertekelesSzam = ""
+    }
+    else if(LekertTermekek.ertekelt.length == 1)
+    {
+        ertekelesSzam  = LekertTermekek.ertekelt[0].Ertekeles 
+    }
+    ertekeles(LekertTermekek.ertekelt,ertekelesSzam)
 
+}
+
+const ertekeles = (ErtekeltE,ertek) =>
+{
+    console.log(ErtekeltE)
+    let Csillagok = document.getElementsByClassName("csillag")
+    if(ErtekeltE == "nincsBejel"){
+        console.log("asd")
+        const ertekelesHely = document.getElementById("Ertekeles")
+        let h2 = document.createElement("h2")
+        h2.innerHTML = "Az értékeléshez be kell jelentkeznie!"
+        ertekelesHely.innerHTML = ""
+        ertekelesHely.appendChild(h2)
+    }
+    else if (ErtekeltE[0] != undefined) 
+    {
+        //a felhasználó előző értékelését jelenítjük meg, ha a felhasznalo mar ertekelte ezt a termeket
+        for (let i = 0; i < ertek; i++) 
+        {
+            console.log("ad")
+            Csillagok[i].value = "★"
+        }
+        //a csillagokon kikapcsolom a kattintást
+        for (let j = 0; j < Csillagok.length; j++) {
+            Csillagok[j].setAttribute("disabled","")
+        }
+           
+        document.getElementById("ErtekelesKuldes").style.display = "none"
+        document.getElementById("ErtekelPar").innerHTML="Ön már értékelte a koktélt"
+    }
+    else if (ErtekeltE[0] == undefined)
+    {
+        for (let i = 0; i < Csillagok.length; i++) {
+           
+           Csillagok[i].addEventListener("click",()=>{
+            console.log("asd")
+                csillagvaltoztatas(Csillagok.length,"☆")
+                
+                csillagvaltoztatas(i+1,"★")
+           })
+            
+           function csillagvaltoztatas(meddig,mive)
+           {
+                for (let i = 0; i < meddig; i++) 
+                {
+            
+                    Csillagok[i].value=mive
+                }
+           }
+
+           
+        } 
+
+         let url = window.location.href.split('/');
+            let Termekid = url[4];
+            document.getElementById("ErtekelesKuldes").addEventListener("click",async()=>{
+            let ertekszam = 0
+            //Teli csillagok megszámolása
+            for (let i = 0; i < Csillagok.length; i++) 
+            {
+                if (Csillagok[i].value == "★") 
+                {
+                    ertekszam ++;
+                }
+            }
+            console.log(ertekszam, Termekid)
+            await PostFetch("/api/Termek/ErtekelesKuldes",{Tid:Termekid,ertek:ertekszam})
+            
+           oldalGenerálás()
+        })
+    }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

@@ -221,6 +221,16 @@ table,
     align-items: center;
     justify-content: left;
 }
+#ErtekelPar{
+    margin: 0px;
+}
+#ErtekelesKuldes{
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+    background-color:  rgb(255, 186, 83);
+    margin-top: 10px;
+}
 /*Tablazat*/
 tr{
     border-bottom: 1px black solid;
@@ -282,5 +292,9 @@ tr{
         padding: 5px;
 
     }
+    #ErtekelesKuldes{
+    width: 100%;
+    height: 50px;
+}
     
 }
