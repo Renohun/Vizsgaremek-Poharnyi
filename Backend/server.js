@@ -48,6 +48,10 @@ router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak
 router.get('/LepjBe', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/belepes.html'));
 });
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
+router.get('/felhasznaloEllenorzes', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/felhasnzaloEll.html'));
+});
 
 //KoktelKeszites
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/')));

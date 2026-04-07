@@ -7,11 +7,8 @@ const authenticationMiddleware = require('./authenticationMiddleware.js');
 const authorizationMiddelware = require('./authorizationMiddelware.js');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-const mysql = require('mysql2');
 const path = require('path');
 const fajlkezelo = require('fs/promises');
-const { error, log } = require('console');
-const { blob } = require('stream/consumers');
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -43,19 +40,20 @@ router.get('/test', (req, res) => {
     });
 });
 
-async function kepculling(){
-    const felhkep="SELECT ProfilkepUtvonal FROM felhasználó;SELECT BoritoKepUtvonal FROM koktél;SELECT TermekKepUtvonal FROM webshoptermek"
-    let sqlkepek=await lekeres(felhkep)
-    let kepek=[]
+async function kepculling() {
+    const felhkep =
+        'SELECT ProfilkepUtvonal FROM felhasználó;SELECT BoritoKepUtvonal FROM koktél;SELECT TermekKepUtvonal FROM webshoptermek';
+    let sqlkepek = await lekeres(felhkep);
+    let kepek = [];
     for (let i = 0; i < sqlkepek.length; i++) {
-        sqlkepek[i].forEach(element => {
-            kepek.push(Object.values(element)[0])
+        sqlkepek[i].forEach((element) => {
+            kepek.push(Object.values(element)[0]);
         });
-    } 
-    let mappa=await fajlkezelo.readdir(path.join(__dirname, '../images/'))
+    }
+    let mappa = await fajlkezelo.readdir(path.join(__dirname, '../images/'));
     for (let i = 0; i < mappa.length; i++) {
-        if (!(kepek.includes(mappa[i]))) {
-            fajlkezelo.rm(path.join(__dirname, '../images/',mappa[i]))
+        if (!kepek.includes(mappa[i])) {
+            fajlkezelo.rm(path.join(__dirname, '../images/', mappa[i]));
         }
     }
 }
@@ -556,6 +554,26 @@ router.post('/belepes', (request, response) => {
         response.status(500).json({ message: 'Hiba van a vegpontban', error: err });
     }
 });
+
+router.post('/felhasznaloEllenorzes', async (req, res) => {
+    try {
+        const email = req.body.email;
+        if (email.length > 0) {
+            const query = 'SELECT Email FROM felhasználó WHERE Email LIKE ?';
+            //letezik e felhasznalo egyaltalan
+            const [rows] = await DBconnetion.promise().query(query, [email]);
+            if (rows.length > 0) {
+            } else {
+                res.status(200).json({ ures: false, nincs: true });
+            }
+        } else {
+            res.status(200).json({ ures: true, nincs: false });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ hiba: true });
+    }
+});
 //
 //
 //
@@ -831,7 +849,7 @@ router.post(
     }
 );
 
-router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, async(req, res) => {
+router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
         const payload = jwt.decode(req.cookies.auth_token);
         console.log(req.body);
@@ -909,7 +927,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
             });
         });
         res.status(200).json({ message: 'Sikeres koktel feltoltes' });
-        await kepculling()
+        await kepculling();
     } catch (err) {
         console.log(err);
     }
@@ -1049,7 +1067,7 @@ router.post('/AdminPanel/TermekFeltoltes', async (req, res) => {
                     termekAra
                 ]);
                 res.status(200).json({ message: 'Termek hozzadva sikeresen' });
-                await kepculling()
+                await kepculling();
             }
         }
     } catch (error) {
@@ -1365,7 +1383,6 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     }
 });
 
-
 router.delete('/AdatlapLekeres/Kosarurites', async (request, response) => {
     let mit = jwt.decode(request.cookies.auth_token).userID;
     let MelyikKosár = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
@@ -1389,7 +1406,6 @@ router.delete('/AdatlapLekeres/Kosarurites', async (request, response) => {
     }
 });
 
-
 router.delete('/AdatlapLekeres/TermekUrites', async (request, response) => {
     let mit = request.body.termék;
     let honnan = await lekeres(
@@ -1409,7 +1425,6 @@ router.delete('/AdatlapLekeres/TermekUrites', async (request, response) => {
         });
     }
 });
-
 
 router.patch('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     let mit = request.body.termék;
@@ -1433,7 +1448,6 @@ router.patch('/AdatlapLekeres/TermekFrissites', async (request, response) => {
         });
     }
 });
-
 
 router.delete('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     let ki = request.body.id;
@@ -1521,46 +1535,44 @@ router.get('/Koktelok/KepLekeres', async (request, response) => {
     }
 });
 
-
 router.put('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     try {
-        let hiba=false
-        let tomb =""
+        let hiba = false;
+        let tomb = '';
         let adatmodositas = 'UPDATE felhasználó SET Felhasználónév=?,Email=?';
-        if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.Email)&&/^[a-zA-Z0-9_]{2,30}$/.test(request.body.Felhasználónév)) {
+        if (
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.Email) &&
+            /^[a-zA-Z0-9_]{2,30}$/.test(request.body.Felhasználónév)
+        ) {
             tomb = `${request.body.Felhasználónév},${request.body.Email}`;
-        }
-        else{
-            hiba=true
+        } else {
+            hiba = true;
         }
         let profil = jwt.decode(request.cookies.auth_token).userID;
-        if (request.body.Jelszó != 'undefined'&&hiba==false) {
+        if (request.body.Jelszó != 'undefined' && hiba == false) {
             if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.Jelszó)) {
                 adatmodositas += ',Jelszó=?';
                 tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
-            }
-            else{
-                hiba=true
+            } else {
+                hiba = true;
             }
         }
-        if (request.body.KépÚtvonal != undefined&&hiba==false) {
+        if (request.body.KépÚtvonal != undefined && hiba == false) {
             adatmodositas += ',ProfilKepUtvonal=?';
             tomb += `,${request.body.KépÚtvonal}`;
         }
         adatmodositas += ` WHERE FelhID LIKE ${profil}`;
-        if (hiba==false) {
+        if (hiba == false) {
             await lekeres(adatmodositas, tomb.split(','));
-            await kepculling()
+            await kepculling();
             response.status(200).json({
                 message: 'Siker!'
             });
-        }
-        else{
+        } else {
             response.status(500).json({
                 message: 'Hibás adat!'
             });
         }
-        
     } catch (error) {
         console.log(error);
         response.status(500).json({
@@ -2041,8 +2053,6 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
     }
 });
 
-
-
 //
 //
 //
@@ -2072,23 +2082,22 @@ router.get('/WebShop/TermekLekeres', async (request, response) => {
 router.get('/WebShop/TermeklekeresByNev/:nev', async (request, response) => {
     try {
         const nev = request.params.nev;
-        console.log(nev)
+        console.log(nev);
         const query = 'SELECT * FROM webshoptermek';
-        let Nevlista = []
+        let Nevlista = [];
         const [termekek] = await DBconnetion.promise().query(query);
         for (let i = 0; i < termekek.length; i++) {
-            if (termekek[i].TermekCim.includes(nev)) 
-            {
-                Nevlista.push(termekek[i])    
+            if (termekek[i].TermekCim.includes(nev)) {
+                Nevlista.push(termekek[i]);
             }
-            }
+        }
         response.status(200).json({
             data: Nevlista
         });
     } catch (error) {
         console.log(error);
         throw new Error(error);
-        
+
         response.status(500).json({
             message: 'Hibás lekérés'
         });
@@ -2174,7 +2183,7 @@ router.post('/Webshop/szures', async (request, response) => {
             console.log('2') 
         */
 
-       //SZÉPÍTENI KELL!!!
+        //SZÉPÍTENI KELL!!!
 
         let szurtTermekek;
         if (ertekLista.length == 1) {
@@ -2253,53 +2262,50 @@ router.post('/Webshop/szures', async (request, response) => {
     }
 });
 
-router.post('/Webshop/KosarKuldes/:id', async(request,response)=>{
-    
+router.post('/Webshop/KosarKuldes/:id', async (request, response) => {
     if (request.cookies.auth_token != null) //be van e jelentkezve a felhasználó
-        {
-           try {
-                const id = request.params.id;
-                const mennyiseg = 1;
-                const UserID = jwt.decode(request.cookies.auth_token).userID //"sessionId" lekérése
-              
+    {
+        try {
+            const id = request.params.id;
+            const mennyiseg = 1;
+            const UserID = jwt.decode(request.cookies.auth_token).userID; //"sessionId" lekérése
 
-                const KosarLekeresQuery = "SELECT SessionID from kosár WHERE UserID = ?" 
-                const  [KosarLekeres] = await DBconnetion.promise().query(KosarLekeresQuery,[UserID])
+            const KosarLekeresQuery = 'SELECT SessionID from kosár WHERE UserID = ?';
+            const [KosarLekeres] = await DBconnetion.promise().query(KosarLekeresQuery, [UserID]);
 
-                const ArLekeresQuery = "SELECT Ar FROM webshoptermek WHERE TermekID = ?"
-                 const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery,[id])
-            
+            const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
+            const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
 
-                const VanEIlyenQuery = "SELECT * FROM kosártermék WHERE TermekID = ?"
-                const [vanEIlyen] =  await DBconnetion.promise().query(VanEIlyenQuery,[id])
-             
+            const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ?';
+            const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id]);
 
-                //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
-                if (vanEIlyen[0] == undefined) 
-                {
-                    const kosarFeltoltQuery = "INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)"
-                    const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery,[KosarLekeres[0].SessionID, id, mennyiseg, ArLekeres[0][0].Ar])
-                    response.status(200).json({Siker:KosarFeltolt.affectedRows})  
-                }
-                else
-                {
-                    const kosarUpdateQuery = "UPDATE kosártermék SET Darabszam = Darabszam+1 WHERE TermekID = ? AND KosarID = ?"
-                    const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery,[id,KosarLekeres[0].SessionID])
-                    response.status(200).json({Siker:KosarUpdate.affectedRows})
-                }
-            } 
-         catch (error) 
-         {
-            console.log(error)
-            response.status(500).json({hiba:error})
+            //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
+            if (vanEIlyen[0] == undefined) {
+                const kosarFeltoltQuery =
+                    'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
+                const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
+                    KosarLekeres[0].SessionID,
+                    id,
+                    mennyiseg,
+                    ArLekeres[0][0].Ar
+                ]);
+                response.status(200).json({ Siker: KosarFeltolt.affectedRows });
+            } else {
+                const kosarUpdateQuery =
+                    'UPDATE kosártermék SET Darabszam = Darabszam+1 WHERE TermekID = ? AND KosarID = ?';
+                const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [
+                    id,
+                    KosarLekeres[0].SessionID
+                ]);
+                response.status(200).json({ Siker: KosarUpdate.affectedRows });
+            }
+        } catch (error) {
+            console.log(error);
+            response.status(500).json({ hiba: error });
         }
-
-    } 
-    else 
-        {
-                response.status(200).json({hiba:"bejel"})
-        }
-   
-})
+    } else {
+        response.status(200).json({ hiba: 'bejel' });
+    }
+});
 
 module.exports = router;
