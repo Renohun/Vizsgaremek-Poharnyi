@@ -48,6 +48,20 @@ router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak
 router.get('/LepjBe', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/belepes.html'));
 });
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
+router.get('/felhasznaloEllenorzes', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/felhasnzaloEll.html'));
+});
+
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
+router.get('/felhasznaloAuth/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/emailKodMegadas.html'));
+});
+
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
+router.get('/jelszoValtoztatas/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/jelszoValt.html'));
+});
 
 //KoktelKeszites
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/')));

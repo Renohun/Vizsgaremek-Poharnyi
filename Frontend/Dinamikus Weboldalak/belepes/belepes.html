@@ -29,7 +29,14 @@
                         </li>
                     </div>
                     <div class="navbar-nav d-flex align-items-center">
-                        <input type="button" value="" id="ThemeSwitcher" />
+                        <div id="ThemeSwitcher">
+                            <img
+                                src="../kellékek/free-moon-icon-2304-thumb.png"
+                                id="themeSwitcherimg"
+                                style="height: 50px; width: 50px"
+                                alt=""
+                            />
+                        </div>
                         <a href="/Regisztralj" id="regisztracio">
                             <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
@@ -88,16 +95,16 @@
                                     class="form-control"
                                     required
                                 />
-
+                                <a href="/felhasznaloEllenorzes" target="_self">Elfelejetettem a jelszot!</a>
                                 <input
                                     type="submit"
                                     id="bejelentkezesGomb"
                                     value="Bejelentkezes"
-                                    class="w-100 btn btn-success mt-4"
+                                    class="w-100 btn btn-success mt-3"
                                 />
                             </form>
                             <label for="jelszomutatas">Jelszo megjelenitese</label>
-                            <input type="checkbox" name="" id="jelszomutatas" class="mt-3" />
+                            <input type="checkbox" name="" id="jelszomutatas" class="mt-2" />
                         </div>
                         <div class="card-header d-flex flex-column align-items-center">
                             <span class="text-center fw-bold"
