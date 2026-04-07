@@ -12,6 +12,7 @@ async function POSTfetch(url, obj) {
             throw new Error('Hiba tortent a POST fetchnel');
         }
     } catch (err) {
+        console.error(err);
         throw new Error(err);
     }
 }
@@ -25,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalElement.show();
 
             document.getElementById('modalText').innerText =
-                'Nem adott meg email cimet! Kerjuk adjon meg egy email cimet!';
+                'Nem adott meg egy olyan email cimet, amely megfelel a kriteriumoknak!';
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
@@ -41,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
             });
+        }
+        if (response.redirect != null || undefined) {
+            window.location.href = response.redirect + '/' + response.kod;
         }
     });
 });

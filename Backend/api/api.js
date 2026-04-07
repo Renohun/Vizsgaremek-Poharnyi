@@ -9,6 +9,9 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const fajlkezelo = require('fs/promises');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+require('dotenv').config();
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -557,12 +560,15 @@ router.post('/belepes', (request, response) => {
 
 router.post('/felhasznaloEllenorzes', async (req, res) => {
     try {
-        const email = req.body.email;
-        if (email.length > 0) {
+        let email = req.body.email;
+        if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
             const query = 'SELECT Email FROM felhasználó WHERE Email LIKE ?';
             //letezik e felhasznalo egyaltalan
             const [rows] = await DBconnetion.promise().query(query, [email]);
             if (rows.length > 0) {
+                //ez a sor az emailt kodolja base64 segitsegevel, ez nem biztonsagos kodolas, csak szimplan nem akarom az emailt csak ugy megejeleniteni
+                email = Buffer.from(email, 'utf-8').toString('base64');
+                res.status(200).json({ redirect: '/felhasznaloAuth', kod: email });
             } else {
                 res.status(200).json({ ures: false, nincs: true });
             }
@@ -574,6 +580,65 @@ router.post('/felhasznaloEllenorzes', async (req, res) => {
         res.status(500).json({ hiba: true });
     }
 });
+
+let emailKod;
+
+//email kikuldi --- tobbszor hasznalhato vegpont
+router.get('/emailKuldes', async (req, res) => {
+    try {
+        const urlArr = req.get('referer').split('/');
+        const emailCoded = urlArr[urlArr.length - 1];
+        //dekodolt email base64-bol at utf8-ba
+        const emailDeCoded = Buffer.from(emailCoded, 'base64').toString('utf-8');
+
+        //generaluk egy 6 jegy kodot amelyet beleteszunk az emailbe, amit majd elkerunk a felhasznalotol ezel authenticalva
+        function generateCode(length = 6) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const bytes = crypto.randomBytes(length);
+
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars[bytes[i] % chars.length];
+            }
+            return result;
+        }
+
+        emailKod = generateCode();
+        console.log(process.env.GUSER);
+        console.log(process.env.GPASS);
+
+        // Create a transporter using SMTP
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // use STARTTLS (upgrade connection to TLS after connecting)
+            auth: {
+                user: process.env.GUSER,
+                pass: process.env.GPASS
+            }
+        });
+
+        try {
+            const info = await transporter.sendMail({
+                from: process.env.GUSER, // sender address
+                to: emailDeCoded, // list of recipients
+                subject: 'Elfelejtett jelszo', // subject line
+                html: `<h2>Az On kodja:</h2><p style="color: blue;">${emailKod}</p>` // HTML body
+            });
+
+            console.log('Message sent: %s', info.messageId);
+            // Preview URL is only available when using an Ethereal test account
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        } catch (err) {
+            throw new Error('sikertelen email kuldes');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error });
+    }
+});
+
+router.post('/kodEllenorzes', (req, res) => {});
 //
 //
 //

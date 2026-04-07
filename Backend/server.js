@@ -53,6 +53,11 @@ router.get('/felhasznaloEllenorzes', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/felhasnzaloEll.html'));
 });
 
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
+router.get('/felhasznaloAuth/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/emailKodMegadas.html'));
+});
+
 //KoktelKeszites
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/')));
 router.get('/Keszites', (req, res) => {
