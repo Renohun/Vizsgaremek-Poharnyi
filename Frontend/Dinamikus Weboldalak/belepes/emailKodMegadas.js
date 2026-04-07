@@ -37,5 +37,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await POSTfetch('http://127.0.0.1:3000/api/kodEllenorzes', {
             kod: document.getElementById('kodInput').value
         });
+        console.log(response);
+
+        if (response.ures == true) {
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = 'Nem adott meg kodot! Kerjuk adjon meg egy kodot!';
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
+        }
+        if (response.hibas == true) {
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText =
+                'Helytelen kodot adott meg! Kerjuk adja meg a helyes kodot vagy kerjen egy uj email-t!';
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
+        }
+        if (response.helyes == true && (response.redirect != null || undefined)) {
+            window.location.href = '/jelszoValtoztatas/' + response.kod;
+        }
     });
 });

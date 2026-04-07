@@ -629,6 +629,8 @@ router.get('/emailKuldes', async (req, res) => {
             console.log('Message sent: %s', info.messageId);
             // Preview URL is only available when using an Ethereal test account
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+            res.status(200).json({ message: 'sikeres email kuldes!' });
         } catch (err) {
             throw new Error('sikertelen email kuldes');
         }
@@ -638,7 +640,72 @@ router.get('/emailKuldes', async (req, res) => {
     }
 });
 
-router.post('/kodEllenorzes', (req, res) => {});
+router.post('/kodEllenorzes', (req, res) => {
+    try {
+        const kuldottKod = req.body.kod;
+        const urlArr = req.get('referer').split('/');
+        const emailCoded = urlArr[urlArr.length - 1];
+        console.log('kuldott: ' + kuldottKod);
+        console.log('email: ' + emailKod);
+
+        if (kuldottKod.length > 0) {
+            if (kuldottKod == emailKod) {
+                res.status(200).json({
+                    helyes: true,
+                    redirect: '/jelszoValtoztatas',
+                    kod: emailCoded,
+                    ures: false,
+                    hibas: false
+                });
+            } else {
+                res.status(200).json({ helyes: false, ures: false, hibas: true });
+            }
+        } else {
+            res.status(200).json({ ures: true, helyes: false, hibas: false });
+        }
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ err: error });
+    }
+});
+
+router.patch('/jelszoValtoztatas', async (req, res) => {
+    try {
+        const jelszo1 = req.body.jelszo1;
+        const jelszo2 = req.body.jelszo2;
+
+        const kuldottKod = req.body.kod;
+        const urlArr = req.get('referer').split('/');
+        const emailCoded = urlArr[urlArr.length - 1];
+        const emailDeCoded = Buffer.from(emailCoded, 'base64').toString('utf-8');
+
+        if (
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{2,}$/.test(jelszo1) &&
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{2,}$/.test(jelszo2)
+        ) {
+            if (jelszo1 == jelszo2) {
+                //titkositas
+                const kodoltJelszo = await argon.hash(jelszo1, { type: argon.argon2id });
+                const query = 'UPDATE felhasználó SET Jelszó = ? WHERE Email LIKE ?';
+                const [rows] = await DBconnetion.promise().query(query, [kodoltJelszo, emailDeCoded]);
+
+                res.status(200).json({
+                    kriterium: false,
+                    egyezes: false,
+                    megvaltoztatva: true,
+                    valtoztatottSorok: rows.affectedRows
+                });
+            } else {
+                res.status(200).json({ kriterium: false, egyezes: true, megvaltoztatva: false });
+            }
+        } else {
+            res.status(200).json({ kriterium: true, egyezes: false, megvaltoztatva: false });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Hiba tortent', error: error });
+    }
+});
 //
 //
 //
