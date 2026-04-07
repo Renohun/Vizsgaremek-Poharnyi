@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
-                window.location.href = '/';
             });
         }
         if (response.egyezes == true) {
@@ -44,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
-                window.location.href = '/';
             });
         }
         if (response.megvaltoztatva == true) {

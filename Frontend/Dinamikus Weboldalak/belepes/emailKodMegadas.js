@@ -33,6 +33,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     //email-t itt kikuldi
     await GETfetch('http://127.0.0.1:3000/api/emailKuldes');
 
+    document.getElementById('ujEmailKeres').addEventListener('click', async () => {
+        await GETfetch('http://127.0.0.1:3000/api/emailKuldes');
+        var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+        modalElement.show();
+
+        document.getElementById('modalText').innerText = 'Az uj email sikeresen elkuldve!';
+
+        document.getElementById('modalBtn').addEventListener('click', () => {
+            modalElement.hide();
+        });
+    });
+
     document.getElementById('kodKuldesBtn').addEventListener('click', async () => {
         const response = await POSTfetch('http://127.0.0.1:3000/api/kodEllenorzes', {
             kod: document.getElementById('kodInput').value
