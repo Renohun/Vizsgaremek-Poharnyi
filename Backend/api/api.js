@@ -2051,26 +2051,41 @@ router.post('/Termek/KosarKuldes', async (request, response) => {
             const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
             const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
 
+            const mennyisegLekeres = 'SELECT TermekKeszlet FROM webshoptermek WHERE TermekID = ?';
+            const [MennyisegLe] = await DBconnetion.promise().query(mennyisegLekeres, [id]);
+            
             const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ?';
             const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id]);
-
-            //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
-            if (vanEIlyen[0] == undefined) {
-                const kosarFeltoltQuery =
-                    'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
-                const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
-                    KosarLekeres[0].SessionID,
-                    id,
-                    mennyiseg,
-                    ArLekeres[0][0].Ar
-                ]);
-                response.status(200).json({ Siker: KosarFeltolt.affectedRows });
-            } else {
-                const kosarUpdateQuery =
-                    'UPDATE kosártermék SET Darabszam = Darabszam+? WHERE TermekID = ? AND KosarID = ?';
-                const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [mennyiseg,id,KosarLekeres[0].SessionID]);
-                response.status(200).json({ Siker: KosarUpdate.affectedRows });
+            if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99) 
+            {   
+                
+                response.status(200).json({hiba:"raktar"})
             }
+            else
+            {
+                  //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
+                if (vanEIlyen[0] == undefined) 
+                    {
+                            const kosarFeltoltQuery =
+                                'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
+                            const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
+                                KosarLekeres[0].SessionID,
+                                id,
+                                mennyiseg,
+                                ArLekeres[0][0].Ar
+                            ]);
+                            response.status(200).json({ Siker: KosarFeltolt.affectedRows });
+                    } 
+                else 
+                    {
+                        const kosarUpdateQuery =
+                            'UPDATE kosártermék SET Darabszam = Darabszam+? WHERE TermekID = ? AND KosarID = ?';
+                        const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [mennyiseg,id,KosarLekeres[0].SessionID]);
+                        response.status(200).json({ Siker: KosarUpdate.affectedRows });
+                    }
+            }
+          
+            
         } catch (error) {
             console.log(error);
             response.status(500).json({ hiba: error });

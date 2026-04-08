@@ -84,6 +84,7 @@ const oldalGenerálás =  async () =>{
     TermekLeirasHely.innerHTML = LekertTermekek.termek[0].TermekLeiras
     //adatokTabla
     let tablaHely = document.getElementById("Tablazat")
+    tablaHely.innerHTML = "";
     //szűrések
     let TablazatElemek = {"Kategória" : LekertTermekek.termek[0].TermekKategoria,"Márka" : LekertTermekek.termek[0].TermekMarka, "Származási Hely" : LekertTermekek.termek[0].TermekSzarmazas};
     if (LekertTermekek.termek[0].TermekAlkoholSzazalek != 0) 
@@ -122,22 +123,53 @@ const oldalGenerálás =  async () =>{
     //vanEPolcon
     let PolcLabelSzovegHely = document.getElementById("VaneSzoveg")
     let PolcLabelHely = document.getElementById("VanePolcon")
+    let kosarGomb = document.getElementById("kosarba")
+    let mennyisegHely = document.getElementById("mennyisegInput")
     if (LekertTermekek.termek[0].TermekKeszlet <= 5 && LekertTermekek.termek[0].TermekKeszlet > 0 ) 
     {
+        //a felhasználó nem tud a raktáron lévő mennyiségnél többet rendelni!
+        let max =LekertTermekek.termek[0].TermekKeszlet;
+        mennyisegHely.max = max;
+        mennyisegHely.addEventListener("change",()=>{
+            
+            if (mennyisegHely.value > max) 
+            {
+                mennyisegHely.value = max;  
+            }
+        })
         PolcLabelHely.innerHTML = "Utolsó Darabok!"
         PolcLabelHely.classList.add("Utolso")
         console.log(PolcLabelHely)
     }
     else if(LekertTermekek.termek[0].TermekKeszlet > 5)
     {
+        //a felhasználó maximum 99 terméket tud rendelni!
+      
+        let max = mennyisegHely.max
+          if (max > LekertTermekek.termek[0].TermekKeszlet) 
+            {
+                max = LekertTermekek.termek[0].TermekKeszlet
+            }
+        mennyisegHely.addEventListener("change",()=>{
+            console.log(max) 
+            if (mennyisegHely.value > max) /*why??*/ 
+            {
+                mennyisegHely.value = max;  
+            }
+        })
+        
         PolcLabelHely.innerHTML = "Raktáron!"
         PolcLabelHely.classList.add("VanPolcon")
-          console.log(PolcLabelHely)
+        console.log(PolcLabelHely)
     }
-    else{
+    else
+    {
+        kosarGomb.innerHTML = "Nem lehet kosárba rakni!"
+        kosarGomb.disabled = "true";
+        mennyisegHely.disabled = "true"
         PolcLabelHely.innerHTML = "Elfogyott!"
         PolcLabelHely.classList.add("NincsPolcon")
-          console.log(PolcLabelHely)
+        console.log(PolcLabelHely)
     }
     //Ertekeles
     //Ellenorizzuk, hogy a felhasznalo ertekelt e mar
@@ -242,6 +274,9 @@ const KosarbaRak = async()=>
     else if(KosarData.Siker != null){
         alert("Sikeresen kosárba rakta a terméket!")
     }
+    else if(KosarData.hiba == "raktar"){
+        alert("nincs elég termék raktáron, vagy túl sokat próbált egyszerre rendelni!")
+    }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -254,6 +289,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     var coll = document.getElementsByClassName('TovGomb');
     var i;
 
+    //mennyiség maximalizálása
+   
 
     for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener('click', function () {
