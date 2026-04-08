@@ -92,7 +92,11 @@ const oldalGenerálás =  async () =>{
     }
     if(LekertTermekek.termek[0].TermekKategoria != "Eszkozok" || LekertTermekek.termek[0].TermekKategoria != "Pohar" || LekertTermekek.termek[0].TermekKategoria != "Merch") 
     {
-       TablazatElemek.Ürtartalom =  LekertTermekek.termek[0].TermekUrtartalom + "L"
+       if (LekertTermekek.termek[0].TermekUrtartalom != null)
+        {
+            TablazatElemek.Ürtartalom =  LekertTermekek.termek[0].TermekUrtartalom + "L"
+        }  
+       
     }
     for (const element of Object.entries(TablazatElemek))
     {
