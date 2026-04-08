@@ -225,12 +225,35 @@ const ertekeles = (ErtekeltE,ertek) =>
     }
 }
 
+const KosarbaRak = async()=>
+{
+    let mennyiseg = document.getElementById("mennyisegInput").value
+    let url = window.location.href.split('/');
+    let Termekid = url[4];
+
+    let postObj = {id:Termekid,mennyiseg:mennyiseg}
+
+    const KosarData = await PostFetch("/api/Termek/KosarKuldes",postObj)
+    console.log(KosarData)
+    if(KosarData.hiba == "bejel")
+    {
+        alert("A termék kosárba helyezéséhez kérem jelentkezzen be!")
+    }
+    else if(KosarData.Siker != null){
+        alert("Sikeresen kosárba rakta a terméket!")
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     //függvények meghívása
     oldalGenerálás()
 
+
+    let kosarGomb = document.getElementById("kosarba")
+    kosarGomb.addEventListener("click",KosarbaRak)
     var coll = document.getElementsByClassName('TovGomb');
     var i;
+
 
     for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener('click', function () {

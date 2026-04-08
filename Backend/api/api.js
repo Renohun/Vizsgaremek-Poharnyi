@@ -2036,4 +2036,49 @@ router.post("/termek/ErtekelesKuldes/",async(request,response)=>
     
 })
 
+router.post('/Termek/KosarKuldes', async (request, response) => {
+    if (request.cookies.auth_token != null) //be van e jelentkezve a felhasználó
+    {
+        try {
+            const id = request.body.id;
+            
+            const mennyiseg = request.body.mennyiseg;
+            const UserID = jwt.decode(request.cookies.auth_token).userID; //"sessionId" lekérése
+            console.log(UserID)
+            const KosarLekeresQuery = 'SELECT SessionID from kosár WHERE UserID = ?';
+            const [KosarLekeres] = await DBconnetion.promise().query(KosarLekeresQuery, [UserID]);
+
+            const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
+            const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
+
+            const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ?';
+            const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id]);
+
+            //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
+            if (vanEIlyen[0] == undefined) {
+                const kosarFeltoltQuery =
+                    'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
+                const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
+                    KosarLekeres[0].SessionID,
+                    id,
+                    mennyiseg,
+                    ArLekeres[0][0].Ar
+                ]);
+                response.status(200).json({ Siker: KosarFeltolt.affectedRows });
+            } else {
+                const kosarUpdateQuery =
+                    'UPDATE kosártermék SET Darabszam = Darabszam+? WHERE TermekID = ? AND KosarID = ?';
+                const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [mennyiseg,id,KosarLekeres[0].SessionID]);
+                response.status(200).json({ Siker: KosarUpdate.affectedRows });
+            }
+        } catch (error) {
+            console.log(error);
+            response.status(500).json({ hiba: error });
+        }
+    } else 
+    {
+        response.status(200).json({ hiba: 'bejel' });
+    }
+});
+
 module.exports = router;
