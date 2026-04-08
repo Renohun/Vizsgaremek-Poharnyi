@@ -110,6 +110,61 @@ const oldalGenerálás =  async () =>{
         }
         tablaHely.appendChild(tr)
     }
+    //HasonloTermekek
+    let hova = document.getElementById("TermekSor")
+    const HasonlokData = await GETfetch(`/api/Termek/HasonloTermekek/${LekertTermekek.termek[0].TermekKategoria}`)
+   
+
+    console.log(HasonlokData)
+    for (let i = 0; i < HasonlokData.hasonlok.length; i++)
+    {
+        const KepData = await TermekKepLekeres(`http://127.0.0.1:3000/api/termek/KepLekeres/${HasonlokData.hasonlok[i].TermekID}`)
+        let KepUrl = URL.createObjectURL(KepData)
+        let kartya = document.createElement("div")
+        kartya.classList.add("Termek")
+        hova.appendChild(kartya)
+
+        let KepDiv = document.createElement("div")
+        KepDiv.classList.add("hasonloKepDiv")
+        kartya.appendChild(KepDiv)
+
+        let img = document.createElement("img")
+        img.src = KepUrl
+        img.classList.add("hasonloKep")
+        KepDiv.appendChild(img)
+
+        let nevDiv = document.createElement("div")
+        nevDiv.classList.add("hasonloNevDiv")
+        kartya.appendChild(nevDiv)
+
+        let h4 = document.createElement("h4")
+        h4.classList.add("hasonloNev")
+        h4.innerHTML = HasonlokData.hasonlok[i].TermekCim
+        nevDiv.appendChild(h4)
+
+        let ErtekelesDiv = document.createElement("div")
+        ErtekelesDiv.classList.add("ErtekelesDiv")
+        kartya.appendChild(ErtekelesDiv)
+        let csillagok = [];
+        for (let i = 0; i < 5; i++)
+        {
+            let csillag = document.createElement("p")
+            csillag.innerHTML = "☆"
+            csillag.classList.add("HasonloCsillag")
+            csillagok.push(csillag)
+            ErtekelesDiv.appendChild(csillag)
+        }
+        const meddig = await GETfetch(`/api/Termek/HasonloTermekErtekeles/${HasonlokData.hasonlok[i].TermekID}`)
+        console.log(meddig)
+        if (meddig != 0) {
+            
+        }
+        for (let i = 0; i < meddig.ert; i++) 
+            {
+                console.log("kapa")
+                csillagok[i].innerHTML="★"
+            }    
+    }
     //Ar
     let ArHely = document.getElementById("arHely")
     ArHely.innerHTML = LekertTermekek.termek[0].Ar + "Ft"
@@ -286,14 +341,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let kosarGomb = document.getElementById("kosarba")
     kosarGomb.addEventListener("click",KosarbaRak)
-    var coll = document.getElementsByClassName('TovGomb');
-    var i;
+
+    var adat = document.getElementById('Tbtn');
 
     //mennyiség maximalizálása
-   
-
-    for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener('click', function () {
+    adat.addEventListener('click', function () {
             this.classList.add('active');
             var content = this.nextElementSibling;
             if (content.style.maxHeight) {
@@ -302,5 +354,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 content.style.maxHeight = content.scrollHeight + 'px';
             }
         });
-    }
+    
+    
 });

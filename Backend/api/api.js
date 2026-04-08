@@ -2096,4 +2096,48 @@ router.post('/Termek/KosarKuldes', async (request, response) => {
     }
 });
 
+router.get("/Termek/HasonloTermekek/:kateg",async(request,response)=>{
+    try 
+    {
+        const kateg = request.params.kateg;
+        const kategQuery = 'SELECT * FROM webshoptermek WHERE TermekKategoria LIKE ?'
+        const [KategLeker] = await DBconnetion.promise().query(kategQuery,[kateg])
+        let indexLista = [];
+        for (let i = 0; i < 3; i++) 
+        {
+           indexLista.push(Math.floor(Math.random()*KategLeker.length))
+        }
+        let Hasonlok = [];
+        for (let i = 0; i <indexLista.length; i++) {
+            for (let j = 0; j < KategLeker.length; j++) {
+                if (j == indexLista[i]) 
+                {
+                    Hasonlok.push(KategLeker[j])
+                }
+            }
+        }
+        response.status(200).json({
+            hasonlok:Hasonlok
+        })
+    } 
+    catch (error) {
+        console.log(error)
+    }
+})
+
+router.get("/Termek/HasonloTermekErtekeles/:id",async(request,response)=>{
+    try {
+        const id = request.params.id
+        console.log(id)
+        const query = "SELECT AVG(Ertekeles) AS 'atlag' FROM ertekeles WHERE HovaIrták = ? AND MilyenDologhoz = 'Termék'"
+        const [Ertekeles] =  await DBconnetion.promise().query(query,[id])
+        let atlag = Math.round(Ertekeles[0].atlag)
+        response.status(200).json({ert: atlag})
+    } catch (error) {
+        console.log(error)
+        response.status(500).json({hiba:error})
+    }
+   
+
+})
 module.exports = router;
