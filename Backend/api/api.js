@@ -2295,6 +2295,8 @@ router.post('/Webshop/szures', async (request, response) => {
         let query = 'SELECT * FROM webshoptermek WHERE';
         let whereErtekek;
         const elfogadott = ['csokkeno', 'novekvo', '-', 'TermekCim'];
+        /*whitelist - ezzel ellenőrzöm, hogy csak az általam elfogadott dolgokat írta be a felhasználó, 
+        az sql-injection miatt. táblanévnél nem lehet paraméterezni, ezért szükséges ez.*/
         let ertekLista = [];
         let OrderBy;
         let OrderByErtek;
