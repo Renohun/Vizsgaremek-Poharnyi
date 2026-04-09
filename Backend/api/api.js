@@ -1148,14 +1148,9 @@ async function lekeres(query, param) {
 }
 router.get('/AdatlapLekeres/FelhAdatok/', async (request, response) => {
     //A Lekérés definiálása
-    let query =
-        'SELECT Felhasználónév,Email,JelszóHossza,RegisztracioDatuma from felhasználó WHERE FelhID LIKE ?;SELECT COUNT(KiKedvelteID) AS KEDVID from kedvencek where KiKedvelteID like ? ;SELECT COUNT(Keszito) AS KOMMID from komment where Keszito like ?;SELECT COUNT(Keszito) AS RATEID from ertekeles where Keszito like ?;SELECT COUNT(Keszito) AS MAKEID from koktél where Keszito like ?;';
-    let ertekek = [];
-    for (let i = 0; i < 5; i++) {
-        ertekek.push(jwt.decode(request.cookies.auth_token).userID);
-    }
+    let query ='SELECT Felhasználónév,Email,JelszóHossza,RegisztracioDatuma,ProfilkepUtvonal,COUNT(KiKedvelteID) AS KEDVID,COUNT(Keszito) AS KOMMID,COUNT(Keszito) AS MAKEID,COUNT(Keszito) AS RATEID from felhasználó INNER JOIN kedvencek ON FelhID=KiKedvelteID INNER JOIN komment ON FelhID=Keszito,INNER JOIN ertekeles ON FelhID=Keszito, INNER JOIN koktél ON FelhID=Keszito WHERE FelhID LIKE ?';
     //Lekérdezés
-    DBconnetion.query(query, ertekek, async (err, rows) => {
+    DBconnetion.query(query, jwt.decode(request.cookies.auth_token).userID, async (err, rows) => {
         if (err) {
             response.status(500).json({
                 message: 'Hiba tortent lekeres kozben!',
@@ -1236,7 +1231,7 @@ router.get('/AdatlapLekeres/Koktelok/', async (request, response) => {
 });
 
 async function getKoktel(id) {
-    let koktelokLekeres = 'SELECT KoktelCim,BoritoKepUtvonal from koktél where KoktélID like ?';
+    let koktelokLekeres = 'SELECT KoktelCim,BoritoKepUtvonal,KoktélID from koktél where KoktélID like ?';
     let ertekelesAtlagLekeres ='SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
     let osszetevokLekerese = 'SELECT Osszetevő from koktelokosszetevoi where KoktélID like ?';
     let koktélbadgek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
@@ -1319,7 +1314,7 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     //Lekérések
     let KosarLekeres = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
     let KosarTermekLekeres = 'SELECT TermekID,Darabszam,EgysegAr FROM kosártermék WHERE KosarID LIKE ?';
-    let TermekLekeres = 'SELECT TermekCim,TermekLeiras FROM webshoptermek WHERE TermekID LIKE ?';
+    let TermekLekeres = 'SELECT TermekCim,TermekLeiras,TermekKepUtvonal FROM webshoptermek WHERE TermekID LIKE ?';
     //Adattárolók
     let vasarlo = jwt.decode(request.cookies.auth_token).userID;
     let kosar;
@@ -1455,34 +1450,10 @@ router.post('/AdatlapLekeres/KepFeltoltes', fileStorage.array('profilkep'), asyn
     }
 });
 
-router.get('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response) => {
-    try {
-        let melyik = request.params.melyik;
-        let kepkereses = 'SELECT BoritoKepUtvonal FROM Koktél WHERE KoktélID LIKE ?';
-        let kinek = await lekeres(kepkereses, melyik);
-        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].BoritoKepUtvonal));
-    } catch (error) {
-        console.log(error);
-    }
-});
 
-router.get('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response) => {
+router.get('/AdatlapLekeres/KepLekeres/:kep', async (request, response) => {
     try {
-        let melyik = request.params.melyik;
-        let kepkereses = 'SELECT TermekKepUtvonal FROM WebshopTermek WHERE TermekID LIKE ?';
-        let kinek = await lekeres(kepkereses, melyik);
-        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].TermekKepUtvonal));
-    } catch (error) {
-        console.log(error);
-    }
-});
-
-router.get('/AdatlapLekeres/KepLekeres/', async (request, response) => {
-    try {
-        let profil = jwt.decode(request.cookies.auth_token).userID;
-        let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
-        let kinek = await lekeres(kepkereses, profil);
-        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].ProfilkepUtvonal));
+        response.sendFile(path.join(__dirname, '..', 'images', request.params.kep));
     } catch (error) {
         console.log(error);
     }
