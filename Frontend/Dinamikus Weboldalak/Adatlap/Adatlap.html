@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter shadow">
             <div class="container-fluid hatter">
                 <div class="navbar-brand">
                     <a class="navbar-brand" id="marka" href="#">Pohárnyi</a>
@@ -30,7 +30,14 @@
                         </li>
                     </div>
                     <div class="navbar-nav d-flex align-items-center">
-                        <input type="button" value="" id="ThemeSwitcher" />
+                        <div id="ThemeSwitcher">
+                            <img
+                                src="../kellékek/free-moon-icon-2304-thumb.png"
+                                id="themeSwitcherimg"
+                                style="height: 50px; width: 50px"
+                                alt=""
+                            />
+                        </div>
                         <a href="/Regisztralj" id="regisztracio">
                             <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
@@ -89,13 +96,13 @@
                         <p class="fs-1">Adatlap</p>
                     </div>
                     <div class="row justify-content-center">
-                        <div class="col-9 col-sm-9 col-md-5 col-lg-5 col-xl-5">
+                        <div class="col-9 col-sm-9 col-md-5 col-lg-5 col-xl-5 ">
                             <div class="flex-column d-flex">
                                 <p id="result"></p>
                                 <p>Profilképed:</p>
                                 <label>
                                         <input type="file" hidden disabled  id="input" name="file" accept="image/*"/>
-                                        <img src="" class="profil-big" alt="A Profilképednek kéne itt lennie... valami nem sikerült." title="A Profilképed!" id="profilkep"/>
+                                        <img src="" class="profil-big shadow-lg" alt="A Profilképednek kéne itt lennie... valami nem sikerült." title="A Profilképed!" id="profilkep"/>
                                 </label>
                                 <label for="Felhasználónév">Felhasználónév:</label>
                                 <input type="text" disabled id="Felhasználónév" class="form-control"/>
@@ -120,7 +127,7 @@
                                 <input type="button" class="btn btn-primary mt-1" value="Adatok Módosítása" id="Módosítás">
                             </div>
                         </div>
-                        <div class="col-8 col-sm-9 col-md-4 col-lg-4 col-xl-4">
+                        <div class="col-8 col-sm-9 col-md-4 col-lg-4 col-xl-4 ">
                             <div class="fs-3">Statisztikák:</div>
                             <div class="card">
                                 <div class="paratlan">
@@ -146,18 +153,12 @@
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">A Kosarad</p>
                     </div>
-                    <div class="row mb-4 p-0">
-                        <div id="KosárGombok">
-
-                        </div>
-                        <div class="row pe-0">
-                            <div id="KosárFizetésGomb">
-
-                            </div>
-                            
-                        </div>
+                    <div id="KosarPanel" class="row">
+                        <span id="KosarAllapot" class="fs-3 mb-2"></span>
+                        <div id="KosárGombok" class="mb-2"></div>
+                        <div id="KosárFizetésGomb" class="mb-2"></div>
                     </div>
-                    <div class="row" id="IdeKosár">
+                    <div id="IdeKosár" class="row justify-content-center" >
                     </div>
 
 
@@ -166,7 +167,7 @@
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Kedvenc Koktélok</p>
                     </div>
-                    <div id="IdeKedvenc">
+                    <div id="IdeKedvenc" class="row justify-content-center">
 
                     </div>
                 </div>
@@ -174,7 +175,7 @@
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Saját Koktélok</p>
                     </div>
-                    <div id="IdeSaját">
+                    <div id="IdeSaját" class="row justify-content-center">
 
                     </div>  
                 </div>
