@@ -1148,21 +1148,34 @@ async function lekeres(query, param) {
 }
 router.get('/AdatlapLekeres/FelhAdatok/', async (request, response) => {
     //A Lekérés definiálása
-    let query ='SELECT Felhasználónév,Email,JelszóHossza,RegisztracioDatuma,ProfilkepUtvonal,COUNT(KiKedvelteID) AS KEDVID,COUNT(Keszito) AS KOMMID,COUNT(Keszito) AS MAKEID,COUNT(Keszito) AS RATEID from felhasználó INNER JOIN kedvencek ON FelhID=KiKedvelteID INNER JOIN komment ON FelhID=Keszito,INNER JOIN ertekeles ON FelhID=Keszito, INNER JOIN koktél ON FelhID=Keszito WHERE FelhID LIKE ?';
+    let adat ='SELECT Felhasználónév,Email,JelszóHossza,RegisztracioDatuma,ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
+    let kedvenc="SELECT COUNT(KiKedvelteID) AS KEDVID from felhasználó INNER JOIN kedvencek ON FelhID=KiKedvelteID WHERE FelhID LIKE ?"
+    let komment="SELECT COUNT(komment.Keszito) AS KOMMID from felhasználó INNER JOIN komment ON FelhID=komment.Keszito WHERE FelhID LIKE ?"
+    let ertekeles="SELECT COUNT(ertekeles.Keszito) AS RATEID from felhasználó INNER JOIN ertekeles ON FelhID=ertekeles.Keszito WHERE FelhID LIKE ?"
+    let keszitett="SELECT COUNT(koktél.Keszito) AS MAKEID from felhasználó INNER JOIN koktél ON FelhID=koktél.Keszito WHERE FelhID LIKE ?"
     //Lekérdezés
-    DBconnetion.query(query, jwt.decode(request.cookies.auth_token).userID, async (err, rows) => {
-        if (err) {
-            response.status(500).json({
-                message: 'Hiba tortent lekeres kozben!',
-                hiba: err
-            });
-        } else {
-            response.status(200).json({
-                message: 'Sikeres Lekérés!',
-                tartalom: rows
-            });
-        }
-    });
+    try {
+        adat=(await lekeres(adat,jwt.decode(request.cookies.auth_token).userID))[0]
+        kedvenc=(await lekeres(kedvenc,jwt.decode(request.cookies.auth_token).userID))[0]
+        komment=(await lekeres(komment,jwt.decode(request.cookies.auth_token).userID))[0]
+        ertekeles=(await lekeres(ertekeles,jwt.decode(request.cookies.auth_token).userID))[0]
+        keszitett=(await lekeres(keszitett,jwt.decode(request.cookies.auth_token).userID))[0]
+        let tartalom={adat,kedvenc,komment,ertekeles,keszitett}
+        response.status(200).json({
+            message:"Sikeres Lekérés!",
+            tartalom:tartalom
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message:"Hiba Történt!"
+        })
+    }
+
+    
+    
+    
 });
 
 router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
@@ -1314,12 +1327,14 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     //Lekérések
     let KosarLekeres = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
     let KosarTermekLekeres = 'SELECT TermekID,Darabszam,EgysegAr FROM kosártermék WHERE KosarID LIKE ?';
-    let TermekLekeres = 'SELECT TermekCim,TermekLeiras,TermekKepUtvonal FROM webshoptermek WHERE TermekID LIKE ?';
+    let TermekLekeres = 'SELECT TermekCim,TermekLeiras,TermekKepUtvonal,TermekKeszlet FROM webshoptermek WHERE TermekID LIKE ?';
+    let TermekErtekelesLekeres = 'SELECT AVG(ertekeles) AS Osszert FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE "Termék"';
+    let TermekKommentLekeres = 'SELECT COUNT(KommentID) AS KommNum FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE "Termék"';
     //Adattárolók
     let vasarlo = jwt.decode(request.cookies.auth_token).userID;
     let kosar;
     let kosartermekek;
-    let termekek = [];
+    let adatok=[]
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     //Lekérdezés
     try {
@@ -1331,13 +1346,16 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
             });
         } else {
             for (let i = 0; i < kosartermekek.length; i++) {
-                let temp = await lekeres(TermekLekeres, kosartermekek[i].TermekID);
-                termekek.push(temp[0]);
+                let kosarAdatok=kosartermekek[i]
+                let termAdatok = (await lekeres(TermekLekeres, kosartermekek[i].TermekID))[0];          
+                let ertekeles = (await lekeres(TermekErtekelesLekeres, kosartermekek[i].TermekID))[0];
+                let kommentek = (await lekeres(TermekKommentLekeres, kosartermekek[i].TermekID))[0];
+                adatok.push({kosarAdatok,termAdatok,ertekeles,kommentek})
+
             }
             response.status(200).json({
                 message: 'Sikeres Lekérés!',
-                kosár: kosartermekek,
-                termekek: termekek
+                adat: adatok
             });
         }
     } catch (error) {
@@ -1352,17 +1370,9 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
 
 
 router.delete('/AdatlapLekeres/Kosarurites', async (request, response) => {
-    let mit = jwt.decode(request.cookies.auth_token).userID;
-    let MelyikKosár = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
-    let MelyikKosárAz;
     let KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
     try {
-        await DBconnetion.promise()
-            .query(MelyikKosár, mit)
-            .then(([rows]) => {
-                MelyikKosárAz = rows[0].SessionID;
-            });
-        await DBconnetion.promise().query(KosárÜrítés, MelyikKosárAz);
+        await lekeres(KosárÜrítés, jwt.decode(request.cookies.auth_token).userID);
         response.status(200).json({
             message: 'Sikeres Törlés!'
         });
@@ -1377,6 +1387,8 @@ router.delete('/AdatlapLekeres/Kosarurites', async (request, response) => {
 
 router.delete('/AdatlapLekeres/TermekUrites', async (request, response) => {
     let mit = request.body.termék;
+    console.log(mit);
+    
     let honnan = await lekeres(
         'SELECT SessionID FROM kosár WHERE UserID LIKE ?',
         jwt.decode(request.cookies.auth_token).userID
@@ -1398,14 +1410,10 @@ router.delete('/AdatlapLekeres/TermekUrites', async (request, response) => {
 
 router.patch('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     let mit = request.body.termék;
-    let honnan = await lekeres(
-        'SELECT SessionID FROM kosár WHERE UserID LIKE ?',
-        jwt.decode(request.cookies.auth_token).userID
-    );
     let mennyit = request.body.count;
     let TermékTöltés = 'UPDATE KosárTermék SET Darabszam = ? WHERE KosarID LIKE ? AND TermekID LIKE ?';
     try {
-        await DBconnetion.promise().query(TermékTöltés, [mennyit, honnan[0].SessionID, mit]);
+        await DBconnetion.promise().query(TermékTöltés, [mennyit, jwt.decode(request.cookies.auth_token).userID, mit]);
         response.status(200).json({
             message: 'Sikeres Frissítés!'
         });
