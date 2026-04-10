@@ -604,14 +604,14 @@ router.get('/emailKuldes', async (req, res) => {
         }
 
         emailKod = generateCode();
-        console.log(process.env.GUSER);
-        console.log(process.env.GPASS);
+        //console.log(process.env.GUSER);
+        //console.log(process.env.GPASS);
 
-        // Create a transporter using SMTP
         const transporter = nodemailer.createTransport({
+            //domain ez lehetne a outlook stb.. a szolgaltato
             host: 'smtp.gmail.com',
             port: 587,
-            secure: false, // use STARTTLS (upgrade connection to TLS after connecting)
+            secure: false,
             auth: {
                 user: process.env.GUSER,
                 pass: process.env.GPASS
@@ -619,16 +619,12 @@ router.get('/emailKuldes', async (req, res) => {
         });
 
         try {
-            const info = await transporter.sendMail({
-                from: process.env.GUSER, // sender address
-                to: emailDeCoded, // list of recipients
-                subject: 'Elfelejtett jelszo', // subject line
-                html: `<h2>Az On kodja:</h2><p style="color: blue;">${emailKod}</p>` // HTML body
+            await transporter.sendMail({
+                from: process.env.GUSER,
+                to: emailDeCoded,
+                subject: 'Elfelejtett jelszo',
+                html: `<h2>Az On kodja:</h2><p style="color: blue;">${emailKod}</p>`
             });
-
-            console.log('Message sent: %s', info.messageId);
-            // Preview URL is only available when using an Ethereal test account
-            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
             res.status(200).json({ message: 'sikeres email kuldes!' });
         } catch (err) {
