@@ -117,7 +117,15 @@ display: flex;
 .kartya{
     height: 100%    ;
 }
-
+/*értékelés*/
+.ertDiv{
+    display: flex;
+    flex-direction: row;
+}
+.ErtP{
+    min-width: 30px;
+    min-height: 30px;
+}
 @media (min-width: 1900px) 
 {
     .kartya{

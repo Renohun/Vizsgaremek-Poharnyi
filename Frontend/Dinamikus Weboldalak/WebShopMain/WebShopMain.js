@@ -281,6 +281,18 @@ const kartyaGen = async(data,hova)=>{
         KartyaBody.appendChild(adatDiv)
 
         //adatok kiírása
+//értékelés
+        let ertDiv = document.createElement("div")
+        ertDiv.classList.add("ertDiv")
+        adatDiv.appendChild(ertDiv)
+
+        for (let i = 0; i < 5; i++) {
+            let ErtP = document.createElement("p")
+            ErtP.innerHTML = "☆"
+            ErtP.classList.add("ErtP")
+            ertDiv.appendChild(ErtP)
+            }
+
 //kateg
         let div1 = document.createElement("div")
         div1.classList.add("kulondiv")
