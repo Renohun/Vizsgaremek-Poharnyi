@@ -79,11 +79,8 @@ router.get('/WebShop', (req, res) => {
 //Kijelentkezes
 //TODO POST-ra atirni
 router.get('/Kijelentkezes', authenticationMiddleware, (req, res) => {
-    res.clearCookie('auth_token', {
-        httpOnly: 'true',
-        secure: process.env.COOKIE_SECURE === 'true',
-        sameSite: process.env.COOKIE_SECURE
-    });
+    res.clearCookie('auth_token');
+    res.clearCookie('auth_token_access');
 
     res.redirect('/');
 });
