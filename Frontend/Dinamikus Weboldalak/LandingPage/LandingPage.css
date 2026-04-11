@@ -1,0 +1,100 @@
+
+#header{
+    background-image: url("../LandingPage/img/koktel2.webp") !important ;
+    background-position:center bottom;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment:scroll;
+    height:50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    }
+    #Focim{
+        color: white;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    font-size: 100px;
+    font-weight: bold;
+    align-content: center;
+}
+@media only screen and (max-width: 425px) 
+{
+      #Focim{font-size: 60px;}
+}
+#alcim{
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    font-weight: bold;
+    align-content: center;
+    font-size: large;
+}
+#Body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+}
+#Bemutat{
+    display: flex;
+    margin-top: 50px;
+}
+#BodyCimDiv{
+background-color: rgb(65, 65, 65);
+    width: 100%;
+    display: flex;
+}
+#BodyCim{
+    display: flex;
+    font-size: 4vw;
+    align-items: center;
+    font-weight: 800;
+    margin: auto;
+    color: rgb(201, 201, 201);
+}
+#BemutatBal{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+#BemutatCim{
+   margin-left: 10px;
+}
+.bemutatSzoveg{
+    font-size: large;
+    margin-left: 10px;
+
+}
+#BemutatKep{
+    display: flex;
+    width: 50%;
+}
+#Kepek{
+    display: flex;
+    margin: auto;
+    
+}
+@media only screen and (max-width: 800px) 
+{
+
+        #Bemutat{
+            flex-direction: column;
+            margin: 0px;
+        }
+        #BemutatCim{
+            margin-top: 25px;
+        }
+        #BemutatBal{
+            display: flex;
+            flex-direction: column;
+            width: 100%
+           
+        }
+        #BemutatKep{display: none;}
+        .bemutatSzoveg{color: rgb(0, 0, 0);}
+        #BodyCim{font-size: 7vw;}
+}
