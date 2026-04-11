@@ -286,11 +286,17 @@ const kartyaGen = async(data,hova)=>{
         ertDiv.classList.add("ertDiv")
         adatDiv.appendChild(ertDiv)
 
-        for (let i = 0; i < 5; i++) {
-            let ErtP = document.createElement("p")
-            ErtP.innerHTML = "☆"
-            ErtP.classList.add("ErtP")
-            ertDiv.appendChild(ErtP)
+        for (let i = 0; i < 5; i++) 
+            {
+                let ErtP = document.createElement("p")
+                ErtP.innerHTML = "☆"
+                ErtP.classList.add("ErtP")
+                ertDiv.appendChild(ErtP)
+            }
+        const Ertek = await TermekLekeres(`/api/WebShop/TermekErtekeles/${data.data[i].TermekID}`) 
+        for (let i = 0; i < Ertek.ert; i++) 
+            {
+                ertDiv.children[i].innerHTML="★" //a kiszámolt értékig átirjuk a csillagokat
             }
 
 //kateg
