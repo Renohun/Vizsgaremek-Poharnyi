@@ -113,6 +113,13 @@ router.get('/Koktel/:koktelID', (req, res) => {
 router.get('/KoktelHiba', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/nincsilyen.html'));
 });
+// termekek
+router.get('/Termek/:termekID', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/TermekOldal/TermekOldal.html'));
+});
+router.get('/HianyzoTermek', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/TermekOldal/NincsIlyenTermek.html'));
+});
 
 router.get('/jogosultsag', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/hibaOldalak/jogosultsag.html'));
