@@ -112,6 +112,7 @@ const oldalGenerálás =  async () =>{
     }
     //HasonloTermekek
     let hova = document.getElementById("TermekSor")
+    hova.innerHTML = ""
     const HasonlokData = await GETfetch(`/api/Termek/HasonloTermekek/${LekertTermekek.termek[0].TermekKategoria}/${LekertTermekek.termek[0].TermekID}`)
    
 

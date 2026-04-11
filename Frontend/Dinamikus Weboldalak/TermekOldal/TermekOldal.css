@@ -77,16 +77,15 @@
     margin-top: 5px;
     margin-bottom: 10px;
     padding: 0;
-    width: auto;
+    width: 25%;
     height: 25px;
     color: rgb(31, 31, 31);
     border: none;
     text-align: left;
-    background-color: lightgoldenrodyellow;
+    background-color: rgb(223, 223, 223);
+    
 }
-.TovGomb:hover {
-    background-color: rgb(254, 255, 195);
-}
+.TovGomb:hover {background-color: rgb(180, 180, 180);}
 table,
 .lol {
     border: 1px solid rgb(180, 180, 180);
@@ -116,7 +115,6 @@ table,
      justify-self: center;
      margin: auto ;
     width: 100%;
-    background-color: lightgoldenrodyellow;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
