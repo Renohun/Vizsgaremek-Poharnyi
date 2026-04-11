@@ -2328,4 +2328,292 @@ router.get("/Termek/HasonloTermekErtekeles/:id",async(request,response)=>{
    
 
 })
+//
+//
+//
+// WebShop
+//
+//
+//
+router.get('/WebShop/TermekLekeres', async (request, response) => {
+    try {
+        const query = 'SELECT * FROM webshoptermek';
+        //console.log(limit)
+        const [termekek] = await DBconnetion.promise().query(query);
+        
+        response.status(200).json({
+            data: termekek,
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message: 'Hibás lekérés'
+        });
+    }
+});
+
+router.get('/WebShop/HosszLekeres', async (request, response) => {
+    try {
+        const query = 'SELECT COUNT(TermekID) AS "hossz" FROM webshoptermek';
+        //console.log(limit)
+        const [hossz] = await DBconnetion.promise().query(query);
+        
+        response.status(200).json({
+            data: hossz[0].hossz,
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message: 'Hibás lekérés'
+        });
+    }
+});
+
+router.get('/WebShop/TermekLekeresPag', async (request, response) => {
+    try {
+        const query = 'SELECT * FROM webshoptermek LIMIT ? OFFSET ?';
+        const Lengthquery = 'SELECT COUNT(TermekID) FROM webshoptermek';
+        const limit = parseInt(request.query.limit);
+        const offset = parseInt(request.query.offset);
+        const [termekek] = await DBconnetion.promise().query(query,[limit,offset]);
+        
+        response.status(200).json({
+            data: termekek,
+        });
+    } catch (error) {
+        
+        console.log(error);
+        response.status(500).json({
+            message: 'Hibás lekérés'
+        });
+    }
+});
+
+router.get('/WebShop/TermeklekeresByNev/:nev', async (request, response) => {
+    try {
+        const limit = parseInt(request.query.limit);
+        const offset = parseInt(request.query.offset);
+        
+        const nev = request.params.nev;
+       
+        const query = "SELECT * FROM webshoptermek WHERE TermekCim like ? LIMIT ? OFFSET ?";
+        
+        const [termekek] = await DBconnetion.promise().query(query,[`%${nev}%`,limit,offset]);
+          
+        response.status(200).json({
+            data: termekek
+        });
+    } catch (error) {
+        console.log(error);
+        
+        response.status(500).json({
+            message: 'Hibás lekérés'
+        });
+    }
+});
+
+router.get('/Webshop/Keplekeres/:id', async (request, response) => {
+    try {
+        const { id } = request.params;
+        const query = 'SELECT  TermekKepUtvonal FROM webshoptermek WHERE TermekID = ?';
+        const [termekek] = await DBconnetion.promise().query(query, [id]);
+        console.log(termekek[0].TermekKepUtvonal);
+        response.sendFile(path.join(__dirname, '..', 'images', termekek[0].TermekKepUtvonal));
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message: 'hiba'
+        });
+    }
+});
+
+router.post('/Webshop/szures', async (request, response) => {
+    try {
+        
+        const limit = parseInt(request.query.limit);
+        const offset = parseInt(request.query.offset);
+        const feltetelek = request.body;
+        let query = 'SELECT * FROM webshoptermek WHERE';
+        let whereErtekek;
+        const elfogadott = ['csokkeno', 'novekvo', '-', 'TermekCim'];
+        /*whitelist - ezzel ellenőrzöm, hogy csak az általam elfogadott dolgokat írta be a felhasználó, 
+        az sql-injection miatt. táblanévnél nem lehet paraméterezni, ezért szükséges ez.*/
+        let ertekLista = [];
+        let OrderBy;
+        let OrderByErtek;
+        for (const item of Object.entries(feltetelek)) {
+            if (item[0] == 'MaxAr') {
+                query += ' Ar <= ? AND';
+            } else if (item[0] == 'MaxAlk') {
+                query += ' TermekAlkoholSzazalek <= ? AND';
+            } else if (item[0] == 'TermekKategoria') {
+                query += ' TermekKategoria = ? AND';
+            } else if (item[0] == 'MaxAlk') {
+                query += ' TermekUrtartalom = ? AND';
+            } else if (item[0] == 'rendezes') {
+                if (elfogadott.includes(item[1])) {
+                    if (item[1] == 'novekvo') {
+                        OrderBy = ` ORDER BY Ar ASC`;
+                    } else if (item[1] == 'csokkeno') {
+                        OrderBy = ` ORDER BY Ar DESC`;
+                    } else if (item[1] == 'TermekCim') {
+                        OrderBy = ` ORDER BY TermekCim ASC`;
+                    } else if (item[1] == '-') {
+                        OrderBy = ` ORDER BY TermekId ASC`;
+                    }
+                } else {
+                    throw new Error('Rendezéshiba');
+                }
+            } else if (item[0] == 'akcio') {
+                query += ' TermekDiscount is NOT NULL AND';
+            } else {
+                query += ` ${item[0]} like ? AND`;
+            }
+
+            if (item[0] != 'rendezes') {
+                ertekLista.push(item[1]);
+            }
+        }
+        // a query utolso 3 elemenek (AND) levágása
+        query = query.slice(query[0], query.length - 4);
+
+        query += OrderBy;
+        let limitoffset = " LIMIT ? OFFSET ?"
+        query += limitoffset
+        // console.log(OrderByErtek)
+        for (let i = 0; i < ertekLista.length; i++) {
+            console.log(ertekLista[i]);
+        }
+
+        /* TEST
+        const sql = mysql.format(query, [ertekLista[0]]);
+            console.log(sql);
+            console.log(typeof ertekLista[0]);
+            console.log('2') 
+        */
+
+        //SZÉPÍTENI KELL!!!
+
+        let szurtTermekek;
+        if (ertekLista.length == 1) {
+            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0],limit,offset]);
+        } else if (ertekLista.length == 2) {
+            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], ertekLista[1],limit,offset]);
+        } else if (ertekLista.length == 3) {
+            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], ertekLista[1], ertekLista[2],limit,offset]);
+        } else if (ertekLista.length == 4) {
+            console.log('4')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],limit,offset
+            ]);
+        } else if (ertekLista.length == 5) {
+            console.log('5')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],
+                ertekLista[4],limit,offset
+            ]);
+        } else if (ertekLista.length == 6) {
+            console.log('6')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],
+                ertekLista[4],
+                ertekLista[5],limit,offset
+            ]);
+        } else if (ertekLista.length == 7) {
+            console.log('7')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],
+                ertekLista[4],
+                ertekLista[5],
+                ertekLista[6],limit,offset
+            ]);
+        } else if (ertekLista.length == 8) {
+            console.log('8')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],
+                ertekLista[4],
+                ertekLista[5],
+                ertekLista[6],
+                ertekLista[7],limit,offset
+            ]);
+        } else if (ertekLista.length == 9) {
+            console.log('9')[szurtTermekek] = await DBconnetion.promise().query(query, [
+                ertekLista[0],
+                ertekLista[1],
+                ertekLista[2],
+                ertekLista[3],
+                ertekLista[4],
+                ertekLista[5],
+                ertekLista[6],
+                ertekLista[7],
+                ertekLista[8],limit,offset
+            ]);
+        }
+        response.status(200).json({
+            data: szurtTermekek,
+            hossz : szurtTermekek.length
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message: 'hiba'
+        });
+    }
+});
+
+router.post('/Webshop/KosarKuldes/:id', async (request, response) => {
+    if (request.cookies.auth_token != null) //be van e jelentkezve a felhasználó
+    {
+        try {
+            const id = request.params.id;
+            const mennyiseg = 1;
+            const UserID = jwt.decode(request.cookies.auth_token).userID; //"sessionId" lekérése
+
+            const KosarLekeresQuery = 'SELECT SessionID from kosár WHERE UserID = ?';
+            const [KosarLekeres] = await DBconnetion.promise().query(KosarLekeresQuery, [UserID]);
+
+            const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
+            const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
+
+            const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ?';
+            const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id]);
+
+            //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
+            if (vanEIlyen[0] == undefined) {
+                const kosarFeltoltQuery =
+                    'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
+                const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
+                    KosarLekeres[0].SessionID,
+                    id,
+                    mennyiseg,
+                    ArLekeres[0][0].Ar
+                ]);
+                response.status(200).json({ Siker: KosarFeltolt.affectedRows });
+            } else {
+                const kosarUpdateQuery =
+                    'UPDATE kosártermék SET Darabszam = Darabszam+1 WHERE TermekID = ? AND KosarID = ?';
+                const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [
+                    id,
+                    KosarLekeres[0].SessionID
+                ]);
+                response.status(200).json({ Siker: KosarUpdate.affectedRows });
+            }
+        } catch (error) {
+            console.log(error);
+            response.status(500).json({ hiba: error });
+        }
+    } else {
+        response.status(200).json({ hiba: 'bejel' });
+    }
+});
 module.exports = router;
