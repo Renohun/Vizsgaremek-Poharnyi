@@ -2096,12 +2096,13 @@ router.post('/Termek/KosarKuldes', async (request, response) => {
     }
 });
 
-router.get("/Termek/HasonloTermekek/:kateg",async(request,response)=>{
+router.get("/Termek/HasonloTermekek/:kateg/:id",async(request,response)=>{
     try 
     {
         const kateg = request.params.kateg;
-        const kategQuery = 'SELECT * FROM webshoptermek WHERE TermekKategoria LIKE ?'
-        const [KategLeker] = await DBconnetion.promise().query(kategQuery,[kateg])
+        const id = request.params.id;
+        const kategQuery = 'SELECT * FROM webshoptermek WHERE TermekKategoria LIKE ? AND TermekID <> ?'
+        const [KategLeker] = await DBconnetion.promise().query(kategQuery,[kateg,id])
         let indexLista = [];
         for (let i = 0; i < 3; i++) 
         {

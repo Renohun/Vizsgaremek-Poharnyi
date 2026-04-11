@@ -143,6 +143,9 @@ table,
     display: flex;
     flex-direction: column;
 }
+.Termek:hover{
+    border:3px solid black;
+}
 #BovitContent {
     margin-top: 15px;
     text-align: left;
@@ -174,6 +177,19 @@ table,
 .ErtekelesDiv{
     display: flex;
     margin-left: 5px;
+}
+@media only screen and (max-width: 500px) {
+    #TermekSor{flex-direction: column;}
+    .Termek
+    {
+        width: 80%;
+        height: 80%;        
+        align-self: center;
+        margin: 5px;     
+    }
+    .ErtekelesDiv{
+        margin-left: 10px;
+    }
 }
 .VanPolcon {
     height: 30px;
@@ -343,6 +359,7 @@ tr{
     #ErtekelesKuldes{
     width: 100%;
     height: 50px;
-}
     
+}
+     #TermekSor{height: auto;}
 }

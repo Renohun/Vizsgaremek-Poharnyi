@@ -112,7 +112,7 @@ const oldalGenerálás =  async () =>{
     }
     //HasonloTermekek
     let hova = document.getElementById("TermekSor")
-    const HasonlokData = await GETfetch(`/api/Termek/HasonloTermekek/${LekertTermekek.termek[0].TermekKategoria}`)
+    const HasonlokData = await GETfetch(`/api/Termek/HasonloTermekek/${LekertTermekek.termek[0].TermekKategoria}/${LekertTermekek.termek[0].TermekID}`)
    
 
     console.log(HasonlokData)
@@ -123,6 +123,10 @@ const oldalGenerálás =  async () =>{
         let kartya = document.createElement("div")
         kartya.classList.add("Termek")
         hova.appendChild(kartya)
+
+        kartya.addEventListener("click",()=>{
+            window.location.href = `/Termek/${HasonlokData.hasonlok[i].TermekID}`
+        })
 
         let KepDiv = document.createElement("div")
         KepDiv.classList.add("hasonloKepDiv")
