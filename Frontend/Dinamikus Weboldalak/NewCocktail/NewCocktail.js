@@ -366,7 +366,6 @@ Izlekeres();
 //adatok kiküldése az adatbazisba
 
 const AdatStorage = async () => {
-    console.log(window.innerWidth);
     let data;
     let hiba = true;
     //alap adatok kitöltésének ellenörzése
@@ -434,7 +433,22 @@ const AdatStorage = async () => {
         osszetevoLista.push(lista);
         console.log(osszetevoLista);
     }
+    //mennyiségEllenőrzés
+    let Ujmennyiseg = 0;
+    for (let i = 0; i < osszetevoLista.length; i++) 
+        {
+            console.log(osszetevoLista[i] +" lalala")
+            if (osszetevoLista[i][2] == "ml" || osszetevoLista[i][2] == "ML") 
+            {
+                Ujmennyiseg += parseInt(osszetevoLista[i][1])
+            }
+        }
 
+    if (Ujmennyiseg != document.getElementById('mennyiseg').value) 
+    {
+        alert("kérem ügyeljen arra, hogy mennyiségek egyezzenek!")
+        hiba = false;
+    }
     //leiras kiszedese
     let leiras = document.getElementById('leiras').value;
     if (leiras == '') {
