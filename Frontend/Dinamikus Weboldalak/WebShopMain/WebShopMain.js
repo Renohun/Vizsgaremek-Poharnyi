@@ -240,7 +240,7 @@ const kartyaGen = async(data,hova)=>{
     console.log(data)
     for (let i = 0; i < data.data.length; i++) {
         const oszlop = document.createElement('div');
-        oszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
+        oszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1',"kartyaOszlop");
         hova.appendChild(oszlop);
 
         let kartyaMain = document.createElement("div")
@@ -281,6 +281,24 @@ const kartyaGen = async(data,hova)=>{
         KartyaBody.appendChild(adatDiv)
 
         //adatok kiírása
+//értékelés
+        let ertDiv = document.createElement("div")
+        ertDiv.classList.add("ertDiv")
+        adatDiv.appendChild(ertDiv)
+
+        for (let i = 0; i < 5; i++) 
+            {
+                let ErtP = document.createElement("p")
+                ErtP.innerHTML = "☆"
+                ErtP.classList.add("ErtP")
+                ertDiv.appendChild(ErtP)
+            }
+        const Ertek = await TermekLekeres(`/api/WebShop/TermekErtekeles/${data.data[i].TermekID}`) 
+        for (let i = 0; i < Ertek.ert; i++) 
+            {
+                ertDiv.children[i].innerHTML="★" //a kiszámolt értékig átirjuk a csillagokat
+            }
+
 //kateg
         let div1 = document.createElement("div")
         div1.classList.add("kulondiv")
