@@ -118,6 +118,20 @@ display: flex;
     height: 100%    ;
 }
 
+@media (min-width: 1900px) 
+{
+    .kartya{
+    max-width: 400px;
+    margin-left:    0px;
+    margin-right: 0px;
+    padding: 0px;
+    }
+    .kartyaOszlop{
+        gap: 0px;
+        max-width: 470px;
+    }
+
+}
 .kartya:has(.kartyakep:hover){
     border: rgb(48, 48, 48) 2px solid;
 }

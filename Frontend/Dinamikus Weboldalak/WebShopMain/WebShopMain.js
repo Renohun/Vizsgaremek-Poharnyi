@@ -240,7 +240,7 @@ const kartyaGen = async(data,hova)=>{
     console.log(data)
     for (let i = 0; i < data.data.length; i++) {
         const oszlop = document.createElement('div');
-        oszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
+        oszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1',"kartyaOszlop");
         hova.appendChild(oszlop);
 
         let kartyaMain = document.createElement("div")
