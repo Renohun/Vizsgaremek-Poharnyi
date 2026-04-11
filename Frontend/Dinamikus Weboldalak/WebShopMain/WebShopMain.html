@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../kellékek/NavBar.css" />
+        <link rel="stylesheet" href="../kellékek/universalCSS.css" />
+        <link rel="stylesheet" href="../kellékek/lightTheme.css" />
+        <link rel="stylesheet" href="../WebShopMain/WebShopMain.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
+            <div class="container-fluid hatter">
+                <div class="navbar-brand">
+                    <a class="navbar-brand" id="marka" href="#">Pohárnyi</a>
+                    <p id="alszoveg">Az online koktélbár</p>
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse justify-content-between" id="collapsable">
+                    <div class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active jelenlegi" href="/Fooldal" aria-current="page">Főoldal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Koktelok" class="nav-link">Koktelok</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">Mi van a polcon?</a>
+                        </li>
+                    </div>
+                    <div>
+                        <input type="button" value="" id="ThemeSwitcher" />
+                        <a href="/Regisztralj">
+                            <input
+                                type="button"
+                                class="btn btn-secondary nav-item"
+                                value="Regisztárció"
+                                id="regisztracio"
+                            />
+                        </a>
+                        <a href="/LepjBe">
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="belepes" />
+                        </a>
+
+                        <a href="/Keszites">
+                            <input
+                                type="button"
+                                class="nav-item btn btn-warning"
+                                hidden
+                                value="Saját koktél létrehozása"
+                                id="sajatKoktelKeszites"
+                            />
+                        </a>
+                        <a href="/Adatlap">
+                            <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div id="main">
+            <div id="szuresek">
+                <div id="kereses">
+                    <input type="text" placeholder="Keresés" id="NevKereses" />
+                    <button type="button" class="formBtn" id="keresesBtn"><i class="fa fa-search"></i></button>
+                    <button
+                        type="button"
+                        class="formBtn"
+                        id="szuresGomb"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample"
+                        aria-expanded="false"
+                        aria-controls="collapseExample"
+                    >
+                        szűrés
+                    </button>
+                </div>
+            </div>
+            <div id="szures">
+                <div class="collapse" id="collapseExample">
+                    <div id="szuresek" class="card card-body">
+                        
+                        <div id="ar">
+                            <div class="slidecontainer">
+                                <label id="ArLabel" for="ArSlider">Maximum ár</label>
+                                <input
+                                    type="range"
+                                   name="ArSlider"
+                                    class="slider"
+                                    id="arRange"
+                                />
+                                <div id="arKiiras">
+                                    <input type="text" maxlength="7" id="maxAr"></input>
+                                    <label>Ft</label>
+                                </div>
+                               
+                            </div>
+                        </div>
+                        <div id="alkoholTart" class="eltunt">
+                            <div class="slidecontainer">
+                                <label id="AlkLabel" for="AlkSlider">Maximum alkoholtartalom</label>
+                                <input
+                                    type="range"
+                                    name="AlkSlider"
+                                    class="slider"
+                                    id="AlkRange"
+                                />
+                                <div id="AlkKiiras">
+                                    <input type="text" maxlength="3" id="maxAlk"></input>
+                                    <label>%</label>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div id="szarmazasiHely" class="selekt">
+                            <div id="SzarmazasSelectDiv" class="selektdiv">
+                                <label for="SzOrszag">Származási Ország</label>
+                                <select name="SzOrszag" id="OrszagSelect">
+                                     
+                                </select>
+                            </div>
+                         </div>
+                         <div id="Marka" class="selekt">
+                            <div id="MarkaSelectDiv"  class="selektdiv">
+                                <label for="MarkaSel">Márka</label>
+                                <select name="MarkaSel" id="MarkaSelect">
+                                    
+                                </select>
+                            </div>
+                         </div>
+                         <div id="Kategoria" class="selekt">
+                            <div id="KategoriaSelectDiv"  class="selektdiv">
+                                <label for="KategSel">Kategória</label>
+                                <select name="KategSel" id="KategoriaSelect">
+                                    
+                                </select>
+                            </div>
+                         </div>
+                         <div id="Urtartalom" class="selekt eltunt">
+                            <div id="UrtartalomSelectDiv"  class="selektdiv">
+                                <label for="KategSel">Űrtartalom</label>
+                                <select name="UrtartalomSel" id="UrtartalomSelect">
+                                    
+                                </select>
+                            </div>
+                         </div>
+                         <div id="Kiszereles" class="selekt">
+                            <div id="KiszerelesSelectDiv"  class="selektdiv">
+                                <label for="KiszerelesSel">Kiszerelés</label>
+                                <select name="KiszerelesSel" id="KiszerelesSelect">
+                                    
+                                </select>
+                            </div>
+                         </div>
+                         <div id="Rendezes" class="selekt">
+                            <div id="RendezesSelectDiv"  class="selektdiv">
+                                <label for="RendezesSelect">Rendezés</label>
+                                <select name="RendezSel" id="RendezesSelect">
+                                    <option value="-">-</option>
+                                    <option value="TermekCim">abc sorrend</option>
+                                    <option value="novekvo">Ár szerint növekvő</option>
+                                    <option value="csokkeno">Ár szerint csökkenő</option>
+                                </select>
+                            </div>
+                         </div>
+                          <div id="Akciose">
+                            <div id="AkcioSelectDiv">
+                                <label for="Akciocheck">Akciós</label>
+                                <input type="checkbox" name="Akcios" id="AkcioseCheck">
+                            </div>
+                         </div>
+                         <div id="kuldes">
+                            <div id="kuldesgombDiv">
+                               <input type="button" class="btn btn-success" name="kuldes" id="kuldesGomb" value="Szűrés">
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <div id="kartyak">
+                <div id="kartyaSor" class="row mt-3 justify-content-center"></div>
+            </div>
+            <div id="pagination">
+                
+            </div>
+        </div>
+
+        <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../kellékek/themeSwitcher.js"></script>
+        <script src="../WebShopMain/WebShopMain.js"></script>
+        <script src="../kellékek/navBar.js"></script>
+    </body>
+</html>

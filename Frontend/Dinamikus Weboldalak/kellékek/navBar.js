@@ -17,7 +17,7 @@ async function POSTreq(url) {
 async function POSTKepLekeres(url) {
     try {
         const ertek = await fetch(url, {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'image/jpeg' }
         });
         if (ertek.ok) {

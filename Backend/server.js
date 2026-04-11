@@ -36,13 +36,31 @@ router.get('/Fooldal', (req, res) => {
 //Regisztracio - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Regisztráció/')));
 router.get('/Regisztralj', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Regisztráció/Regisztracio.html'));
+    if (req.cookies.auth_token == null) {
+        res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Regisztráció/Regisztracio.html'));
+    } else {
+        res.redirect('/');
+    }
 });
 
 //Bejelentkezes - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
 router.get('/LepjBe', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/belepes.html'));
+});
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
+router.get('/felhasznaloEllenorzes', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/felhasnzaloEll.html'));
+});
+
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
+router.get('/felhasznaloAuth/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/emailKodMegadas.html'));
+});
+
+router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
+router.get('/jelszoValtoztatas/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/jelszoValt.html'));
 });
 
 //KoktelKeszites
@@ -54,7 +72,10 @@ router.get('/Keszites', (req, res) => {
         res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/NewCocktail.html'));
     }
 });
-
+//WebShop
+router.get('/WebShop', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/WebShopMain/WebShopMain.html'));
+});
 //Kijelentkezes
 //TODO POST-ra atirni
 router.get('/Kijelentkezes', authenticationMiddleware, (req, res) => {
@@ -99,6 +120,11 @@ router.get('/Termek/:termekID', (req, res) => {
 router.get('/HianyzoTermek', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/TermekOldal/NincsIlyenTermek.html'));
 });
+
+router.get('/jogosultsag', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/hibaOldalak/jogosultsag.html'));
+});
+
 //!API endpoints
 app.use('/', router);
 const endpoints = require('./api/api.js');

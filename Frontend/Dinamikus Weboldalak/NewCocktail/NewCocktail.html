@@ -3,12 +3,12 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Pohárnyi | Saját Koktél</title>
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
-        <link rel="stylesheet" href="../kellékek/lightTheme.css" />
         <link rel="stylesheet" href="NewCocktail.css" />
+        <link rel="stylesheet" href="../kellékek/lightTheme.css" />
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -34,7 +34,14 @@
                         </li>
                     </div>
                     <div class="navbar-nav d-flex align-items-center">
-                        <input type="button" value="" id="ThemeSwitcher" />
+                        <div id="ThemeSwitcher">
+                            <img
+                                src="../kellékek/free-moon-icon-2304-thumb.png"
+                                id="themeSwitcherimg"
+                                style="height: 50px; width: 50px"
+                                alt=""
+                            />
+                        </div>
                         <a href="/Regisztralj" id="regisztracio">
                             <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
@@ -75,7 +82,7 @@
                     </div>
                 </div>
             </div>
-            <div class="container mx-auto" id="koktelurlap">
+            <div class="container mx-auto shadow" id="koktelurlap">
                 <div class="row mx-auto">
                     <h4 id="urlapcim" class="display-7 text-center">Új koktél adatai:</h4>
                 </div>

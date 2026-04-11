@@ -1,0 +1,17 @@
+.card {
+    height: 550px;
+}
+.koktelCard {
+    height: 1200px;
+}
+.kommentCard {
+    height: 550px;
+}
+.sotetites {
+    background-color: rgb(40, 110, 68);
+    color: white;
+}
+.sotetites:hover {
+    background-color: rgb(43, 133, 84);
+    color: white;
+}

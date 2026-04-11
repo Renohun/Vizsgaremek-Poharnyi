@@ -7,10 +7,11 @@ const authenticationMiddleware = require('./authenticationMiddleware.js');
 const authorizationMiddelware = require('./authorizationMiddelware.js');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-
 const path = require('path');
 const fajlkezelo = require('fs/promises');
-const { error } = require('console');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+require('dotenv').config();
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -41,6 +42,25 @@ router.get('/test', (req, res) => {
         }
     });
 });
+
+async function kepculling() {
+    const felhkep =
+        'SELECT ProfilkepUtvonal FROM felhasználó;SELECT BoritoKepUtvonal FROM koktél;SELECT TermekKepUtvonal FROM webshoptermek';
+    let sqlkepek = await lekeres(felhkep);
+    let kepek = [];
+    for (let i = 0; i < sqlkepek.length; i++) {
+        sqlkepek[i].forEach((element) => {
+            kepek.push(Object.values(element)[0]);
+        });
+    }
+    let mappa = await fajlkezelo.readdir(path.join(__dirname, '../images/'));
+    for (let i = 0; i < mappa.length; i++) {
+        if (!kepek.includes(mappa[i])) {
+            fajlkezelo.rm(path.join(__dirname, '../images/', mappa[i]));
+        }
+    }
+}
+
 //Koktelok vegpontok
 router.post('/sutiJelenlete', (req, res) => {
     if (!req.cookies.auth_token) {
@@ -386,32 +406,47 @@ router.post('/regisztracio', async (request, response) => {
     try {
         //console.log(request.body);
 
-        const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
+        if (request.body.jelszo == request.body.jelszoIsmet) {
+            if (
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.email) &&
+                /^[a-zA-Z0-9_]{2,30}$/.test(request.body.felhaszanaloNev) &&
+                /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.jelszo) &&
+                request.body.ASZF
+            ) {
+                const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
 
-        felhasznaloObjReg = {
-            email: request.body.email,
-            felhasznaloNev: request.body.felhasznaloNev,
-            jelszo: hashed
-        };
+                const felhasznaloObjReg = {
+                    email: request.body.email,
+                    felhasznaloNev: request.body.felhasznaloNev,
+                    jelszo: hashed
+                };
 
-        //console.log(felhasznaloObjReg.jelszo);
+                const duplikacioEll = 'SELECT FelhID FROM felhasználó WHERE Felhasználónév LIKE ? OR Email LIKE ?';
 
-        const sqlQuery = 'INSERT INTO felhasználó (Felhasználónév, Email, Jelszó) VALUES (?,?,?)';
+                const [rows] = await DBconnetion.promise().query(duplikacioEll, [
+                    felhasznaloObjReg.felhasznaloNev,
+                    felhasznaloObjReg.email
+                ]);
 
-        DBconnetion.query(
-            sqlQuery,
-            [felhasznaloObjReg.felhasznaloNev, felhasznaloObjReg.email, felhasznaloObjReg.jelszo],
-            (err, result) => {
-                if (err) {
-                    response.status(500).json({
-                        message: 'Hiba tortent adat feltoltesnel!' + err
-                    });
-                } else {
-                    response.status(200).json({
-                        message: 'Sikeres regisztracio!',
-                        result: result.insertId
-                    });
-                    /*
+                if (rows.length == 0) {
+                    const sqlQuery = 'INSERT INTO felhasználó (Felhasználónév, Email, Jelszó) VALUES (?,?,?)';
+
+                    DBconnetion.query(
+                        sqlQuery,
+                        [felhasznaloObjReg.felhasznaloNev, felhasznaloObjReg.email, felhasznaloObjReg.jelszo],
+                        (err, result) => {
+                            if (err) {
+                                response.status(500).json({
+                                    message: 'Hiba tortent adat feltoltesnel!' + err
+                                });
+                            } else {
+                                response.status(200).json({
+                                    megEgyezik: false,
+                                    kriterium: false,
+                                    duplikacio: false,
+                                    sikeres: true
+                                });
+                                /*
                     console.log(
                         'Adatok melyek felettek toltve: ' +
                             felhasznaloObjReg.felhasznaloNev +
@@ -420,9 +455,22 @@ router.post('/regisztracio', async (request, response) => {
                             ' ' +
                             felhasznaloObjReg.jelszo
                     );*/
+                            }
+                        }
+                    );
+                } else {
+                    response
+                        .status(200)
+                        .json({ megEgyezik: false, kriterium: false, duplikacio: true, sikeres: false });
                 }
+            } else {
+                response.status(200).json({ megEgyezik: false, kriterium: true, duplikacio: false, sikeres: false });
             }
-        );
+        } else {
+            response.status(200).json({ megEgyezik: true, kriterium: false, duplikacio: false, sikeres: false });
+        }
+
+        //console.log(felhasznaloObjReg.jelszo);
     } catch (err) {
         console.log('Valamilyen extra hiba tortent: ' + err);
         response.status(500).json({
@@ -507,6 +555,151 @@ router.post('/belepes', (request, response) => {
     } catch (err) {
         console.error(err);
         response.status(500).json({ message: 'Hiba van a vegpontban', error: err });
+    }
+});
+
+router.post('/felhasznaloEllenorzes', async (req, res) => {
+    try {
+        let email = req.body.email;
+        if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+            const query = 'SELECT Email FROM felhasználó WHERE Email LIKE ?';
+            //letezik e felhasznalo egyaltalan
+            const [rows] = await DBconnetion.promise().query(query, [email]);
+            if (rows.length > 0) {
+                //ez a sor az emailt kodolja base64 segitsegevel, ez nem biztonsagos kodolas, csak szimplan nem akarom az emailt csak ugy megejeleniteni
+                email = Buffer.from(email, 'utf-8').toString('base64');
+                res.status(200).json({ redirect: '/felhasznaloAuth', kod: email });
+            } else {
+                res.status(200).json({ ures: false, nincs: true });
+            }
+        } else {
+            res.status(200).json({ ures: true, nincs: false });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ hiba: true });
+    }
+});
+
+let emailKod;
+
+//email kikuldi --- tobbszor hasznalhato vegpont
+router.get('/emailKuldes', async (req, res) => {
+    try {
+        const urlArr = req.get('referer').split('/');
+        const emailCoded = urlArr[urlArr.length - 1];
+        //dekodolt email base64-bol at utf8-ba
+        const emailDeCoded = Buffer.from(emailCoded, 'base64').toString('utf-8');
+
+        //generaluk egy 6 jegy kodot amelyet beleteszunk az emailbe, amit majd elkerunk a felhasznalotol ezel authenticalva
+        function generateCode(length = 6) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const bytes = crypto.randomBytes(length);
+
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars[bytes[i] % chars.length];
+            }
+            return result;
+        }
+
+        emailKod = generateCode();
+        //console.log(process.env.GUSER);
+        //console.log(process.env.GPASS);
+
+        const transporter = nodemailer.createTransport({
+            //domain ez lehetne a outlook stb.. a szolgaltato
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            auth: {
+                user: process.env.GUSER,
+                pass: process.env.GPASS
+            }
+        });
+
+        try {
+            await transporter.sendMail({
+                from: process.env.GUSER,
+                to: emailDeCoded,
+                subject: 'Elfelejtett jelszo',
+                html: `<h2>Az On kodja:</h2><p style="color: blue;">${emailKod}</p>`
+            });
+
+            res.status(200).json({ message: 'sikeres email kuldes!' });
+        } catch (err) {
+            throw new Error('sikertelen email kuldes');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error });
+    }
+});
+
+router.post('/kodEllenorzes', (req, res) => {
+    try {
+        const kuldottKod = req.body.kod;
+        const urlArr = req.get('referer').split('/');
+        const emailCoded = urlArr[urlArr.length - 1];
+        console.log('kuldott: ' + kuldottKod);
+        console.log('email: ' + emailKod);
+
+        if (kuldottKod.length > 0) {
+            if (kuldottKod == emailKod) {
+                res.status(200).json({
+                    helyes: true,
+                    redirect: '/jelszoValtoztatas',
+                    kod: emailCoded,
+                    ures: false,
+                    hibas: false
+                });
+            } else {
+                res.status(200).json({ helyes: false, ures: false, hibas: true });
+            }
+        } else {
+            res.status(200).json({ ures: true, helyes: false, hibas: false });
+        }
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ err: error });
+    }
+});
+
+router.patch('/jelszoValtoztatas', async (req, res) => {
+    try {
+        const jelszo1 = req.body.jelszo1;
+        const jelszo2 = req.body.jelszo2;
+
+        const kuldottKod = req.body.kod;
+        const urlArr = req.get('referer').split('/');
+        const emailCoded = urlArr[urlArr.length - 1];
+        const emailDeCoded = Buffer.from(emailCoded, 'base64').toString('utf-8');
+
+        if (
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{2,}$/.test(jelszo1) &&
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{2,}$/.test(jelszo2)
+        ) {
+            if (jelszo1 == jelszo2) {
+                //titkositas
+                const kodoltJelszo = await argon.hash(jelszo1, { type: argon.argon2id });
+                const query = 'UPDATE felhasználó SET Jelszó = ? WHERE Email LIKE ?';
+                const [rows] = await DBconnetion.promise().query(query, [kodoltJelszo, emailDeCoded]);
+
+                res.status(200).json({
+                    kriterium: false,
+                    egyezes: false,
+                    megvaltoztatva: true,
+                    valtoztatottSorok: rows.affectedRows
+                });
+            } else {
+                res.status(200).json({ kriterium: false, egyezes: true, megvaltoztatva: false });
+            }
+        } else {
+            res.status(200).json({ kriterium: true, egyezes: false, megvaltoztatva: false });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Hiba tortent', error: error });
     }
 });
 //
@@ -784,7 +977,7 @@ router.post(
     }
 );
 
-router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, (req, res) => {
+router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
         const payload = jwt.decode(req.cookies.auth_token);
         console.log(req.body);
@@ -862,6 +1055,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
             });
         });
         res.status(200).json({ message: 'Sikeres koktel feltoltes' });
+        await kepculling();
     } catch (err) {
         console.log(err);
     }
@@ -1001,6 +1195,7 @@ router.post('/AdminPanel/TermekFeltoltes', async (req, res) => {
                     termekAra
                 ]);
                 res.status(200).json({ message: 'Termek hozzadva sikeresen' });
+                await kepculling();
             }
         }
     } catch (error) {
@@ -1099,125 +1294,123 @@ async function lekeres(query, param) {
 }
 router.get('/AdatlapLekeres/FelhAdatok/', async (request, response) => {
     //A Lekérés definiálása
-    let query =
-        'SELECT Felhasználónév,Email,JelszóHossza,RegisztracioDatuma from felhasználó WHERE FelhID LIKE ?;SELECT COUNT(KiKedvelteID) AS KEDVID from kedvencek where KiKedvelteID like ? ;SELECT COUNT(Keszito) AS KOMMID from komment where Keszito like ?;SELECT COUNT(Keszito) AS RATEID from ertekeles where Keszito like ?;SELECT COUNT(Keszito) AS MAKEID from koktél where Keszito like ?;';
-    let ertekek = [];
-    //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
-
-    for (let i = 0; i < 5; i++) {
-        ertekek.push(jwt.decode(request.cookies.auth_token).userID);
-    }
+    let adat ='SELECT Felhasználónév,Email,JelszóHossza,RegisztracioDatuma,ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
+    let kedvenc="SELECT COUNT(KiKedvelteID) AS KEDVID from felhasználó INNER JOIN kedvencek ON FelhID=KiKedvelteID WHERE FelhID LIKE ?"
+    let komment="SELECT COUNT(komment.Keszito) AS KOMMID from felhasználó INNER JOIN komment ON FelhID=komment.Keszito WHERE FelhID LIKE ?"
+    let ertekeles="SELECT COUNT(ertekeles.Keszito) AS RATEID from felhasználó INNER JOIN ertekeles ON FelhID=ertekeles.Keszito WHERE FelhID LIKE ?"
+    let keszitett="SELECT COUNT(koktél.Keszito) AS MAKEID from felhasználó INNER JOIN koktél ON FelhID=koktél.Keszito WHERE FelhID LIKE ?"
     //Lekérdezés
-    DBconnetion.query(query, ertekek, async (err, rows) => {
-        if (err) {
-            response.status(500).json({
-                message: 'Hiba tortent lekeres kozben!',
-                hiba: err
-            });
-        } else {
-            response.status(200).json({
-                message: 'Sikeres Lekérés!',
-                tartalom: rows
-            });
-        }
-    });
+    try {
+        adat=(await lekeres(adat,jwt.decode(request.cookies.auth_token).userID))[0]
+        kedvenc=(await lekeres(kedvenc,jwt.decode(request.cookies.auth_token).userID))[0]
+        komment=(await lekeres(komment,jwt.decode(request.cookies.auth_token).userID))[0]
+        ertekeles=(await lekeres(ertekeles,jwt.decode(request.cookies.auth_token).userID))[0]
+        keszitett=(await lekeres(keszitett,jwt.decode(request.cookies.auth_token).userID))[0]
+        let tartalom={adat,kedvenc,komment,ertekeles,keszitett}
+        response.status(200).json({
+            message:"Sikeres Lekérés!",
+            tartalom:tartalom
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message:"Hiba Történt!"
+        })
+    }
+
+    
+    
+    
 });
 
 router.get('/AdatlapLekeres/Kedvencek/', async (request, response) => {
-    //A Lekérés definiálása
-    let KedvencekLekeres = 'SELECT MitKedveltID from kedvencek WHERE KikedvelteID LIKE ?';
-    let koktelLekeres = 'SELECT KoktélID,KoktelCim from koktél where KoktélID like ?';
-    let ertekelesAtlagLekeres =
-        'SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
-    let osszetevokLekerese = 'SELECT Osszetevő from koktelokosszetevoi where KoktélID like ?';
-    let koktélbadgek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
-    let badgek = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?';
-    //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
-    let felhaszanalo = jwt.decode(request.cookies.auth_token).userID;
-    let kokteladatok;
-    let ertekeles;
-    let osszetevok;
-    let jelvenyadatok;
-
-    //Lekérdezés
     try {
-        kedvencek = await lekeres(KedvencekLekeres, felhaszanalo);
-        if (kedvencek.length == 0) {
-            response.status(200).json({
-                message: 'Üres Lekérés!'
-            });
-        } else {
-            let koktel = [];
-            for (let i = 0; i < kedvencek.length; i++) {
-                let koktelbadgek = [];
-                kokteladatok = await lekeres(koktelLekeres, kedvencek[i].MitKedveltID);
-                ertekeles = await lekeres(ertekelesAtlagLekeres, kedvencek[i].MitKedveltID);
-                osszetevok = await lekeres(osszetevokLekerese, kedvencek[i].MitKedveltID);
-                jelvenyadatok = await lekeres(koktélbadgek, kedvencek[i].MitKedveltID);
-
-                for (let j = 0; j < jelvenyadatok.length; j++) {
-                    koktelbadgek.push(await lekeres(badgek, jelvenyadatok[j].JelvényID));
-                }
-                koktel.push({ kokteladatok, ertekeles, osszetevok, koktelbadgek });
-            }
-            response.status(200).json({
-                message: 'siker!',
-                adat: koktel
-            });
+        //A Lekérés definiálása
+        let KedvencekLekeres = 'SELECT MitKedveltID from kedvencek WHERE KikedvelteID LIKE ?';
+        let koktelok=await lekeres(KedvencekLekeres,jwt.decode(request.cookies.auth_token).userID)
+        let kokteltomb=[]
+        for (let i = 0; i < koktelok.length; i++) 
+        {
+            kokteltomb.push(await getKoktel(koktelok[i].MitKedveltID))
         }
-    } catch (error) {
+        if (kokteltomb.length!=0) 
+        {
+            response.status(200).json({
+                message:"Sikeres Lekérés!",
+                adat:kokteltomb
+            })
+        }
+        else
+        {
+            response.status(204).json({
+                message:"Üres Lekérés!"
+            })
+        }
+    } 
+    catch (error) {
         console.log(error);
-
         response.status(500).json({
-            message: 'Hiba'
-        });
+            message:"Hibás Lekérés!"
+        })
     }
 });
 
 router.get('/AdatlapLekeres/Koktelok/', async (request, response) => {
-    //A Lekérés definiálása
-    let koktelLekeres = 'SELECT KoktélID,KoktelCim,BoritoKepUtvonal from koktél where Keszito like ?';
-    let ertekelesLekeres =
-        'SELECT AVG(Ertekeles) as Osszert from ertekeles WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
-    let kommentLekeres =
-        'SELECT Count(HovaIrták) as KommNum from komment WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
-    let koktélbadgek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
-    let badgek = 'SELECT JelvényNeve FROM jelvények WHERE JelvényID LIKE ?';
-    //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
-    let felhaszanalo = jwt.decode(request.cookies.auth_token).userID;
-    let kokteladatok;
-    let jelvenyadatok;
-    let ertekelesek = [];
-    let kommentek = [];
-    let jelvenyek = [];
-    //Lekérdezés
     try {
-        kokteladatok = await lekeres(koktelLekeres, felhaszanalo);
-        if (kokteladatok.length == 0) {
-            response.status(204);
-        } else {
-            for (let i = 0; i < kokteladatok.length; i++) {
-                ertekelesek.push(await lekeres(ertekelesLekeres, kokteladatok[i].KoktélID));
-                kommentek.push(await lekeres(kommentLekeres, kokteladatok[i].KoktélID));
-                jelvenyadatok = await lekeres(koktélbadgek, kokteladatok[i].KoktélID);
-                for (let j = 0; j < jelvenyadatok.length; j++) {
-                    jelvenyek.push(await lekeres(badgek, jelvenyadatok[j].JelvényID));
-                }
-            }
-            response.status(200).json({
-                message: 'siker!',
-                adat: kokteladatok,
-                ertek: ertekelesek,
-                kommnum: kommentek,
-                badgek: jelvenyek
-            });
+        //A Lekérés definiálása
+        let koktelokLekeres = 'SELECT KoktélID from koktél where Keszito like ?';
+        let koktelok=await lekeres(koktelokLekeres,jwt.decode(request.cookies.auth_token).userID)
+        let kokteltomb=[]
+        for (let i = 0; i < koktelok.length; i++) 
+        {
+            kokteltomb.push(await getKoktel(koktelok[i].KoktélID))
         }
-    } catch (error) {
+        if (kokteltomb.length!=0) 
+        {
+            response.status(200).json({
+                message:"Sikeres Lekérés!",
+                adat:kokteltomb
+            })
+        }
+        else
+        {
+            response.status(204).json({
+                message:"Üres Lekérés!"
+            })
+        }
+    } 
+    catch (error) {
+        console.log(error);
         response.status(500).json({
-            message: 'Hiba'
-        });
+            message:"Hibás Lekérés!"
+        })
     }
+    
 });
+
+async function getKoktel(id) {
+    let koktelokLekeres = 'SELECT KoktelCim,BoritoKepUtvonal,KoktélID from koktél where KoktélID like ?';
+    let ertekelesAtlagLekeres ='SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
+    let osszetevokLekerese = 'SELECT Osszetevő from koktelokosszetevoi where KoktélID like ?';
+    let koktélbadgek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
+    let badgek = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?';
+    let kommentLekeres ='SELECT Count(HovaIrták) as KommNum from komment WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
+
+    //Lekérdezés
+    let adat = (await lekeres(koktelokLekeres, id))[0];
+    let ertekeles = (await lekeres(ertekelesAtlagLekeres, id))[0];
+    let osszetevok = await lekeres(osszetevokLekerese,id);
+    let jelvenyadatok = await lekeres(koktélbadgek,id);
+    let kommentek = (await lekeres(kommentLekeres, id))[0];
+
+    let jelvenyek = [];
+    for (let j = 0; j < jelvenyadatok.length; j++) {
+        jelvenyek.push((await lekeres(badgek, jelvenyadatok[j].JelvényID))[0]);
+    }
+    return {adat,ertekeles,osszetevok,jelvenyek,kommentek};
+}
+
 
 router.get('/AdatlapLekeres/Jelentesek/', async (request, response) => {
     //A Lekérések definiálása
@@ -1280,12 +1473,14 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     //Lekérések
     let KosarLekeres = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
     let KosarTermekLekeres = 'SELECT TermekID,Darabszam,EgysegAr FROM kosártermék WHERE KosarID LIKE ?';
-    let TermekLekeres = 'SELECT TermekCim,TermekLeiras FROM webshoptermek WHERE TermekID LIKE ?';
+    let TermekLekeres = 'SELECT TermekCim,TermekLeiras,TermekKepUtvonal,TermekKeszlet FROM webshoptermek WHERE TermekID LIKE ?';
+    let TermekErtekelesLekeres = 'SELECT AVG(ertekeles) AS Osszert FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE "Termék"';
+    let TermekKommentLekeres = 'SELECT COUNT(KommentID) AS KommNum FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE "Termék"';
     //Adattárolók
     let vasarlo = jwt.decode(request.cookies.auth_token).userID;
     let kosar;
     let kosartermekek;
-    let termekek = [];
+    let adatok=[]
     //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
     //Lekérdezés
     try {
@@ -1297,13 +1492,16 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
             });
         } else {
             for (let i = 0; i < kosartermekek.length; i++) {
-                let temp = await lekeres(TermekLekeres, kosartermekek[i].TermekID);
-                termekek.push(temp[0]);
+                let kosarAdatok=kosartermekek[i]
+                let termAdatok = (await lekeres(TermekLekeres, kosartermekek[i].TermekID))[0];          
+                let ertekeles = (await lekeres(TermekErtekelesLekeres, kosartermekek[i].TermekID))[0];
+                let kommentek = (await lekeres(TermekKommentLekeres, kosartermekek[i].TermekID))[0];
+                adatok.push({kosarAdatok,termAdatok,ertekeles,kommentek})
+
             }
             response.status(200).json({
                 message: 'Sikeres Lekérés!',
-                kosár: kosartermekek,
-                termekek: termekek
+                adat: adatok
             });
         }
     } catch (error) {
@@ -1316,18 +1514,10 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
-    let mit = jwt.decode(request.cookies.auth_token).userID;
-    let MelyikKosár = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
-    let MelyikKosárAz;
+router.delete('/AdatlapLekeres/Kosarurites', async (request, response) => {
     let KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
     try {
-        await DBconnetion.promise()
-            .query(MelyikKosár, mit)
-            .then(([rows]) => {
-                MelyikKosárAz = rows[0].SessionID;
-            });
-        await DBconnetion.promise().query(KosárÜrítés, MelyikKosárAz);
+        await lekeres(KosárÜrítés, jwt.decode(request.cookies.auth_token).userID);
         response.status(200).json({
             message: 'Sikeres Törlés!'
         });
@@ -1338,8 +1528,11 @@ router.post('/AdatlapLekeres/Kosarurites', async (request, response) => {
         });
     }
 });
-router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
+
+router.delete('/AdatlapLekeres/TermekUrites', async (request, response) => {
     let mit = request.body.termék;
+    console.log(mit);
+    
     let honnan = await lekeres(
         'SELECT SessionID FROM kosár WHERE UserID LIKE ?',
         jwt.decode(request.cookies.auth_token).userID
@@ -1357,16 +1550,13 @@ router.post('/AdatlapLekeres/TermekUrites', async (request, response) => {
         });
     }
 });
-router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
+
+router.patch('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     let mit = request.body.termék;
-    let honnan = await lekeres(
-        'SELECT SessionID FROM kosár WHERE UserID LIKE ?',
-        jwt.decode(request.cookies.auth_token).userID
-    );
     let mennyit = request.body.count;
     let TermékTöltés = 'UPDATE KosárTermék SET Darabszam = ? WHERE KosarID LIKE ? AND TermekID LIKE ?';
     try {
-        await DBconnetion.promise().query(TermékTöltés, [mennyit, honnan[0].SessionID, mit]);
+        await DBconnetion.promise().query(TermékTöltés, [mennyit, jwt.decode(request.cookies.auth_token).userID, mit]);
         response.status(200).json({
             message: 'Sikeres Frissítés!'
         });
@@ -1380,7 +1570,7 @@ router.post('/AdatlapLekeres/TermekFrissites', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/JelentesTorles', async (request, response) => {
+router.delete('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     let ki = request.body.id;
     let mit = jwt.decode(request.cookies.auth_token).userID;
     let milyen = request.body.tipus;
@@ -1409,34 +1599,11 @@ router.post('/AdatlapLekeres/KepFeltoltes', fileStorage.array('profilkep'), asyn
         });
     }
 });
-router.post('/AdatlapLekeres/KoktelKepLekeres/:melyik', async (request, response) => {
-    try {
-        let melyik = request.params.melyik;
-        let kepkereses = 'SELECT BoritoKepUtvonal FROM Koktél WHERE KoktélID LIKE ?';
-        let kinek = await lekeres(kepkereses, melyik);
-        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].BoritoKepUtvonal));
-    } catch (error) {
-        console.log(error);
-    }
-});
 
-router.post('/AdatlapLekeres/TermekKepLekeres/:melyik', async (request, response) => {
-    try {
-        let melyik = request.params.melyik;
-        let kepkereses = 'SELECT TermekKepUtvonal FROM WebshopTermek WHERE TermekID LIKE ?';
-        let kinek = await lekeres(kepkereses, melyik);
-        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].TermekKepUtvonal));
-    } catch (error) {
-        console.log(error);
-    }
-});
 
-router.post('/AdatlapLekeres/KepLekeres/', async (request, response) => {
+router.get('/AdatlapLekeres/KepLekeres/:kep', async (request, response) => {
     try {
-        let profil = jwt.decode(request.cookies.auth_token).userID;
-        let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
-        let kinek = await lekeres(kepkereses, profil);
-        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].ProfilkepUtvonal));
+        response.sendFile(path.join(__dirname, '..', 'images', request.params.kep));
     } catch (error) {
         console.log(error);
     }
@@ -1454,7 +1621,7 @@ router.post('/AdminPanel/KepLekeres/:id', async (request, response) => {
     }
 });
 
-router.post('/Koktelok/KepLekeres', async (request, response) => {
+router.get('/Koktelok/KepLekeres', async (request, response) => {
     try {
         let profil = jwt.decode(request.cookies.auth_token).userID;
         let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
@@ -1465,24 +1632,44 @@ router.post('/Koktelok/KepLekeres', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
+router.put('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     try {
+        let hiba = false;
+        let tomb = '';
         let adatmodositas = 'UPDATE felhasználó SET Felhasználónév=?,Email=?';
-        let tomb = `${request.body.Felhasználónév},${request.body.Email}`;
-        let profil = jwt.decode(request.cookies.auth_token).userID;
-        if (request.body.Jelszó != 'undefined') {
-            adatmodositas += ',Jelszó=?';
-            tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
+        if (
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.Email) &&
+            /^[a-zA-Z0-9_]{2,30}$/.test(request.body.Felhasználónév)
+        ) {
+            tomb = `${request.body.Felhasználónév},${request.body.Email}`;
+        } else {
+            hiba = true;
         }
-        if (request.body.KépÚtvonal != undefined) {
+        let profil = jwt.decode(request.cookies.auth_token).userID;
+        if (request.body.Jelszó != 'undefined' && hiba == false) {
+            if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.Jelszó)) {
+                adatmodositas += ',Jelszó=?';
+                tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
+            } else {
+                hiba = true;
+            }
+        }
+        if (request.body.KépÚtvonal != undefined && hiba == false) {
             adatmodositas += ',ProfilKepUtvonal=?';
             tomb += `,${request.body.KépÚtvonal}`;
         }
         adatmodositas += ` WHERE FelhID LIKE ${profil}`;
-        await lekeres(adatmodositas, tomb.split(','));
-        response.status(200).json({
-            message: 'Siker!'
-        });
+        if (hiba == false) {
+            await lekeres(adatmodositas, tomb.split(','));
+            await kepculling();
+            response.status(200).json({
+                message: 'Siker!'
+            });
+        } else {
+            response.status(500).json({
+                message: 'Hibás adat!'
+            });
+        }
     } catch (error) {
         console.log(error);
         response.status(500).json({
@@ -1491,7 +1678,7 @@ router.post('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
     }
 });
 
-router.post('/AdatlapLekeres/Fioktorles', async (request, response) => {
+router.delete('/AdatlapLekeres/Fioktorles', async (request, response) => {
     try {
         const FelhasznaloTorles = 'DELETE FROM felhasználó WHERE FelhID LIKE ?';
         const ErtekTorles = 'DELETE FROM ertekeles WHERE Keszito LIKE ?';
@@ -1548,7 +1735,7 @@ router.post('/AdatlapLekeres/Fizetes', async (request, response) => {
     try {
         const KosarLekeres = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
         const KosarTermekLekeres = 'SELECT TermekID,Darabszam FROM kosártermék WHERE KosarID LIKE ?';
-        const TermekFrissites = 'UPDATE webshoptermek SET Termekkeszlet=Termekkeszlet-? WHERE TermekID LIKE ?';
+        const TermekFrissites = 'UPDATE webshoptermek SET Termekkeszlet=Termekkeszlet-?,TermekHanyanVettekMeg=TermekHanyanVettekMeg+1  WHERE TermekID LIKE ?';
         const KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
         let kosar = await lekeres(KosarLekeres, jwt.decode(request.cookies.auth_token).userID);
 
@@ -1704,7 +1891,7 @@ router.post('/Koktel/SendKedvenc', async (request, response) => {
     });
 });
 
-router.post('/Koktel/DeleteKomment', async (request, response) => {
+router.delete('/Koktel/DeleteKomment', async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE KommentID LIKE ?';
     const JelentesLekeres =
         'SELECT JelentesID from jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?';
@@ -1724,7 +1911,7 @@ router.post('/Koktel/DeleteKomment', async (request, response) => {
     });
 });
 
-router.post('/Koktel/DeleteKoktel', async (request, response) => {
+router.delete('/Koktel/DeleteKoktel', async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const ErtekelesTorles = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const JelentesLekeres =
@@ -1831,7 +2018,7 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
     }
 });
 
-router.post('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
+router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
     try {
         response.sendFile(path.join(__dirname, '..', 'images', request.params.utvonal));
     } catch (error) {
