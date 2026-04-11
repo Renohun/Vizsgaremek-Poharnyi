@@ -1479,14 +1479,12 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
     let KosarTermekLekeres = 'SELECT TermekID,Darabszam,EgysegAr FROM kosártermék WHERE KosarID LIKE ?';
     let TermekLekeres = 'SELECT TermekCim,TermekLeiras,TermekKepUtvonal,TermekKeszlet FROM webshoptermek WHERE TermekID LIKE ?';
     let TermekErtekelesLekeres = 'SELECT AVG(ertekeles) AS Osszert FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE "Termék"';
-    let TermekKommentLekeres = 'SELECT COUNT(KommentID) AS KommNum FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE "Termék"';
     //Adattárolók
     let vasarlo = jwt.decode(request.cookies.auth_token).userID;
     let kosar;
     let kosartermekek;
     let adatok=[]
-    //paraméteresen lehet csak megkapni az értéket amiről lekérünk, de hogy kapjuk azt meg?
-    //Lekérdezés
+
     try {
         kosar = await lekeres(KosarLekeres, vasarlo);
         kosartermekek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
@@ -1499,8 +1497,7 @@ router.get('/AdatlapLekeres/Kosar/', async (request, response) => {
                 let kosarAdatok=kosartermekek[i]
                 let termAdatok = (await lekeres(TermekLekeres, kosartermekek[i].TermekID))[0];          
                 let ertekeles = (await lekeres(TermekErtekelesLekeres, kosartermekek[i].TermekID))[0];
-                let kommentek = (await lekeres(TermekKommentLekeres, kosartermekek[i].TermekID))[0];
-                adatok.push({kosarAdatok,termAdatok,ertekeles,kommentek})
+                adatok.push({kosarAdatok,termAdatok,ertekeles})
 
             }
             response.status(200).json({
@@ -1652,8 +1649,8 @@ router.put('/AdatlapLekeres/Adatmodositas/', async (request, response) => {
         let profil = jwt.decode(request.cookies.auth_token).userID;
         if (request.body.Jelszó != 'undefined' && hiba == false) {
             if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.Jelszó)) {
-                adatmodositas += ',Jelszó=?';
-                tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
+                adatmodositas += ',Jelszó=?,JelszóHossza=?';
+                tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })},${request.body.Jelszó.length}`;
             } else {
                 hiba = true;
             }
@@ -1737,18 +1734,17 @@ router.delete('/AdatlapLekeres/Fioktorles', async (request, response) => {
 
 router.post('/AdatlapLekeres/Fizetes', async (request, response) => {
     try {
-        const KosarLekeres = 'SELECT SessionID FROM kosár WHERE UserID LIKE ?';
+
         const KosarTermekLekeres = 'SELECT TermekID,Darabszam FROM kosártermék WHERE KosarID LIKE ?';
         const TermekFrissites = 'UPDATE webshoptermek SET Termekkeszlet=Termekkeszlet-?,TermekHanyanVettekMeg=TermekHanyanVettekMeg+1  WHERE TermekID LIKE ?';
         const KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
-        let kosar = await lekeres(KosarLekeres, jwt.decode(request.cookies.auth_token).userID);
 
-        let kosartermek = await lekeres(KosarTermekLekeres, kosar[0].SessionID);
+        let kosartermek = await lekeres(KosarTermekLekeres, jwt.decode(request.cookies.auth_token).userID);
 
         for (let i = 0; i < kosartermek.length; i++) {
             await lekeres(TermekFrissites, [kosartermek[i].Darabszam, kosartermek[i].TermekID]);
         }
-        await lekeres(KosárÜrítés, kosar[0].SessionID);
+        await lekeres(KosárÜrítés, jwt.decode(request.cookies.auth_token).userID);
         response.status(200).json({
             message: 'sikeres fizetés!'
         });
