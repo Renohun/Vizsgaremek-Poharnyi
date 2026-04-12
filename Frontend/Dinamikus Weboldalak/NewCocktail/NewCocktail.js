@@ -368,6 +368,12 @@ Izlekeres();
 const AdatStorage = async () => {
     let data;
     let hiba = true;
+    document.getElementById('Ujra').style.display = 'none';
+    document.getElementById('hiba').style.display = 'none';
+    document.getElementById('siker').removeAttribute('hidden',false);
+    document.getElementById('visszaGomb').removeAttribute('hidden', false);
+    document.getElementById('tovabb').removeAttribute('hidden', true);
+    console.log(hiba)
     //alap adatok kitöltésének ellenörzése
     if (document.getElementById('nev').value == '') {
         hiba = false;
@@ -508,6 +514,7 @@ const AdatStorage = async () => {
         document.getElementById('siker').setAttribute('hidden', true);
         document.getElementById('visszaGomb').setAttribute('hidden', true);
         document.getElementById('tovabb').setAttribute('hidden', true);
+        hiba = true
     }
     //uj koktel gomb funkcioja
     document.getElementById('visszaGomb').addEventListener('click', () => {
