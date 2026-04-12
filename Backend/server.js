@@ -21,7 +21,7 @@ app.use(cookie_parser());
 
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/')));
 
-router.get('/', (request, response) => {
+router.get('/', saveLastUrl, (request, response) => {
     response.sendFile(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'LandingPage', 'LandingPage.html'));
 });
 //Ne / legyen a default hanem A Fooldal
@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
 });
 
 //Landing Page
-router.get('/Fooldal', (req, res) => {
+router.get('/Fooldal', saveLastUrl, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/LandingPage/LandingPage.html'));
 });
 
