@@ -335,16 +335,22 @@ async function KedvencekLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/")
 
     let hova=document.getElementById("IdeKedvenc")
-    hova.innerHTML=""
-    for (let i = 0; i < valasz.adat.length; i++) {
-        let koktel=kartyakeszites(valasz.adat[i])
-        koktelextrak(koktel,valasz.adat[i])
-        hova.appendChild(koktel)
+    if (valasz.message!="Üres Lekérés!") {
+        
+        hova.innerHTML=""
+        for (let i = 0; i < valasz.adat.length; i++) {
+            let koktel=kartyakeszites(valasz.adat[i])
+            koktelextrak(koktel,valasz.adat[i])
+            hova.appendChild(koktel)
+        }
+        while (hova.childNodes.length%4!=0) {
+            let kamukartyaDiv=document.createElement("div")
+            kamukartyaDiv.classList.add("col-10","col-sm-7","col-md-7","col-lg-6","col-xl-5","col-xxl-3","mb-1")
+            hova.appendChild(kamukartyaDiv)
+        }
     }
-    while (hova.childNodes.length%4!=0) {
-        let kamukartyaDiv=document.createElement("div")
-        kamukartyaDiv.classList.add("col-10","col-sm-7","col-md-7","col-lg-6","col-xl-5","col-xxl-3","mb-1")
-        hova.appendChild(kamukartyaDiv)
+    else{
+        hova.innerHTML="Nincs kedvenc koktélod!"
     }
 
     
@@ -353,18 +359,22 @@ async function KoktelokLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Koktelok/")
 
     let hova=document.getElementById("IdeSaját")
-    hova.innerHTML=""
-    for (let i = 0; i < valasz.adat.length; i++) {
-        let koktel=kartyakeszites(valasz.adat[i])
-        koktelextrak(koktel,valasz.adat[i])
-        hova.appendChild(koktel)
+    if (valasz.message!="Üres Lekérés!") {
+        hova.innerHTML=""
+        for (let i = 0; i < valasz.adat.length; i++) {
+            let koktel=kartyakeszites(valasz.adat[i])
+            koktelextrak(koktel,valasz.adat[i])
+            hova.appendChild(koktel)
+        }
+        while (hova.childNodes.length%4!=0) {
+            let kamukartyaDiv=document.createElement("div")
+            kamukartyaDiv.classList.add("col-10","col-sm-7","col-md-7","col-lg-6","col-xl-5","col-xxl-3","mb-1")
+            hova.appendChild(kamukartyaDiv)
+        }
     }
-    while (hova.childNodes.length%4!=0) {
-        let kamukartyaDiv=document.createElement("div")
-        kamukartyaDiv.classList.add("col-10","col-sm-7","col-md-7","col-lg-6","col-xl-5","col-xxl-3","mb-1")
-        hova.appendChild(kamukartyaDiv)
+    else{
+        hova.innerHTML="Nincs saját koktélod!"
     }
-
     
     
     
@@ -377,6 +387,8 @@ async function JelentesekLekeres() {
         hova.innerHTML="Nem jelentettél semmit."
     }
     else{
+        console.log(valasz);
+        
         for (let i = 0; i < valasz.adat.length; i++) {
             let JelentesDiv=document.createElement("div")
             let sortör=document.createElement("hr")
@@ -394,7 +406,7 @@ async function JelentesekLekeres() {
             JelentesAllapota.classList.add("text-center")  
             if (valasz.adat[i][0].JelentesTipusa=="Koktél") {
                 JelentesNev.innerHTML="Jelentett Koktél"
-                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][1].Felhasználónév} "${valasz.rep[i][0].KoktelCim}" című koktélját.<br>Indok:${valasz.adat[i][1].JelentesIndoka}`
+                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][1][0].Felhasználónév} "${valasz.rep[i][0][0].KoktelCim}" című koktélját.<br>Indok:${valasz.adat[i][1].JelentesIndoka}`
                 JelentesDiv.appendChild(JelentesNev)
                 JelentesNev.appendChild(sortör)
                 JelentesDiv.appendChild(JelentesText)
@@ -428,14 +440,8 @@ async function JelentesekLekeres() {
             }
 
             JelentesVisszavonasa.addEventListener("click",()=>{
-                let mit={
-                    tettes:valasz.adat[i][1].JelentésID,
-                    id:4,
-                    tipus:valasz.adat[i][0].JelentesTipusa
-                }
-                
-                
-                AdatPost("/api/AdatlapLekeres/JelentesTorles",mit,"DELETE")
+                            
+                AdatPost("/api/AdatlapLekeres/JelentesTorles",{tettes:valasz.adat[i][1].JelentésID},"DELETE")
                 JelentesekLekeres()
             })
 
@@ -464,6 +470,8 @@ async function KosarLekeres() {
     //Ez a változó jelöli a tényleges kártyák számát
     let valodi=0
     hova.innerHTML=""
+    console.log(valasz);
+    
     if (valasz.message=="Üres Kosár") {
         document.getElementById("KosarAllapot").innerHTML="Üres A Kosarad!"
         kosárGombok.innerHTML=""

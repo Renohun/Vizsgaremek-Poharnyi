@@ -1574,16 +1574,19 @@ router.patch('/AdatlapLekeres/TermekFrissites', authenticationMiddleware, async 
 });
 
 router.delete('/AdatlapLekeres/JelentesTorles', async (request, response) => {
-    let ki = request.body.id;
-    let mit = jwt.verify(request.cookies.auth_token,process.env.JWT_SECRET_REFRESH).userID;
-    let milyen = request.body.tipus;
+    let ki = jwt.verify(request.cookies.auth_token,process.env.JWT_SECRET_REFRESH).userID;
+    let mit = request.body.tettes;
     let JelentésTörlés = 'DELETE FROM Jelentők WHERE JelentőID LIKE ? AND JelentésID LIKE ?';
+    let JelentesFontossagCsokkentes="UPDATE Jelentesek SET JelentesMennyisege=JelentesMennyisege-1 WHERE JelentesID LIKE ?"
     try {
-        await DBconnetion.promise().query(JelentésTörlés, [ki, mit, milyen]);
+        await lekeres(JelentésTörlés, [ki, mit]);
+        await lekeres(JelentesFontossagCsokkentes, mit);
         response.status(200).json({
             message: 'Sikeres Frissítés!'
         });
     } catch (error) {
+        console.log(error);
+        
         response.status(500).json({
             message: 'Hiba Történt!',
             hiba: error
@@ -1637,26 +1640,28 @@ router.get('/Koktelok/KepLekeres', async (request, response) => {
 router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (request, response) => {
     try {
         let hiba = false;
-        let tomb = '';
+        let tomb = {};
         let adatmodositas = 'UPDATE felhasználó SET Felhasználónév=?,Email=?';
         if (
             /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.Email) &&
             /^[a-zA-Z0-9_]{2,30}$/.test(request.body.Felhasználónév)
         ) {
-            tomb = `${request.body.Felhasználónév},${request.body.Email}`;
+            tomb.felhaszanalo = `${request.body.Felhasználónév}`;
+            tomb.email =`${request.body.Email}`
         } else {
             hiba = true;
         }
         let profil = jwt.verify(request.cookies.auth_token,process.env.JWT_SECRET_REFRESH).userID;
         if (request.body.KépÚtvonal != undefined && hiba == false) {
             adatmodositas += ',ProfilKepUtvonal=?';
-            tomb += `,${request.body.KépÚtvonal}`;
+            tomb.kepvonal=`${request.body.KépÚtvonal}`
+            
         }
         if (request.body.Jelszó != 'undefined' && hiba == false) {
             if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.Jelszó)) {
                 adatmodositas += ',JelszóHossza=?,Jelszó=?';
-                tomb += `,${request.body.Jelszó.length}`;
-                tomb += `,${await argon.hash(request.body.Jelszó, { type: argon.argon2id })} `;
+                tomb.hossz=`${request.body.Jelszó.length}`
+                tomb.jelszo=`${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`
 
                 
             } else {
@@ -1665,7 +1670,7 @@ router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (re
         }
         adatmodositas += ` WHERE FelhID LIKE ${profil}`;
         if (hiba == false) {
-            await lekeres(adatmodositas, tomb.split(','));
+            await lekeres(adatmodositas, Object.values(tomb));
             await kepculling();
             response.status(200).json({
                 message: 'Siker!'
