@@ -2605,8 +2605,8 @@ router.post('/Webshop/KosarKuldes/:id', async (request, response) => {
             const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
             const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
 
-            const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ?';
-            const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id]);
+            const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? AND KosarID = ?';
+            const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id,KosarLekeres[0].SessionID]);
 
             //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
             if (vanEIlyen[0] == undefined) {
