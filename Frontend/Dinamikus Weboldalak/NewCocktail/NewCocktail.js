@@ -370,6 +370,7 @@ const AdatStorage = async () => {
     let hiba = true;
     document.getElementById('Ujra').style.display = 'none';
     document.getElementById('hiba').style.display = 'none';
+    document.getElementById('vissza').style.display = 'none';
     document.getElementById('siker').removeAttribute('hidden',false);
     document.getElementById('visszaGomb').removeAttribute('hidden', false);
     document.getElementById('tovabb').removeAttribute('hidden', true);
@@ -510,6 +511,7 @@ const AdatStorage = async () => {
     } else if (hiba == false) {
         //hibás kitöltés kezelése
         document.getElementById('Ujra').style.display = 'block';
+        document.getElementById('vissza').style.display = 'block';
         document.getElementById('hiba').style.display = 'block';
         document.getElementById('siker').setAttribute('hidden', true);
         document.getElementById('visszaGomb').setAttribute('hidden', true);
