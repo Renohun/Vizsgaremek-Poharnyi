@@ -366,9 +366,17 @@ Izlekeres();
 //adatok kiküldése az adatbazisba
 
 const AdatStorage = async () => {
-    console.log(window.innerWidth);
     let data;
     let hiba = true;
+    let egyezoMl = true;
+    document.getElementById('Ujra').style.display = 'none';
+    document.getElementById('hiba').style.display = 'none';
+    document.getElementById('hiba').innerHTML = "Kérem töltse ki a Hiányzó adatokat!"
+    document.getElementById('vissza').style.display = 'none';
+    document.getElementById('siker').removeAttribute('hidden',false);
+    document.getElementById('visszaGomb').removeAttribute('hidden', false);
+    document.getElementById('tovabb').removeAttribute('hidden', true);
+    console.log(hiba)
     //alap adatok kitöltésének ellenörzése
     if (document.getElementById('nev').value == '') {
         hiba = false;
@@ -434,7 +442,22 @@ const AdatStorage = async () => {
         osszetevoLista.push(lista);
         console.log(osszetevoLista);
     }
+    //mennyiségEllenőrzés
+    let Ujmennyiseg = 0;
+    for (let i = 0; i < osszetevoLista.length; i++) 
+        {
+            console.log(osszetevoLista[i] +" lalala")
+            if (osszetevoLista[i][2] == "ml" || osszetevoLista[i][2] == "ML") 
+            {
+                Ujmennyiseg += parseInt(osszetevoLista[i][1])
+            }
+        }
 
+    if (Ujmennyiseg != document.getElementById('mennyiseg').value) 
+    {
+        hiba = false;
+        egyezoMl = false
+    }
     //leiras kiszedese
     let leiras = document.getElementById('leiras').value;
     if (leiras == '') {
@@ -490,10 +513,17 @@ const AdatStorage = async () => {
     } else if (hiba == false) {
         //hibás kitöltés kezelése
         document.getElementById('Ujra').style.display = 'block';
+        document.getElementById('vissza').style.display = 'block';
         document.getElementById('hiba').style.display = 'block';
+        if (egyezoMl == false) 
+        {
+           document.getElementById('hiba').innerHTML += " és/vagy Kérem ügyeljen arra, hogy a megadott mililiter mennyiségek egyezzenek!"
+        }
         document.getElementById('siker').setAttribute('hidden', true);
         document.getElementById('visszaGomb').setAttribute('hidden', true);
         document.getElementById('tovabb').setAttribute('hidden', true);
+        hiba = true
+        egyezoMl = true
     }
     //uj koktel gomb funkcioja
     document.getElementById('visszaGomb').addEventListener('click', () => {
