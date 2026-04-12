@@ -317,6 +317,7 @@ async function Tisztitas() {
     //Több elemes dinamikus divek ürítése
     document.getElementById("komment").value=""
     document.getElementById("Kommentek").innerHTML=""
+    document.getElementById("szam").innerHTML="0"
     document.getElementById("Ossztev").innerHTML=""
     document.getElementById("badgek").innerHTML=""
 }
