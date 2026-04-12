@@ -368,8 +368,10 @@ Izlekeres();
 const AdatStorage = async () => {
     let data;
     let hiba = true;
+    let egyezoMl = true;
     document.getElementById('Ujra').style.display = 'none';
     document.getElementById('hiba').style.display = 'none';
+    document.getElementById('hiba').innerHTML = "Kérem töltse ki a Hiányzó adatokat!"
     document.getElementById('vissza').style.display = 'none';
     document.getElementById('siker').removeAttribute('hidden',false);
     document.getElementById('visszaGomb').removeAttribute('hidden', false);
@@ -453,8 +455,8 @@ const AdatStorage = async () => {
 
     if (Ujmennyiseg != document.getElementById('mennyiseg').value) 
     {
-        alert("kérem ügyeljen arra, hogy mennyiségek egyezzenek!")
         hiba = false;
+        egyezoMl = false
     }
     //leiras kiszedese
     let leiras = document.getElementById('leiras').value;
@@ -513,10 +515,15 @@ const AdatStorage = async () => {
         document.getElementById('Ujra').style.display = 'block';
         document.getElementById('vissza').style.display = 'block';
         document.getElementById('hiba').style.display = 'block';
+        if (egyezoMl == false) 
+        {
+           document.getElementById('hiba').innerHTML += " és/vagy Kérem ügyeljen arra, hogy a megadott mililiter mennyiségek egyezzenek!"
+        }
         document.getElementById('siker').setAttribute('hidden', true);
         document.getElementById('visszaGomb').setAttribute('hidden', true);
         document.getElementById('tovabb').setAttribute('hidden', true);
         hiba = true
+        egyezoMl = true
     }
     //uj koktel gomb funkcioja
     document.getElementById('visszaGomb').addEventListener('click', () => {
