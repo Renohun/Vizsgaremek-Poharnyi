@@ -47,10 +47,10 @@ async function PATCHfetch(url) {
     }
 }
 
-async function POSTKepLekeres(url) {
+async function GETKepLekeres(url) {
     try {
         const ertek = await fetch(url, {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'image/jpeg' }
         });
         if (ertek.ok) {
@@ -89,8 +89,8 @@ function koktelRendereles(koktelok) {
             //console.log(koktel.KoktélID);
 
             (async () => {
-                const koktelKep = await POSTKepLekeres(
-                    `http://127.0.0.1:3000/api/AdminPanel/KepLekeres/${koktel.KoktélID}`
+                const koktelKep = await GETKepLekeres(
+                    `http://127.0.0.1:3000/api/AdatlapLekeres/KepLekeres/${koktel.BoritoKepUtvonal}`
                 );
                 imgTag.setAttribute('src', URL.createObjectURL(koktelKep));
             })();
