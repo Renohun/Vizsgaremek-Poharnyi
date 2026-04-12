@@ -37,6 +37,11 @@ const WebShopTovabb = async()=>{
 const koktelTovabb = async()=>{
     window.location.href = "/Koktelok"
 }
+const KeszitTovabb = async()=>{
+        window.location.href = "/Keszites"
+    
+    
+}
 //népszerű koktél
 const NepszeruKoktelok = async()=>{
     const data = await GetFetch("http://127.0.0.1:3000/api/Fooldal/NepszeruKoktelok")
@@ -81,5 +86,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
     let KoktelGomb = document.getElementById("KoktelGomb")
     KoktelGomb.addEventListener("click",koktelTovabb)
 
+    let KeszitGomb = document.getElementById("KeszitGomb")
+    KeszitGomb.addEventListener("click",KeszitTovabb)
     NepszeruKoktelok()
 })
