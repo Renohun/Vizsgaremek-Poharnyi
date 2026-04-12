@@ -88,18 +88,13 @@ CREATE TABLE KoktelokOsszetevoi(
     FOREIGN KEY(KoktélID) REFERENCES Koktél(KoktélID)
 );
 
-CREATE TABLE Kosár(
-	SessionID INT AUTO_INCREMENT PRIMARY KEY,
-	UserID INT NOT NULL,
-	FOREIGN KEY(UserID) REFERENCES Felhasználó(FelhID)
-);
 
 CREATE TABLE KosárTermék(
 	KosarID INT NOT NULL,
 	TermekID INT NOT NULL,
 	Darabszam INT DEFAULT 1,
 	EgysegAr INT NOT NULL,
-	FOREIGN KEY(KosarID) REFERENCES Kosár(SessionID),
+	FOREIGN KEY(KosarID) REFERENCES Felhasználó(FelhID),
 	FOREIGN KEY(TermekID,EgysegAr) REFERENCES WebshopTermek(TermekID,Ar)
 );
 

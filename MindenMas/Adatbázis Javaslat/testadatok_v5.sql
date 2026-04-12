@@ -115,11 +115,6 @@ VALUES
 ("Ouzou","Görög alkohol, mentolos ízzel",1,0.5,200,"what.webp","Egyéb","Görög Varázs","Görögország",12,9500),
 ("Soju Eper","Koreai desztillált alkohol, eper ízben",1,0.35,200,"what.webp","Egyéb","Jinro","Korea",12,2500);
 
-INSERT INTO Kosár(UserID)
-VALUES
-(1),
-(2),
-(3);
 
 INSERT INTO KosárTermék(KosarID,TermekID,Darabszam,Egysegar)
 VALUES
