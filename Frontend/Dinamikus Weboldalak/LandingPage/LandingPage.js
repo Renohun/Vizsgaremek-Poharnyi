@@ -11,7 +11,24 @@ const GetFetch = async(url)=>{
     }
 }
 
-
+const KepFetch=async(url)=>{
+    try {
+      const ertek=await fetch(url,{
+        method: "GET",
+        headers: {"Content-Type":"image/jpeg"}
+      })  
+      if (ertek.ok) {
+        return ertek.blob()
+      }
+      else{
+        console.log("hiba");
+        
+      }
+    } 
+    catch (error) {
+        console.error(error)
+    }
+}
 
 
 const WebShopTovabb = async()=>{
@@ -24,6 +41,32 @@ const koktelTovabb = async()=>{
 const NepszeruKoktelok = async()=>{
     const data = await GetFetch("http://127.0.0.1:3000/api/Fooldal/NepszeruKoktelok")
     console.log(data)
+    let hova = document.getElementById("NepszeruKoktelDiv")
+    for (let i = 0; i < data.data.length; i++) {
+        const kep = await KepFetch(`http://127.0.0.1:3000/api/Fooldal/KepLekeres/${data.data[i].KoktélID}`)
+        let kartya = document.createElement("div")
+        kartya.classList.add("NepszeruKartya")
+        
+        let kepdiv = document.createElement("div")
+        kepdiv.classList.add("NepszeruKepDiv")
+
+        let img = document.createElement("img")
+        img.classList.add("nepszeruKep","img-fluid")
+        img.src = URL.createObjectURL(kep)
+        kepdiv.appendChild(img)
+        kartya.appendChild(kepdiv)
+        
+        let kartyaBody = document.createElement("div")
+        kartyaBody.classList.add("KartyaBody")
+        
+        let cim = document.createElement("h3")
+        cim.innerHTML = data.data[i].KoktelCim
+        cim.classList.add("nepszeruCim")
+        kartyaBody.appendChild(cim)
+
+        kartya.appendChild(kartyaBody)
+        hova.appendChild(kartya)
+    }
 }
 
 document.addEventListener("DOMContentLoaded",async()=>{
@@ -34,5 +77,5 @@ document.addEventListener("DOMContentLoaded",async()=>{
     let KoktelGomb = document.getElementById("KoktelGomb")
     KoktelGomb.addEventListener("click",koktelTovabb)
 
-    NepszeruKoktelok()
+    //NepszeruKoktelok()
 })

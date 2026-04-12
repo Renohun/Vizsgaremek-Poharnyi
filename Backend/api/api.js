@@ -2445,7 +2445,6 @@ router.get("/Fooldal/NepszeruKoktelok",async(request,response)=>{
     try {
         const query = "SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC LIMIT 5"
         const [Nepszeruk] = await DBconnetion.promise().query(query) 
-        console.log(Nepszeruk)
         response.status(200).json({
             data:Nepszeruk
         })
@@ -2458,5 +2457,15 @@ router.get("/Fooldal/NepszeruKoktelok",async(request,response)=>{
     }
     
 })
-
+router.get('/Fooldal/KepLekeres/:id', async (request, response) => {
+    try {
+        //console.log(request.body);
+        let { id } = request.params;
+        let kepkereses = 'SELECT BoritoKepUtvonal FROM koktél WHERE KoktélID LIKE ?';
+        let kinek = await lekeres(kepkereses, id);
+        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].BoritoKepUtvonal));
+    } catch (error) {
+        console.log(error);
+    }
+});
 module.exports = router;
