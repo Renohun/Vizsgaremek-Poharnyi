@@ -261,7 +261,7 @@ async function AdatlapLekeres(){
                     if(AdatlapJelszo2.value!=AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true){
                         hiba+="\t A kettő jelszó nem egyezik!"
                     }
-                    else if(AdatlapJelszo2.value==AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true&&/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(AdatlapJelszo)==false){
+                    else if(AdatlapJelszo2.value==AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true&&/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(AdatlapJelszo.value)==false){
                         hiba+="\t A Jelszó nem felel meg a követelményeknek!"
                     }
                     else{
@@ -307,7 +307,10 @@ async function AdatlapLekeres(){
         modosit.removeAttribute("disabled","true")
         titkos.setAttribute("disabled","true")
         AdatlapJelszo.setAttribute("disabled","true")
-        AdatlapJelszo2.setAttribute("disabled","true")
+        AdatlapJelszo2.setAttribute("disabled","true")        
+        AdatlapJelszo2.setAttribute("hidden","true")        
+        AdatlapJelszo.setAttribute("type","password")
+        AdatlapJelszo2.setAttribute("type","password")
         document.getElementById("pwShowDiv").setAttribute("hidden","true")
         document.getElementById("pwChangeDiv").setAttribute("hidden","true")
     }
