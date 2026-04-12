@@ -190,12 +190,16 @@ const oldalGenerálás =  async () =>{
     {
         //a felhasználó nem tud a raktáron lévő mennyiségnél többet rendelni!
         let max =LekertTermekek.termek[0].TermekKeszlet;
+        let min 
         mennyisegHely.max = max;
         mennyisegHely.addEventListener("change",()=>{
             
             if (mennyisegHely.value > max) 
             {
                 mennyisegHely.value = max;  
+            }
+            if(mennyisegHely.value < 1){
+                mennyisegHely.value = 1
             }
         })
         PolcLabelHely.innerHTML = "Utolsó Darabok!"
@@ -216,6 +220,9 @@ const oldalGenerálás =  async () =>{
             if (mennyisegHely.value > max) /*why??*/ 
             {
                 mennyisegHely.value = max;  
+            }
+            if(mennyisegHely.value < 1){
+                mennyisegHely.value = 1
             }
         })
         

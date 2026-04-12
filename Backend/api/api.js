@@ -2295,7 +2295,7 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
 
             const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ?';
             const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id]);
-            if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99) {
+            if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1) {
                 response.status(200).json({ hiba: 'raktar' });
             } else {
                 //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
