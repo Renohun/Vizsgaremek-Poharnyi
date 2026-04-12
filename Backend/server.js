@@ -6,6 +6,7 @@ const path = require('path');
 const cookie_parser = require('cookie-parser');
 const authenticationMiddleware = require('./api/authenticationMiddleware.js');
 const authorizationMiddelware = require('./api/authorizationMiddelware.js');
+const saveLastUrl = require('./api/saveLastURLMiddleware.js');
 
 //!Beállítások
 const app = express();
@@ -35,7 +36,7 @@ router.get('/Fooldal', (req, res) => {
 
 //Regisztracio - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Regisztráció/')));
-router.get('/Regisztralj', (req, res) => {
+router.get('/Regisztralj', saveLastUrl, (req, res) => {
     if (req.cookies.auth_token == null) {
         res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Regisztráció/Regisztracio.html'));
     } else {
@@ -45,7 +46,7 @@ router.get('/Regisztralj', (req, res) => {
 
 //Bejelentkezes - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
-router.get('/LepjBe', (req, res) => {
+router.get('/LepjBe', saveLastUrl, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/belepes.html'));
 });
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/belepes/')));
@@ -65,7 +66,7 @@ router.get('/jelszoValtoztatas/:id', (req, res) => {
 
 //KoktelKeszites
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/')));
-router.get('/Keszites', (req, res) => {
+router.get('/Keszites', saveLastUrl, (req, res) => {
     if (req.cookies.auth_token == null) {
         res.redirect('/LepjBe');
     } else {
@@ -73,48 +74,54 @@ router.get('/Keszites', (req, res) => {
     }
 });
 //WebShop
-router.get('/WebShop', (req, res) => {
+router.get('/WebShop', saveLastUrl, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/WebShopMain/WebShopMain.html'));
 });
 //Kijelentkezes
 //TODO POST-ra atirni
 router.get('/Kijelentkezes', authenticationMiddleware, (req, res) => {
-    res.clearCookie('auth_token', {
-        httpOnly: 'true',
-        secure: process.env.COOKIE_SECURE === 'true',
-        sameSite: process.env.COOKIE_SECURE
-    });
+    res.clearCookie('auth_token');
+    res.clearCookie('auth_token_access');
 
     res.redirect('/');
 });
 
 //Adatok - Dinamikus
-router.get('/Adatlap', authenticationMiddleware, (req, res) => {
+router.get('/Adatlap', saveLastUrl, authenticationMiddleware, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Adatlap/Adatlap.html'));
 });
 //AdminPanel - Dinamikus
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/AdminPanel - Dinamikus')));
-router.get('/AdminPanel', authenticationMiddleware, authorizationMiddelware, (req, res) => {
+router.get('/AdminPanel', saveLastUrl, authenticationMiddleware, authorizationMiddelware, (req, res) => {
     res.sendFile(
         path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'AdminPanel - Dinamikus', 'index.html')
     );
 });
 //Koktelok
 router.use(express.static(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'Pohárnyi - Dinamikus')));
-router.get('/Koktelok', (req, res) => {
+router.get('/Koktelok', saveLastUrl, (req, res) => {
+    //console.log(req);
+
     res.sendFile(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'Pohárnyi - Dinamikus', 'PohAlc.html'));
 });
 
 //Koktel
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap')));
-router.get('/Koktel/:koktelID', (req, res) => {
+router.get('/Koktel/:koktelID', saveLastUrl, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/koktellap.html'));
 });
 router.get('/KoktelHiba', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/nincsilyen.html'));
 });
+// termekek
+router.get('/Termek/:termekID', saveLastUrl, (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/TermekOldal/TermekOldal.html'));
+});
+router.get('/HianyzoTermek', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/TermekOldal/NincsIlyenTermek.html'));
+});
 
-router.get('/jogosultsag', (req, res) => {
+router.get('/jogosultsag', saveLastUrl, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/hibaOldalak/jogosultsag.html'));
 });
 

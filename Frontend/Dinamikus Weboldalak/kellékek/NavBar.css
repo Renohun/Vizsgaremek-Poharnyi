@@ -2,7 +2,7 @@
     text-decoration: underline;
 }
 .hatter {
-    background-color: #9acd32;
+    background-color: rgb(146, 197, 7);
 }
 #alszoveg {
     font-size: x-small;
@@ -18,7 +18,7 @@
 }
 
 .navbar-nav > li > .dropdown-menu {
-    background-color: #9acd32;
+    background-color: rgb(146, 197, 7);
     border-radius: 0px;
 }
 
@@ -35,15 +35,15 @@ div > li {
     width: 50px;
 }
 .hatter{
-    background-color: #9acd32;
+    background-color: rgb(146, 197, 7);
     border-bottom-right-radius: 5px;
 }
 .navbar-nav > div > .dropdown-menu {
-    background-color: #9acd32;
+    background-color: rgb(146, 197, 7);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     border-top: 0px;
-    border-color: #9acd32;
+    border-color: rgb(146, 197, 7);
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     --bs-dropdown-link-hover-bg: #a7e727;
@@ -53,4 +53,11 @@ div > li {
     text-decoration: none;
     /*color: rgb(28, 180, 28);*/
     color: black;
+}
+
+#Sidebar{
+    background-color: rgb(146, 197, 7);
+    margin-top:5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }

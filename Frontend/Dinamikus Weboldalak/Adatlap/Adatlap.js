@@ -140,7 +140,9 @@ async function AdatlapLekeres(){
     let AdatlapJelszoLabel2=document.getElementById("labelJelszo2")
 
     let AdatlapJelszoValtozatas=document.getElementById("pwChange")
-    let AdatlapJelszoValtozatasLabel=document.getElementById("pwChangeLabel")
+
+    let AdatlapJelszoMutatas=document.getElementById("pwShow")
+
 
     let AdatlapKep=document.getElementById("profilkep")
     AdatlapFelh.value=ertek.Felhasználónév
@@ -153,11 +155,8 @@ async function AdatlapLekeres(){
     //A Módosítás Gomb Következményei
     let modosit=document.getElementById("Módosítás")
     let hovaGombok=document.getElementById("AdatlapGombok")
-    let eredmény=document.getElementById("result")
     let titkos=document.getElementById("input")
-    eredmény.innerHTML=""
     modosit.addEventListener("click",()=>{
-        eredmény.innerHTML=""
         AdatMentes.setAttribute("type","button")
         AdatMentes.setAttribute("value","Mentés")
         AdatMentes.classList.add("btn","btn-success","me-1")
@@ -170,21 +169,36 @@ async function AdatlapLekeres(){
         let tempMail=AdatlapEmail.value
         let tempJelszo=AdatlapJelszo.value
         let tempKep=kapottkep
+
         AdatlapFelh.removeAttribute("disabled","true")
         AdatlapEmail.removeAttribute("disabled","true")
         titkos.removeAttribute("disabled","true")
         modosit.setAttribute("disabled","true")
-        AdatlapJelszoValtozatas.removeAttribute("hidden","true")
-        AdatlapJelszoValtozatasLabel.removeAttribute("hidden","true")
+
+        document.getElementById("pwChangeDiv").removeAttribute("hidden","true")
+        
         AdatlapJelszoValtozatas.addEventListener("click",()=>{
             if (AdatlapJelszoValtozatas.checked) {
+                document.getElementById("pwShowDiv").removeAttribute("hidden","true")
                 AdatlapJelszo.value=""
                 AdatlapJelszo.removeAttribute("disabled","true")
                 AdatlapJelszo2.removeAttribute("disabled","true")
                 AdatlapJelszo2.removeAttribute("hidden","true")
                 AdatlapJelszoLabel2.removeAttribute("hidden","true")
+
+                AdatlapJelszoMutatas.addEventListener("click",()=>{
+                    if (AdatlapJelszoMutatas.checked) {
+                        AdatlapJelszo.setAttribute("type","text")
+                        AdatlapJelszo2.setAttribute("type","text")
+                    }
+                    else{
+                        AdatlapJelszo.setAttribute("type","password")
+                        AdatlapJelszo2.setAttribute("type","password")
+                    }
+                })
             }
             else{
+                document.getElementById("pwShowDiv").setAttribute("hidden","true")
                 AdatlapJelszo.value=tempJelszo
                 AdatlapJelszo.setAttribute("disabled","true")
                 AdatlapJelszo2.setAttribute("disabled","true")
@@ -194,17 +208,12 @@ async function AdatlapLekeres(){
         })
         hovaGombok.appendChild(AdatMentes)
         hovaGombok.appendChild(AdatMégse)
-        AdatMentes.addEventListener("click",async()=>{
-        let valto=await adatvaltas()
-        if (valto==true) 
+        AdatMentes.addEventListener("click",async()=>
         {
-            eredmény.innerHTML="Sikeres Mentés!"
-            GombOles()
-        }
-
-
+            await adatvaltas()
         })
-        AdatMégse.addEventListener("click",()=>{
+        AdatMégse.addEventListener("click",()=>
+        {
                 undo()
                 GombOles()
         
@@ -215,16 +224,16 @@ async function AdatlapLekeres(){
                 AdatlapEmail.value=tempMail
                 AdatlapJelszo.value=tempJelszo
                 AdatlapKep.setAttribute("src",tempKep)
-                eredmény.innerHTML="Sikeres Törlés!"
+                modal("Siker","Sikeres Törlés!")
             } 
             catch (error) {
-                //redirect?
-                eredmény.innerHTML="Hiba történt!"
+                modal("Hiba","Váratlan Hiba Történt!")
             }
         }
 
         async function adatvaltas(){
             try {
+                    let hiba=""
                     let FelhAdatok={
                         
                     }//" " a space ellenőrzés
@@ -233,8 +242,7 @@ async function AdatlapLekeres(){
                             FelhAdatok.Email=AdatlapEmail.value
                     }
                     else{
-                        eredmény.innerHTML="A felhasználónév / email-cím nem felel meg a követelményeknek!"
-                        return false
+                        hiba+="\t A felhasználónév / email-cím nem felel meg a követelményeknek!"
                     }
                     FelhAdatok.Felhasználónév=AdatlapFelh.value
                     FelhAdatok.Email=AdatlapEmail.value
@@ -242,8 +250,7 @@ async function AdatlapLekeres(){
                     //A Kép Eltárolása. Visszakapjuk a kép új nevét, amit továbbadunk az adatbázisnak   
                     if(titkos.files.length!=0){
                         if (titkos.files[0].type!="image/jpeg"&&titkos.files[0].type!="image/png"&&titkos.files[0].type!="image/bmp"&&titkos.files[0].type!="image/webp") {
-                            eredmény.innerHTML="A megadott fájl nem felel meg a követelményeknek!"
-                            return false
+                            hiba+="\t A megadott fájl nem felel meg a követelményeknek!"
                         }
                         else{
                             data.append("profilkep",titkos.files[0])
@@ -252,35 +259,31 @@ async function AdatlapLekeres(){
                         }
                     }
                     if(AdatlapJelszo2.value!=AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true){
-                        eredmény.innerHTML="A kettő jelszó nem egyezik!"
-
-                        return false
+                        hiba+="\t A kettő jelszó nem egyezik!"
                     }
-                    else if(AdatlapJelszo2.value==AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true&&/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(AdatlapJelszo)==false){
-                        eredmény.innerHTML="A Jelszó nem felel meg a követelményeknek!"
-                        return false
+                    else if(AdatlapJelszo2.value==AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true&&/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(AdatlapJelszo.value)==false){
+                        hiba+="\t A Jelszó nem felel meg a követelményeknek!"
                     }
                     else{
 
                         FelhAdatok.Jelszó=AdatlapJelszo.value
                         
                         let valasz=await AdatPost("/api/AdatlapLekeres/Adatmodositas/",FelhAdatok,"PUT")
-                        console.log(valasz);
                         if (valasz=="200") {
-                            return true
+                            modal("Sikeres Adatmódosítás!","Az Adatai sikeresen frissültek!")
+                            GombOles()
                         }
                         else{
-                            eredmény.innerHTML="Váratlan hiba történt!"
-                            return false
+                            modal("Hiba","Váratlan Hiba Történt!")
                         }
+                    }
+                    if (hiba!="") {
+                        modal("Hibás adatok!","Az alábbi adatok hibásak:"+hiba)
                     }
                     
             } 
             catch (error) {
-                //redirect?
-                console.log(error);
-                
-                eredmény.innerHTML="Váratlan hiba történt!"
+                modal("Hiba","Váratlan Hiba Történt!")
                 return false
             }
 
@@ -299,16 +302,17 @@ async function AdatlapLekeres(){
             hovaGombok.removeChild(mit[i])
             
         }
-        AdatlapJelszoValtozatas.setAttribute("hidden","true")
-        AdatlapJelszoValtozatasLabel.setAttribute("hidden","true")
         AdatlapFelh.setAttribute("disabled","true")
         AdatlapEmail.setAttribute("disabled","true")
         modosit.removeAttribute("disabled","true")
         titkos.setAttribute("disabled","true")
         AdatlapJelszo.setAttribute("disabled","true")
-        AdatlapJelszo2.setAttribute("disabled","true")
-        AdatlapJelszo2.setAttribute("hidden","true")
-        AdatlapJelszoLabel2.setAttribute("hidden","true")
+        AdatlapJelszo2.setAttribute("disabled","true")        
+        AdatlapJelszo2.setAttribute("hidden","true")        
+        AdatlapJelszo.setAttribute("type","password")
+        AdatlapJelszo2.setAttribute("type","password")
+        document.getElementById("pwShowDiv").setAttribute("hidden","true")
+        document.getElementById("pwChangeDiv").setAttribute("hidden","true")
     }
 
 
@@ -543,11 +547,11 @@ async function KosarLekeres() {
             try {
                 AdatPost("/api/AdatlapLekeres/Kosarurites/",null,"DELETE")
                 KosarLekeres()
-                alert("Siker!")
+                modal("Siker!","Kosár sikeresen ürítve")
 
             } 
             catch (error) {
-                alert("Hiba Történt!")
+                modal("Hiba!","Hiba történt a kosár ürítésekor!")
             }
         })
         //Fizetés
@@ -586,23 +590,32 @@ async function KosarLekeres() {
 }
 
 function fioktorles(){
+    //Előhívjuk a modalt
     var JelIv = new bootstrap.Modal(document.getElementById('Fioktorles'), {})   
     JelIv.show()
-    document.getElementById("DelNvm").addEventListener("click",()=>{
-        
-        document.getElementById("DelConfText").value=""
-        JelIv.hide()
-    },{once:true})
+    //Ha rányom a törlés gombra
     document.getElementById("DelConf").addEventListener("click",async()=>{
+        //De helytelenül írta be a TÖRLÉS szót
         if (document.getElementById("DelConfText").value!="TÖRLÉS") {
+            //Akkor nem engedjuk tovább 
             document.getElementById("feedback").innerHTML="A mező nem tartalmazza a helyes szavat!"
         }
+        //Ellenben ha jól írta be
         else{
-            await AdatPost("/api/AdatlapLekeres/Fioktorles","","DELETE")
-            await AdatPost("/api/Kijelentkezes","","POST")
+            //Kitöröljük a fiókját
+            await AdatPost("/api/AdatlapLekeres/Fioktorles",null,"DELETE")
+            //Kijelentkeztetjük
+            await AdatPost("/api/Kijelentkezes",null,"POST")
+            //Kidobjuk a főoldalra
             window.location.href="/"
-        }
-        
+        } 
+    },{once:true})
+    //Ha meggondolja magát
+    document.getElementById("DelNvm").addEventListener("click",()=>{
+        //Kiürítjuk a mezőt
+        document.getElementById("DelConfText").value=""
+        //elrejtük a modalt
+        JelIv.hide()
     },{once:true})
     
     
@@ -611,41 +624,43 @@ function fioktorles(){
 
 
 async function fizetes(){
+    //Itt lesz egy gomb ami visszavezet az "előző" felületre
     let gombSáv=document.getElementById("KosárGombok")
+    
+    //A felület ahol a fizetési panel és a számla fog helyezkedni
+    let Fizetes=document.getElementById("KosárFizetésGomb")
+    //Mindent ami a fizetés felületen volt kitörlök
     gombSáv.innerHTML=""
-    let összJelző=document.getElementById("IdeKosár")
-    összJelző.innerHTML=""
-    let gombok=document.getElementById("KosárFizetésGomb")
-    gombok.innerHTML=""
+    document.getElementById("IdeKosár").innerHTML=""
+    Fizetes.innerHTML=""
+    Fizetes.classList.add("mt-2","dark","row","justify-content-md-center","justify-content-sm-center","justify-content-lg-between")
 
-    let gomb=document.createElement("input")
+    //Újra a backendről kérem le az adatokat, manipulációt elkerülve
     let kosar=await AdatGet("/api/AdatlapLekeres/Kosar")
-    console.log(kosar);
-    
     let termekek=kosar.adat
-    console.log(termekek);
-    
-    
-    
+
+    //Ha vissza akar menni a felhasználó akkor ez a gomb adja ezt a lehetőséget neki
+    let gomb=document.createElement("input")
     gomb.setAttribute("type","button")
     gomb.setAttribute("value","Vissza")
     gomb.classList.add("btn","btn-secondary")
-    //Visszaépítem a Gombokat mert nem dinamikusak de törölhetőek
     gomb.addEventListener("click",()=>{
+        //Visszaépítem a Gombokat mert nem dinamikusak de törölhetőek
         visszaepites()
         KosarLekeres()
     })
     gombSáv.appendChild(gomb)
-    gombok.classList.add("mt-2","dark")
-    let total=0
+    
+    
     //Termék Adatok
     let termékekList=document.createElement("div")
-    gombok.classList.add("row","justify-content-md-center","justify-content-sm-center","justify-content-lg-between")
     termékekList.classList.add("col-12","col-lg-4","col-md-6","col-sm-12","bg-light","rounded","p-2","border","border-dark")
+
     let szoveg=document.createElement("div")
     szoveg.innerHTML="Termék Adatok"
     termékekList.appendChild(szoveg)
 
+    let total=0
     for (let i = 0; i < termekek.length; i++) {
         let termekadatok=kosar.adat[i].kosarAdatok
         let sor=document.createElement("div")
@@ -654,81 +669,94 @@ async function fizetes(){
         total+=termekadatok.EgysegAr*termekadatok.Darabszam
         termékekList.appendChild(sor)
     }
+
+    //Itt látja a felhasználó az összesen fizetendő összeget
     let osszeg=document.createElement("div")
     osszeg.classList.add("border-top","border-dark","fs-4")
     osszeg.innerHTML="Összesen: "+total+" Ft"
     termékekList.appendChild(osszeg)
-    //Számlázási Adatok
+
+    //Számlázási Adatok Felülete
+    //A form ami segít a validációban
     let PayList=document.createElement("form")
     PayList.classList.add("col-12","col-lg-4","col-md-6","col-sm-12","border","border-dark","bg-light","rounded","p-2","needs-validation")
+
     let payszoveg=document.createElement("div")
     payszoveg.innerHTML="Számlázási Adatok"
-    //PayList.setAttribute("novalidate","true")
     PayList.appendChild(payszoveg)
+
     //Email
     let mailLab=document.createElement("label")
-    let mail=document.createElement("input")
-    mail.setAttribute("placeholder","pelda@email.cim")
-    mail.setAttribute("required","true")
-    mail.setAttribute("id","fizmail")
-    mail.classList.add("form-control")
     mailLab.setAttribute("for","fizmail")
     mailLab.innerHTML="Email-Cím"
     PayList.appendChild(mailLab)
-    PayList.appendChild(mail)
-    //Név
+
+    let mail=document.createElement("input")
+    mail.setAttribute("placeholder","pelda@email.cim")
+    mail.setAttribute("id","fizmail")
+    inputKezelo(mail)
+
+    //Név és Labelje
     let nameLab=document.createElement("label")
-    let name=document.createElement("input")
-    name.setAttribute("placeholder","Minta László")
-    name.setAttribute("required","true")
-    name.setAttribute("id","fizname")
-    name.classList.add("form-control")
     nameLab.setAttribute("for","fizname")
     nameLab.innerHTML="Teljes Név"
     PayList.appendChild(nameLab)
-    PayList.appendChild(name)
 
-    //Cím
+    let name=document.createElement("input")
+    name.setAttribute("placeholder","Minta László")
+    name.setAttribute("id","fizname")
+    inputKezelo(name)
+
+    //Cím és Labelje
     let locLab=document.createElement("label")
-    let loc=document.createElement("input")
-    loc.setAttribute("placeholder","1234 MintaVáros Minta u. 5")
-    loc.setAttribute("required","true")
-    loc.setAttribute("id","fizplace")
-    loc.classList.add("form-control")
     locLab.setAttribute("for","fizplace")
     locLab.innerHTML="Teljes Cím"
     PayList.appendChild(locLab)
-    PayList.appendChild(loc)
+
+    let loc=document.createElement("input")
+    loc.setAttribute("placeholder","1234 MintaVáros Minta u. 5")
+    loc.setAttribute("id","fizplace")
+    inputKezelo(loc)
     
-    //TelSzám
+    //Telefonszám és Labelje
     let numLab=document.createElement("label")
+    numLab.innerHTML="Telefonszám"
+    numLab.setAttribute("for","fiznum")
+    PayList.appendChild(numLab)
+    
     let num=document.createElement("input")
     num.setAttribute("placeholder","+36201234567")
     num.setAttribute("type","tel")
     num.setAttribute("id","fiznum")
-    num.setAttribute("required","true")
-    num.classList.add("form-control")
-    numLab.setAttribute("for","fiznum")
-    numLab.innerHTML="Telefonszám"
-    PayList.appendChild(numLab)
-    PayList.appendChild(num)
-    
+    inputKezelo(num)
+
+    function inputKezelo(dolog){
+        dolog.setAttribute("required","true")
+        dolog.classList.add("form-control")
+        PayList.appendChild(dolog)
+    }
     //Kártya Vagy Készpénz
+    //Select és opcióinak létrehozása
     let typeLab=document.createElement("label")
     typeLab.innerHTML="Fizetési Mód"
     typeLab.setAttribute("for","fizmod")
+
     let type=document.createElement("select")
     type.classList.add("form-select")
     type.id="fizmod"
+
     let kar=document.createElement("option")
     kar.innerHTML="Kártyás Fizetés"
+    kar.classList.add("form-option")
+    type.appendChild(kar)
+
     let kesz=document.createElement("option")
     kesz.innerHTML="Fizetés Átvételkor"
-    kar.classList.add("form-option")
     kesz.classList.add("form-option")
-    type.appendChild(kar)
     type.appendChild(kesz)
 
+    //A bankkártya száma
+    //Formátum: 4 darab 4 számból álló szekció
     let karszam=document.createElement("input")
     karszam.id="kszam"
     let karszamlab=document.createElement("label")
@@ -736,7 +764,8 @@ async function fizetes(){
     karszamlab.innerHTML="Kártyaszám"  
     karszam.setAttribute("placeholder","6795 5431 6342 6542")
     karszam.classList.add("form-control")
-
+    //A bankkártya lejárati dátuma
+    //Formátum: évszázad hanyadik éve/hónap
     let karexp=document.createElement("input")
     karexp.id="kexp"
     let karexplab=document.createElement("label")
@@ -744,7 +773,8 @@ async function fizetes(){
     karexplab.innerHTML="Lejárati Dátum"
     karexp.setAttribute("placeholder","23/01")
     karexp.classList.add("form-control")
-
+    //Kártya Biztonsági Érték (CSV)
+    //Formátum: 3 szám
     let karcsv=document.createElement("input")
     karcsv.id="kcsv"
     let karcsvlab=document.createElement("label")
@@ -756,7 +786,9 @@ async function fizetes(){
 
     PayList.appendChild(typeLab)
     PayList.appendChild(type)
+    //ha kártyás fizetés van
     if (type.selectedIndex==0) {
+        //Akkor megjelenítjuk a kártya információkat és kötelezővé tesszük kitöltését
         PayList.appendChild(karszamlab)
         PayList.appendChild(karszam)
         PayList.appendChild(karexplab)
@@ -773,40 +805,56 @@ async function fizetes(){
     rendgomb.setAttribute("value","Rendelés leadása")
     rendgomb.classList.add("btn","btn-success","mt-2","w-100")
     rendgomb.addEventListener("click",async()=>{
-        //actual validacio^
+        //Adatok validálása
         let valid=true
-        let adat={}
         let hiba=""
+        //Ha a kártyás fizetés opció van kiválasztva
         if (type.selectedIndex==0) {
+            //Ellenőrizzük hogy "hitelesek" a kártya adatok, avagy kinézetileg megfelelnek e egy igazinak
+            //Ha nem
             if (!(/^[0-9]{3}$/.test(karcsv.value)&&/^[0-9]{2}\/[0-9]{2}$/.test(karexp.value)&&/^[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}$/.test(karszam.value))) {
-                valid=false
+                //akkor az hibás adat és eltároljuk hogy az volt hibás
                 hiba+="Kártya"
+                valid=false
             }
         }
+        //Ha a telefonszám nem valós formátumú, avagy nem +36-os formátumú vagy 06-os formátumú
+        //Külföldi számot is elfogadunk, csak példa értékű a fenti.
         if (!(/^\+[0-9]{11}$/.test(num.value)||/^[0-9]{11}$/.test(num.value)) ) {
+            //akkor az hibás adat és eltároljuk hogy az volt hibás
             hiba+="Tel"
             valid=false 
         }
+        //Ha nincs megadva név
         if (name.value=="") {
+            //akkor az hibás adat és eltároljuk hogy az volt hibás
             hiba+="Név"
             valid=false
         }
+        //Ha a megadott email cím nem tartalmaz legalább kettő karaktert egy @-al elválasztva, illetve urána egy pontot és a pont után 2 karaktert
         if (!(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail.value))) {
+            //akkor az hibás adat és eltároljuk hogy az volt hibás
             hiba+="Mail"
             valid=false
         }
+        //ha minden adat helyes
         if (valid) {
-            //Mivel valójában nem szállítunk semmit (meglepő), nem számít hogy mit küldünk fel az endpointra, csak az számí hogy helyes az adat
-            await AdatPost("/api/AdatlapLekeres/Fizetes",adat,"POST")
+            //Mivel valójában nem szállítunk semmit (meglepő), nem számít hogy mit küldünk fel az endpointra, csak az számít hogy helyes az adat
+            await AdatPost("/api/AdatlapLekeres/Fizetes",null,"POST")
+            modal("Siker!","Sikeres Fizetés!")
         }
+        //Ha nem
         else{
-            alert("Hiba történt!")
+            modal("Hibás adatok!","Az alábbi adatok nem felelnek meg a ")
         }
     })
     PayList.appendChild(rendgomb)
 
+    //Ha a más opciót választ a felhasználó a selectben
     type.addEventListener("change",()=>{
+        //ha kártyás fizetés van
         if (type.selectedIndex==0) {
+            //Akkor megjelenítjuk a kártya információkat és kötelezővé tesszük kitöltését
             PayList.removeChild(rendgomb)
             PayList.appendChild(karszamlab)
             PayList.appendChild(karszam)
@@ -819,7 +867,9 @@ async function fizetes(){
             karexp.setAttribute("required","true")
             karcsv.setAttribute("required","true")
         }
+        //Ha átvételes fizetés van
         else{            
+            //akkor elrejtük a kártyás felületet és nem kötelező kitölteni őket
             PayList.removeChild(rendgomb)
             PayList.removeChild(karszamlab)
             PayList.removeChild(karszam)
@@ -835,36 +885,38 @@ async function fizetes(){
     })
     
 
-    //PayList.appendChild()
-    gombok.appendChild(termékekList)
-    gombok.appendChild(PayList)
-    //összJelző.innerHTML=`Összesen: ${total} Ft`
-    //összJelző.classList.add("ps-3")
-    //await AdatPost()
-    //KosarLekeres()
+    Fizetes.appendChild(termékekList)
+    Fizetes.appendChild(PayList)
 }
 
 function visszaepites(){    
+        //Visszaállítom az eredeti állapotukra a diveket
         let gombSáv=document.getElementById("KosárGombok")
         gombSáv.innerHTML=""
+
         let összJelző=document.getElementById("IdeKosár")
         összJelző.innerHTML=""
-        //összJelző.classList.remove("ps-3")
+
         let gombok=document.getElementById("KosárFizetésGomb")
         gombok.innerHTML=""
         gombok.classList.remove("mt-2","dark")
+
         document.getElementById("KosarAllapot").innerHTML="A Kosárban lévő termékek"
+
+        //Létrehozom a 3 alap gombot
         let fizgom=document.createElement("input")
-        let delgom=document.createElement("input")
-        let modgom=document.createElement("input")
         fizgom.setAttribute("type","button")
         fizgom.setAttribute("id","KosárFizet")
         fizgom.setAttribute("value","Fizetés")
-        fizgom.classList.add("btn","btn-success")        
+        fizgom.classList.add("btn","btn-success")  
+        
+        let delgom=document.createElement("input")
         delgom.setAttribute("type","button")
         delgom.setAttribute("id","KosárDelete")
         delgom.setAttribute("value","Kosár Ürítése")
-        delgom.classList.add("btn","btn-danger","ms-1")        
+        delgom.classList.add("btn","btn-danger","ms-1")   
+        
+        let modgom=document.createElement("input")
         modgom.setAttribute("type","button")
         modgom.setAttribute("id","KosárEdit")
         modgom.setAttribute("value","Kosár Módosítása")
@@ -900,6 +952,7 @@ function kartyakeszites(adatok){
     kartya.classList.add("card","h-100","justify-content-between","d-flex")
     kartyaKep.classList.add("card-img-top","kep")
     kartyaBody.classList.add("card-body","flex-column")
+    kartyaKommentek.classList.add("komment")
     kartyaGombDiv.classList.add("px-3","pb-3")
     kartyaTitle.classList.add("card-title")
     kartyaGomb.classList.add("btn","btn-secondary","w-100","mt-auto")
@@ -925,14 +978,17 @@ function kartyakeszites(adatok){
         kartyaErtekeles.innerHTML="Nincs még értékelés!"
     }
     //Van-e komment
-    if (adatok.kommentek.Kommnum!=0) 
+    if (adatok.kommentek!=undefined) 
     {
-        kartyaKommentek.innerHTML=`Kommentek Száma:${adatok.kommentek.KommNum}`
+        if (adatok.kommentek.Kommnum!=0) 
+        {
+            kartyaKommentek.innerHTML=`Kommentek Száma:${adatok.kommentek.KommNum}`
+        }
+        else
+        {
+            kartyaKommentek.innerHTML="Nincs még komment!"
+        }                
     }
-    else
-    {
-        kartyaKommentek.innerHTML="Nincs még komment!"
-    }                
 
     //Összeépítés
     kartyaBody.appendChild(kartyaTitle)
@@ -953,6 +1009,8 @@ async function koktelextrak(dolog,adat){
     let badgek=dolog.getElementsByClassName("misc")[0]
     let kartyaTitle=dolog.getElementsByClassName("card-title")[0]
     kartyaTitle.innerHTML=adat.adat.KoktelCim
+
+    
 
     let gomb=dolog.getElementsByClassName("btn-secondary")[0]
     gomb.setAttribute("value","Tovább a Koktélra")
@@ -1015,19 +1073,25 @@ async function koktelextrak(dolog,adat){
 }
 
 async function kosarextrak(dolog,adat){
+    //Termékkép
     let kep=dolog.getElementsByClassName("kep")[0]
     kep.setAttribute("src",URL.createObjectURL(await AdatGetKep("/api/AdatlapLekeres/KepLekeres/"+adat.termAdatok.TermekKepUtvonal)))
-    let adatok=dolog.getElementsByClassName("misc")[0]
+
+    //Termékcím
     let kartyaTitle=dolog.getElementsByClassName("card-title")[0]
     kartyaTitle.innerHTML=adat.termAdatok.TermekCim
 
+    //Átirányító gomb
     let gomb=dolog.getElementsByClassName("btn-secondary")[0]
     gomb.setAttribute("value","Tovább a Termékre")
     gomb.addEventListener("click",()=>{
-        window.location.href=`http://127.0.0.1:3000/Koktel/${adat.kosarAdatok.TermekID}`
+        window.location.href=`http://127.0.0.1:3000/Termek/${adat.kosarAdatok.TermekID}`
     })
 
+    //Rendelési adatok
+    let adatok=dolog.getElementsByClassName("misc")[0]
 
+    //Leírás
     let termekLeiras=document.createElement("div")
     //Mivel nem szükséges/előnyös kiírni a teljes leírást a cardba, egy adott hossz után levágjuk,ha a felhasználó többet akar olvalsni, akkor rá fog nyomni a gombra
     let szoveg=""
@@ -1045,11 +1109,19 @@ async function kosarextrak(dolog,adat){
     
     termekLeiras.innerHTML=szoveg
     
+    //Egységár,Darabszám,Összár felületek
     let termekAdatok=document.createElement("div")
     termekAdatok.classList.add("py-2")
 
+    //
     let termekEgysegar=document.createElement("div")
-    termekEgysegar.innerHTML="Egységár: "+adat.kosarAdatok.EgysegAr+"/db"
+    if (adat.kosarAdatok.TermekDiscount!=null) {
+        termekEgysegar.innerHTML="Egységár: "+adat.kosarAdatok.EgysegAr*(100-adatok.kosarAdatok.EgysegAr)/100+"/db"
+    }
+    else{
+        termekEgysegar.innerHTML="Egységár: "+adat.kosarAdatok.EgysegAr+"/db"
+
+    }
 
     let termekDarabszamDiv=document.createElement("div")
     let termekDarabszam=document.createElement("span")
@@ -1071,4 +1143,17 @@ async function kosarextrak(dolog,adat){
     termekAdatok.appendChild(termekOsszarDiv)
     adatok.appendChild(termekAdatok)
 
+}
+
+
+function modal(cim,szöveg){
+    var visszaJelzés = new bootstrap.Modal(document.getElementById('Visszajelzes'), {})
+    document.getElementById("infoCim").innerHTML=cim   
+    document.getElementById("infoSzoveg").innerHTML=szöveg   
+    document.getElementById("Okezo").addEventListener("click",()=>{
+        document.getElementById("infoCim").innerHTML=""   
+        document.getElementById("infoSzoveg").innerHTML=""   
+        visszaJelzés.hide()
+    })   
+    visszaJelzés.show()
 }

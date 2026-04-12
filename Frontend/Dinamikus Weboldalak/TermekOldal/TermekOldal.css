@@ -6,7 +6,7 @@
     align-self: center;
     align-content: center;
     justify-content: center;
-    width: 70%;
+    width: 80%;
     margin-top: 50px;
 }
 #TermekAdatok {
@@ -21,11 +21,9 @@
     flex-direction: column;
     background-color: rgb(238, 238, 210);
     width: 30%;
-    height: auto;
 }
 #TermekCimDiv {
     display: flex;
-    margin-left: 5px;
 }
 #TermekCim {
     font-weight: 400;
@@ -57,6 +55,7 @@
     flex-direction: column;
     align-items: center;
     margin-left: 5px;
+    margin-right: 5px;
 }
 #TermekSzovegDiv {
     display: flex;
@@ -71,42 +70,79 @@
     border-top: solid rgb(207, 207, 198) 1px;
 }
 .content {
-    padding: 0 18px;
-    background-color: lightgoldenrodyellow;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
+   
 }
+
 .TovGomb {
     margin-top: 5px;
-    width: 100px;
+    margin-bottom: 10px;
+    padding: 0;
+    width: 25%;
     height: 25px;
     color: rgb(31, 31, 31);
     border: none;
-    text-align: center;
-    background-color: lightgoldenrodyellow;
+    text-align: left;
+    background-color: rgb(223, 223, 223);
+    
 }
-.TovGomb:hover {
-    background-color: rgb(254, 255, 195);
-}
+.TovGomb:hover {background-color: rgb(180, 180, 180);}
 table,
 .lol {
     border: 1px solid rgb(180, 180, 180);
 }
-.tablazat {
+#Tablazat {
     border: 1px solid rgb(165, 165, 165);
+    width: 100%;
+}
+.td1{
+    text-align: end;
 }
 #TulGomb {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+     width: 100%;
 }
 #TulContent {
-    margin-top: 15px;
+    margin-top: 30px;
+    width:  300px;
     text-align: left;
     position: relative;
     right: 18px;
     z-index: -1;
+     padding-left: 18px;
+     margin: auto;
+     justify-self: center;
+     margin: auto ;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+/*HasonloTermekek*/
+#hasonloTermekek{
+    width: 100%;
+    height: 100%;
+}
+#TermekSor{
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: auto;
+    height: auto;
+}
+.Termek{
+    width: 33%;
+    height: 100%;
+    border: 1px black solid;
+    background-color: gainsboro;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.Termek:hover{
+    border:3px solid black;
 }
 #BovitContent {
     margin-top: 15px;
@@ -115,7 +151,45 @@ table,
     right: 18px;
     z-index: -1;
 }
-#VanePolcon {
+.hasonloKep{
+    width: 90%;
+}
+.hasonloKepDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.hasonloNevDiv{
+    justify-self: flex-end;
+    align-content: flex-end;
+    justify-content: flex-end;
+
+}
+.hasonloNev{
+    margin-left:5% ;
+    margin-top: 10px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+.ErtekelesDiv{
+    display: flex;
+    margin-left: 5px;
+}
+@media only screen and (max-width: 500px) {
+    #TermekSor{flex-direction: column;}
+    .Termek
+    {
+        width: 80%;
+        height: 80%;        
+        align-self: center;
+        margin: 5px;     
+    }
+    .ErtekelesDiv{
+        margin-left: 10px;
+    }
+}
+.VanPolcon {
     height: 30px;
     width: 100px;
     background-color: rgb(5, 228, 5);
@@ -126,9 +200,41 @@ table,
     color: aliceblue;
     margin-top: 15px;
     padding: 3px;
+    font-size:medium;
+}
+.Utolso {
+    height: 30px;
+    width: 140px;
+    padding: 10px;
+    background-color: rgb(251, 255, 0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    color: rgb(0, 0, 0);
+    margin-top: 15px;
+    padding: 3px;
+    font-size:medium;
+}
+.NincsPolcon {
+    height: 30px;
+    width: 100px;
+    background-color: rgb(180, 0, 0);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-items: flex-end;
+    color: aliceblue;
+    margin-top: 15px;
+    padding: 3px;
+    font-size:medium;
+}
+
+#sarga{
+    background-color: yellow;
 }
 #ar {
-    margin-left: 25px;
+    margin-left: 12px;
     margin-top: 25px;
 }
 #LiterAr {
@@ -166,6 +272,31 @@ table,
     margin-left: 10px;
     margin-right: 10px;
 }
+#ertekelesCim{
+     margin-top: 15px;
+     margin-bottom: 0px;
+}
+#csillagok{
+    margin-top: 0px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+#ErtekelPar{
+    margin: 0px;
+}
+#ErtekelesKuldes{
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+    background-color:  rgb(255, 186, 83);
+    margin-top: 10px;
+}
+/*Tablazat*/
+tr{
+    border-bottom: 1px black solid;
+}
 @media only screen and (max-width: 1000px) {
     #main {
         display: flex;
@@ -196,6 +327,7 @@ table,
         justify-content: center;
         overflow: hidden;
         position: relative;
+        margin-bottom: 10px;
     }
     #TermekLeiras {
         width: 100%;
@@ -203,4 +335,29 @@ table,
     #Tulajdonsagok {
         margin-bottom: 15px;
     }
+    #Tablazat{
+        width: 100%;
+    }
+    #csillagok{
+    width: 100%;
+    margin-top: 0px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(223, 223, 223);
+    }
+    .csillag{
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        padding: 5px;
+
+    }
+    #ErtekelesKuldes{
+    width: 100%;
+    height: 50px;
+    
+}
+     #TermekSor{height: auto;}
 }
