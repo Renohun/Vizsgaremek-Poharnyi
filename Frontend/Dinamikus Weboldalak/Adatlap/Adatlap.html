@@ -23,7 +23,7 @@
                 <div class="navbar-collapse collapse justify-content-between" id="collapsable">
                     <div class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active jelenlegi" href="/Fooldal" aria-current="page">Főoldal</a>
+                            <a class="nav-link active" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
                         <li class="nav-item">
                             <a href="/Koktelok" class="nav-link">Koktelok</a>
@@ -60,7 +60,7 @@
                                 aria-expanded="false"
                             />
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
+                                <li class="dropdown-item jelenlegi"><a href="/Adatlap">Adatlap</a></li>
                                 <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
                                 <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
                             </ul>
@@ -98,7 +98,6 @@
                     <div class="row justify-content-center">
                         <div class="col-9 col-sm-9 col-md-5 col-lg-5 col-xl-5 ">
                             <div class="flex-column d-flex">
-                                <p id="result"></p>
                                 <p>Profilképed:</p>
                                 <label>
                                         <input type="file" hidden disabled  id="input" name="file" accept="image/*"/>
@@ -110,11 +109,14 @@
                                 <label for="Email-cím">Email-cím:</label>
                                 <input type="email" disabled id="Email-cím" class="form-control"/>
 
-                                
-                                
-                                <div class="float-start">
-                                    <label for="pwChange" hidden id="pwChangeLabel" class="form-check-label align-content-center">Szeretne Jelszót Változtatni?</label>
-                                    <input type="checkbox" class="form-check-input" hidden id="pwChange">
+                                <div class="float-start" hidden id="pwChangeDiv">
+                                    <label for="pwChange" id="pwChangeLabel" class="form-check-label align-content-center">Szeretne Jelszót Változtatni?</label>
+                                    <input type="checkbox" class="form-check-input" id="pwChange">
+                                </div>
+
+                                <div class="float-start" hidden id="pwShowDiv">
+                                    <label for="pwShow" id="pwShowLabel" class="form-check-label align-content-center">Jelszó megjelenítése</label>
+                                    <input type="checkbox" class="form-check-input" id="pwShow">
                                 </div>
 
                                 <label for="Jelszó">Jelszó:</label>
@@ -202,6 +204,24 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" id="DelNvm">Mégse</button>
                             <button type="button" class="btn btn-danger"id="DelConf">Fiók Törlése</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="modal" tabindex="-1" id="Visszajelzes">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="text-center mt-1">
+                          <h3 id="infoCim"></h3>
+                          <hr>
+                        </div>
+                        <div class="p-3 row">
+                            <h5 id="infoSzoveg" class="text-center">
+
+                            </h5>
+
+                            <button type="button" class="btn btn-success"id="Okezo">Rendben</button>
                         </div>
                       </div>
                     </div>
