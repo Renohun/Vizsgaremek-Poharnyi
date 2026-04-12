@@ -2657,6 +2657,24 @@ router.post('/Webshop/KosarKuldes/:id', authenticationMiddleware, async (request
         response.status(500).json({ hiba: error });
     }
 });
+router.get('/WebShop/TermekErtekeles/:id', async (request, response) => {
+    try {
+        const id = request.params.id;
+        const query =
+            "SELECT AVG(Ertekeles) AS 'atlag' FROM ertekeles WHERE HovaIrták = ? AND MilyenDologhoz = 'Termék'";
+        const [Ertekeles] = await DBconnetion.promise().query(query, [id]);
+        let atlag = Math.round(Ertekeles[0].atlag);
+        response.status(200).json({ ert: atlag });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({ hiba: error });
+    }
+});
+//
+//
+// Föoldal
+//
+//
 router.get('/Fooldal/NepszeruKoktelok', async (request, response) => {
     try {
         const query = 'SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC LIMIT 5';
@@ -2671,6 +2689,7 @@ router.get('/Fooldal/NepszeruKoktelok', async (request, response) => {
         });
     }
 });
+
 router.get('/Fooldal/KepLekeres/:id', async (request, response) => {
     try {
         //console.log(request.body);
@@ -2682,18 +2701,14 @@ router.get('/Fooldal/KepLekeres/:id', async (request, response) => {
         console.log(error);
     }
 });
-router.get('/WebShop/TermekErtekeles/:id', async (request, response) => {
+
+router.get('/Fooldal/BevaneJelentkezve',authenticationMiddleware, async(request,response)=>{
     try {
-        const id = request.params.id;
-        const query =
-            "SELECT AVG(Ertekeles) AS 'atlag' FROM ertekeles WHERE HovaIrták = ? AND MilyenDologhoz = 'Termék'";
-        const [Ertekeles] = await DBconnetion.promise().query(query, [id]);
-        let atlag = Math.round(Ertekeles[0].atlag);
-        response.status(200).json({ ert: atlag });
+        response.status(200).json({siker:"siker"})
     } catch (error) {
-        console.log(error);
-        response.status(500).json({ hiba: error });
+        console.log(error)
+        response.status(200).json({siker:"hiba"})
     }
-});
+})
 
 module.exports = router;
