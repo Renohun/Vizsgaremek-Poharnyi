@@ -11,16 +11,6 @@ body {
     padding: 10px;
     border-radius: 5px;
 }
-.hatter {
-    background-color: rgb(146, 197, 7);
-}
-
-#Sidebar {
-    background-color: rgb(146, 197, 7);
-    margin-top: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
 
 .koktelshadow{
     background-color: rgb(231, 231, 231);

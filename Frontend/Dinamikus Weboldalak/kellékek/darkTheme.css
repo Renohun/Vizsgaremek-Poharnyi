@@ -22,16 +22,9 @@ body {
     background-color: #a7e727;
     color: black;
 }
-/*NavBar*/
-
 
 /*Adatlap*/
-#Sidebar{
-    background-color: #9acd32;
-    margin-top:5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
+
 .gomb,.torles-gomb{
     background-color: #9acd32;
 }
