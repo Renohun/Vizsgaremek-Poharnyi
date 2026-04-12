@@ -105,6 +105,8 @@ async function Betoltes() {
 console.log(koktélAdat);
 
     //A koktél képének lekérése és megadása
+    console.log(koktélAdat.BoritoKepUtvonal);
+    
     const KepLekeres=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+koktélAdat.BoritoKepUtvonal)
     document.getElementById("KoktélKép").setAttribute("src",URL.createObjectURL(KepLekeres))
 
