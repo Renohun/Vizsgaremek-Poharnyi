@@ -2635,8 +2635,35 @@ router.post('/Webshop/KosarKuldes/:id', async (request, response) => {
     } else {
         response.status(200).json({ hiba: 'bejel' });
     }
-});
 
+});
+router.get("/Fooldal/NepszeruKoktelok",async(request,response)=>{
+    try {
+        const query = "SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC LIMIT 5"
+        const [Nepszeruk] = await DBconnetion.promise().query(query) 
+        response.status(200).json({
+            data:Nepszeruk
+        })
+    } catch (error) {
+        console.log(error)
+        response.status(500).json({
+            hiba:error
+        })
+
+    }
+    
+})
+router.get('/Fooldal/KepLekeres/:id', async (request, response) => {
+    try {
+        //console.log(request.body);
+        let { id } = request.params;
+        let kepkereses = 'SELECT BoritoKepUtvonal FROM koktél WHERE KoktélID LIKE ?';
+        let kinek = await lekeres(kepkereses, id);
+        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].BoritoKepUtvonal));
+    } catch (error) {
+        console.log(error);
+    }
+});
 router.get("/WebShop/TermekErtekeles/:id",async(request,response)=>{
     try {
         const id = request.params.id

@@ -21,8 +21,8 @@ app.use(cookie_parser());
 
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/')));
 
-router.get('/', saveLastUrl, (request, response) => {
-    response.sendFile(path.join(__dirname, '..', 'Frontend', 'templateHTML', 'Landing Page', 'Landing Page.html'));
+router.get('/', (request, response) => {
+    response.sendFile(path.join(__dirname, '..', 'Frontend', 'Dinamikus Weboldalak', 'LandingPage', 'LandingPage.html'));
 });
 //Ne / legyen a default hanem A Fooldal
 router.get('/', (req, res) => {
@@ -30,8 +30,8 @@ router.get('/', (req, res) => {
 });
 
 //Landing Page
-router.get('/Fooldal', saveLastUrl, (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/templateHTML/Landing Page/Landing Page.html'));
+router.get('/Fooldal', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/LandingPage/LandingPage.html'));
 });
 
 //Regisztracio - Dinamikus
