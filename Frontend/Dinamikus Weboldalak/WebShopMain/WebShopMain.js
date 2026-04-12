@@ -10,13 +10,16 @@ const TermekLekeres = async (url) => {
     }
 };
 
-
 const KosarPost = async (url) => {
     try {
-        const valasz = await fetch(url,({
-            method: "POST",
-            headers:{"Content-type":'image/jpeg'}
-        }));
+        const valasz = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (valasz.redirected) {
+            //console.log(valasz.url);
+            window.location.href = valasz.url;
+        }
         if (valasz.ok) {
             return valasz.json();
         }
@@ -27,9 +30,9 @@ const KosarPost = async (url) => {
 
 const TermekKepLekeres = async (url) => {
     try {
-        const valasz = await fetch(url,{
-            method : "GET",
-            headers:{'Content-Type':'image/jpeg'}
+        const valasz = await fetch(url, {
+            method: 'GET',
+            headers: { 'Content-Type': 'image/jpeg' }
         });
         if (valasz.ok) {
             return valasz.blob();
@@ -38,25 +41,22 @@ const TermekKepLekeres = async (url) => {
         throw new Error(error);
     }
 };
-const SzuresPost=async(url,data)=>{
+const SzuresPost = async (url, data) => {
     try {
-      const ertek=await fetch(url,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(data)
-      })  
-      if (ertek.ok) {
-        return ertek.json()
-      }
-      else{
-        console.log("hiba");
-        
-      }
-    } 
-    catch (error) {
-        console.error(error)
+        const ertek = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        if (ertek.ok) {
+            return ertek.json();
+        } else {
+            console.log('hiba');
+        }
+    } catch (error) {
+        console.error(error);
     }
-}
+};
 
 //
 //
@@ -86,12 +86,12 @@ const Sliderek = async () => {
     alk.sort((a, b) => a - b);
     slider1.setAttribute('min', ar[0]);
     slider1.setAttribute('max', ar[ar.length - 1]);
-       slider1.setAttribute('value', ar[ar.length - 1]);
-    output1.value = ar[ar.length-1];
-  
+    slider1.setAttribute('value', ar[ar.length - 1]);
+    output1.value = ar[ar.length - 1];
+
     //slider2
-    slider2.setAttribute('value', alk[alk.length-1]);
-    output2.value = alk[alk.length-1];
+    slider2.setAttribute('value', alk[alk.length - 1]);
+    output2.value = alk[alk.length - 1];
     slider2.setAttribute('min', alk[0]);
     slider2.setAttribute('max', alk[alk.length - 1]);
 
@@ -127,7 +127,7 @@ const Sliderek = async () => {
         }
     });
 };
-const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
+const SelectFeltolt = (data, Select1, Select2, Select3, Select4, Select5) => {
     let alapOption1 = document.createElement('option');
     alapOption1.setAttribute('value', '-');
     alapOption1.setAttribute('id', 'AlapOrszagOption');
@@ -146,14 +146,14 @@ const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
     alapOption3.setAttribute('id', 'AlapKategOption');
     alapOption3.innerHTML = '-';
     Select3.appendChild(alapOption3);
-     //4.Option
+    //4.Option
     let alapOption4 = document.createElement('option');
     alapOption4.setAttribute('value', '-');
     alapOption4.setAttribute('selected', 'true');
     alapOption4.setAttribute('id', 'AlapKiszerelesOption');
     alapOption4.innerHTML = '-';
     Select4.appendChild(alapOption4);
-     //5.Option
+    //5.Option
     let alapOption5 = document.createElement('option');
     alapOption5.setAttribute('value', '-');
     alapOption5.setAttribute('selected', 'true');
@@ -171,11 +171,11 @@ const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
         if (!Orszag.includes(data.data[i].TermekSzarmazas)) {
             Orszag.push(data.data[i].TermekSzarmazas);
         }
-       //Márka kivalasztasa
+        //Márka kivalasztasa
         if (!Marka.includes(data.data[i].TermekMarka)) {
             Marka.push(data.data[i].TermekMarka);
         }
-       //Kategoriak kivalasztasa
+        //Kategoriak kivalasztasa
         if (!kategoria.includes(data.data[i].TermekKategoria)) {
             kategoria.push(data.data[i].TermekKategoria);
         }
@@ -197,37 +197,37 @@ const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
         Select3.appendChild(option3);
     }
     //marka select feltoltese
-     for (let i = 0; i < Marka.length; i++) {
-            let option2 = document.createElement('option');
-            option2.setAttribute('value', Marka[i]);
-            option2.innerHTML =  Marka[i];
-            option2.setAttribute('id', `Marka${i}`);
-            Select2.appendChild(option2);   
-        }
+    for (let i = 0; i < Marka.length; i++) {
+        let option2 = document.createElement('option');
+        option2.setAttribute('value', Marka[i]);
+        option2.innerHTML = Marka[i];
+        option2.setAttribute('id', `Marka${i}`);
+        Select2.appendChild(option2);
+    }
     //orszag select feltoltese
-      for (let i = 0; i < Orszag.length; i++) {
-            let option = document.createElement('option');
-             option.setAttribute('value', Orszag[i]);
-            option.innerHTML = Orszag[i];
-            option.setAttribute('id', `szarmazas${i}`);
-            Select1.appendChild(option); 
-        }
-        //kiszereles select feltoltese
-      for (let i = 0; i < kiszereles.length; i++) {
-            let option = document.createElement('option');
-             option.setAttribute('value', kiszereles[i]);
-            option.innerHTML = kiszereles[i];
-            option.setAttribute('id', `kiszereles${i}`);
-            Select4.appendChild(option); 
-        }
-        //urtartalom select feltoltese
-      for (let i = 0; i < urtartalom.length; i++) {
-            let option = document.createElement('option');
-             option.setAttribute('value',urtartalom[i]);
-            option.innerHTML = urtartalom[i];
-            option.setAttribute('id', `urtartalom${i}`);
-            Select5.appendChild(option); 
-        }
+    for (let i = 0; i < Orszag.length; i++) {
+        let option = document.createElement('option');
+        option.setAttribute('value', Orszag[i]);
+        option.innerHTML = Orszag[i];
+        option.setAttribute('id', `szarmazas${i}`);
+        Select1.appendChild(option);
+    }
+    //kiszereles select feltoltese
+    for (let i = 0; i < kiszereles.length; i++) {
+        let option = document.createElement('option');
+        option.setAttribute('value', kiszereles[i]);
+        option.innerHTML = kiszereles[i];
+        option.setAttribute('id', `kiszereles${i}`);
+        Select4.appendChild(option);
+    }
+    //urtartalom select feltoltese
+    for (let i = 0; i < urtartalom.length; i++) {
+        let option = document.createElement('option');
+        option.setAttribute('value', urtartalom[i]);
+        option.innerHTML = urtartalom[i];
+        option.setAttribute('id', `urtartalom${i}`);
+        Select5.appendChild(option);
+    }
 };
 
 //
@@ -236,143 +236,140 @@ const SelectFeltolt = (data, Select1, Select2, Select3,Select4,Select5) => {
 //
 //
 
-const kartyaGen = async(data,hova)=>{
-    console.log(data)
+const kartyaGen = async (data, hova) => {
+    console.log(data);
     for (let i = 0; i < data.data.length; i++) {
         const oszlop = document.createElement('div');
-        oszlop.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1',"kartyaOszlop");
+        oszlop.classList.add(
+            'col-8',
+            'col-sm-7',
+            'col-md-6',
+            'col-lg-6',
+            'col-xl-3',
+            'col-xxl-3',
+            'mb-1',
+            'kartyaOszlop'
+        );
         hova.appendChild(oszlop);
 
-        let kartyaMain = document.createElement("div")
-        kartyaMain.classList.add("card","kartya")
-        kartyaMain.setAttribute("id",`kartya${i}`)
-        oszlop.appendChild(kartyaMain)
+        let kartyaMain = document.createElement('div');
+        kartyaMain.classList.add('card', 'kartya');
+        kartyaMain.setAttribute('id', `kartya${i}`);
+        oszlop.appendChild(kartyaMain);
 
-        let img = document.createElement("img")
-        const kartyaKep = await TermekKepLekeres(`/api/WebShop/Keplekeres/${data.data[i].TermekID}`)
+        let img = document.createElement('img');
+        const kartyaKep = await TermekKepLekeres(`/api/WebShop/Keplekeres/${data.data[i].TermekID}`);
 
-         img.addEventListener("click",()=>{
-            window.location.href = `/Termek/${data.data[i].TermekID}`
-        })
-        
-        const kepURL = URL.createObjectURL(kartyaKep)
-        img.setAttribute("src",kepURL)
-        img.classList.add("card-img-top","kartyakep")
-        kartyaMain.appendChild(img)
+        img.addEventListener('click', () => {
+            window.location.href = `/Termek/${data.data[i].TermekID}`;
+        });
 
-        let KartyaBody = document.createElement("div")
-        KartyaBody.classList.add("card-body","kartyaBody")
-        KartyaBody.setAttribute("id",`KartyaBody${i}`)
-        kartyaMain.appendChild(KartyaBody)
-        
-        KartyaBody.addEventListener("click",()=>{
-            window.location.href = `/Termek/${data.data[i].TermekID}`
-        })
+        const kepURL = URL.createObjectURL(kartyaKep);
+        img.setAttribute('src', kepURL);
+        img.classList.add('card-img-top', 'kartyakep');
+        kartyaMain.appendChild(img);
 
-        let KartyaCim = document.createElement("h5")
-        KartyaCim.classList.add("card-title","kartyaCim")
-         KartyaCim.setAttribute("id",`KartyaCim${i}`)
-        KartyaCim.innerHTML = data.data[i].TermekCim
-        KartyaBody.appendChild(KartyaCim)
+        let KartyaBody = document.createElement('div');
+        KartyaBody.classList.add('card-body', 'kartyaBody');
+        KartyaBody.setAttribute('id', `KartyaBody${i}`);
+        kartyaMain.appendChild(KartyaBody);
 
-        let adatDiv = document.createElement("div")
-        adatDiv.classList.add("adatDiv")
-        adatDiv.setAttribute("id",`KartyaAdatok${i}`)
-        KartyaBody.appendChild(adatDiv)
+        KartyaBody.addEventListener('click', () => {
+            window.location.href = `/Termek/${data.data[i].TermekID}`;
+        });
+
+        let KartyaCim = document.createElement('h5');
+        KartyaCim.classList.add('card-title', 'kartyaCim');
+        KartyaCim.setAttribute('id', `KartyaCim${i}`);
+        KartyaCim.innerHTML = data.data[i].TermekCim;
+        KartyaBody.appendChild(KartyaCim);
+
+        let adatDiv = document.createElement('div');
+        adatDiv.classList.add('adatDiv');
+        adatDiv.setAttribute('id', `KartyaAdatok${i}`);
+        KartyaBody.appendChild(adatDiv);
 
         //adatok kiírása
-//értékelés
-        let ertDiv = document.createElement("div")
-        ertDiv.classList.add("ertDiv")
-        adatDiv.appendChild(ertDiv)
+        //értékelés
+        let ertDiv = document.createElement('div');
+        ertDiv.classList.add('ertDiv');
+        adatDiv.appendChild(ertDiv);
 
-        for (let i = 0; i < 5; i++) 
-            {
-                let ErtP = document.createElement("p")
-                ErtP.innerHTML = "☆"
-                ErtP.classList.add("ErtP")
-                ertDiv.appendChild(ErtP)
-            }
-        const Ertek = await TermekLekeres(`/api/WebShop/TermekErtekeles/${data.data[i].TermekID}`) 
-        for (let i = 0; i < Ertek.ert; i++) 
-            {
-                ertDiv.children[i].innerHTML="★" //a kiszámolt értékig átirjuk a csillagokat
-            }
-
-//kateg
-        let div1 = document.createElement("div")
-        div1.classList.add("kulondiv")
-        let tipus = document.createElement("p")
-        tipus.classList.add("kuloncim")
-        tipus.innerHTML = "Kategória"
-        div1.appendChild(tipus)
-        let tipusertek = document.createElement("p")
-        tipusertek.classList.add("kulonErtek")
-        tipusertek.innerHTML = data.data[i].TermekKategoria;
-        div1.appendChild(tipusertek)
-        adatDiv.appendChild(div1)
-//szarmazas
-        let div2 = document.createElement("div")
-        div2.classList.add("kulondiv")
-        let szarmazas = document.createElement("p")
-        szarmazas.classList.add("kuloncim")
-        szarmazas.innerHTML = "Származás"
-        div2.appendChild(szarmazas)
-        let szarmazasertek = document.createElement("p")
-        szarmazasertek.classList.add("kulonErtek")
-        szarmazasertek.innerHTML = data.data[i].TermekSzarmazas;
-        div2.appendChild(szarmazasertek)
-        adatDiv.appendChild(div2)
-//marka
-        let div3 = document.createElement("div")
-        div3.id = "kulondiv3"
-        div3.classList.add("kulondiv")
-        let marka = document.createElement("p")
-        marka.classList.add("kuloncim")
-        marka.innerHTML = "Márka"
-        div3.appendChild(marka)
-        let markaErtek = document.createElement("p")
-        markaErtek.classList.add("kulonErtek")
-        markaErtek.innerHTML = data.data[i].TermekMarka;
-        div3.appendChild(markaErtek)
-        adatDiv.appendChild(div3)
-        
-        let ar = document.createElement("h4")
-        ar.classList.add("ar")
-        ar.setAttribute("id",`${i}kartyaId`)
-        ar.innerHTML = data.data[i].Ar + "Ft"
-        adatDiv.appendChild(ar)
-
-        if (data.data[i].TermekDiscount != null) 
-        {
-            ar.style.textDecoration="line-through"
-            let AkciosAr = (data.data[i].Ar/100)*(100-data.data[i].TermekDiscount)
-            let AkciosArHely = document.createElement("h5")
-            AkciosArHely.innerHTML = AkciosAr + "Ft"
-            AkciosArHely.style.color ="red"
-            adatDiv.appendChild(AkciosArHely)
+        for (let i = 0; i < 5; i++) {
+            let ErtP = document.createElement('p');
+            ErtP.innerHTML = '☆';
+            ErtP.classList.add('ErtP');
+            ertDiv.appendChild(ErtP);
         }
-        
-        let kosarba = document.createElement("button")
-        kosarba.classList.add("btn","kartyaGomb")
-        kosarba.innerHTML = "kosárba"
-        kartyaMain.appendChild(kosarba)
-        
-        kosarba.addEventListener("click", async ()=>{
-         const kosár = await KosarPost(`/api/WebShop/KosarKuldes/${data.data[i].TermekID}`);
-         if (kosár.hiba == "bejel" )
-            {
-                alert("Kérem jelentkezzen be a kosárba rakáshoz!")
-            }
-         if(kosár.siker = 1)
-            {
-                alert("Sikeresen kosárba rakta a terméket!")
-            }
-        })
+        const Ertek = await TermekLekeres(`/api/WebShop/TermekErtekeles/${data.data[i].TermekID}`);
+        for (let i = 0; i < Ertek.ert; i++) {
+            ertDiv.children[i].innerHTML = '★'; //a kiszámolt értékig átirjuk a csillagokat
+        }
 
+        //kateg
+        let div1 = document.createElement('div');
+        div1.classList.add('kulondiv');
+        let tipus = document.createElement('p');
+        tipus.classList.add('kuloncim');
+        tipus.innerHTML = 'Kategória';
+        div1.appendChild(tipus);
+        let tipusertek = document.createElement('p');
+        tipusertek.classList.add('kulonErtek');
+        tipusertek.innerHTML = data.data[i].TermekKategoria;
+        div1.appendChild(tipusertek);
+        adatDiv.appendChild(div1);
+        //szarmazas
+        let div2 = document.createElement('div');
+        div2.classList.add('kulondiv');
+        let szarmazas = document.createElement('p');
+        szarmazas.classList.add('kuloncim');
+        szarmazas.innerHTML = 'Származás';
+        div2.appendChild(szarmazas);
+        let szarmazasertek = document.createElement('p');
+        szarmazasertek.classList.add('kulonErtek');
+        szarmazasertek.innerHTML = data.data[i].TermekSzarmazas;
+        div2.appendChild(szarmazasertek);
+        adatDiv.appendChild(div2);
+        //marka
+        let div3 = document.createElement('div');
+        div3.id = 'kulondiv3';
+        div3.classList.add('kulondiv');
+        let marka = document.createElement('p');
+        marka.classList.add('kuloncim');
+        marka.innerHTML = 'Márka';
+        div3.appendChild(marka);
+        let markaErtek = document.createElement('p');
+        markaErtek.classList.add('kulonErtek');
+        markaErtek.innerHTML = data.data[i].TermekMarka;
+        div3.appendChild(markaErtek);
+        adatDiv.appendChild(div3);
+
+        let ar = document.createElement('h4');
+        ar.classList.add('ar');
+        ar.setAttribute('id', `${i}kartyaId`);
+        ar.innerHTML = data.data[i].Ar + 'Ft';
+        adatDiv.appendChild(ar);
+
+        if (data.data[i].TermekDiscount != null) {
+            ar.style.textDecoration = 'line-through';
+            let AkciosAr = (data.data[i].Ar / 100) * (100 - data.data[i].TermekDiscount);
+            let AkciosArHely = document.createElement('h5');
+            AkciosArHely.innerHTML = AkciosAr + 'Ft';
+            AkciosArHely.style.color = 'red';
+            adatDiv.appendChild(AkciosArHely);
+        }
+
+        let kosarba = document.createElement('button');
+        kosarba.classList.add('btn', 'kartyaGomb');
+        kosarba.innerHTML = 'kosárba';
+        kartyaMain.appendChild(kosarba);
+
+        kosarba.addEventListener('click', async () => {
+            const valasz = await KosarPost(`/api/WebShop/KosarKuldes/${data.data[i].TermekID}`);
+            console.log(valasz);
+        });
     }
-}
-
+};
 
 //
 //  szűrési adatok kinyerése
@@ -393,31 +390,31 @@ async function szures() {
     //max ár hozzaadasa
     szuresiAdatok.MaxAr = arSlider.value;
     //max alkoholtartalom hozáaadása
-    if (KategoriaSelect.value == "alkohol") {
+    if (KategoriaSelect.value == 'alkohol') {
         szuresiAdatok.MaxAlk = alkoholSlider.value;
     }
     //selectek hozzáadása
-    if (OrszagSelect.value != "-") {
+    if (OrszagSelect.value != '-') {
         szuresiAdatok.TermekSzarmazas = OrszagSelect.value;
     }
 
-    if (MarkaSelect.value != "-") {
+    if (MarkaSelect.value != '-') {
         szuresiAdatok.TermekMarka = MarkaSelect.value;
     }
 
-    if (KategoriaSelect.value != "-") {
+    if (KategoriaSelect.value != '-') {
         szuresiAdatok.TermekKategoria = KategoriaSelect.value;
     }
 
-    if (kiszerelesSelect.value != "-") {
+    if (kiszerelesSelect.value != '-') {
         szuresiAdatok.TermekKiszereles = kiszerelesSelect.value;
     }
 
-    if (UrtartalomSelect.value != "-") {
+    if (UrtartalomSelect.value != '-') {
         szuresiAdatok.TermekUrtartalom = UrtartalomSelect.value;
     }
     //akcios-e?
-    let akcio = document.getElementById("AkcioseCheck");
+    let akcio = document.getElementById('AkcioseCheck');
     if (akcio.checked == true) {
         szuresiAdatok.akcio = true;
     }
@@ -429,31 +426,27 @@ async function szures() {
 //Keresés
 //
 
-const kereses = async ()=>{
-    const keresendoSzo = document.getElementById("NevKereses").value
-    console.log(keresendoSzo)
-    if (keresendoSzo == "") 
-        {
-            alert("Töltse Ki a keresőmezőt!")
+const kereses = async () => {
+    const keresendoSzo = document.getElementById('NevKereses').value;
+    console.log(keresendoSzo);
+    if (keresendoSzo == '') {
+        alert('Töltse Ki a keresőmezőt!');
+    } else {
+        let KartyaHova = document.getElementById('kartyaSor');
+        KartyaHova.textContent = '';
+
+        const dataHossz = await TermekLekeres(
+            `/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${1000}&offset=${0}`
+        );
+
+        if (dataHossz.data.length == 0) {
+            alert('nincs ilyen Termék');
+            //window.location.reload();
+        } else {
+            TermekBetoltes(1, dataHossz.data.length, false, '', true);
         }
-    else
-        {
-            let KartyaHova = document.getElementById("kartyaSor")
-            KartyaHova.textContent = "";
-            
-            const dataHossz = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${1000}&offset=${0}`);
-             
-            if (dataHossz.data.length == 0) 
-            {
-                alert("nincs ilyen Termék")
-                //window.location.reload();
-            }
-            else
-            {
-                TermekBetoltes(1,dataHossz.data.length,false ,"",true)
-            }
-        }
-}
+    }
+};
 
 //
 //
@@ -462,112 +455,94 @@ const kereses = async ()=>{
 //
 
 //a két pagination fuggvenyhez szükséges globális változok
-const limit = 16
+const limit = 16;
 let jelenlegiOldal = 1;
 
- const paginationHely = document.getElementById("pagination")
- 
- const TermekBetoltes = async (jelenOldal = 1, hossz,szurtE = false, szuresiAdatok,NevSzerinti) => {
+const paginationHely = document.getElementById('pagination');
+
+const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdatok, NevSzerinti) => {
     jelenlegiOldal = jelenOldal;
 
-    let KartyaHova = document.getElementById("kartyaSor");
-    KartyaHova.innerHTML = "";
- 
-    
+    let KartyaHova = document.getElementById('kartyaSor');
+    KartyaHova.innerHTML = '';
+
     let oldalszam = Math.ceil(hossz / limit);
 
     let offset = (jelenOldal - 1) * limit;
 
-
-    if (!szurtE && !NevSzerinti) 
-        {
-         const  data = await TermekLekeres( `/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`);
-          await kartyaGen(data, KartyaHova);
-            PaginationGombok(false,hossz);
-        }
-    else if(szurtE == true  && !NevSzerinti)
-        {
-         const  szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`,szuresiAdatok)
-          await kartyaGen(szurtdata, KartyaHova);
-          console.log(oldalszam)
-            PaginationGombok(true,hossz,szuresiAdatok);
-           
-        }
-    else if(NevSzerinti == true && !szurtE)
-        {
-            const keresendoSzo = document.getElementById("NevKereses").value
-            const data = await TermekLekeres(`/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${limit}&offset=${offset}`);
-            await kartyaGen(data, KartyaHova);
-            PaginationGombok(false,hossz,"",true);
-        }
+    if (!szurtE && !NevSzerinti) {
+        const data = await TermekLekeres(`/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`);
+        await kartyaGen(data, KartyaHova);
+        PaginationGombok(false, hossz);
+    } else if (szurtE == true && !NevSzerinti) {
+        const szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`, szuresiAdatok);
+        await kartyaGen(szurtdata, KartyaHova);
+        console.log(oldalszam);
+        PaginationGombok(true, hossz, szuresiAdatok);
+    } else if (NevSzerinti == true && !szurtE) {
+        const keresendoSzo = document.getElementById('NevKereses').value;
+        const data = await TermekLekeres(
+            `/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${limit}&offset=${offset}`
+        );
+        await kartyaGen(data, KartyaHova);
+        PaginationGombok(false, hossz, '', true);
+    }
     window.location.hash = `page${jelenOldal}`;
 };
 
-const gombHozzaAdas = (hova,oldalszam,szurtE,szuresiAdatok,hossz,NevSzerinti)=>{
-
-    const PagGomb = document.createElement("button");
-    PagGomb.classList.add("PageGomb")
-    PagGomb.innerHTML = oldalszam;  
+const gombHozzaAdas = (hova, oldalszam, szurtE, szuresiAdatok, hossz, NevSzerinti) => {
+    const PagGomb = document.createElement('button');
+    PagGomb.classList.add('PageGomb');
+    PagGomb.innerHTML = oldalszam;
 
     if (oldalszam === jelenlegiOldal) {
-        PagGomb.style.fontWeight = "bold";
-        PagGomb.style.backgroundColor = "#c2c2c2";
+        PagGomb.style.fontWeight = 'bold';
+        PagGomb.style.backgroundColor = '#c2c2c2';
     }
 
-    if (!szurtE && !NevSzerinti) 
-    {
-        PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam,hossz))
-        hova.appendChild(PagGomb)
+    if (!szurtE && !NevSzerinti) {
+        PagGomb.addEventListener('click', () => TermekBetoltes(oldalszam, hossz));
+        hova.appendChild(PagGomb);
+    } else if (szurtE && !NevSzerinti) {
+        PagGomb.addEventListener('click', () => TermekBetoltes(oldalszam, hossz, true, szuresiAdatok));
+        hova.appendChild(PagGomb);
+    } else if (NevSzerinti && !szurtE) {
+        PagGomb.addEventListener('click', () => TermekBetoltes(oldalszam, hossz, false, '', true));
+        hova.appendChild(PagGomb);
     }
-    else if(szurtE && !NevSzerinti)
-        {
-            PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam,hossz,true,szuresiAdatok))
-            hova.appendChild(PagGomb)
-        }
-    else if(NevSzerinti && !szurtE)
-        {
-            PagGomb.addEventListener("click",()=> TermekBetoltes(oldalszam,hossz,false,"",true))
-            hova.appendChild(PagGomb)
-        }
-   
-}
+};
 
- const PaginationGombok = async(SzurtE,hossz,szuresiAdatok,NevSzerinti)=>{
+const PaginationGombok = async (SzurtE, hossz, szuresiAdatok, NevSzerinti) => {
     //oldalhosszok
-    
 
-    let oldalszam = Math.ceil(hossz/16)
-    const paginationHely = document.getElementById("pagination")
-    paginationHely.innerHTML = "";
+    let oldalszam = Math.ceil(hossz / 16);
+    const paginationHely = document.getElementById('pagination');
+    paginationHely.innerHTML = '';
 
-    let elsogomb = Math.max(1,jelenlegiOldal-2)
-    let utolsoGomb = Math.min(oldalszam, jelenlegiOldal + 2)
+    let elsogomb = Math.max(1, jelenlegiOldal - 2);
+    let utolsoGomb = Math.min(oldalszam, jelenlegiOldal + 2);
 
     //első oldal a gombok között
-     if (elsogomb > 1) 
-        {
-        gombHozzaAdas(paginationHely, 1,SzurtE,szuresiAdatok,hossz,NevSzerinti);
-       if (elsogomb > 1)
-        {
-            paginationHely.append("...");
+    if (elsogomb > 1) {
+        gombHozzaAdas(paginationHely, 1, SzurtE, szuresiAdatok, hossz, NevSzerinti);
+        if (elsogomb > 1) {
+            paginationHely.append('...');
         }
     }
     //köztes oldalak
-    for (let i = elsogomb; i <= utolsoGomb; i++) 
-        {
-         gombHozzaAdas(paginationHely,i,SzurtE,szuresiAdatok,hossz,NevSzerinti)
-        }
+    for (let i = elsogomb; i <= utolsoGomb; i++) {
+        gombHozzaAdas(paginationHely, i, SzurtE, szuresiAdatok, hossz, NevSzerinti);
+    }
     //uolso oldal
-   if (utolsoGomb<oldalszam) 
-        {
-            if(utolsoGomb < oldalszam){
-                paginationHely.append("...")
-            }
-            gombHozzaAdas(paginationHely, oldalszam,SzurtE,szuresiAdatok,hossz,NevSzerinti);
+    if (utolsoGomb < oldalszam) {
+        if (utolsoGomb < oldalszam) {
+            paginationHely.append('...');
         }
-}
+        gombHozzaAdas(paginationHely, oldalszam, SzurtE, szuresiAdatok, hossz, NevSzerinti);
+    }
+};
 
-//  
+//
 //
 // OLDAL BETÖLTÉSE ESTÉN LEFUTÓ KÓD
 //
@@ -575,64 +550,55 @@ const gombHozzaAdas = (hova,oldalszam,szurtE,szuresiAdatok,hossz,NevSzerinti)=>{
 
 document.addEventListener('DOMContentLoaded', async () => {
     //első 16 termék lekérése
-     TermekHossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
-    const data =  await TermekBetoltes(1,TermekHossz.data);
+    TermekHossz = await TermekLekeres(`/api/WebShop/HosszLekeres`);
+    const data = await TermekBetoltes(1, TermekHossz.data);
 
     //sliderek Feltöltése
     Sliderek();
-    
+
     //Selectek feltöltése
-     const dataSzures = await TermekLekeres(`/api/WebShop/TermekLekeres`);
+    const dataSzures = await TermekLekeres(`/api/WebShop/TermekLekeres`);
     let OrszagSelect = document.getElementById('OrszagSelect');
     let MarkaSelect = document.getElementById('MarkaSelect');
     let KategoriaSelect = document.getElementById('KategoriaSelect');
     let RendezesSelect = document.getElementById('RendezesSelect');
     let kiszerelesSelect = document.getElementById('KiszerelesSelect');
     let UrtartalomSelect = document.getElementById('UrtartalomSelect');
-    SelectFeltolt(dataSzures, OrszagSelect, MarkaSelect, KategoriaSelect,kiszerelesSelect,UrtartalomSelect);
-    OrszagSelect.addEventListener('change', () => {
-       
-    });//alkohol ellernörzés
-  
-    let alkoholcsuszka = document.getElementById("alkoholTart")
-    let urtalrtalom = document.getElementById("Urtartalom")
-    KategoriaSelect.addEventListener("change",()=>{
-    
-    //alkohol-e?
-        if(KategoriaSelect.value == "Szirup" || KategoriaSelect.value == "Merch" || KategoriaSelect.value == "Pohar" || KategoriaSelect.value =="-")
-            {
-                alkoholcsuszka.classList.add("eltunt")
-            }
-        else
-            {
-                alkoholcsuszka.classList.remove("eltunt")
-            }
-        if(KategoriaSelect.value == "Eszkoz" || KategoriaSelect.value == "Merch" || KategoriaSelect.value == "-")
-            {
-                urtalrtalom.classList.add("eltunt")
-            }   
-        else
-            {
-                urtalrtalom.classList.remove("eltunt")
-            }
-    } )
-   
-    //Név Szerinti Keresés
-    let keresoGomb = document.getElementById("keresesBtn")
-    keresoGomb.addEventListener("click",kereses)
+    SelectFeltolt(dataSzures, OrszagSelect, MarkaSelect, KategoriaSelect, kiszerelesSelect, UrtartalomSelect);
+    OrszagSelect.addEventListener('change', () => {}); //alkohol ellernörzés
 
-   
+    let alkoholcsuszka = document.getElementById('alkoholTart');
+    let urtalrtalom = document.getElementById('Urtartalom');
+    KategoriaSelect.addEventListener('change', () => {
+        //alkohol-e?
+        if (
+            KategoriaSelect.value == 'Szirup' ||
+            KategoriaSelect.value == 'Merch' ||
+            KategoriaSelect.value == 'Pohar' ||
+            KategoriaSelect.value == '-'
+        ) {
+            alkoholcsuszka.classList.add('eltunt');
+        } else {
+            alkoholcsuszka.classList.remove('eltunt');
+        }
+        if (KategoriaSelect.value == 'Eszkoz' || KategoriaSelect.value == 'Merch' || KategoriaSelect.value == '-') {
+            urtalrtalom.classList.add('eltunt');
+        } else {
+            urtalrtalom.classList.remove('eltunt');
+        }
+    });
+
+    //Név Szerinti Keresés
+    let keresoGomb = document.getElementById('keresesBtn');
+    keresoGomb.addEventListener('click', kereses);
+
     //szűrés meghívása
-    let SzuresGomb = document.getElementById("kuldesGomb")
-    SzuresGomb.addEventListener("click", async ()=>
-    {
-        const adatok = szures()
-        console.log(await adatok)
-        const  szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`,await adatok)
-        TermekBetoltes(1,szurtDataHossz.hossz,true,await adatok)
+    let SzuresGomb = document.getElementById('kuldesGomb');
+    SzuresGomb.addEventListener('click', async () => {
+        const adatok = szures();
+        console.log(await adatok);
+        const szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`, await adatok);
+        TermekBetoltes(1, szurtDataHossz.hossz, true, await adatok);
         szuresiAdatok = {};
-        
-    })
-    
-    
+    });
 });

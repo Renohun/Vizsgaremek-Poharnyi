@@ -2246,7 +2246,7 @@ router.get('/termek/KepLekeres/:id', async (request, response) => {
 
 router.get('/termek/KepLekeres/:id', async (request, response) => {
     try {
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
         const id = request.params.id;
         const query = 'SELECT TermekKepUtvonal FROM webshoptermek WHERE termekID = ?';
         const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
@@ -2277,7 +2277,7 @@ router.post('/termek/ErtekelesKuldes/', async (request, response) => {
     }
 });
 
-router.post('/Termek/KosarKuldes', async (request, response) => {
+router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, response) => {
     if (request.cookies.auth_token != null) //be van e jelentkezve a felhasználó
     {
         try {
@@ -2625,39 +2625,37 @@ router.post('/Webshop/szures', async (request, response) => {
 });
 
 router.post('/Webshop/KosarKuldes/:id', authenticationMiddleware, async (request, response) => {
-    
-        try {
-            const id = request.params.id;
-            const mennyiseg = 1;
-            const UserID = jwt.verify(request.cookies.auth_token, process.env.JWT_SECRET_REFRESH).userID; //"sessionId" lekérése
+    try {
+        const id = request.params.id;
+        const mennyiseg = 1;
+        const UserID = jwt.verify(request.cookies.auth_token, process.env.JWT_SECRET_REFRESH).userID; //"sessionId" lekérése
 
-            const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
-            const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
+        const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
+        const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
 
-            const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? AND KosarID = ?';
-            const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
+        const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? AND KosarID = ?';
+        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
 
-            //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
-            if (vanEIlyen[0] == undefined) {
-                const kosarFeltoltQuery =
-                    'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
-                const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
-                    UserID,
-                    id,
-                    mennyiseg,
-                    ArLekeres[0][0].Ar
-                ]);
-                response.status(200).json({ Siker: KosarFeltolt.affectedRows });
-            } else {
-                const kosarUpdateQuery =
-                    'UPDATE kosártermék SET Darabszam = Darabszam+1 WHERE TermekID = ? AND KosarID = ?';
-                const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [id, UserID]);
-                response.status(200).json({ Siker: KosarUpdate.affectedRows });
-            }
-        } catch (error) {
-            console.log(error);
-            response.status(500).json({ hiba: error });
+        //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
+        if (vanEIlyen[0] == undefined) {
+            const kosarFeltoltQuery = 'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
+            const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
+                UserID,
+                id,
+                mennyiseg,
+                ArLekeres[0][0].Ar
+            ]);
+            response.status(200).json({ Siker: KosarFeltolt.affectedRows });
+        } else {
+            const kosarUpdateQuery =
+                'UPDATE kosártermék SET Darabszam = Darabszam+1 WHERE TermekID = ? AND KosarID = ?';
+            const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [id, UserID]);
+            response.status(200).json({ Siker: KosarUpdate.affectedRows });
         }
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({ hiba: error });
+    }
 });
 router.get('/Fooldal/NepszeruKoktelok', async (request, response) => {
     try {
