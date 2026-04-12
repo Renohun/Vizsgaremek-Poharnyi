@@ -2439,6 +2439,24 @@ router.post('/Webshop/KosarKuldes/:id', async (request, response) => {
     } else {
         response.status(200).json({ hiba: 'bejel' });
     }
+
 });
+router.get("/Fooldal/NepszeruKoktelok",async(request,response)=>{
+    try {
+        const query = "SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC LIMIT 5"
+        const [Nepszeruk] = await DBconnetion.promise().query(query) 
+        console.log(Nepszeruk)
+        response.status(200).json({
+            data:Nepszeruk
+        })
+    } catch (error) {
+        console.log(error)
+        response.status(500).json({
+            hiba:error
+        })
+
+    }
+    
+})
 
 module.exports = router;
