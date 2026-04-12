@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Pohárnyi | Profilod</title>
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="Adatlap.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter shadow">
             <div class="container-fluid hatter">
                 <div class="navbar-brand">
                     <a class="navbar-brand" id="marka" href="#">Pohárnyi</a>
@@ -23,54 +23,48 @@
                 <div class="navbar-collapse collapse justify-content-between" id="collapsable">
                     <div class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active jelenlegi" href="/Fooldal" aria-current="page">Főoldal</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                                aria-expanded="false"
-                                >Poháryni koktélok</a
-                            >
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="/PoharnyiAlkoholosKoktelok">Alkoholos Koktélok</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                                aria-expanded="false"
-                                >Ti koktéljaitok</a
-                            >
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Alkoholos Koktélok</a></li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
-                                </li>
-                            </ul>
+                            <a class="nav-link active" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">Mi van a polcon?</a>
+                            <a href="/Koktelok" class="nav-link">Koktelok</a>
                         </li>
                     </div>
-                    <div>
-                        <input type="button" value="" id="ThemeSwitcher" />
-                        <a href="/Keszites">
-                            <input type="button" class="nav-item btn btn-warning"  value="Saját koktél létrehozása" id=""/>
+                    <div class="navbar-nav d-flex align-items-center">
+                        <div id="ThemeSwitcher">
+                            <img
+                                src="../kellékek/free-moon-icon-2304-thumb.png"
+                                id="themeSwitcherimg"
+                                style="height: 50px; width: 50px"
+                                alt=""
+                            />
+                        </div>
+                        <a href="/Regisztralj" id="regisztracio">
+                            <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
-                        <a href="/Adatlap">
-                            <input type="button" class="nav-item profil"  value="     " id="Profile" />
+                        <a href="/LepjBe" id="belepes">
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" />
                         </a>
+
+                        <a href="/Keszites" id="sajatKoktelKeszites" hidden>
+                            <input
+                                type="button"
+                                class="nav-item btn btn-warning mx-2"
+                                value="Saját koktél létrehozása"
+                            />
+                        </a>
+                        <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                            <img
+                                class="nav-link dropdown-toggle profil"
+                                data-bs-toggle="dropdown"
+                                role="button"
+                                aria-expanded="false"
+                            />
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item jelenlegi"><a href="/Adatlap">Adatlap</a></li>
+                                <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,7 +87,6 @@
                     <div class="mb-auto mt-auto">
                         <input type="button" value="Jelentések" class="gomb" id="Jelentések" />
                     </div>
-                    <!--Does Nothing:-->
                     <div class="mb-auto mt-auto">
                         <input type="button" value="Fiók Törlése" class="torles-gomb" id="Törlés" />
                     </div>
@@ -103,13 +96,12 @@
                         <p class="fs-1">Adatlap</p>
                     </div>
                     <div class="row justify-content-center">
-                        <div class="col-9 col-sm-9 col-md-5 col-lg-5 col-xl-5">
+                        <div class="col-9 col-sm-9 col-md-5 col-lg-5 col-xl-5 ">
                             <div class="flex-column d-flex">
-                                <p id="result"></p>
                                 <p>Profilképed:</p>
                                 <label>
-                                        <input type="file" hidden disabled  id="input" name="file"/>
-                                        <img src="" class="profil-big" alt="A Profilképednek kéne itt lennie... valami nem sikerült." title="A Profilképed!" id="profilkep"/>
+                                        <input type="file" hidden disabled  id="input" name="file" accept="image/*"/>
+                                        <img src="" class="profil-big shadow-lg" alt="A Profilképednek kéne itt lennie... valami nem sikerült." title="A Profilképed!" id="profilkep"/>
                                 </label>
                                 <label for="Felhasználónév">Felhasználónév:</label>
                                 <input type="text" disabled id="Felhasználónév" class="form-control"/>
@@ -117,11 +109,14 @@
                                 <label for="Email-cím">Email-cím:</label>
                                 <input type="email" disabled id="Email-cím" class="form-control"/>
 
-                                
-                                
-                                <div class="float-start">
-                                    <label for="pwChange" hidden id="pwChangeLabel" class="form-check-label align-content-center">Szeretne Jelszót Változtatni?</label>
-                                    <input type="checkbox" class="form-check-input" hidden id="pwChange">
+                                <div class="float-start" hidden id="pwChangeDiv">
+                                    <label for="pwChange" id="pwChangeLabel" class="form-check-label align-content-center">Szeretne Jelszót Változtatni?</label>
+                                    <input type="checkbox" class="form-check-input" id="pwChange">
+                                </div>
+
+                                <div class="float-start" hidden id="pwShowDiv">
+                                    <label for="pwShow" id="pwShowLabel" class="form-check-label align-content-center">Jelszó megjelenítése</label>
+                                    <input type="checkbox" class="form-check-input" id="pwShow">
                                 </div>
 
                                 <label for="Jelszó">Jelszó:</label>
@@ -134,11 +129,11 @@
                                 <input type="button" class="btn btn-primary mt-1" value="Adatok Módosítása" id="Módosítás">
                             </div>
                         </div>
-                        <div class="col-8 col-sm-9 col-md-4 col-lg-4 col-xl-4">
+                        <div class="col-8 col-sm-9 col-md-4 col-lg-4 col-xl-4 ">
                             <div class="fs-3">Statisztikák:</div>
                             <div class="card">
                                 <div class="paratlan">
-                                    Regisztárció dátuma: <span id="RegDate"></span>
+                                    Regisztráció dátuma: <span id="RegDate"></span>
                                 </div>
                                 <div class="paros">
                                     Saját koktélok száma: <span id="KeszitKoktelNum"></span>
@@ -160,18 +155,12 @@
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">A Kosarad</p>
                     </div>
-                    <div class="row mb-4 p-0">
-                        <div id="KosárGombok">
-
-                        </div>
-                        <div class="row pe-0">
-                            <div id="KosárFizetésGomb">
-
-                            </div>
-                            
-                        </div>
+                    <div id="KosarPanel" class="row">
+                        <span id="KosarAllapot" class="fs-3 mb-2"></span>
+                        <div id="KosárGombok" class="mb-2"></div>
+                        <div id="KosárFizetésGomb" class="mb-2"></div>
                     </div>
-                    <div class="row" id="IdeKosár">
+                    <div id="IdeKosár" class="row justify-content-center" >
                     </div>
 
 
@@ -180,7 +169,7 @@
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Kedvenc Koktélok</p>
                     </div>
-                    <div id="IdeKedvenc">
+                    <div id="IdeKedvenc" class="row justify-content-center">
 
                     </div>
                 </div>
@@ -188,7 +177,7 @@
                     <div class="d-flex justify-content-center">
                         <p class="fs-1">Saját Koktélok</p>
                     </div>
-                    <div id="IdeSaját">
+                    <div id="IdeSaját" class="row justify-content-center">
 
                     </div>  
                 </div>
@@ -219,9 +208,29 @@
                       </div>
                     </div>
                 </div>
+
+                <div class="modal" tabindex="-1" id="Visszajelzes">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="text-center mt-1">
+                          <h3 id="infoCim"></h3>
+                          <hr>
+                        </div>
+                        <div class="p-3 row">
+                            <h5 id="infoSzoveg" class="text-center">
+
+                            </h5>
+
+                            <button type="button" class="btn btn-success"id="Okezo">Rendben</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
         </div>
         <script src="Adatlap.js"></script>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
+        <script src="../kellékek/navBar.js"></script>
+
     </body>
 </html>

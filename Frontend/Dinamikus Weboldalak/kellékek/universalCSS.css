@@ -5,3 +5,19 @@
 * {
     font-family: Roboto;
 }
+
+.badge{
+    font-weight: 500;
+}
+
+.img-fluid,.card-img-top{
+    height: 400px;
+}
+#keresofelulet{
+    margin-top: 20px;
+}
+
+#osszetevoDiv{
+    padding: 10px;
+    border-radius: 5px;
+}

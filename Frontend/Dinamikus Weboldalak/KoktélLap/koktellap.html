@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
     </head>
     <body>
-            <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
             <div class="container-fluid hatter">
                 <div class="navbar-brand">
                     <a class="navbar-brand" id="marka" href="#">Pohárnyi</a>
@@ -25,58 +25,45 @@
                         <li class="nav-item">
                             <a class="nav-link active jelenlegi" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                                aria-expanded="false"
-                                >Poháryni koktélok</a
-                            >
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="/PoharnyiAlkoholosKoktelok">Alkoholos Koktélok</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                href="#"
-                                role="button"
-                                aria-expanded="false"
-                                >Ti koktéljaitok</a
-                            >
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Alkoholos Koktélok</a></li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Nem-Alkoholos Koktélok</a>
-                                </li>
-                            </ul>
-                        </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">Mi van a polcon?</a>
+                            <a href="/Koktelok" class="nav-link">Koktelok</a>
                         </li>
                     </div>
-                    <div>
+                    <div class="navbar-nav d-flex align-items-center">
                         <input type="button" value="" id="ThemeSwitcher" />
-                        <a href="/Keszites">
-                            <input type="button" class="nav-item btn btn-warning"  value="Saját koktél létrehozása" id=""/>
+                        <a href="/Regisztralj" id="regisztracio">
+                            <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
-                        <a href="/Adatlap">
-                            <input type="button" class="nav-item profil"  value="     " id="Profile" />
+                        <a href="/LepjBe" id="belepes">
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" />
                         </a>
+
+                        <a href="/Keszites" id="sajatKoktelKeszites" hidden>
+                            <input
+                                type="button"
+                                class="nav-item btn btn-warning mx-2"
+                                value="Saját koktél létrehozása"
+                            />
+                        </a>
+                        <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                            <img
+                                class="nav-link dropdown-toggle profil"
+                                data-bs-toggle="dropdown"
+                                role="button"
+                                aria-expanded="false"
+                            />
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
+                                <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-            </nav>
+        </nav>
             <div  class="container">
-                <div class="border-bottom border-2 border-dark text-center">
+                <div class="border-bottom border-2 border-dark text-center" id="header">
                     <h1><span id="Cimsor" class="ps-4"></span><span id="fav"></span></h1>
                     <span id="kokteldate"></span>
                     <div id="badgek">
@@ -84,19 +71,19 @@
                     </div>
                     <input type="button" id="KoktJel" class="btn text-danger border-0" value="Koktél Jelentése">
                 </div>
-                <div class="row border-bottom border-2 border-dark ">
-                    <p class="fs-4">Készítette: <span id="Madeby"></span> <span id="Tagsag" class="text-primary"></span><input type="button" id="FelhJel"  class="btn text-danger border-0" value="Jelentés"> </p>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-5 d-flex">
-                            <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid col-5 rounded">
-                            <div class="ps-4 flex-column">
+                <div class="row border-bottom border-2 border-dark pb-3">
+                    <p class="fs-4" id="maker">Készítette: <img src="" id="keszKep"> <span id="Madeby"></span> <span id="Tagsag" class="text-primary"></span><input type="button" id="FelhJel"  class="btn text-danger border-0" value="Jelentés"> </p>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 row">
+                            <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid col-12 col-sm-6 col-md-6 col-lg-6 rounded">
+                            <div class="ps-4 flex-column col-12 col-sm-6 col-md-6 col-lg-6">
                                 <label for="mennyiseg">Hány ml-nyit szeretne készíteni</label>
-                                <input type="number" id="mennyiseg" step="10" class="form-control" min="0">
+                                <input type="number" id="mennyiseg" step="5" class="form-control" min="0">
                                 <span class="fs-4">Összetevők</span>
                                 <ul id="Ossztev">
                                 </ul>
                             </div>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <div class="text-break" id="recept">
                            
                         </div>
@@ -129,13 +116,13 @@
                     <div class="row mt-2">
                         <h1 class="border-bottom border-2 border-dark text-center">Kommentek</h1>
                     </div>
-                    <div id="Kommentek">
+                    <div id="Kommentek" class="shadow-lg p-2">
 
                     </div>
                 </div>
             </div>
 
-            <div class="modal" tabindex="-1" id="teszt">
+            <div class="modal" tabindex="-1" id="JelentesLap">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -158,5 +145,6 @@
             <script src="../koktellap.js"></script>
             <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
             <script src="../kellékek/themeSwitcher.js"></script>
+            <script src="../kellékek/navBar.js"></script>
     </body>
 </html>

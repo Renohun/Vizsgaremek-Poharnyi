@@ -1,4 +1,17 @@
 body {
-    background-color: lightgoldenrodyellow;
+    background-color: rgb(223, 223, 223);
     color: black;
+}
+#koktelurlap {
+    background-color: rgb(223, 223, 223);
+    color: black;
+}
+#osszetevoDiv {
+    background-color: rgb(179, 179, 179);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.koktelshadow{
+    background-color: rgb(231, 231, 231);
 }

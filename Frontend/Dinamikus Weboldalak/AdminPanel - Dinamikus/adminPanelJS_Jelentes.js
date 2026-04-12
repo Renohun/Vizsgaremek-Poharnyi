@@ -113,14 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             let ujOszlop = document.createElement('div');
                             ujOszlop.classList.add(
-                                'col-8',
-                                'col-sm-7',
+                                'col-12',
+                                'col-sm-6',
                                 'col-md-6',
                                 'col-lg-6',
                                 'col-xl-3',
                                 'col-xxl-3',
+                                'align-self-stretch',
                                 'mb-1'
                             );
+                            ujOszlop.setAttribute('id', 'felhasznaloJelentes');
                             jelentesekSor.appendChild(ujOszlop);
 
                             let margoDiv = document.createElement('div');
@@ -128,11 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             ujOszlop.appendChild(margoDiv);
 
                             let cardDiv = document.createElement('div');
-                            cardDiv.classList.add('card', 'h-100');
+                            cardDiv.classList.add('card');
                             margoDiv.appendChild(cardDiv);
 
                             let cardBody = document.createElement('div');
-                            cardBody.classList.add('card-body');
+                            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
                             cardDiv.appendChild(cardBody);
 
                             let titleH4 = document.createElement('h4');
@@ -164,14 +166,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             let jelentesekLista = document.createElement('ul');
                             //console.log(rows.koktelok[i][0].jelentesIndokok[0][0].JelentesIndoka);
+                            //rows.felhasznalok[i][0].jelentesIndokok[0].length avagy hany indok van
+                            //rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka maga az indok
+                            if (rows.felhasznalok[i][0].jelentesIndokok[0].length < 3) {
+                                for (let j = 0; j < rows.felhasznalok[i][0].jelentesIndokok[0].length; j++) {
+                                    if (rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
+                                        let indokArr =
+                                            rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
+                                        console.log(indokArr.length);
 
-                            for (let j = 0; j < rows.felhasznalok[i][0].jelentesIndokok[0].length; j++) {
-                                let jelentesekIndokok = document.createElement('li');
-                                jelentesekIndokok.innerText =
-                                    rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                jelentesekLista.appendChild(jelentesekIndokok);
+                                        if (indokArr.length < 8) {
+                                            let jelentesekIndokok = document.createElement('li');
+                                            jelentesekIndokok.innerText =
+                                                rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        } else if (indokArr.length >= 8) {
+                                            console.log('beleptem ide');
+
+                                            let indokString = '';
+                                            for (let k = 0; k < 8; k++) {
+                                                indokString += ' ' + indokArr[k];
+                                            }
+                                            let jelentesekIndokok = document.createElement('li');
+                                            indokString += '...';
+                                            jelentesekIndokok.innerText = indokString;
+                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        }
+                                    }
+                                }
+                            } else if (rows.felhasznalok[i][0].jelentesIndokok[0].length >= 3) {
+                                for (let j = 0; j < 3; j++) {
+                                    let indokArr =
+                                        rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
+                                    console.log(indokArr.length);
+
+                                    if (indokArr.length < 8) {
+                                        let jelentesekIndokok = document.createElement('li');
+                                        jelentesekIndokok.innerText =
+                                            rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                        jelentesekLista.appendChild(jelentesekIndokok);
+                                    } else if (indokArr.length >= 8) {
+                                        //console.log('beleptem ide');
+
+                                        let indokString = '';
+                                        for (let k = 0; k < 8; k++) {
+                                            indokString += ' ' + indokArr[k];
+                                        }
+                                        let jelentesekIndokok = document.createElement('li');
+                                        indokString += '...';
+                                        jelentesekIndokok.innerText = indokString;
+                                        jelentesekLista.appendChild(jelentesekIndokok);
+                                    }
+                                }
+
+                                const jelentesXIndok = document.createElement('li');
+                                jelentesXIndok.innerText =
+                                    'Tovabbi ' +
+                                    parseInt(rows.felhasznalok[i][0].jelentesIndokok[0].length - 3) +
+                                    ' jelentes...';
+                                jelentesekLista.appendChild(jelentesXIndok);
                             }
 
+                            if (jelentesekLista.children.length <= 0) {
+                                let jelentesUres = document.createElement('li');
+                                jelentesUres.innerText = 'Indok még nincsen megadva';
+                                jelentesekLista.appendChild(jelentesUres);
+                            }
                             cardBody.appendChild(jelentesekLista);
 
                             //Itt sztrokot kaptam...
@@ -248,8 +308,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             console.log(rows.koktelok[i]);
                             let ujOszlop = document.createElement('div');
                             ujOszlop.classList.add(
-                                'col-8',
-                                'col-sm-7',
+                                'col-12',
+                                'col-sm-6',
                                 'col-md-6',
                                 'col-lg-6',
                                 'col-xl-3',
@@ -264,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ujOszlop.appendChild(margoDiv);
 
                             let cardDiv = document.createElement('div');
-                            cardDiv.classList.add('card', 'h-100');
+                            cardDiv.classList.add('card', 'koktelCard');
                             margoDiv.appendChild(cardDiv);
 
                             //console.log(rows.koktelok[i][0].KoktélID);
@@ -284,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             cardDiv.appendChild(imgTag);
 
                             let cardBody = document.createElement('div');
-                            cardBody.classList.add('card-body');
+                            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
                             cardDiv.appendChild(cardBody);
 
                             let titleH4 = document.createElement('h4');
@@ -350,12 +410,69 @@ document.addEventListener('DOMContentLoaded', () => {
                             let jelentesekLista = document.createElement('ul');
                             //console.log(rows.koktelok[i][0].jelentesIndokok[0][0].JelentesIndoka);
 
-                            for (let j = 0; j < rows.koktelok[i][0].jelentesIndokok[0].length; j++) {
-                                let jelentesekIndokok = document.createElement('li');
-                                jelentesekIndokok.innerText = rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                jelentesekLista.appendChild(jelentesekIndokok);
+                            if (rows.koktelok[i][0].jelentesIndokok[0].length < 3) {
+                                for (let j = 0; j < rows.koktelok[i][0].jelentesIndokok[0].length; j++) {
+                                    if (rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
+                                        let indokArr =
+                                            rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
+                                        console.log(indokArr.length);
+
+                                        if (indokArr.length < 8) {
+                                            let jelentesekIndokok = document.createElement('li');
+                                            jelentesekIndokok.innerText =
+                                                rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        } else if (indokArr.length >= 8) {
+                                            console.log('beleptem ide');
+
+                                            let indokString = '';
+                                            for (let k = 0; k < 8; k++) {
+                                                indokString += ' ' + indokArr[k];
+                                            }
+                                            let jelentesekIndokok = document.createElement('li');
+                                            indokString += '...';
+                                            jelentesekIndokok.innerText = indokString;
+                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        }
+                                    }
+                                }
+                            } else if (rows.koktelok[i][0].jelentesIndokok[0].length >= 3) {
+                                for (let j = 0; j < 3; j++) {
+                                    let indokArr = rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
+                                    console.log(indokArr.length);
+
+                                    if (indokArr.length < 8) {
+                                        let jelentesekIndokok = document.createElement('li');
+                                        jelentesekIndokok.innerText =
+                                            rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                        jelentesekLista.appendChild(jelentesekIndokok);
+                                    } else if (indokArr.length >= 8) {
+                                        //console.log('beleptem ide');
+
+                                        let indokString = '';
+                                        for (let k = 0; k < 8; k++) {
+                                            indokString += ' ' + indokArr[k];
+                                        }
+                                        let jelentesekIndokok = document.createElement('li');
+                                        indokString += '...';
+                                        jelentesekIndokok.innerText = indokString;
+                                        jelentesekLista.appendChild(jelentesekIndokok);
+                                    }
+                                }
+
+                                const jelentesXIndok = document.createElement('li');
+                                jelentesXIndok.innerText =
+                                    'Tovabbi ' +
+                                    parseInt(rows.koktelok[i][0].jelentesIndokok[0].length - 3) +
+                                    ' jelentes...';
+                                jelentesekLista.appendChild(jelentesXIndok);
                             }
 
+                            if (jelentesekLista.children.length <= 0) {
+                                let jelentesUres = document.createElement('li');
+                                jelentesUres.innerText = 'Indok még nincsen megadva';
+                                jelentesekLista.appendChild(jelentesUres);
+                            }
                             cardBody.appendChild(jelentesekLista);
 
                             let gombDiv = document.createElement('div');
@@ -387,8 +504,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     while (sorokHossza % 4 != 0) {
                         let ujOszlop = document.createElement('div');
                         ujOszlop.classList.add(
-                            'col-8',
-                            'col-sm-7',
+                            'col-12',
+                            'col-sm-6',
                             'col-md-6',
                             'col-lg-6',
                             'col-xl-3',
@@ -424,8 +541,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (i % 2 != 0) {
                             let ujOszlop = document.createElement('div');
                             ujOszlop.classList.add(
-                                'col-8',
-                                'col-sm-7',
+                                'col-12',
+                                'col-sm-6',
                                 'col-md-6',
                                 'col-lg-6',
                                 'col-xl-3',
@@ -439,11 +556,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             ujOszlop.appendChild(margoDiv);
 
                             let cardDiv = document.createElement('div');
-                            cardDiv.classList.add('card', 'h-100');
+                            cardDiv.classList.add('card', 'kommentCard');
                             margoDiv.appendChild(cardDiv);
 
                             let cardBody = document.createElement('div');
-                            cardBody.classList.add('card-body');
+                            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
                             cardDiv.appendChild(cardBody);
 
                             let titleH4 = document.createElement('h4');
@@ -464,6 +581,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             let separator2 = document.createElement('hr');
                             cardBody.appendChild(separator2);
 
+                            let jelentesContainer = document.createElement('div');
+                            jelentesContainer.classList.add('d-flex', 'flex-column', 'justify-content-start');
+
                             let jelentesHeader = document.createElement('h4');
                             jelentesHeader.innerText = 'Jelentes indokai:';
                             cardBody.appendChild(jelentesHeader);
@@ -471,13 +591,71 @@ document.addEventListener('DOMContentLoaded', () => {
                             let jelentesekLista = document.createElement('ul');
                             //console.log(rows.koktelok[i][0].jelentesIndokok[0][0].JelentesIndoka);
 
-                            for (let j = 0; j < rows.kommentek[i][0].jelentesIndokok[0].length; j++) {
-                                let jelentesekIndokok = document.createElement('li');
-                                jelentesekIndokok.innerText = rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                jelentesekLista.appendChild(jelentesekIndokok);
-                            }
+                            if (rows.kommentek[i][0].jelentesIndokok[0].length < 3) {
+                                for (let j = 0; j < rows.kommentek[i][0].jelentesIndokok[0].length; j++) {
+                                    if (rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
+                                        let indokArr =
+                                            rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
+                                        console.log(indokArr.length);
 
-                            cardBody.appendChild(jelentesekLista);
+                                        if (indokArr.length < 8) {
+                                            let jelentesekIndokok = document.createElement('li');
+                                            jelentesekIndokok.innerText =
+                                                rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        } else if (indokArr.length >= 8) {
+                                            console.log('beleptem ide');
+
+                                            let indokString = '';
+                                            for (let k = 0; k < 8; k++) {
+                                                indokString += ' ' + indokArr[k];
+                                            }
+                                            let jelentesekIndokok = document.createElement('li');
+                                            indokString += '...';
+                                            jelentesekIndokok.innerText = indokString;
+                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        }
+                                    }
+                                }
+                            } else if (rows.kommentek[i][0].jelentesIndokok[0].length >= 3) {
+                                for (let j = 0; j < 3; j++) {
+                                    let indokArr = rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
+                                    console.log(indokArr.length);
+
+                                    if (indokArr.length < 8) {
+                                        let jelentesekIndokok = document.createElement('li');
+                                        jelentesekIndokok.innerText =
+                                            rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                        jelentesekLista.appendChild(jelentesekIndokok);
+                                    } else if (indokArr.length >= 8) {
+                                        //console.log('beleptem ide');
+
+                                        let indokString = '';
+                                        for (let k = 0; k < 8; k++) {
+                                            indokString += ' ' + indokArr[k];
+                                        }
+                                        let jelentesekIndokok = document.createElement('li');
+                                        indokString += '...';
+                                        jelentesekIndokok.innerText = indokString;
+                                        jelentesekLista.appendChild(jelentesekIndokok);
+                                    }
+                                }
+
+                                const jelentesXIndok = document.createElement('li');
+                                jelentesXIndok.innerText =
+                                    'Tovabbi ' +
+                                    parseInt(rows.kommentek[i][0].jelentesIndokok[0].length - 3) +
+                                    ' jelentes...';
+                                jelentesekLista.appendChild(jelentesXIndok);
+                            }
+                            if (jelentesekLista.children.length <= 0) {
+                                let jelentesUres = document.createElement('li');
+                                jelentesUres.innerText = 'Indok még nincsen megadva';
+                                jelentesekLista.appendChild(jelentesUres);
+                            }
+                            jelentesContainer.appendChild(jelentesHeader);
+                            jelentesContainer.appendChild(jelentesekLista);
+                            cardBody.appendChild(jelentesContainer);
 
                             let gombDiv = document.createElement('div');
                             gombDiv.classList.add('d-flex', 'justify-content-between');

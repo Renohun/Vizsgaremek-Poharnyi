@@ -1,0 +1,240 @@
+
+#header{
+    background-image: url("../LandingPage/img/koktel2.webp") !important ;
+    background-position:center bottom;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment:scroll;
+    height:50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    }
+    #Focim{
+        color: white;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    font-size: 100px;
+    font-weight: bold;
+    align-content: center;
+}
+@media only screen and (max-width: 425px) 
+{
+      #Focim{font-size: 60px;}
+}
+#alcim{
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    font-weight: bold;
+    align-content: center;
+    font-size: large;
+}
+#Body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+}
+#Bemutat{
+    display: flex;
+    margin-top: 30px;
+}
+#BodyCimDiv{
+background-color: rgb(65, 65, 65);
+    width: 100%;
+    display: flex;
+}
+#BodyCim{
+    display: flex;
+    font-size: 4vw;
+    align-items: center;
+    font-weight: 800;
+    margin: auto;
+    color: rgb(201, 201, 201);
+}
+#BemutatBal{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: auto;
+}
+#BemutatCim{
+   margin-left: 10px;
+}
+.bemutatSzoveg{
+    font-size: large;
+    margin-left: 10px;
+}
+#BemutatSzoveg1{
+    margin-top: 15px;
+}
+#PhTeam{
+    color: rgb(172, 0, 0);
+}
+#phTradeMark{
+    color: rgb(6, 85, 0);
+}
+#Szolgaltatasok{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 30px;
+    
+}
+.szolgaltatasokDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+      border: solid 1px black;
+      margin: 5px;
+      border-radius: 5px;
+}
+
+#Koktelok{
+    width: 30%;
+    
+    background-image: url(../LandingPage/img/cocktail4.avif);
+    background-color: rgb(255, 255, 255,0.5);
+    background-blend-mode: lighten;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+#koktelKeszites{
+    width: 30%;
+     background-image: url(../LandingPage/img/bartender-2000x.jpg);
+    background-color: rgb(255, 255, 255,0.5);
+    background-blend-mode: lighten;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+#WebShop{
+    width: 30%;
+    
+     background-image: url(../LandingPage/img/webshop.webp);
+    background-color: rgb(255, 255, 255,0.5);
+    background-blend-mode: lighten;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.SzolgCim{
+    font-size: 3vw;
+    padding: 20px;
+    margin-top: 10px;
+}
+.SzolgSzoveg{
+    font-size: x-large;
+    margin: auto;
+    width: 80%;
+    padding: 10px;
+    margin-top: 200px;
+}
+.SzolgGomb{
+    width:90%;
+    margin-left: auto;
+    margin-right: auto;
+    border: none;
+    background-color: rgb(146, 146, 146);
+    color: rgb(241, 241, 241);
+    height: 50px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    font-size: x-large;
+}
+.SzolgGomb:hover{
+    background-color: rgb(80, 80, 80);
+}
+#NepszeruKoktelok{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin-top: 20px;
+}
+#NepszeruCim{
+    font-size:  2.5vw;
+    margin: auto;
+    align-self: center;
+    
+}
+#NepszeruKoktelDiv{
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+.NepszeruKartya{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    background-color: blanchedalmond;
+    margin: 15px;
+}
+.NepszeruKartya:hover{
+    border: 1px black solid;
+    cursor: pointer;
+}
+#NepszeruKepDiv{
+  border-radius: 15px;
+  width: 100%;
+}
+#nepszeruKep{
+    margin: auto;
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+}
+@media only screen and (max-width: 1710px) 
+{
+#NepszeruKoktelDiv{flex-wrap: wrap;}
+.NepszeruKartya{width: 30%;}
+
+}
+@media only screen and (max-width: 1000px) 
+{
+.NepszeruKartya{width: 50%;}
+#NepszeruCim{font-size: 7vw;}
+}
+@media only screen and (max-width: 400px) 
+{
+#NepszeruKoktelok{width: 100%;}
+}
+@media only screen and (max-width: 1000px) 
+{
+    .SzolgCim{font-size: 7vw;}
+#Szolgaltatasok{flex-direction: column;}
+#Koktelok{width:100%;}
+#koktelKeszites{width: 100%;}
+#WebShop{width: 100%;}
+}
+@media only screen and (max-width: 800px) 
+{
+
+        #Bemutat{
+            flex-direction: column;
+            margin: 0px;
+        }
+        #BemutatCim{
+            margin-top: 25px;
+        }
+        #BemutatBal{
+            display: flex;
+            flex-direction: column;
+            width: 100%
+           
+        }
+        #BemutatKep{display: none;}
+        .bemutatSzoveg{color: rgb(0, 0, 0);}
+        #BodyCim{font-size: 7vw;}
+}

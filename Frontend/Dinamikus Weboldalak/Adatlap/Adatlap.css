@@ -13,9 +13,8 @@ a{
     border-radius: 50%;
     width: 200px;
     height: 200px;
-    /*background-image: url(../UnversalCSS/whatever.png);*/
+    background-color: rgb(200, 200, 200);;
 }
-/*TODO: ha a profilra raviszi az egeret a bro, fedje le egy "kattints a profilkép megváltoztatásáért" felirat"*/
 
 .kep{
     width: 100%;
@@ -25,7 +24,7 @@ a{
     color: crimson;
 }
 .gomb,.torles-gomb{
-    background-color: #9acd32;
+    background-color: rgb(146, 197, 7);
     border: 0px;
 }
 .gomb:hover,.torles-gomb:hover{

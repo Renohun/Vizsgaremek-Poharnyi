@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pohárnyi | Bejelentkezés</title>
+        <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../kellékek/NavBar.css" />
+        <link rel="stylesheet" href="../kellékek/lightTheme.css" />
+        <link rel="stylesheet" href="../kellékek/universalCSS.css" />
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter shadow">
+            <div class="container-fluid hatter">
+                <div class="navbar-brand">
+                    <a class="navbar-brand" id="marka" href="#">Pohárnyi</a>
+                    <p id="alszoveg">Az online koktélbár</p>
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse justify-content-between" id="collapsable">
+                    <div class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active jelenlegi" href="/Fooldal" aria-current="page">Főoldal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Koktelok" class="nav-link">Koktelok</a>
+                        </li>
+                    </div>
+                    <div class="navbar-nav d-flex align-items-center">
+                        <div id="ThemeSwitcher">
+                            <img
+                                src="../kellékek/free-moon-icon-2304-thumb.png"
+                                id="themeSwitcherimg"
+                                style="height: 50px; width: 50px"
+                                alt=""
+                            />
+                        </div>
+                        <a href="/Regisztralj" id="regisztracio">
+                            <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
+                        </a>
+                        <a href="/LepjBe" id="belepes">
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" />
+                        </a>
+
+                        <a href="/Keszites" id="sajatKoktelKeszites" hidden>
+                            <input
+                                type="button"
+                                class="nav-item btn btn-warning mx-2"
+                                value="Saját koktél létrehozása"
+                            />
+                        </a>
+                        <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                            <img
+                                class="nav-link dropdown-toggle profil"
+                                data-bs-toggle="dropdown"
+                                role="button"
+                                aria-expanded="false"
+                            />
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
+                                <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="row my-5">
+                <div class="col-md-12">
+                    <div class="card shadow">
+                        <div class="card-header text-center fw-bold">Elfejetett jelszo</div>
+                        <div class="card-body">
+                            <p style="margin: 0px">
+                                Kerjuk adja meg az email-ben kapott 6 szamjegyu kodot! Ha esetleg nem talalja az email,
+                                akkor kerjen egy ujat! <strong>Fontos!</strong> Az email-re lehet, hogy varni kell egy
+                                picit!
+                            </p>
+                            <p id="ujEmailKeres" style="color: blue; text-decoration: underline; cursor: pointer">
+                                Uj kod kerese!
+                            </p>
+                            <input
+                                tabindex="1"
+                                type="text"
+                                class="form-control w-100"
+                                id="kodInput"
+                                placeholder="Kerjuk adja meg a kapott kodot!"
+                            />
+                            <input
+                                tabindex="2"
+                                type="button"
+                                value="Kod kuldese"
+                                class="btn btn-success w-100 mt-2"
+                                id="kodKuldesBtn"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" id="infoModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="text-center mt-1">
+                        <h5 id="modalText"></h5>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" id="modalBtn" value="Rendben" class="btn btn-success w-100" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../kellékek/themeSwitcher.js"></script>
+        <script src="../kellékek/navBar.js"></script>
+        <script src="../belepes/emailKodMegadas.js"></script>
+    </body>
+</html>

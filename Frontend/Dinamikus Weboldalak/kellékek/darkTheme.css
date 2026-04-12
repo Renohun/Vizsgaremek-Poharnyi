@@ -1,66 +1,74 @@
 /*Általános*/
 body {
-    background-color: rgb(29, 27, 27);
-    color: rgb(61, 139, 61);
+    /*
+    background-color: rgb(66, 66, 66);
+    */
+    background-color: rgb(34, 41, 34);
+    color: rgb(103, 194, 103);
 }
 .card{
     color: black;
-    background-color: burlywood;
+    background-color: rgb(196, 163, 121);
+    border: 0px;
 }
 
 .btn-secondary{
     background-color: rgb(61, 139, 61);
     border: rgb(61, 139, 61);
-    color: black;
+    --bs-btn-color:white
 }
 
 .btn-secondary:hover{
-    background-color: #9acd32;
+    background-color: #a7e727;
     color: black;
 }
-/*NavBar*/
-.hatter{
-    background-color: #647c33;
-    border-bottom-right-radius: 5px;
-}
-.navbar-nav > li > .dropdown-menu {
-    background-color: #647c33;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-top: 0px;
-}
+
 /*Adatlap*/
-#Sidebar{
-    background-color: #647c33;
-    margin-top:5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
+
 .gomb,.torles-gomb{
-    background-color: #647c33;
+    background-color: #9acd32;
 }
 .torles-gomb{
     color: rgb(173, 1, 36);
 }
+
+.modal-content{
+    --bs-modal-bg:rgb(66, 66, 66);
+    color:#9acd32;
+}
 /*Koktelok weboldal*/
 #keresofelulet{
-    margin-top: 20px;
-    background-color: rgb(66, 66, 66);
+    background-color: rgb(65, 65, 65);
     border-radius: 5px;
     padding-bottom: 20px;
 }
 #koktelSor{
-    background-color: rgb(66, 66, 66);
+    background-color: rgb(65, 65, 65);
     border-radius: 5px;
     padding-top: 12px;
     padding-bottom: 12px;
 }
 
 /*Koktel Oldal*/
-#fav>input{
+#fav>input,.star,.star:hover,.star:disabled{
     color: yellow;
 }
 
+#Kommentek{
+    background-color: rgb(97, 97, 97);
+    padding-bottom:5px;
+    padding-top:5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+}
+
+.dark>div.bg-light{
+    background-color: rgb(65, 65, 65)!important;
+}
+.dark>form.bg-light{
+    background-color: rgb(65, 65, 65)!important;
+}
 
 /*Koktél Hiba*/
 
@@ -69,4 +77,62 @@ body {
 }
 #vissza:hover{
     color: red;
+}
+
+/*Koktel Keszites*/
+.main{
+    background-color: rgb(34, 41, 34);
+    color: black;
+}
+#koktelurlap{
+    margin-top: 0px;
+    background-color:rgb(97, 97, 97);/* rgb(143, 112, 72);*/
+    color: white;
+}
+#urlapcim,#drop-area{
+    background-color: rgb(124, 124, 124);/*rgb(175, 137, 90);*/
+}
+
+#szoveg{
+    color: black;
+}
+
+#osszetevoDiv{
+    background-color: rgb(124, 124, 124);/*rgb(175, 137, 90);*/
+    color: white;
+}
+#osszetevoDiv>div{
+    width: 100%;
+}
+/*Belepes*/
+
+
+/*Javaslat Kavicsnak
+.Osszetevobtn{
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.OsszetevoBar{
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+#eroDiv,#izDiv,#allergenDiv{
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+A gombra nyomás után i guess
+.jelvenygomb{
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}*/
+
+#osszetevogomb{
+    background-color: #324ecd;
+    border-color:#324ecd ;
+    color: white;
+}
+#osszetevogomb:hover{
+    background-color: #2774e7;
+    border-color:#2774e7 ;
 }

@@ -40,15 +40,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('torlesGomb').addEventListener('click', async () => {
         const valasztottErtek = document.getElementById('koktelSelect').value;
-        const data = await POSTfetch(`http://127.0.0.1:3000/api/koktelTorles/${valasztottErtek}`);
-        var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
-        modalElement.show();
+        if (valasztottErtek.length > 0) {
+            const data = await POSTfetch(`http://127.0.0.1:3000/api/koktelTorles/${valasztottErtek}`);
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
 
-        document.getElementById('modalText').innerText = 'Koktél sikeresen törölve';
+            document.getElementById('modalText').innerText = 'Koktél sikeresen törölve';
 
-        document.getElementById('modalBtn').addEventListener('click', () => {
-            modalElement.hide();
-            window.location.reload();
-        });
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+                window.location.reload();
+            });
+        } else {
+            var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+            modalElement.show();
+
+            document.getElementById('modalText').innerText = 'Eloszor valasszon ki egy koktelt!';
+
+            document.getElementById('modalBtn').addEventListener('click', () => {
+                modalElement.hide();
+            });
+        }
     });
 });

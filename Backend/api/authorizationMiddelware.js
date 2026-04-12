@@ -1,23 +1,36 @@
 const DBconnetion = require('../database.js');
 const jwt = require('jsonwebtoken');
 
-function AuthorizaitionMiddleware(req, res, next) {
-    const query = 'SELECT Admin FROM felhasználó WHERE FelhID LIKE ?';
-    console.log('Jogositas: ' + JSON.stringify(jwt.decode(req.cookies.auth_token)));
+//Lenyege a rendszernek, hogy ha a felhasznalo egyszer bejelentkezik akkor a 1 napig biztosan ne kelljen ujra,
+// ez a refersh token segitsegevel oldhato meg,
+// tehat ahanyszor egy olyan dolgot csinal amihez kell bejelentkezes annyiszor megnezzuk hogy be volt e mar jelentekezve,
+// ha igen akkor mindenkeppen kap egy uj token amiben benne vannak az adatai amelyek a weboldalon esetleg hasznalunk kellene
 
-    DBconnetion.query(query, [req.data.userID], (err, rows) => {
-        if (err) {
-            res.status(500).json({ message: 'Hibas adatbazis eleres' });
-        }
-        //console.log(rows[0].Admin);
+async function AuthorizaitionMiddleware(req, res, next) {
+    try {
+        //hosszu tavu suti lekerese a requestbol
+        const tokenAccess = req.cookies.auth_token_access;
+        const tokenRefresh = req.cookies.auth_token;
+        //extra ellenorzes reven van ez itt, ha esetleg valaki atirja a sutiben szereprlo erteket
+        const query = 'SELECT Admin FROM felhasználó WHERE FelhID LIKE ?';
+        //console.log('Jogositas: ' + JSON.stringify(jwt.decode(req.cookies.auth_token)));
+        const payload = jwt.verify(tokenAccess, process.env.JWT_SECRET);
+        const refreshPayload = jwt.verify(tokenRefresh, process.env.JWT_SECRET_REFRESH);
 
-        if (req.data && req.data.adminStatus == 1 && rows[0].Admin == 1) {
-            next();
+        const [rows] = await DBconnetion.promise().query(query, [payload.userID]);
+
+        if (rows[0].Admin == 0 && refreshPayload.adminStatus == 0) {
+            //atiranyotjuk ha a felhasznalo jogosultsaga nem meg felelo
+            res.redirect('/jogosultsag');
         } else {
-            res.status(403).json({
-                message: 'Nincs jogod'
-            });
+            next();
         }
-    });
+    } catch (error) {
+        //kotelezo bejelentkezes hiba eseten -- sutik torlesre kerulnek -- kidobjuk a felhasznalot a picsaba
+        res.clearCookie('auth_token');
+        res.clearCookie('auth_token_access');
+        console.log(error);
+        res.redirect('/LepjBe');
+    }
 }
 module.exports = AuthorizaitionMiddleware;

@@ -30,10 +30,27 @@ async function POSTfetch(url, obj) {
     }
 }
 
-async function POSTKepLekeres(url) {
+async function PATCHfetch(url) {
+    try {
+        const data = await fetch(url, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (data.ok) {
+            return await data.json();
+        } else {
+            throw new Error('Hiba tortent a POST fetchnel');
+        }
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function GETKepLekeres(url) {
     try {
         const ertek = await fetch(url, {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'image/jpeg' }
         });
         if (ertek.ok) {
@@ -46,8 +63,9 @@ async function POSTKepLekeres(url) {
     }
 }
 
-function atvitelKoktelra() {
+async function atvitelKoktelra() {
     const id = this.dataset.id;
+    await PATCHfetch(`http://127.0.0.1:3000/api/Koktelok/nepszeruseg/${id}`);
     window.location.href = `http://127.0.0.1:3000/Koktel/${id}`;
 }
 
@@ -58,11 +76,11 @@ function koktelRendereles(koktelok) {
     koktelok.koktelokAdat.forEach((koktel) => {
         if (koktel != null) {
             const divMB = document.createElement('div');
-            divMB.classList.add('col-8', 'col-sm-7', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
+            divMB.classList.add('col-12', 'col-sm-6', 'col-md-6', 'col-lg-6', 'col-xl-3', 'col-xxl-3', 'mb-1');
             DOMsor.appendChild(divMB);
 
             const cardDiv = document.createElement('div');
-            cardDiv.classList.add('card', 'h-100');
+            cardDiv.classList.add('card', 'h-100', 'shadow-sm');
             divMB.appendChild(cardDiv);
 
             let imgTag = document.createElement('img');
@@ -71,8 +89,8 @@ function koktelRendereles(koktelok) {
             //console.log(koktel.KoktélID);
 
             (async () => {
-                const koktelKep = await POSTKepLekeres(
-                    `http://127.0.0.1:3000/api/AdminPanel/KepLekeres/${koktel.KoktélID}`
+                const koktelKep = await GETKepLekeres(
+                    `http://127.0.0.1:3000/api/AdatlapLekeres/KepLekeres/${koktel.BoritoKepUtvonal}`
                 );
                 imgTag.setAttribute('src', URL.createObjectURL(koktelKep));
             })();
@@ -260,7 +278,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const koktelok = await GETfetch(`http://127.0.0.1:3000/api/Koktelok/lekeres/${keresettKoktelNeve}`);
                 koktelRendereles(koktelok);
             } else {
-                alert('Nem adott meg nevet!');
+                const koktelok = await GETfetch('http://127.0.0.1:3000/api/Koktelok/lekeres');
+                //console.log(koktelok);
+                koktelRendereles(koktelok);
             }
         } catch (err) {
             console.error(err);

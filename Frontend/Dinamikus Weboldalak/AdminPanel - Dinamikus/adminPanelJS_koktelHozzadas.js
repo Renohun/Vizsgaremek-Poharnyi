@@ -49,14 +49,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (vanEMar == false) {
             jelvenyTombObj.push(jelvenyObj);
-            this.classList.remove('btn-info');
-            this.classList.add('btn-primary');
+            this.classList.remove('btn-success');
+            this.classList.add('sotetites');
         } else {
             //torolje a mar ilyen eltarolt jelvenyt
             jelvenyTombObj.splice(index, 1);
 
-            this.classList.add('btn-info');
-            this.classList.remove('btn-primary');
+            this.classList.remove('sotetites');
+            this.classList.add('btn-success');
         }
         console.log(jelvenyTombObj);
     }
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gomb.setAttribute('type', 'button');
             gomb.setAttribute('value', data.allergenek[i].JelvényNeve);
             gomb.dataset.kategoria = 'allergen';
-            gomb.classList.add('btn', 'btn-info');
+            gomb.classList.add('btn', 'btn-success', 'shadow-sm', 'w-100');
             //once, hogy megveletlenul se keruljon fel tobb EventListener egy Elementre, hiszen akkor tobbszor futna le az fv.
             gomb.addEventListener('click', osszetevoGombListener);
             koktelAllergenekSelect.appendChild(gomb);
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gomb.setAttribute('type', 'button');
             gomb.setAttribute('value', data.erossegek[i].JelvényNeve);
             gomb.dataset.kategoria = 'erosseg';
-            gomb.classList.add('btn', 'btn-info');
+            gomb.classList.add('btn', 'btn-success', 'shadow-sm', 'w-100');
             gomb.addEventListener('click', osszetevoGombListener);
             koktelErossegeSelect.appendChild(gomb);
         }
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gomb.setAttribute('type', 'button');
             gomb.setAttribute('value', data.izek[i].JelvényNeve);
             gomb.dataset.kategoria = 'iz';
-            gomb.classList.add('btn', 'btn-info');
+            gomb.classList.add('btn', 'btn-success', 'shadow-sm', 'w-100');
             gomb.addEventListener('click', osszetevoGombListener);
             koktelIzeSelect.appendChild(gomb);
         }
@@ -250,6 +250,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 koktelRecept.classList.add('hibasForm');
                 hibasFrom = true;
             }
+            let kepTarolas = new FormData();
+            if (
+                document.getElementById('koktelKepFeltoltes').files[0].length != 0 &&
+                (document.getElementById('koktelKepFeltoltes').files[0].type == 'image/jpeg' ||
+                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/png' ||
+                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/webp' ||
+                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/bmp')
+            ) {
+                kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
+            } else {
+                hibasFrom = true;
+            }
 
             if (!hibasFrom) {
                 let alkoholosEBool = false;
@@ -259,8 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 //onsole.log(document.getElementById('koktelKepFeltoltes').files[0]);
 
-                let kepTarolas = new FormData();
-                kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
                 //console.log(kepTarolas);
 
                 (async () => {
@@ -302,7 +312,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             modalElement.hide();
                             window.location.reload();
                         });
-                        window.location.reload();
                     } else {
                         var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
                         modalElement.show();
