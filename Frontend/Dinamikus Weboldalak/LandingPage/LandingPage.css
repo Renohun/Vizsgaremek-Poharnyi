@@ -152,25 +152,24 @@ background-color: rgb(65, 65, 65);
 .SzolgGomb:hover{
     background-color: rgb(80, 80, 80);
 }
-
-#KoktelGomb{
-   
-}
 #NepszeruKoktelok{
     display: flex;
     flex-direction: column;
     width: 80%;
-    overflow-x: auto;
+    margin-top: 20px;
 }
 #NepszeruCim{
     font-size:  2.5vw;
-    margin-right: 50px;
+    margin: auto;
     align-self: center;
     
 }
 #NepszeruKoktelDiv{
     display: flex;
-    width: auto;
+    width: 100%;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
 }
 .NepszeruKartya{
     display: flex;
@@ -180,20 +179,36 @@ background-color: rgb(65, 65, 65);
     align-items: center;
     justify-content: center;
     background-color: blanchedalmond;
-    border-radius: 15px;
     margin: 15px;
 }
 .NepszeruKartya:hover{
-    border: 2px black solid;
+    border: 1px black solid;
     cursor: pointer;
 }
 #NepszeruKepDiv{
-    width: 10%;
+  border-radius: 15px;
+  width: 100%;
 }
 #nepszeruKep{
     margin: auto;
-    width: 100px;
+    width: 100%;
     height: auto;
+    border-radius: 15px;
+}
+@media only screen and (max-width: 1710px) 
+{
+#NepszeruKoktelDiv{flex-wrap: wrap;}
+.NepszeruKartya{width: 30%;}
+
+}
+@media only screen and (max-width: 1000px) 
+{
+.NepszeruKartya{width: 50%;}
+#NepszeruCim{font-size: 7vw;}
+}
+@media only screen and (max-width: 400px) 
+{
+#NepszeruKoktelok{width: 100%;}
 }
 @media only screen and (max-width: 1000px) 
 {

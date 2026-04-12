@@ -47,6 +47,10 @@ const NepszeruKoktelok = async()=>{
         let kartya = document.createElement("div")
         kartya.classList.add("NepszeruKartya")
         
+        kartya.addEventListener("click",()=>{
+            window.location.href = `/Koktel/${data.data[i].KoktélID}`
+        })
+
         let kepdiv = document.createElement("div")
         kepdiv.classList.add("NepszeruKepDiv")
 
@@ -77,5 +81,5 @@ document.addEventListener("DOMContentLoaded",async()=>{
     let KoktelGomb = document.getElementById("KoktelGomb")
     KoktelGomb.addEventListener("click",koktelTovabb)
 
-    //NepszeruKoktelok()
+    NepszeruKoktelok()
 })
