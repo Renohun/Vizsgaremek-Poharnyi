@@ -1261,16 +1261,20 @@ router.get(
             const { id } = req.params;
             const { ertek } = req.params;
 
-            console.log(id);
-            console.log(ertek);
-
-            const frissetesQuery = 'UPDATE webshoptermek SET TermekDiscount = ? WHERE TermekCim LIKE ?';
-
-            await DBconnetion.promise().query(frissetesQuery, [ertek, id]);
-
-            res.status(200).json({ result: 'Learazas sikeresen frissitve' });
+            if (ertek>100||ertek<1) 
+            {
+                res.status(422).json({ result: 'Leárazás értéke helytelen' });
+            }
+            else
+            {
+                const frissetesQuery = 'UPDATE webshoptermek SET TermekDiscount = ? WHERE TermekCim LIKE ?';
+    
+                await DBconnetion.promise().query(frissetesQuery, [ertek, id]);
+    
+                res.status(200).json({ result: 'Leárazás sikeresen frissitve' });
+            }
         } catch (error) {
-            res.status(500).json({ message: 'Hiba tortent a vegpontban', error: err });
+            res.status(500).json({ message: 'Hiba történt a végpontban', error: err });
         }
     }
 );
