@@ -2213,10 +2213,11 @@ router.get('/termek/KepLekeres/:id', async (request, response) => {
 
 router.get('/termek/KepLekeres/:id', async (request, response) => {
     try {
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         const id = request.params.id;
         const query = 'SELECT TermekKepUtvonal FROM webshoptermek WHERE termekID = ?';
         const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
-        console.log(lekertTermek);
+        console.log(lekertTermek + 'asasdasdadadasd');
         response.sendFile(path.join(__dirname, '..', 'images', lekertTermek[0].TermekKepUtvonal));
     } catch (error) {
         console.log(error);
