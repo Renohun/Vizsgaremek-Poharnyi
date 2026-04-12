@@ -210,11 +210,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                             if (indokArrKarakterSzam >= 50) {
                                                 let indokString = '';
                                                 let karakterSzamlalo = 0;
-                                                while (karakterSzamlalo != 50) {
+                                                while (karakterSzamlalo < 50) {
                                                     for (let k = 0; k < indokArr.length; k++) {
                                                         indokString += ' ';
                                                         for (let l = 0; l < indokArr[k].length; l++) {
-                                                            indokString += indokArr[k];
+                                                            indokString += indokArr[k][l];
                                                             karakterSzamlalo++;
                                                         }
                                                     }
@@ -492,11 +492,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                             if (indokArrKarakterSzam >= 50) {
                                                 let indokString = '';
                                                 let karakterSzamlalo = 0;
-                                                while (karakterSzamlalo != 50) {
+                                                while (karakterSzamlalo < 50) {
                                                     for (let k = 0; k < indokArr.length; k++) {
                                                         indokString += ' ';
                                                         for (let l = 0; l < indokArr[k].length; l++) {
-                                                            indokString += indokArr[k];
+                                                            indokString += indokArr[k][l];
                                                             karakterSzamlalo++;
                                                         }
                                                     }
@@ -719,7 +719,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                                     for (let k = 0; k < indokArr.length; k++) {
                                                         indokString += ' ';
                                                         for (let l = 0; l < indokArr[k].length; l++) {
-                                                            indokString += indokArr[k];
+                                                            indokString += indokArr[k][l];
                                                             karakterSzamlalo++;
                                                         }
                                                     }
