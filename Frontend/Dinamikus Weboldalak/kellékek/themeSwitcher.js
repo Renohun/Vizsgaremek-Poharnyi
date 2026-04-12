@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const themeSwitcherBtn = document.getElementById('ThemeSwitcher');
-
+    const savedTheme = localStorage.getItem('Theme');
+    //weboldal ujra toltes eseten: megnezzuk hogy mi van elmentve ez alapjan allitjuk be a kepet
+    if (savedTheme == 'DarkTheme') {
+        const img = document.getElementById('themeSwitcherimg');
+        img.setAttribute('src', '../kellékek/831682.png');
+    } else if (savedTheme == 'LigthTheme') {
+        const img = document.getElementById('themeSwitcherimg');
+        img.setAttribute('src', '../kellékek/free-moon-icon-2304-thumb.png');
+    }
     //Ugyanaz a logikai maradt
 
     //Ez a resz azert felel hogy a weboldal betoltese utan megnezze hogy van e valami elmentve a localstorageba
@@ -8,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //.getItem - lehet rakeresni az adott Item property alapjan
     //.setItem - ezzel allitjuk be a property erteket
     //.removeItem - adja magat
-    const savedTheme = localStorage.getItem('Theme');
+
     if (savedTheme != null) {
         const linkTags = document.getElementsByTagName('link');
         for (let i = 0; i < linkTags.length; i++) {
