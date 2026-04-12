@@ -318,9 +318,15 @@ const ertekeles = (ErtekeltE,ertek) =>
                 }
             }
             console.log(ertekszam, Termekid)
-            await PostFetch("/api/Termek/ErtekelesKuldes",{Tid:Termekid,ertek:ertekszam})
-            
-           oldalGenerálás()
+            if (ertekszam == 0) 
+            {
+                let ertszov = document.getElementById("ErtekelPar")
+                ertszov.innerHTML = "üres értékelést nem tud küldeni!"
+            }
+            else
+            {await PostFetch("/api/Termek/ErtekelesKuldes",{Tid:Termekid,ertek:ertekszam})
+                oldalGenerálás()
+            }
         })
     }
 }
