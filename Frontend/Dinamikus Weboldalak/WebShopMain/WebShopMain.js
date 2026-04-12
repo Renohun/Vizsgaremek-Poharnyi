@@ -15,7 +15,7 @@ const KosarPost = async (url) => {
     try {
         const valasz = await fetch(url,({
             method: "POST",
-            headers:{"Content-type":'image/jpeg'}
+            headers:{"Content-type":'application/json'}
         }));
         if (valasz.ok) {
             return valasz.json();
