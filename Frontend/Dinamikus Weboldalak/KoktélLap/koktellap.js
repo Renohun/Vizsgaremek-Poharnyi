@@ -102,9 +102,10 @@ async function Betoltes() {
         Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${osszetevoAdat[i].Mennyiség} ${osszetevoAdat[i].Mertekegyseg}`
         OssztevHely.appendChild(Ossztevo)
     }
+console.log(koktélAdat);
 
     //A koktél képének lekérése és megadása
-    const KepLekeres=await AdatLekeresKep("/api/AdatlapLekeres/KoktelKepLekeres/"+koktélAdat.KoktélID)
+    const KepLekeres=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+koktélAdat.BoritoKepUtvonal)
     document.getElementById("KoktélKép").setAttribute("src",URL.createObjectURL(KepLekeres))
 
     //A koktél képének lekérése és megadása
