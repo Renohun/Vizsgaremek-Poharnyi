@@ -102,9 +102,12 @@ async function Betoltes() {
         Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${osszetevoAdat[i].Mennyiség} ${osszetevoAdat[i].Mertekegyseg}`
         OssztevHely.appendChild(Ossztevo)
     }
+console.log(koktélAdat);
 
     //A koktél képének lekérése és megadása
-    const KepLekeres=await AdatLekeresKep("/api/AdatlapLekeres/KoktelKepLekeres/"+koktélAdat.KoktélID)
+    console.log(koktélAdat.BoritoKepUtvonal);
+    
+    const KepLekeres=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+koktélAdat.BoritoKepUtvonal)
     document.getElementById("KoktélKép").setAttribute("src",URL.createObjectURL(KepLekeres))
 
     //A koktél képének lekérése és megadása
@@ -314,6 +317,7 @@ async function Tisztitas() {
     //Több elemes dinamikus divek ürítése
     document.getElementById("komment").value=""
     document.getElementById("Kommentek").innerHTML=""
+    document.getElementById("szam").innerHTML="0"
     document.getElementById("Ossztev").innerHTML=""
     document.getElementById("badgek").innerHTML=""
 }
