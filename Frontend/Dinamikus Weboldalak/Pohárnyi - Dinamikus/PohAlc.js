@@ -253,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('szuresInditas').addEventListener('click', async () => {
         try {
             const OBJ = {
+                nev: document.getElementById('searchBar').value,
                 erosseg: document.getElementById('Erősség').value,
                 ize: document.getElementById('Alap').value,
                 allergenek: document.getElementById('Allergének').value,
