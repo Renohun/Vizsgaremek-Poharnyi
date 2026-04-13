@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
         else{
             document.getElementById("FelhJel").addEventListener("click",()=>{jelentes(eredmeny.adat.FelhID,"Felhasználó",eredmeny.adat.FelhID)})
             document.getElementById("KoktJel").addEventListener("click",()=>{jelentes(eredmeny.adat.KoktélID,"Koktél",eredmeny.adat.FelhID)})
-            kedveles()
+            await kedveles()
         }
     }
     else{

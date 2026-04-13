@@ -1786,12 +1786,8 @@ router.get('/Koktel/:id', async (request, response) => {
         let komment = await lekeres(KommentLekeres, [request.params.id, 'Koktél']);
         let kedv = false;
         let ert = false;
-        let ertekeles;
-        console.log(request.cookies.auth_token_access);
-        
-        console.log(jwt.verify(request.cookies.auth_token_access,process.env.JWT_SECRET).userID);
-        
-        if (jwt.verify(request.cookies.auth_token_access,process.env.JWT_SECRET).userID != null) {
+        let ertekeles;     
+        if (request.cookies.auth_token_access != undefined) {
             if (koktel[0].FelhID == jwt.verify(request.cookies.auth_token_access,process.env.JWT_SECRET).userID) {
                 koktel[0].UgyanazE = true;
             } else {
@@ -1832,7 +1828,7 @@ router.get('/Koktel/:id', async (request, response) => {
                 komment: komment,
                 jelvenyek: jelvényinfo,
                 osszetevok: osszetevok,
-                belepette: jwt.verify(request.cookies.auth_token_access,process.env.JWT_SECRET) != null ? true : false,
+                belepette: jwt.decode(request.cookies.auth_token) != null ? true : false,
                 kedveltee: kedv,
                 ertekeltee: ert,
                 ertekeles: ert == true ? ertekeles[0].Ertekeles : 0
