@@ -388,52 +388,50 @@ async function JelentesekLekeres() {
         hova.innerHTML="Nem jelentettél semmit."
     }
     else{
-        console.log(valasz);
-        
         for (let i = 0; i < valasz.adat.length; i++) {
             let JelentesDiv=document.createElement("div")
             let sortör=document.createElement("hr")
-            let sortör2=document.createElement("hr")
+            let JelentesIndok=document.createElement("div")
             let JelentesNev=document.createElement("div")
             let JelentesText=document.createElement("div")
             let JelentesAllapota=document.createElement("div")
             let JelentesVisszavonasa=document.createElement("input")
-            JelentesDiv.classList.add("card","m-1")
-            JelentesDiv.classList.add("col-6","col-sm-7","col-md-3","col-lg-3","col-xl-2","col-xxl-2","mb-1")
-            JelentesNev.classList.add("card-title","fs-4","text-center")
-            JelentesVisszavonasa.classList.add("btn","btn-danger","mb-2","mt-2")
+            JelentesDiv.classList.add("card","col-10","col-sm-7","col-md-7","col-lg-6","col-xl-5","col-xxl-3","mb-1","d-flex")
+            JelentesNev.classList.add("fs-4","text-center","pb-2","border-bottom","border-solid")
+            //JelentesNev.style.height="50px"
+            JelentesVisszavonasa.classList.add("btn","btn-danger","mb-2")
             JelentesVisszavonasa.setAttribute("type","button")
             JelentesVisszavonasa.setAttribute("value","Jelentés Visszavonása")
-            JelentesAllapota.classList.add("text-center")  
+            JelentesAllapota.classList.add("text-center","mt-auto")  
             if (valasz.adat[i][0].JelentesTipusa=="Koktél") {
                 JelentesNev.innerHTML="Jelentett Koktél"
-                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][1][0].Felhasználónév} "${valasz.rep[i][0][0].KoktelCim}" című koktélját.<br>Indok:${valasz.adat[i][1].JelentesIndoka}`
+                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][1][0].Felhasználónév} "${valasz.rep[i][0][0].KoktelCim}" című koktélját.`
                 JelentesDiv.appendChild(JelentesNev)
-                JelentesNev.appendChild(sortör)
+        
                 JelentesDiv.appendChild(JelentesText)
                 
                 
             }
             else if(valasz.adat[i][0].JelentesTipusa=="Komment"){
                 JelentesNev.innerHTML="Jelentett Komment"
-                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][1][0].Felhasználónév} "${valasz.rep[i][0][0].Tartalom}" Kommentjét.<br>Indok:${valasz.adat[i][1].JelentesIndoka}`
+                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][1][0].Felhasználónév} "${valasz.rep[i][0][0].Tartalom}" Kommentjét.`
                 JelentesDiv.appendChild(JelentesNev)
-                JelentesNev.appendChild(sortör)
+        
                 JelentesDiv.appendChild(JelentesText)
             }
             else{
                 JelentesNev.innerHTML="Jelentett Felhasználó"
-                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][0].Felhasználónév} Felhasználót.<br>Indok:${valasz.adat[i][1].JelentesIndoka}`
+                JelentesText.innerHTML=`Feljelentetted ${valasz.rep[i][0].Felhasználónév} Felhasználót.`
                 JelentesDiv.appendChild(JelentesNev)
-                JelentesNev.appendChild(sortör)
+        
                 JelentesDiv.appendChild(JelentesText)
             }
-
-
+            JelentesIndok.innerHTML=`Indok:${valasz.adat[i][1].JelentesIndoka}`
+            JelentesDiv.appendChild(JelentesIndok)
             if (valasz.adat[i][0].JelentesAllapota=="0") {
                 JelentesAllapota.innerHTML="Jelenlegi Állapota: Elküldve"
             }
-            else if (valasz.adat[i][0].JelentesAllapota=="0") {
+            else if (valasz.adat[i][0].JelentesAllapota=="2") {
                 JelentesAllapota.innerHTML="Jelenlegi Állapota: Elfogadva!"
             }
             else{
@@ -446,8 +444,8 @@ async function JelentesekLekeres() {
                 JelentesekLekeres()
             })
 
-            JelentesText.appendChild(sortör2)
-            JelentesText.appendChild(JelentesAllapota)
+            
+            JelentesDiv.appendChild(JelentesAllapota)
             JelentesDiv.appendChild(JelentesVisszavonasa)
             hova.appendChild(JelentesDiv)
         }
@@ -966,7 +964,6 @@ function kartyakeszites(adatok){
     kartyaMisc.classList.add("misc") // Referencia érdekében
     
     
-    //
     if (adatok.ertekeles.Osszert!=null) 
     {
         let csillagert=Math.ceil(adatok.ertekeles.Osszert)
@@ -978,7 +975,7 @@ function kartyakeszites(adatok){
             csillagok+="☆"
             
         }
-        kartyaErtekeles.innerHTML=`Értékelés:${csillagok} (${Math.fround(adatok.ertekeles.Osszert)})`
+        kartyaErtekeles.innerHTML=`Értékelés:${csillagok} (${Math.round(adatok.ertekeles.Osszert * 10) / 10})`
     }
     else
     {
