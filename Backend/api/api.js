@@ -114,12 +114,12 @@ router.get('/Koktelok/lekeres', async (req, res) => {
             'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE 2';
 
         let [jelentettTartalomID] = await DBconnetion.promise().query(queryJelentettTartalmak, ['Koktél']);
-        console.log(jelentettTartalomID);
+        //console.log(jelentettTartalomID);
 
         jelentettTartalomID = jelentettTartalomID.map((a) => {
             return a.JelentettTartalomID;
         });
-        console.log(jelentettTartalomID);
+        //console.log(jelentettTartalomID);
 
         let queryKoktelok = 'SELECT * FROM koktél';
 
@@ -178,12 +178,12 @@ router.get('/Koktelok/lekeres/:koktelNev', async (req, res) => {
             'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE 2';
 
         let [jelentettTartalomID] = await DBconnetion.promise().query(queryJelentettTartalmak, ['Koktél']);
-        console.log(jelentettTartalomID);
+        //console.log(jelentettTartalomID);
 
         jelentettTartalomID = jelentettTartalomID.map((a) => {
             return a.JelentettTartalomID;
         });
-        console.log(jelentettTartalomID);
+        //console.log(jelentettTartalomID);
 
         let { koktelNev } = req.params;
         //console.log(koktelNev);
@@ -265,12 +265,12 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
             'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE 2';
 
         let [jelentettTartalomID] = await DBconnetion.promise().query(queryJelentettTartalmak, ['Koktél']);
-        console.log(jelentettTartalomID);
+        //console.log(jelentettTartalomID);
 
         jelentettTartalomID = jelentettTartalomID.map((a) => {
             return a.JelentettTartalomID;
         });
-        console.log(jelentettTartalomID);
+        //console.log(jelentettTartalomID);
 
         if (jelentettTartalomID.length > 0) {
             if (queryKoktelok.includes('WHERE')) {
@@ -290,7 +290,7 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
             queryKoktelok += ' ORDER BY KeszitesDatuma DESC';
         }
 
-        console.log(queryKoktelok);
+        //console.log(queryKoktelok);
 
         //const querySzuresID = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve IN (?)';
 
@@ -328,7 +328,7 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
                 if (allergenek != '') {
                     szuresTomb.push(allergenek);
                 }
-                console.log(szuresTomb);
+                //console.log(szuresTomb);
 
                 //console.log(szuresTomb);
                 //a parametereket at kene alakitania ID-ka, hogy azt majd hasznalhassam hogy melyik koktel melyik jelveny tartalmazza, igy melyik koktel felel meg a parametereknek
@@ -655,8 +655,8 @@ router.post('/kodEllenorzes', (req, res) => {
         const kuldottKod = req.body.kod;
         const urlArr = req.get('referer').split('/');
         const emailCoded = urlArr[urlArr.length - 1];
-        console.log('kuldott: ' + kuldottKod);
-        console.log('email: ' + emailKod);
+        //console.log('kuldott: ' + kuldottKod);
+        //console.log('email: ' + emailKod);
 
         if (kuldottKod.length > 0) {
             if (kuldottKod == emailKod) {
@@ -2675,13 +2675,13 @@ router.get('/Fooldal/KepLekeres/:id', async (request, response) => {
     }
 });
 
-router.get('/Fooldal/BevaneJelentkezve',authenticationMiddleware, async(request,response)=>{
+router.get('/Fooldal/BevaneJelentkezve', authenticationMiddleware, async (request, response) => {
     try {
-        response.status(200).json({siker:"siker"})
+        response.status(200).json({ siker: 'siker' });
     } catch (error) {
-        console.log(error)
-        response.status(200).json({siker:"hiba"})
+        console.log(error);
+        response.status(200).json({ siker: 'hiba' });
     }
-})
+});
 
 module.exports = router;
