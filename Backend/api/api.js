@@ -2187,14 +2187,6 @@ router.get('/termek/lekeres/:id', async (request, response) => {
             console.log(error);
             response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
         }
-        response.status(200).json({
-            termek: lekertTermek,
-            ertekelt: ertekeltE
-        });
-    } catch (error) {
-        console.log(error);
-        response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
-    }
 });
 
 router.get('/termek/KepLekeres/:id', async (request, response) => {
@@ -2640,9 +2632,6 @@ router.post('/Webshop/KosarKuldes/:id', async (request, response) => {
             console.log(error);
             response.status(500).json({ hiba: error });
         }
-    } catch (error) {
-        console.log(error);
-        response.status(500).json({ hiba: error });
     }
 });
 router.get('/WebShop/TermekErtekeles/:id', async (request, response) => {
