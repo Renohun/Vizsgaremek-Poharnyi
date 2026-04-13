@@ -1,26 +1,37 @@
-let megtortentemar=false
+let koktel=(window.location.href.split("/"))[4]
 document.addEventListener("DOMContentLoaded",async()=>{
-    //megvárjuk hogy betöltsön a weboldal és eltároljuk a bool ertéket hogy be van e lépve
-    let be=await Betoltes()
-    //ha be van
-    if (be) {
-        //Bekapcsoljuk a komment küldési felületet
-        document.getElementById("KommSend").addEventListener("click",async()=>{
-            await Kommentkuldes()
-        })
-        document.getElementById("komment").addEventListener("keyup",()=>{
-                document.getElementById("szam").innerHTML=document.getElementById("komment").value.length
-        })
+    //ez alapján lekérjük az adatokat
+    const eredmeny=await AdatLekeres(`/api/Koktel/${koktel}`)
+    let bevanelepve=await statikusadatok(eredmeny)
+    if (bevanelepve) {
+        document.getElementById("KommSend").addEventListener("click",async()=>{await Kommentkuldes()})
+        document.getElementById("komment").addEventListener("keyup",()=>{document.getElementById("szam").innerHTML=document.getElementById("komment").value.length})
         document.getElementById("Velemeny").classList.add("shadow-sm","p-2","koktelshadow")
+        if (eredmeny.UgyanazE) {
+            document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
+            document.getElementById("KoktJel").setAttribute("value","Koktél Törlése")
+            document.getElementById("KoktJel").id="KoktDel"
+            document.getElementById("KoktDel").addEventListener("click",async()=>{
+                await AdatKuldes("/api/Koktel/DeleteKoktel",{id:id},"DELETE")
+                window.location.href="/Koktelok"
+            })
+        }
+        else{
+            document.getElementById("FelhJel").addEventListener("click",()=>{jelentes(eredmeny.adat.FelhID,"Felhasználó",eredmeny.adat.FelhID)})
+            document.getElementById("KoktJel").addEventListener("click",()=>{jelentes(eredmeny.adat.KoktélID,"Koktél",eredmeny.adat.FelhID)})
+            kedveles()
+        }
     }
-    //ha nincs
     else{
         //Átalakítjuk a komment felületet egy tájékoztató szövegre
         document.getElementById("Velemeny").innerHTML="Komment írásához és a Koktél Értékeléséhez lépj be!"
         //Leromboljuk a jelentési gombokat, visszaélés elkerülése érdekében
-        Obfuszkacio()
+        document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
         document.getElementById("header").removeChild(document.getElementById("KoktJel"))
+        document.getElementById("Cimsor").classList.remove("ps-4")
     }
+    await kommentek(eredmeny,bevanelepve)
+    await erteksetup()
 })
 
 const AdatLekeres=async(url)=>{
@@ -50,26 +61,18 @@ const AdatKuldes=async(url,adat,tipus)=>{
     }
 }
 
-//A fő betöltési function
-async function Betoltes() {
-    //Kiürítünk pár divet
-    await Tisztitas()
-    //Megkapjuk a koktélid-t a link végéről
-    let koktel=window.location.href.split("/")
-    //ez alapján lekérjük az adatokat
-    const eredmeny=await AdatLekeres(`/api/Koktel/${koktel[koktel.length-1]}`)
+
+async function statikusadatok(adatok)
+{
     //ha nincs ilyen köktélunk
-    if (eredmeny==undefined) {
+    if (adatok==undefined) {
         //Átirányítjuk a hibaoldalra
         window.location.href="/KoktelHiba"
     }
     //Külön változókban tároljuk el a kapott adatokat
-    const koktélAdat=eredmeny.adat[0]
-    const jelvényAdat=eredmeny.jelvenyek
-    const osszetevoAdat=eredmeny.osszetevok
-    const kommentAdat=eredmeny.komment
-    
-    //Koktél jelvényei
+    const koktélAdat=adatok.adat
+    const jelvényAdat=adatok.jelvenyek
+    const osszetevoAdat=adatok.osszetevok
     const BadgeHely=document.getElementById("badgek")
     BadgeHely.innerHTML=""
     for (let i = 0; i < jelvényAdat.length; i++) {
@@ -102,119 +105,108 @@ async function Betoltes() {
         Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${osszetevoAdat[i].Mennyiség} ${osszetevoAdat[i].Mertekegyseg}`
         OssztevHely.appendChild(Ossztevo)
     }
-console.log(koktélAdat);
 
     //A koktél képének lekérése és megadása
-    console.log(koktélAdat.BoritoKepUtvonal);
-    
     const KepLekeres=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+koktélAdat.BoritoKepUtvonal)
     document.getElementById("KoktélKép").setAttribute("src",URL.createObjectURL(KepLekeres))
 
-    //A koktél képének lekérése és megadása
+    //A koktél készítőjének képének lekérése és megadása
     const FelhKep=await AdatLekeresKep("/api/Koktel/KommenteloKepLekeres/"+koktélAdat.ProfilkepUtvonal)
     document.getElementById("keszKep").setAttribute("src",URL.createObjectURL(FelhKep))
     document.getElementById("keszKep").classList.add("profilkep","m-0")
 
     //Készítő regisztrációja óta eltelt idő számítása és kijelzése
     let keszitesDate=(koktélAdat.RegisztracioDatuma.split('T')[0]).split("-");
-    let jelenDate=new Date()
-    let TagOta=document.getElementById("Tagsag")
-    if (jelenDate.getFullYear()!=keszitesDate[0]) {
-        TagOta.innerText=`${jelenDate.getFullYear()-keszitesDate[0]} Éve Tag`
-    }
-    else if(jelenDate.getMonth()+1!=keszitesDate[1]){
-        TagOta.innerText=`${jelenDate.getMonth()+1-keszitesDate[1]} Hónapja Tag`
-    }
-    else{
-        TagOta.innerText=`${jelenDate.getDate()-keszitesDate[2]} Napja Tag`
-    }
-    
-    //Kommentek létrehozása
+    document.getElementById("Tagsag").innerText=tagsagOta(keszitesDate)
+    document.getElementById("Cimsor").innerHTML=koktélAdat.KoktelCim
+    document.getElementById("OldalCim").innerHTML="Pohárnyi | "+koktélAdat.KoktelCim
+    document.getElementById("Madeby").innerHTML=koktélAdat.Felhasználónév + " -"
+    document.getElementById("kokteldate").innerHTML="Készült: "+koktélAdat.KeszitesDatuma.split('T')[0]
+    document.getElementById("recept").innerHTML=koktélAdat.Recept
+    document.getElementById("mennyiseg").value=koktélAdat.AlapMennyiseg 
+
+    return adatok.belepette
+
+}
+
+async function kommentek() {
     let KommentekHelye=document.getElementById("Kommentek")
-    console.log(kommentAdat.length);
-    
-    if (KommentekHelye.classList.contains("koktelshadow")==false&&kommentAdat.length!=0) {
-        KommentekHelye.classList.add("koktelshadow")
-    }
-    if (kommentAdat.length==0) {
+
+    let adatok=await AdatLekeres(`/api/Koktel/${koktel}`)
+    let kommentek=adatok.komment
+    let belepette=adatok.belepette
+
+    if (kommentek.length==0) {
+        KommentekHelye.classList.add("p-0")
         KommentekHelye.classList.remove("koktelshadow","p-2")
     }
-    KommentekHelye.innerHTML=""
-    //Visszafele számolunk, így a legújjabb van felül
-    if (kommentAdat.length==0) {
-        KommentekHelye.classList.add("p-0")
-    }
     else{
+        if (KommentekHelye.classList.contains("koktelshadow")==false) {
+            KommentekHelye.classList.add("koktelshadow")
+        }
         if (KommentekHelye.classList.contains("p-0")) {
             KommentekHelye.classList.remove("p-0")
         }
-
     }
-    for (let i = kommentAdat.length-1; i > -1 ; i--) {
-
+            
+    KommentekHelye.innerHTML=""
+    for (let i = kommentek.length-1; i > -1 ; i--) {
         //elemek létrehozása
-        let KommIroRegDate=(kommentAdat[i].RegisztracioDatuma.split("T"))[0].split("-")
         let Komment=document.createElement("div")
-        let KommentHeader=document.createElement("div")
-        let KommenteloKep=document.createElement("img")
-        let KommentIro=document.createElement("label")
-        let KommentIroTagsag=document.createElement("span")
-        let KommentIroReport=document.createElement("input")
-        let KommentTartalom=document.createElement("textarea")
-
+        Komment.classList.add("kommentdiv")
+        
         //Kommentelő képének megadása és classok megadása
-        let kep=await AdatLekeresKep("/api/Koktel/KommenteloKepLekeres/"+kommentAdat[i].ProfilkepUtvonal)
+        let kep=await AdatLekeresKep("/api/Koktel/KommenteloKepLekeres/"+kommentek[i].ProfilkepUtvonal)
+        let KommenteloKep=document.createElement("img")
         KommenteloKep.setAttribute("src",URL.createObjectURL(kep))
         KommenteloKep.classList.add("profilkep","col-1","col-sm-1","col-md-1","col-lg-1","col-xl-1")
-
+        
         //Hozzáadás a headerhez és alsó margin megadás
-        KommentHeader.appendChild(KommenteloKep)
+        let KommentHeader=document.createElement("div")
         KommentHeader.classList.add("mb-1","d-flex","w-100")
-
+        KommentHeader.appendChild(KommenteloKep)
+        
         //Jelentés Gomb formázása
+        let KommentIroReport=document.createElement("input")
         KommentIroReport.classList.add("col-3","col-sm-3","col-md-3","col-lg-1","col-xl-1","p-0","text-end","flex-fill")
-
+        
         //Felhasználónév mező megadása
+        let KommentIro=document.createElement("label")
         KommentIro.classList.add("col-8","col-sm-8","col-md-8","col-lg-10","col-xl-10","flex-fill")
-        KommentIro.innerHTML=kommentAdat[i].Felhasználónév
+        KommentIro.innerHTML=kommentek[i].Felhasználónév+" - "
+        
         
         //Átszínezés
+        let KommIroRegDate=(kommentek[i].RegisztracioDatuma.split("T"))[0].split("-")
+        let KommentIroTagsag=document.createElement("span")
         KommentIroTagsag.classList.add("text-primary")
+        KommentIroTagsag.innerText=tagsagOta(KommIroRegDate)
         
         //Textarea tartalom és stílus megadása
+        let KommentTartalom=document.createElement("textarea")
         KommentTartalom.setAttribute("rows","3")
         KommentTartalom.setAttribute("style","resize: none; text-align: left; box-sizing: border-box")
         KommentTartalom.setAttribute("disabled","true")
         KommentTartalom.classList.add("w-100","komment")
-        KommentTartalom.innerHTML=kommentAdat[i].Tartalom
+        KommentTartalom.innerHTML=kommentek[i].Tartalom
         
-
-        //
-        Komment.classList.add("kommentdiv")
-        //Kitaláljuk mikor regisztrált a kommentelő
-        if (jelenDate.getFullYear()!=KommIroRegDate[0]) {
-            KommentIroTagsag.innerText+=` - ${jelenDate.getFullYear()-KommIroRegDate[0]} Éve Tag`
-        }
-        else if(jelenDate.getMonth()+1!=KommIroRegDate[1]){
-            KommentIroTagsag.innerText+=` - ${jelenDate.getMonth()-KommIroRegDate[1]+1} Hónapja Tag`
-        }
-        else{
-            KommentIroTagsag.innerText+=` - ${jelenDate.getDate()-KommIroRegDate[2]} Napja Tag`
-        }
+        
+        
         KommentHeader.appendChild(KommentIro)
         //Ha a felhasználó be van lépve
-        if (eredmeny.belepette) {
+        
+        if (belepette) {
 
             //Létrehozzuk a jelentés gombot minden komment felett
             KommentIroReport.setAttribute("type","button")
             KommentIroReport.classList.add("btn","text-danger","float-end","border-0")
 
-            if (kommentAdat[i].UgyanazE==false) {
+            if (kommentek[i].UgyanazE==false) {
                 KommentIroReport.setAttribute("value","Jelentés")
                 //Ha rányom
                 KommentIroReport.addEventListener("click",()=>{
                     //Elküldjük jelentésre a kommentet
-                    jelentes(kommentAdat[i].KommentID,"Komment",kommentAdat[i].Keszito)
+                    jelentes(kommentek[i].KommentID,"Komment",kommentek[i].Keszito)
                 })
             }
             //Azonban magát nem tudja feljelenteni
@@ -222,7 +214,7 @@ console.log(koktélAdat);
                 //Ezért helyette ki tudja törölni a kommentet inkább
                 KommentIroReport.setAttribute("value","Törlés")
                 KommentIroReport.addEventListener("click",()=>{
-                    kommentTorles(kommentAdat[i].KommentID)
+                    kommentTorles(kommentek[i].KommentID,adatok,belepette)
                 })
             }
             KommentHeader.appendChild(KommentIroReport)
@@ -233,100 +225,69 @@ console.log(koktélAdat);
         Komment.appendChild(KommentTartalom)
         KommentekHelye.appendChild(Komment)
     }
-    //Ha be van lépve
-    if (eredmeny.belepette) {
-        //Létrehozunk egy csillagot, amire kattintva a kedvencekhez adjuk a koktélt
-        let hova=document.getElementById("fav")
-        hova.innerHTML=""
-        let gombkedv=document.createElement("input")
-        gombkedv.setAttribute("type","button")
-        gombkedv.classList.add("btn","float-end","fs-3","m-0","p-0","border-0")
-        if (eredmeny.kedveltee==false) {            
-            gombkedv.value="☆"
-            gombkedv.addEventListener("click",async()=>{
-                gombkedv.value="★"
-                await kedveles(koktélAdat.KoktélID)
-            },{once:true})
-        }
-        else{
-            gombkedv.value="★"
-            gombkedv.addEventListener("click",async()=>{
-                gombkedv.value="☆"
-                await kedveles(koktélAdat.KoktélID)
-            },{once:true})
-        }
-        hova.appendChild(gombkedv)
-        //Létrehozzuk az értékelés felületet, és ha kell kitöltjük
-        ertekeles(eredmeny.ertekeltee,eredmeny.ertekeles)
-        }
-    //Közvetlen endpointról kapott információkat itt adunk meg
-    document.getElementById("Cimsor").innerHTML=koktélAdat.KoktelCim
-    document.getElementById("OldalCim").innerHTML="Pohárnyi | "+koktélAdat.KoktelCim
-    document.getElementById("Madeby").innerHTML=koktélAdat.Felhasználónév + " -"
-    document.getElementById("kokteldate").innerHTML="Készült: "+koktélAdat.KeszitesDatuma.split('T')[0]
-    document.getElementById("recept").innerHTML=koktélAdat.Recept
-    document.getElementById("mennyiseg").value=koktélAdat.AlapMennyiseg 
-    //Ha ez a felhasználó készítette a koktélt
-    if (koktélAdat.UgyanazE&&megtortentemar==false) {
-        //ne tudja jelenteni magát
-        Obfuszkacio()
-        //A koktélt azonban ki tudja törölni
-        document.getElementById("KoktJel").setAttribute("id","KoktDel")
-        torles(koktélAdat.KoktélID)
-    }
-    //Ha nem
-    else{
-        //Akkor mind a felhasználót,mind a koktélt tudja jelenteni
-        document.getElementById("FelhJel").addEventListener("click",()=>{jelentes(koktélAdat.FelhID,"Felhasználó",koktélAdat.FelhID)})
-        document.getElementById("KoktJel").addEventListener("click",()=>{jelentes(koktélAdat.KoktélID,"Koktél",koktélAdat.FelhID)})
-    }
-    //Ha változtat a koktél mennyiségén
-    document.getElementById("mennyiseg").addEventListener("change",()=>{
-    OssztevHely.innerHTML=""
-    //Helyesen kerekítve jelezzük ki az összetevőket
-    for (let i = 0; i < osszetevoAdat.length; i++) {
-            let Ossztevo=document.createElement("li")
-            Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round((osszetevoAdat[i].Mennyiség*(document.getElementById("mennyiseg").value/koktélAdat.AlapMennyiseg))*10)/10} ${osszetevoAdat[i].Mertekegyseg}`
-            OssztevHely.appendChild(Ossztevo)
-        }
-    })
-
-    //Továbbadjuk azt hogy be van e lépve
-    return eredmeny.belepette
+    
 }
 
+
+
+function tagsagOta(regDate){
+    let jelenDate=new Date()
+    let miota
+    if (jelenDate.getFullYear()!=regDate[0]) {
+        miota=`${jelenDate.getFullYear()-regDate[0]} Éve Tag`
+    }
+    else if(jelenDate.getMonth()+1!=regDate[1]){
+        miota=`${jelenDate.getMonth()+1-regDate[1]} Hónapja Tag`
+    }
+    else{
+        miota=`${jelenDate.getDate()-regDate[2]} Napja Tag`
+    }
+    return miota
+}
 async function Kommentkuldes() {
     //Megkapjuk a koktél idjét a link utolsó részéből
-    let koktel=window.location.href.split("/")
+
     //Egy objectbe eltároljuk
     let tartalom={
         //A komment szövegét
         Tartalom:document.getElementById("komment").value,
         //Melyik koktélhoz írták
-        Koktél:koktel[koktel.length-1]
+        Koktél:koktel
     }
     //Elküldjük a kommentet a backendre
     await AdatKuldes(`/api/Koktel/SendKomment`,tartalom,"POST")
-    //Úrjatöltjük az oldlat
-    Betoltes()
-}
-
-
-
-async function Tisztitas() {
-    //Több elemes dinamikus divek ürítése
     document.getElementById("komment").value=""
-    document.getElementById("Kommentek").innerHTML=""
-    document.getElementById("szam").innerHTML="0"
-    document.getElementById("Ossztev").innerHTML=""
-    document.getElementById("badgek").innerHTML=""
+    document.getElementById("szam").innerText="0"
+    //Úrjatöltjük az oldlat
+    await kommentek()
+}
+async function kommentTorles(id){
+     await AdatKuldes("/api/Koktel/DeleteKomment",{id:id},"DELETE")
+     await kommentek()
+     
 }
 
-
-
-
-
-
+let csillag=document.createElement("input")
+async function kedvencek(){
+    const eredmeny=await AdatLekeres(`/api/Koktel/${koktel}`)
+    if (eredmeny.kedveltee) {
+        csillag.setAttribute("value","★")
+    }
+    else{
+        csillag.setAttribute("value","☆")
+    }
+}
+async function kedveles() {
+    csillag.setAttribute("type","button")
+    csillag.classList.add("btn","fs-1","m-0","p-0","border-0")
+    let kedvenc=document.getElementById("fav")
+    csillag.addEventListener("click",async()=>{
+        await AdatKuldes("/api/Koktel/SendKedvenc",{Koktél:koktel},"POST")
+        kedvencek()
+    })
+    kedvenc.appendChild(csillag)
+    kedvencek()
+}
 async function jelentes(mit,tipus,kit) {
     //A jelentési felület lekérése
     var JelIv = new bootstrap.Modal(document.getElementById('JelentesLap'), {})   
@@ -382,110 +343,47 @@ async function jelentes(mit,tipus,kit) {
     },{once:true})
 
 }
+async function erteksetup() {
 
-function Obfuszkacio(){
-    if (!megtortentemar) {
-        //Szétrobbantom ezeket a gombokat nehogy lehessen belekontárkodni bármibe is
-        document.getElementById("FelhJel").setAttribute("type","")
-        document.getElementById("FelhJel").classList.remove("btn","text-danger")
-        document.getElementById("FelhJel").setAttribute("hidden","true")
-        document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
-    }
-    megtortentemar=true
-
-}
-
-function torles(id){
-    document.getElementById("KoktDel").value="Koktél Törlése"
-    document.getElementById("KoktDel").addEventListener("click",async()=>{
-        await AdatKuldes("/api/Koktel/DeleteKoktel",{id:id},"DELETE")
-        window.location.reload()
-    })
-}
-
-async function kommentTorles(id){
-     await AdatKuldes("/api/Koktel/DeleteKomment",{id:id},"DELETE")
-     Betoltes()
-     
-}
-
-async function kedveles(id) {
-    await AdatKuldes("/api/Koktel/SendKedvenc",{Koktél:id},"POST")
-    Betoltes()
-}
-
-
-function ertekeles(ertekelteE,mennyire) {
-    let koktel=window.location.href.split("/")
-    let ertek=[document.getElementById("star1"),document.getElementById("star2"),document.getElementById("star3"),document.getElementById("star4"),document.getElementById("star5")]
-    //Ha értékelve van már
-    if (ertekelteE) {
-        //Akkor a már megkapott értékelést megjelenítjük
-        for (let i = 0; i < mennyire; i++) {
-            ertek[i].value="★"
-        }
-        //És kikapcsoljuk a kattintást
-        ertek.forEach(csillag => {
-            csillag.classList.add("star")
-            csillag.setAttribute("disabled","")
-        });
-        //És kitöröljük a gombot amivel lehet küldeni
-        document.getElementById("ErtSend").setAttribute("hidden","true")
-        document.getElementById("ErtSend").setAttribute("id","")
-        document.getElementById("rateDisplay").innerHTML="Ön értékelte már a koktélt"
+    let csillagok=document.getElementById("csillagok").children
+    //ez alapján lekérjük az adatokat
+    const eredmeny=await AdatLekeres(`/api/Koktel/${koktel}`)
+    if (eredmeny.ertekeltee) {
+        csillagsetup(eredmeny.ertekeles)
+        csillagok=""
+        document.getElementById("rateDisplay").innerHTML="Ön már értékelte ezt a koktélt!"
+        document.getElementById("Velemeny").children[0].removeChild((document.getElementById("ErtSend")))
     }
     else{
-        //Értékelést akar e adni a felhasználó
-        let kattint=false
-        //Csillagonként
-        ertek.forEach(csillag => {
-            csillag.classList.add("star")
-            //Ha rákattintunk egy csillagra
-            csillag.addEventListener("click",()=>{
-                //kikapcsoljuk a hover funkciókat
-                kattint=true
-                //az összesnek a telítettségét nullázuk,
-                csillagvaltoztatas(ertek.length,"☆")
-                //és addig a csillagig betelítjük őket
-                csillagvaltoztatas(ertek.indexOf(csillag)+1,"★")
+        
+        for (let i = 0; i < csillagok.length; i++) {
+            csillagok[i].addEventListener("click",()=>{
+                csillagsetup(i+1)
             })
-
-            //Ha rávisszük az egerünket egy csillagra
-            csillag.addEventListener("pointerover",()=>{
-                //de nem kattintottunk
-                if (!kattint) {
-                    //Akkor addig a csillagig betelítjük őket
-                    csillagvaltoztatas(ertek.indexOf(csillag)+1,"★")
-                }
-            })
-            //Ha elvisszük a csillagról az egerünket 
-            csillag.addEventListener("pointerout",()=>{
-                //és nem kattintottunk
-                if (!kattint) {
-                    //Akkor az összesnek a telítettségét nullázuk
-                    csillagvaltoztatas(ertek.length,"☆")
-                }
-            });
-        })
-        function csillagvaltoztatas(honnan,mive){
-            //Melyik csillagig
-            for (let i = 0; i < honnan; i++) 
-            {
-                //Mi legyen kimutatva
-                ertek[i].value=mive
-            }
         }
-        //Amikor le akarjuk fixálni az értékelést
         document.getElementById("ErtSend").addEventListener("click",async()=>{
-            //Szűrés segítségével eltároljuk az összes csillagnak az elemét egy tömbben
-            let a=ertek.filter(valaszott=>{  
-                return valaszott.value=="★"
-            }) 
-            //Aminek a hosszát elküljük a backendre a koktél idjével
-            await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:a.length,Koktél:koktel[koktel.length-1]},"POST")
-            //és újratöltjük az oldalt hogy ne adhasson új értékelést
-            Betoltes()
-        },{once:true})
+        
+            let teliCsillagok=0
+            for (let i = 0; i < csillagok.length; i++) {
+                if (csillagok[i].value=="★") {
+                    teliCsillagok++
+                }
+                
+            }
+            if (teliCsillagok!=0) {
+                //Aminek a hosszát elküljük a backendre a koktél idjével
+                await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:teliCsillagok,Koktél:koktel},"POST")
+                await erteksetup()
+            }
+        })
     }
-
+}
+function csillagsetup(meddig){
+    let csillagok=document.getElementById("csillagok").children
+    for (let i = 0; i < meddig; i++) {
+        csillagok[i].setAttribute("value","★")
+    }
+    for (let i = meddig; i < 5; i++) {
+        csillagok[i].setAttribute("value","☆")
+    }
 }
