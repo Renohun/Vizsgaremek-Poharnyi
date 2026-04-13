@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             margoDiv.appendChild(cardDiv);
 
                             let cardBody = document.createElement('div');
-                            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
+                            cardBody.classList.add('card-body', 'd-flex', 'flex-column');
                             cardDiv.appendChild(cardBody);
 
                             let titleH4 = document.createElement('h4');
@@ -153,8 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             cardText.appendChild(emailElement);
 
                             let regisztralasDatuma = document.createElement('p');
-                            regisztralasDatuma.innerText =
-                                'Regisztracio ideje: ' + rows.felhasznalok[i][0].RegisztracioDatuma;
+
+                            let reg = rows.felhasznalok[i][0].RegisztracioDatuma.split('T');
+                            let regDate = reg[0];
+                            let regTime = reg[1].split('.')[0];
+
+                            regisztralasDatuma.innerText = 'Regisztracio ideje: ' + regDate + ' ' + regTime;
                             cardText.appendChild(regisztralasDatuma);
 
                             let separator2 = document.createElement('hr');
@@ -284,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             //es egy 30percet nezem hogy i-vel miert nem mukodik a belso ciklus...
 
                             let gombDiv = document.createElement('div');
-                            gombDiv.classList.add('d-flex', 'justify-content-between');
+                            gombDiv.classList.add('d-flex', 'justify-content-between', 'mt-auto');
                             cardBody.appendChild(gombDiv);
 
                             let elutasitasGomb = document.createElement('input');
@@ -385,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             cardDiv.appendChild(imgTag);
 
                             let cardBody = document.createElement('div');
-                            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
+                            cardBody.classList.add('card-body', 'd-flex', 'flex-column');
                             cardDiv.appendChild(cardBody);
 
                             let titleH4 = document.createElement('h4');
@@ -395,44 +399,41 @@ document.addEventListener('DOMContentLoaded', () => {
                             let separator = document.createElement('hr');
                             cardBody.appendChild(separator);
 
-                            let ertekelesSpan = document.createElement('span');
-                            ertekelesSpan.innerText =
-                                'Ertekeles: ' +
-                                Math.round(rows.koktelok[i][0].ertekeles[0][0].Osszert * 10) / 10 +
-                                '/5';
-                            cardBody.appendChild(ertekelesSpan);
+                            //rows.koktelok[i][0].ertekeles[0][0].Osszert
+
+                            if (rows.koktelok[i][0].ertekeles[0][0].Osszert == null) {
+                                let ertekeles = document.createElement('span');
+                                ertekeles.innerText = 'Nincs meg ertekeles!';
+                                cardBody.appendChild(ertekeles);
+                            } else {
+                                const ertekeles = Math.round(rows.koktelok[i][0].ertekeles[0][0].Osszert * 10) / 10;
+                                let csillagok = '';
+
+                                for (let i = 0; i < Math.round(ertekeles - 0.5); i++) {
+                                    csillagok += '★';
+                                }
+                                //Számot stringé alakítunk, majd megnézzük hogy van e benne tizedesjelölő
+                                if (ertekeles.toString().includes('.')) {
+                                    csillagok += '★';
+                                    for (let i = 0; i < 5 - Math.round(ertekeles); i++) {
+                                        csillagok += '☆';
+                                    }
+                                } else {
+                                    for (let i = 0; i < 5 - Math.round(ertekeles - 0.5); i++) {
+                                        csillagok += '☆';
+                                    }
+                                }
+
+                                csillagok += '(' + ertekeles + ')';
+
+                                let ertekelesElement = document.createElement('span');
+                                ertekelesElement.innerText = 'Értékelés: ' + csillagok;
+                                cardBody.appendChild(ertekelesElement);
+                            }
 
                             let cardText = document.createElement('div');
                             cardText.classList.add('card-text');
                             cardBody.appendChild(cardText);
-
-                            let badgeDiv = document.createElement('div');
-                            cardText.appendChild(badgeDiv);
-
-                            let badgeSpan = document.createElement('span');
-                            badgeSpan.classList.add('badge', 'text-bg-info');
-                            badgeDiv.appendChild(badgeSpan);
-
-                            let ingredientsSpan = document.createElement('span');
-                            ingredientsSpan.innerText = 'Osszetevok';
-                            cardText.appendChild(ingredientsSpan);
-
-                            let listaUl = document.createElement('ul');
-                            cardText.appendChild(listaUl);
-                            //Itt sztrokot kaptam...
-                            //console.log(rows.koktelok[i][0].osszetevok[0].length);
-                            //console.log(rows.koktelok[i][0].osszetevok[0][0].Osszetevő);
-                            //console.log(rows.koktelok[i][0].osszetevok[0][1].Osszetevő);
-
-                            //Imadom amikor mar annyit dolgozok ezen, hogy mar elfelejtem hogy egy ciklusban vagyok
-                            //es egy 30percet nezem hogy i-vel miert nem mukodik a belso ciklus...
-
-                            for (let j = 0; j < rows.koktelok[i][0].osszetevok[0].length; j++) {
-                                let listaLi = document.createElement('li');
-                                //console.log(rows.koktelok[i][0].osszetevok[0][i].Osszetevő);
-                                listaLi.innerText = rows.koktelok[i][0].osszetevok[0][j].Osszetevő;
-                                listaUl.appendChild(listaLi);
-                            }
 
                             let tovabbKoktelraGomb = document.createElement('input');
                             tovabbKoktelraGomb.setAttribute('type', 'button');
@@ -444,9 +445,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             let separator2 = document.createElement('hr');
                             cardBody.appendChild(separator2);
 
+                            const jelentesDiv = document.createElement('div');
+
                             let jelentesHeader = document.createElement('h4');
                             jelentesHeader.innerText = 'Jelentes indokai:';
-                            cardBody.appendChild(jelentesHeader);
+                            jelentesDiv.appendChild(jelentesHeader);
 
                             let jelentesekLista = document.createElement('ul');
                             //console.log(rows.koktelok[i][0].jelentesIndokok[0][0].JelentesIndoka);
@@ -466,10 +469,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                         }
 
                                         if (indokArr.length < 8) {
-                                            if (indokArrKarakterSzam >= 50) {
+                                            if (indokArrKarakterSzam >= 40) {
                                                 let indokString = '';
                                                 let karakterSzamlalo = 0;
-                                                while (karakterSzamlalo < 50) {
+                                                while (karakterSzamlalo < 40) {
                                                     for (let k = 0; k < indokArr.length; k++) {
                                                         indokString += ' ';
                                                         for (let l = 0; l < indokArr[k].length; l++) {
@@ -489,10 +492,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                             }
                                         } else if (indokArr.length >= 8) {
                                             //console.log('beleptem ide');
-                                            if (indokArrKarakterSzam >= 50) {
+                                            if (indokArrKarakterSzam >= 40) {
                                                 let indokString = '';
                                                 let karakterSzamlalo = 0;
-                                                while (karakterSzamlalo < 50) {
+                                                while (karakterSzamlalo < 40) {
                                                     for (let k = 0; k < indokArr.length; k++) {
                                                         indokString += ' ';
                                                         for (let l = 0; l < indokArr[k].length; l++) {
@@ -554,10 +557,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 jelentesUres.innerText = 'Indok még nincsen megadva';
                                 jelentesekLista.appendChild(jelentesUres);
                             }
-                            cardBody.appendChild(jelentesekLista);
+                            jelentesDiv.appendChild(jelentesekLista);
+                            cardBody.appendChild(jelentesDiv);
 
                             let gombDiv = document.createElement('div');
-                            gombDiv.classList.add('d-flex', 'justify-content-between');
+                            gombDiv.classList.add('d-flex', 'justify-content-between', 'mt-auto');
                             cardBody.appendChild(gombDiv);
 
                             let elutasitasGomb = document.createElement('input');
@@ -641,7 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             margoDiv.appendChild(cardDiv);
 
                             let cardBody = document.createElement('div');
-                            cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'justify-content-between');
+                            cardBody.classList.add('card-body', 'd-flex', 'flex-column');
                             cardDiv.appendChild(cardBody);
 
                             let titleH4 = document.createElement('h4');
@@ -781,7 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             cardBody.appendChild(jelentesContainer);
 
                             let gombDiv = document.createElement('div');
-                            gombDiv.classList.add('d-flex', 'justify-content-between');
+                            gombDiv.classList.add('d-flex', 'justify-content-between', 'mt-auto');
                             cardBody.appendChild(gombDiv);
 
                             let elutasitasGomb = document.createElement('input');
