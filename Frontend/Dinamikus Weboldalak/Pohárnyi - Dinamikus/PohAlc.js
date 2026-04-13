@@ -108,26 +108,17 @@ function koktelRendereles(koktelok) {
                 let ertekeles = document.createElement('span');
                 ertekeles.innerText = 'Értékelés: ☆☆☆☆☆';
                 cardBody.appendChild(ertekeles);
-            } else {
-                const ertekeles = Math.round(koktel.ertekeles * 10) / 10;
-                let csillagok = '';
-
-                for (let i = 0; i < Math.round(ertekeles - 0.5); i++) {
-                    csillagok += '★';
+                } 
+                else {
+                let csillagert=Math.ceil(koktel.ertekeles)
+                let csillagok=""
+                for (let i = 0; i < csillagert; i++) {
+                    csillagok+="★"
                 }
-                //Számot stringé alakítunk, majd megnézzük hogy van e benne tizedesjelölő
-                if (ertekeles.toString().includes('.')) {
-                    csillagok += '★';
-                    for (let i = 0; i < 5 - Math.round(ertekeles); i++) {
-                        csillagok += '☆';
-                    }
-                } else {
-                    for (let i = 0; i < 5 - Math.round(ertekeles - 0.5); i++) {
-                        csillagok += '☆';
-                    }
+                for (let i = 0; i < 5-csillagert; i++) {
+                        csillagok+="☆"
                 }
-
-                csillagok += '(' + ertekeles + ')';
+                csillagok += '(' + Math.round(koktel.ertekeles * 10) / 10 + ')';
 
                 let ertekelesElement = document.createElement('span');
                 ertekelesElement.innerText = 'Értékelés: ' + csillagok;
