@@ -5,7 +5,7 @@ body {
 /*Főcím és Háttérkép*/
 #cimdiv {
     padding: 60px;
-    background-image: url(img/test2.jpg);
+    background-image: url(../NewCocktail/img/bartender_koktelkesz.avif);
     background-size: cover;
     background-repeat: repeat-y;
     background-attachment: scroll; /*FIXED?*/
@@ -15,17 +15,13 @@ body {
     width: 100%;
 }
 
-#bg {
-    height: 60px;
-    width: 100%;
-    background-color: black;
-    opacity: 60%;
-}
 #cimszoveg {
     text-align: center;
     color: rgb(255, 255, 255);
     position: relative;
-    top: -53px;
+    background-color:rgba(0, 0, 0, 0.6);
+    background-blend-mode: lighten;
+   
 }
 /*input resz*/
 

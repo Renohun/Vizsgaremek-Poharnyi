@@ -117,38 +117,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const kivalasztottTermek = document.getElementById('termekLearazas').value;
         var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
         if (learazas.length > 0) {
-            if(learazas>100||learazas<1)
-            {
-                
+            if (learazas > 100 || learazas < 1) {
                 document.getElementById('modalText').innerText = 'Leárazás értéke meghaladja a megengedettet!';
-
-            }
-            else{
+            } else {
                 //Ne kezdődhessen 0ával egy érték
-                let ellenorzes=String(learazas)
-                while (ellenorzes[0]==0) {
-                    ellenorzes=ellenorzes.slice(1,ellenorzes.length)
+                let ellenorzes = String(learazas);
+                while (ellenorzes[0] == 0) {
+                    ellenorzes = ellenorzes.slice(1, ellenorzes.length);
                 }
                 (async () => {
                     const data = await GETfetch(
                         `http://127.0.0.1:3000/api/AdminPanel/TermekLearazas/${kivalasztottTermek}/${parseInt(ellenorzes)}`
                     );
-                    if (data.result=="Leárazás sikeresen frissitve") {
-                        
-                        document.getElementById('modalText').innerText = 'Termék sikeresen leárazva ' + learazas + '%-kal!';
-                        
-                    }
-                    else{
-
+                    if (data.result == 'Leárazás sikeresen frissitve') {
+                        document.getElementById('modalText').innerText =
+                            'Termék sikeresen leárazva ' + learazas + '%-kal!';
+                    } else {
                         document.getElementById('modalText').innerText = 'Hiba történt a szerveren!';
                     }
                 })();
             }
-        } 
-        else {
+        } else {
             document.getElementById('modalText').innerText = 'Leárazás értéke hiányzik!';
-
-
         }
         modalElement.show();
         document.getElementById('modalBtn').addEventListener('click', () => {
@@ -157,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('termekFeltoltesGomd').addEventListener('click', async () => {
-        const formDiv = document.getElementsByName('termekFeltoltes')[1];
+        const formDiv = document.getElementsByName('termekFeltoltes')[1].children[0];
 
         let POSTobj = {};
         let hibasAdatok = false;
@@ -228,6 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
             //MODALok megjelenitese
             if (ellResult.duplikacio == false) {
                 POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
+                console.log(POSTobj);
+
                 const response = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
                 console.log(response);
                 var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});

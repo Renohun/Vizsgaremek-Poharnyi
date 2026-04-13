@@ -1142,7 +1142,7 @@ router.post('/koktelTorles/:nev', (req, res) => {
 
 router.post('/AdminPanel/TermekFeltoltes', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
-        //console.log(req.body);
+        console.log(req.body);
 
         const {
             fajlNeve,
@@ -1571,7 +1571,8 @@ router.delete('/AdatlapLekeres/JelentesTorles', async (request, response) => {
     let ki = jwt.verify(request.cookies.auth_token_access,process.env.JWT_SECRET).userID;
     let mit = request.body.tettes;
     let JelentésTörlés = 'DELETE FROM Jelentők WHERE JelentőID LIKE ? AND JelentésID LIKE ?';
-    let JelentesFontossagCsokkentes="UPDATE Jelentesek SET JelentesMennyisege=JelentesMennyisege-1 WHERE JelentesID LIKE ?"
+    let JelentesFontossagCsokkentes =
+        'UPDATE Jelentesek SET JelentesMennyisege=JelentesMennyisege-1 WHERE JelentesID LIKE ?';
     try {
         await lekeres(JelentésTörlés, [ki, mit]);
         await lekeres(JelentesFontossagCsokkentes, mit);
@@ -1580,7 +1581,7 @@ router.delete('/AdatlapLekeres/JelentesTorles', async (request, response) => {
         });
     } catch (error) {
         console.log(error);
-        
+
         response.status(500).json({
             message: 'Hiba Történt!',
             hiba: error
@@ -1641,23 +1642,20 @@ router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (re
             /^[a-zA-Z0-9_]{2,30}$/.test(request.body.Felhasználónév)
         ) {
             tomb.felhaszanalo = `${request.body.Felhasználónév}`;
-            tomb.email =`${request.body.Email}`
+            tomb.email = `${request.body.Email}`;
         } else {
             hiba = true;
         }
         let profil = jwt.verify(request.cookies.auth_token_access,process.env.JWT_SECRET).userID;
         if (request.body.KépÚtvonal != undefined && hiba == false) {
             adatmodositas += ',ProfilKepUtvonal=?';
-            tomb.kepvonal=`${request.body.KépÚtvonal}`
-            
+            tomb.kepvonal = `${request.body.KépÚtvonal}`;
         }
         if (request.body.Jelszó != 'undefined' && hiba == false) {
             if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.Jelszó)) {
                 adatmodositas += ',JelszóHossza=?,Jelszó=?';
-                tomb.hossz=`${request.body.Jelszó.length}`
-                tomb.jelszo=`${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`
-
-                
+                tomb.hossz = `${request.body.Jelszó.length}`;
+                tomb.jelszo = `${await argon.hash(request.body.Jelszó, { type: argon.argon2id })}`;
             } else {
                 hiba = true;
             }
@@ -2189,7 +2187,14 @@ router.get('/termek/lekeres/:id', async (request, response) => {
             console.log(error);
             response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
         }
-    
+        response.status(200).json({
+            termek: lekertTermek,
+            ertekelt: ertekeltE
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
+    }
 });
 
 router.get('/termek/KepLekeres/:id', async (request, response) => {
@@ -2219,10 +2224,11 @@ router.get('/termek/KepLekeres/:id', async (request, response) => {
 
 router.get('/termek/KepLekeres/:id', async (request, response) => {
     try {
+        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
         const id = request.params.id;
         const query = 'SELECT TermekKepUtvonal FROM webshoptermek WHERE termekID = ?';
         const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
-        console.log(lekertTermek);
+        console.log(lekertTermek + 'asasdasdadadasd');
         response.sendFile(path.join(__dirname, '..', 'images', lekertTermek[0].TermekKepUtvonal));
     } catch (error) {
         console.log(error);
@@ -2249,7 +2255,7 @@ router.post('/termek/ErtekelesKuldes/', async (request, response) => {
     }
 });
 
-router.post('/Termek/KosarKuldes', async (request, response) => {
+router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, response) => {
     if (request.cookies.auth_token != null) //be van e jelentkezve a felhasználó
     {
         try {
@@ -2267,7 +2273,7 @@ router.post('/Termek/KosarKuldes', async (request, response) => {
 
             const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ?';
             const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id]);
-            if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99) {
+            if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1) {
                 response.status(200).json({ hiba: 'raktar' });
             } else {
                 //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
@@ -2284,11 +2290,7 @@ router.post('/Termek/KosarKuldes', async (request, response) => {
                 } else {
                     const kosarUpdateQuery =
                         'UPDATE kosártermék SET Darabszam = Darabszam+? WHERE TermekID = ? AND KosarID = ?';
-                    const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [
-                        mennyiseg,
-                        id,
-                        UserID
-                    ]);
+                    const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [mennyiseg, id, UserID]);
                     response.status(200).json({ Siker: KosarUpdate.affectedRows });
                 }
             }
@@ -2638,33 +2640,9 @@ router.post('/Webshop/KosarKuldes/:id', async (request, response) => {
             console.log(error);
             response.status(500).json({ hiba: error });
         }
-    } else {
-        response.status(200).json({ hiba: 'bejel' });
-    }
-});
-router.get('/Fooldal/NepszeruKoktelok', async (request, response) => {
-    try {
-        const query = 'SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC LIMIT 5';
-        const [Nepszeruk] = await DBconnetion.promise().query(query);
-        response.status(200).json({
-            data: Nepszeruk
-        });
     } catch (error) {
         console.log(error);
-        response.status(500).json({
-            hiba: error
-        });
-    }
-});
-router.get('/Fooldal/KepLekeres/:id', async (request, response) => {
-    try {
-        //console.log(request.body);
-        let { id } = request.params;
-        let kepkereses = 'SELECT BoritoKepUtvonal FROM koktél WHERE KoktélID LIKE ?';
-        let kinek = await lekeres(kepkereses, id);
-        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].BoritoKepUtvonal));
-    } catch (error) {
-        console.log(error);
+        response.status(500).json({ hiba: error });
     }
 });
 router.get('/WebShop/TermekErtekeles/:id', async (request, response) => {
@@ -2680,5 +2658,45 @@ router.get('/WebShop/TermekErtekeles/:id', async (request, response) => {
         response.status(500).json({ hiba: error });
     }
 });
+//
+//
+// Föoldal
+//
+//
+router.get('/Fooldal/NepszeruKoktelok', async (request, response) => {
+    try {
+        const query = 'SELECT * FROM koktél ORDER BY KoktelNepszeruseg DESC LIMIT 5';
+        const [Nepszeruk] = await DBconnetion.promise().query(query);
+        response.status(200).json({
+            data: Nepszeruk
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            hiba: error
+        });
+    }
+});
+
+router.get('/Fooldal/KepLekeres/:id', async (request, response) => {
+    try {
+        //console.log(request.body);
+        let { id } = request.params;
+        let kepkereses = 'SELECT BoritoKepUtvonal FROM koktél WHERE KoktélID LIKE ?';
+        let kinek = await lekeres(kepkereses, id);
+        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].BoritoKepUtvonal));
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+router.get('/Fooldal/BevaneJelentkezve',authenticationMiddleware, async(request,response)=>{
+    try {
+        response.status(200).json({siker:"siker"})
+    } catch (error) {
+        console.log(error)
+        response.status(200).json({siker:"hiba"})
+    }
+})
 
 module.exports = router;

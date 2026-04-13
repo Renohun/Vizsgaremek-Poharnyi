@@ -166,7 +166,7 @@ function koktelRendereles(koktelok) {
             const uLista = document.createElement('ul');
             let i = 0;
             //console.log(koktel.osszetevok[0].Osszetevő);
-
+            //itt legeneral 3 vagy annal kevesebb osszeteveot
             while (i != koktel.osszetevok.length && i < 3) {
                 //console.log(koktel.osszetevok);
                 //console.log(koktel.osszetevok[i]);
@@ -178,13 +178,19 @@ function koktelRendereles(koktelok) {
                 uLista.appendChild(liOsszetevo);
                 i++;
             }
-            //console.log(i);
-
             if (koktel.osszetevok.length > 3) {
-                const li = document.createElement('li');
-                li.innerText = `és ${koktel.osszetevok.length - 3} további...`;
-                uLista.appendChild(li);
+                const extraOssz = document.createElement('li');
+                extraOssz.innerText = 'és további ' + (koktel.osszetevok.length - 3) + ' Összetevő...';
+                uLista.appendChild(extraOssz);
+            } else if (koktel.osszetevok.length <= 3) {
+                for (let j = -1; j < 3 - i; j++) {
+                    const extraUres = document.createElement('div');
+                    extraUres.style.height = '20px';
+                    extraUres.style.width = '240px';
+                    uLista.appendChild(extraUres);
+                }
             }
+
             cardText.appendChild(uLista);
 
             const tovabbBtn = document.createElement('input');

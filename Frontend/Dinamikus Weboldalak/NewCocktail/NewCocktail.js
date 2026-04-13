@@ -224,7 +224,6 @@ const AllergenSelect = document.getElementById('allergen');
 
 let Izlekeres = async () => {
     const data = await Getfetch('/api/Keszites/JelvenyLekeres');
-    console.log(data);
 
     //jelvenyek dinamikus létrehozasa:
     const jelvenyHely1 = document.getElementById('eroDiv');
@@ -233,7 +232,6 @@ let Izlekeres = async () => {
 
     //erősség
     for (let i = 0; i < data.erosseg.length; i++) {
-        console.log('a');
         let badge = document.createElement('span');
         badge.innerText = data.erosseg[i].JelvényNeve;
         badge.classList.add('badge', 'text-bg-secondary', 'sajatBadge', 'erobadge');
@@ -242,7 +240,6 @@ let Izlekeres = async () => {
     }
     //ízek
     for (let i = 0; i < data.iz.length; i++) {
-        console.log('a');
         let badge = document.createElement('span');
         badge.innerText = data.iz[i].JelvényNeve;
         badge.classList.add('badge', 'text-bg-secondary', 'sajatBadge', 'izbadge');
@@ -251,7 +248,6 @@ let Izlekeres = async () => {
     }
     //Allergének
     for (let i = 0; i < data.allergen.length; i++) {
-        console.log('a');
         let badge = document.createElement('span');
         badge.innerText = data.allergen[i].JelvényNeve;
         badge.classList.add('badge', 'text-bg-secondary', 'sajatBadge', 'allergenbadge');
@@ -277,7 +273,6 @@ let Izlekeres = async () => {
         const Eroclick = () => {
             let KivalasztottEro = Erobadge;
             KivalasztottErosseg = KivalasztottEro.innerHTML;
-            console.log(KivalasztottErosseg);
             for (let j = 0; j < erossegBadgek.length; j++) {
                 erossegBadgek[j].classList.remove('text-bg-dark');
                 KivalasztottEro.classList.remove('kivalasztott', 'ero');
@@ -312,13 +307,11 @@ let Izlekeres = async () => {
                 valasztottIz.classList.remove('kivalasztott', 'iz');
                 let index = KivalasztottIzek.indexOf(izBadgek[i]);
                 KivalasztottIzek.splice(index, 1);
-                console.log(KivalasztottIzek);
             } else {
                 Izbadge.classList.add('text-bg-dark');
                 valasztottIz.classList.add('text-bg-dark');
                 valasztottIz.classList.add('kivalasztott', 'iz');
                 KivalasztottIzek.push(Izbadge.innerHTML);
-                console.log(KivalasztottIzek);
             }
         };
 
@@ -348,13 +341,11 @@ let Izlekeres = async () => {
                 valasztottallergen.classList.remove('kivalasztott', 'iz');
                 let index = KivalasztottAllergenek.indexOf(allergenBadgek[i]);
                 KivalasztottAllergenek.splice(index, 1);
-                console.log(KivalasztottAllergenek);
             } else {
                 allergenbadge.classList.add('text-bg-dark');
                 valasztottallergen.classList.add('text-bg-dark');
                 valasztottallergen.classList.add('kivalasztott', 'allergen');
                 KivalasztottAllergenek.push(allergenbadge.innerHTML);
-                console.log(KivalasztottAllergenek);
             }
         };
 
@@ -366,9 +357,16 @@ Izlekeres();
 //adatok kiküldése az adatbazisba
 
 const AdatStorage = async () => {
-    console.log(window.innerWidth);
     let data;
     let hiba = true;
+    let egyezoMl = true;
+    document.getElementById('Ujra').style.display = 'none';
+    document.getElementById('hiba').style.display = 'none';
+    document.getElementById('hiba').innerHTML = "Kérem töltse ki a Hiányzó adatokat!"
+    document.getElementById('vissza').style.display = 'none';
+    document.getElementById('siker').removeAttribute('hidden',false);
+    document.getElementById('visszaGomb').removeAttribute('hidden', false);
+    document.getElementById('tovabb').removeAttribute('hidden', true);
     //alap adatok kitöltésének ellenörzése
     if (document.getElementById('nev').value == '') {
         hiba = false;
@@ -380,7 +378,6 @@ const AdatStorage = async () => {
     //képfeltöltés
 
     let kepUtvonal;
-    console.log(inputFile.files[0]);
     const kep = new FormData();
     if (inputFile.files.length != 0) {
         if (
@@ -420,7 +417,6 @@ const AdatStorage = async () => {
     }
     let osszetevoLista = [];
     for (let i = 0; i < osszetevok.length; i++) {
-        console.log(i);
         let osszetevoAdatok = osszetevok[i].children;
         let osszetevo = {};
         let lista = [];
@@ -428,13 +424,24 @@ const AdatStorage = async () => {
             let kinyertOsszetevo = osszetevoAdatok[j].value;
             let KinyertId = osszetevoAdatok[j].id;
             lista.push(kinyertOsszetevo);
-
-            console.log(lista);
         }
         osszetevoLista.push(lista);
-        console.log(osszetevoLista);
     }
+    //mennyiségEllenőrzés
+    let Ujmennyiseg = 0;
+    for (let i = 0; i < osszetevoLista.length; i++) 
+        {
+            if (osszetevoLista[i][2] == "ml" || osszetevoLista[i][2] == "ML") 
+            {
+                Ujmennyiseg += parseInt(osszetevoLista[i][1])
+            }
+        }
 
+    if (Ujmennyiseg != document.getElementById('mennyiseg').value) 
+    {
+        hiba = false;
+        egyezoMl = false
+    }
     //leiras kiszedese
     let leiras = document.getElementById('leiras').value;
     if (leiras == '') {
@@ -446,7 +453,7 @@ const AdatStorage = async () => {
 
     let kinyertbadgeList = document.getElementsByClassName('kivalasztott');
     let kinyertErobadgeList = document.getElementsByClassName('ero');
-    console.log(kinyertbadgeList.length);
+   
 
     for (let i = 0; i < kinyertbadgeList.length; i++) {
         if (kinyertbadgeList[i].classList.contains('ero')) {
@@ -458,7 +465,6 @@ const AdatStorage = async () => {
         //ellenörzi, hogy a felhasználó választott e erősséget
         hiba = false;
     }
-    console.log(kinyertErobadgeList.length);
     if (KivalasztottIzek.length < 1) {
         //ellenörzi, hogy a felhasználó választott e ízt
         hiba = false;
@@ -476,24 +482,28 @@ const AdatStorage = async () => {
         erosseg: elkuldottEro,
         iz: KivalasztottIzek
     };
-    console.log('asdfmiaeftuiaenftiuoejfgi');
     if (KivalasztottAllergenek.length > 0) {
         KoktelAdatok.allergen = KivalasztottAllergenek; //ha valasztott allergent a felhasznalo akkor hozzaadjuk a postobjekthez
-        console.log('kalap');
     }
 
     //hibátlan kitöltés esetén elküldjük az értékeket
     if (hiba == true) {
         KoktelAdatok.kepUtvonala = kepUtvonal.message;
-        console.log(KoktelAdatok);
         data = await AdatPost('/api/Keszites/Feltoltes', KoktelAdatok);
     } else if (hiba == false) {
         //hibás kitöltés kezelése
         document.getElementById('Ujra').style.display = 'block';
+        document.getElementById('vissza').style.display = 'block';
         document.getElementById('hiba').style.display = 'block';
+        if (egyezoMl == false) 
+        {
+           document.getElementById('hiba').innerHTML += " és/vagy Kérem ügyeljen arra, hogy a megadott mililiter mennyiségek egyezzenek!"
+        }
         document.getElementById('siker').setAttribute('hidden', true);
         document.getElementById('visszaGomb').setAttribute('hidden', true);
         document.getElementById('tovabb').setAttribute('hidden', true);
+        hiba = true
+        egyezoMl = true
     }
     //uj koktel gomb funkcioja
     document.getElementById('visszaGomb').addEventListener('click', () => {
@@ -501,7 +511,6 @@ const AdatStorage = async () => {
     });
     // továbbítás a koktél oldalára
     document.getElementById('tovabb').addEventListener('click', () => {
-        console.log(data);
         window.location.href = `Koktel/${data.feltoltottid}`;
     });
 };

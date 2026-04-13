@@ -173,24 +173,65 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.length > 0) {
                                         let indokArr =
                                             rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
-                                        console.log(indokArr.length);
+                                        //console.log(indokArr.length);
+                                        //ez a valtozo tarolja el a teljes indok karakter hosszat
+                                        let indokArrKarakterSzam = 0;
+
+                                        for (let k = 0; k < indokArr.length; k++) {
+                                            for (let l = 0; l < indokArr[k].length; l++) {
+                                                indokArrKarakterSzam += 1;
+                                            }
+                                        }
 
                                         if (indokArr.length < 8) {
-                                            let jelentesekIndokok = document.createElement('li');
-                                            jelentesekIndokok.innerText =
-                                                rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                            jelentesekLista.appendChild(jelentesekIndokok);
-                                        } else if (indokArr.length >= 8) {
-                                            console.log('beleptem ide');
-
-                                            let indokString = '';
-                                            for (let k = 0; k < 8; k++) {
-                                                indokString += ' ' + indokArr[k];
+                                            if (indokArrKarakterSzam >= 50) {
+                                                let indokString = '';
+                                                let karakterSzamlalo = 0;
+                                                while (karakterSzamlalo < 50) {
+                                                    for (let k = 0; k < indokArr.length; k++) {
+                                                        indokString += ' ';
+                                                        for (let l = 0; l < indokArr[k].length; l++) {
+                                                            indokString += indokArr[k][l];
+                                                            karakterSzamlalo++;
+                                                        }
+                                                    }
+                                                }
+                                                let jelentesekIndokok = document.createElement('li');
+                                                jelentesekIndokok.innerText = indokString + '...';
+                                                jelentesekLista.appendChild(jelentesekIndokok);
+                                            } else {
+                                                let jelentesekIndokok = document.createElement('li');
+                                                jelentesekIndokok.innerText =
+                                                    rows.felhasznalok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                                jelentesekLista.appendChild(jelentesekIndokok);
                                             }
-                                            let jelentesekIndokok = document.createElement('li');
-                                            indokString += '...';
-                                            jelentesekIndokok.innerText = indokString;
-                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        } else if (indokArr.length >= 8) {
+                                            //console.log('beleptem ide');
+                                            if (indokArrKarakterSzam >= 50) {
+                                                let indokString = '';
+                                                let karakterSzamlalo = 0;
+                                                while (karakterSzamlalo < 50) {
+                                                    for (let k = 0; k < indokArr.length; k++) {
+                                                        indokString += ' ';
+                                                        for (let l = 0; l < indokArr[k].length; l++) {
+                                                            indokString += indokArr[k][l];
+                                                            karakterSzamlalo++;
+                                                        }
+                                                    }
+                                                }
+                                                let jelentesekIndokok = document.createElement('li');
+                                                jelentesekIndokok.innerText = indokString + '...';
+                                                jelentesekLista.appendChild(jelentesekIndokok);
+                                            } else {
+                                                let indokString = '';
+                                                for (let k = 0; k < 8; k++) {
+                                                    indokString += ' ' + indokArr[k];
+                                                }
+                                                let jelentesekIndokok = document.createElement('li');
+                                                indokString += '...';
+                                                jelentesekIndokok.innerText = indokString;
+                                                jelentesekLista.appendChild(jelentesekIndokok);
+                                            }
                                         }
                                     }
                                 }
@@ -416,23 +457,63 @@ document.addEventListener('DOMContentLoaded', () => {
                                         let indokArr =
                                             rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
                                         console.log(indokArr.length);
+                                        let indokArrKarakterSzam = 0;
+
+                                        for (let k = 0; k < indokArr.length; k++) {
+                                            for (let l = 0; l < indokArr[k].length; l++) {
+                                                indokArrKarakterSzam += 1;
+                                            }
+                                        }
 
                                         if (indokArr.length < 8) {
-                                            let jelentesekIndokok = document.createElement('li');
-                                            jelentesekIndokok.innerText =
-                                                rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                            jelentesekLista.appendChild(jelentesekIndokok);
-                                        } else if (indokArr.length >= 8) {
-                                            console.log('beleptem ide');
-
-                                            let indokString = '';
-                                            for (let k = 0; k < 8; k++) {
-                                                indokString += ' ' + indokArr[k];
+                                            if (indokArrKarakterSzam >= 50) {
+                                                let indokString = '';
+                                                let karakterSzamlalo = 0;
+                                                while (karakterSzamlalo < 50) {
+                                                    for (let k = 0; k < indokArr.length; k++) {
+                                                        indokString += ' ';
+                                                        for (let l = 0; l < indokArr[k].length; l++) {
+                                                            indokString += indokArr[k][l];
+                                                            karakterSzamlalo++;
+                                                        }
+                                                    }
+                                                }
+                                                let jelentesekIndokok = document.createElement('li');
+                                                jelentesekIndokok.innerText = indokString + '...';
+                                                jelentesekLista.appendChild(jelentesekIndokok);
+                                            } else {
+                                                let jelentesekIndokok = document.createElement('li');
+                                                jelentesekIndokok.innerText =
+                                                    rows.koktelok[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                                jelentesekLista.appendChild(jelentesekIndokok);
                                             }
-                                            let jelentesekIndokok = document.createElement('li');
-                                            indokString += '...';
-                                            jelentesekIndokok.innerText = indokString;
-                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        } else if (indokArr.length >= 8) {
+                                            //console.log('beleptem ide');
+                                            if (indokArrKarakterSzam >= 50) {
+                                                let indokString = '';
+                                                let karakterSzamlalo = 0;
+                                                while (karakterSzamlalo < 50) {
+                                                    for (let k = 0; k < indokArr.length; k++) {
+                                                        indokString += ' ';
+                                                        for (let l = 0; l < indokArr[k].length; l++) {
+                                                            indokString += indokArr[k][l];
+                                                            karakterSzamlalo++;
+                                                        }
+                                                    }
+                                                }
+                                                let jelentesekIndokok = document.createElement('li');
+                                                jelentesekIndokok.innerText = indokString + '...';
+                                                jelentesekLista.appendChild(jelentesekIndokok);
+                                            } else {
+                                                let indokString = '';
+                                                for (let k = 0; k < 8; k++) {
+                                                    indokString += ' ' + indokArr[k];
+                                                }
+                                                let jelentesekIndokok = document.createElement('li');
+                                                indokString += '...';
+                                                jelentesekIndokok.innerText = indokString;
+                                                jelentesekLista.appendChild(jelentesekIndokok);
+                                            }
                                         }
                                     }
                                 }
@@ -598,22 +679,64 @@ document.addEventListener('DOMContentLoaded', () => {
                                             rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka.split(' ');
                                         console.log(indokArr.length);
 
-                                        if (indokArr.length < 8) {
-                                            let jelentesekIndokok = document.createElement('li');
-                                            jelentesekIndokok.innerText =
-                                                rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka;
-                                            jelentesekLista.appendChild(jelentesekIndokok);
-                                        } else if (indokArr.length >= 8) {
-                                            console.log('beleptem ide');
+                                        let indokArrKarakterSzam = 0;
 
-                                            let indokString = '';
-                                            for (let k = 0; k < 8; k++) {
-                                                indokString += ' ' + indokArr[k];
+                                        for (let k = 0; k < indokArr.length; k++) {
+                                            for (let l = 0; l < indokArr[k].length; l++) {
+                                                indokArrKarakterSzam += 1;
                                             }
-                                            let jelentesekIndokok = document.createElement('li');
-                                            indokString += '...';
-                                            jelentesekIndokok.innerText = indokString;
-                                            jelentesekLista.appendChild(jelentesekIndokok);
+                                        }
+
+                                        if (indokArr.length < 8) {
+                                            if (indokArrKarakterSzam >= 50) {
+                                                let indokString = '';
+                                                let karakterSzamlalo = 0;
+                                                while (karakterSzamlalo < 50) {
+                                                    for (let k = 0; k < indokArr.length; k++) {
+                                                        indokString += ' ';
+                                                        for (let l = 0; l < indokArr[k].length; l++) {
+                                                            indokString += indokArr[k][l];
+                                                            karakterSzamlalo++;
+                                                        }
+                                                    }
+                                                }
+                                                let jelentesekIndokok = document.createElement('li');
+                                                jelentesekIndokok.innerText = indokString + '...';
+                                                jelentesekLista.appendChild(jelentesekIndokok);
+                                            } else {
+                                                let jelentesekIndokok = document.createElement('li');
+                                                jelentesekIndokok.innerText =
+                                                    rows.kommentek[i][0].jelentesIndokok[0][j].JelentesIndoka;
+                                                jelentesekLista.appendChild(jelentesekIndokok);
+                                            }
+                                        } else if (indokArr.length >= 8) {
+                                            //console.log('beleptem ide');
+
+                                            if (indokArrKarakterSzam >= 50) {
+                                                let indokString = '';
+                                                let karakterSzamlalo = 0;
+                                                while (karakterSzamlalo != 50) {
+                                                    for (let k = 0; k < indokArr.length; k++) {
+                                                        indokString += ' ';
+                                                        for (let l = 0; l < indokArr[k].length; l++) {
+                                                            indokString += indokArr[k][l];
+                                                            karakterSzamlalo++;
+                                                        }
+                                                    }
+                                                }
+                                                let jelentesekIndokok = document.createElement('li');
+                                                jelentesekIndokok.innerText = indokString + '...';
+                                                jelentesekLista.appendChild(jelentesekIndokok);
+                                            } else {
+                                                let indokString = '';
+                                                for (let k = 0; k < 8; k++) {
+                                                    indokString += ' ' + indokArr[k];
+                                                }
+                                                let jelentesekIndokok = document.createElement('li');
+                                                indokString += '...';
+                                                jelentesekIndokok.innerText = indokString;
+                                                jelentesekLista.appendChild(jelentesekIndokok);
+                                            }
                                         }
                                     }
                                 }

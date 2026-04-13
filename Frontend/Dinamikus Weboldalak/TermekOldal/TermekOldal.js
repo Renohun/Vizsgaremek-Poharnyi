@@ -67,16 +67,17 @@ const oldalGenerálás =  async () =>{
     if (LekertTermekek.termek.length == 0) {
         window.location.href = "/HianyzoTermek"
     }
-
-    const lekertKep = await  KepLekeres();
     //Cim
     let termekCimHely = document.getElementById("TermekCim")
     termekCimHely.innerHTML = LekertTermekek.termek[0].TermekCim
 
     //KépBetöltés
-    let KepUrl = URL.createObjectURL(lekertKep)
+    let url = window.location.href.split('/');
+    let id = url[4];
+    console.log(id);
+    const data = await TermekKepLekeres(`http://127.0.0.1:3000/api/Webshop/Keplekeres/${id}`)//termek/keplekeres nem mukodik
     let KepHely = document.getElementById("TermekImg")
-    KepHely.setAttribute("src",URL.createObjectURL(lekertKep))
+    KepHely.setAttribute("src",URL.createObjectURL(data))
     console.log(KepHely)
 
     //tovabbi adatok betöltése
@@ -119,7 +120,7 @@ const oldalGenerálás =  async () =>{
     console.log(HasonlokData)
     for (let i = 0; i < HasonlokData.hasonlok.length; i++)
     {
-        const KepData = await TermekKepLekeres(`http://127.0.0.1:3000/api/termek/KepLekeres/${HasonlokData.hasonlok[i].TermekID}`)
+        const KepData = await TermekKepLekeres(`http://127.0.0.1:3000/api/Webshop/KepLekeres/${HasonlokData.hasonlok[i].TermekID}`)
         let KepUrl = URL.createObjectURL(KepData)
         let kartya = document.createElement("div")
         kartya.classList.add("Termek")
@@ -189,12 +190,16 @@ const oldalGenerálás =  async () =>{
     {
         //a felhasználó nem tud a raktáron lévő mennyiségnél többet rendelni!
         let max =LekertTermekek.termek[0].TermekKeszlet;
+        let min 
         mennyisegHely.max = max;
         mennyisegHely.addEventListener("change",()=>{
             
             if (mennyisegHely.value > max) 
             {
                 mennyisegHely.value = max;  
+            }
+            if(mennyisegHely.value < 1){
+                mennyisegHely.value = 1
             }
         })
         PolcLabelHely.innerHTML = "Utolsó Darabok!"
@@ -215,6 +220,9 @@ const oldalGenerálás =  async () =>{
             if (mennyisegHely.value > max) /*why??*/ 
             {
                 mennyisegHely.value = max;  
+            }
+            if(mennyisegHely.value < 1){
+                mennyisegHely.value = 1
             }
         })
         
@@ -310,9 +318,15 @@ const ertekeles = (ErtekeltE,ertek) =>
                 }
             }
             console.log(ertekszam, Termekid)
-            await PostFetch("/api/Termek/ErtekelesKuldes",{Tid:Termekid,ertek:ertekszam})
-            
-           oldalGenerálás()
+            if (ertekszam == 0) 
+            {
+                let ertszov = document.getElementById("ErtekelPar")
+                ertszov.innerHTML = "üres értékelést nem tud küldeni!"
+            }
+            else
+            {await PostFetch("/api/Termek/ErtekelesKuldes",{Tid:Termekid,ertek:ertekszam})
+                oldalGenerálás()
+            }
         })
     }
 }
