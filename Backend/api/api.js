@@ -737,7 +737,7 @@ router.patch('/jelszoValtoztatas', async (req, res) => {
 router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
         let query =
-            'SELECT JelentesID, JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesAllapota LIKE 0 ORDER BY JelentesMennyisege DESC';
+            'SELECT JelentesID, JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesAllapota LIKE 0 AND JelentesMennyisege > 0 ORDER BY JelentesMennyisege DESC';
 
         let jelentesIndokaQuery = 'SELECT JelentesIndoka FROM jelentők WHERE JelentésID LIKE ?';
 

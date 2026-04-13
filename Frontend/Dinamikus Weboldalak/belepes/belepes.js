@@ -64,7 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
-                window.location.href = '/';
+                function getCookieURL(name) {
+                    const cookies = document.cookie.split('; ');
+                    const cookie = cookies.find((c) => c.startsWith(name + '='));
+                    return cookie ? decodeURIComponent(cookie.split('=').slice(1).join('=')) : null;
+                }
+
+                window.location.href = getCookieURL('lastURL');
             });
         }
     });
