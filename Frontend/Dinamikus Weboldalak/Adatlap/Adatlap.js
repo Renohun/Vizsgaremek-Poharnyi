@@ -390,7 +390,6 @@ async function JelentesekLekeres() {
     else{
         for (let i = 0; i < valasz.adat.length; i++) {
             let JelentesDiv=document.createElement("div")
-            let sortör=document.createElement("hr")
             let JelentesIndok=document.createElement("div")
             let JelentesNev=document.createElement("div")
             let JelentesText=document.createElement("div")
@@ -448,6 +447,11 @@ async function JelentesekLekeres() {
             JelentesDiv.appendChild(JelentesAllapota)
             JelentesDiv.appendChild(JelentesVisszavonasa)
             hova.appendChild(JelentesDiv)
+        }
+        while (hova.childNodes.length%4!=0) {
+            let kamukartyaDiv=document.createElement("div")
+            kamukartyaDiv.classList.add("col-10","col-sm-7","col-md-7","col-lg-6","col-xl-5","col-xxl-3","mb-1")
+            hova.appendChild(kamukartyaDiv)
         }
     }
 }
