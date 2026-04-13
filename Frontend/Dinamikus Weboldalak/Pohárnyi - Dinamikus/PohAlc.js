@@ -104,19 +104,18 @@ function koktelRendereles(koktelok) {
             cim.innerText = koktel.KoktelCim;
             cardBody.appendChild(cim);
 
-            if (koktel.ertekeles == null) {
+            if (koktel.ertekeles == 0) {
                 let ertekeles = document.createElement('span');
-                ertekeles.innerText = 'Értékelés: ☆☆☆☆☆';
+                ertekeles.innerText = 'Nincs meg ertekeles!';
                 cardBody.appendChild(ertekeles);
-                } 
-                else {
-                let csillagert=Math.ceil(koktel.ertekeles)
-                let csillagok=""
+            } else {
+                let csillagert = Math.ceil(koktel.ertekeles);
+                let csillagok = '';
                 for (let i = 0; i < csillagert; i++) {
-                    csillagok+="★"
+                    csillagok += '★';
                 }
-                for (let i = 0; i < 5-csillagert; i++) {
-                        csillagok+="☆"
+                for (let i = 0; i < 5 - csillagert; i++) {
+                    csillagok += '☆';
                 }
                 csillagok += '(' + Math.round(koktel.ertekeles * 10) / 10 + ')';
 
