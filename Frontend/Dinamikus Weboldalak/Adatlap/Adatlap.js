@@ -309,6 +309,7 @@ async function AdatlapLekeres(){
         AdatlapJelszo.setAttribute("disabled","true")
         AdatlapJelszo2.setAttribute("disabled","true")        
         AdatlapJelszo2.setAttribute("hidden","true")        
+        AdatlapJelszoLabel2.setAttribute("hidden","true")        
         AdatlapJelszo.setAttribute("type","password")
         AdatlapJelszo2.setAttribute("type","password")
         document.getElementById("pwShowDiv").setAttribute("hidden","true")
@@ -611,11 +612,9 @@ function fioktorles(){
         //Ellenben ha jól írta be
         else{
             //Kitöröljük a fiókját
-            await AdatPost("/api/AdatlapLekeres/Fioktorles",null,"DELETE")
-            //Kijelentkeztetjük
-            await AdatPost("/api/Kijelentkezes",null,"POST")
+            AdatPost("/api/AdatlapLekeres/Fioktorles",null,"DELETE")
             //Kidobjuk a főoldalra
-            window.location.href="/"
+            window.location.reload()
         } 
     },{once:true})
     //Ha meggondolja magát
