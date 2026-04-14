@@ -2302,8 +2302,8 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
             const mennyisegLekeres = 'SELECT TermekKeszlet FROM webshoptermek WHERE TermekID = ?';
             const [MennyisegLe] = await DBconnetion.promise().query(mennyisegLekeres, [id]);
 
-            const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ?';
-            const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id]);
+            const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? &&  KosarID = ?';
+            const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id,UserID]);
             if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1) {
                 response.status(200).json({ hiba: 'raktar' });
             } else {
