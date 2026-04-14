@@ -210,7 +210,7 @@ const oldalGenerálás =  async () =>{
     {
         //a felhasználó maximum 99 terméket tud rendelni!
       
-        let max = mennyisegHely.max
+        let max = 100
           if (max > LekertTermekek.termek[0].TermekKeszlet) 
             {
                 max = LekertTermekek.termek[0].TermekKeszlet
