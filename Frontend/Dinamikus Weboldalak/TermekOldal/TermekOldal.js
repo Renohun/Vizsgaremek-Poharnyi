@@ -3,9 +3,11 @@
 async function GETfetch(url) {
     try {
         const data = await fetch(url);
+       
         if (data.ok) {
             return await data.json();
-        } else {
+        }
+         else {
             throw new err('Hiba tortent a fetch-el');
         }
     } catch (err) {
@@ -18,10 +20,32 @@ const PostFetch=async(url,object)=>{
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(object)
     })
+      if (valasz.redirected) 
+        {
+            console.log("asd")
+        }
     if (valasz.ok) {
         return valasz.json()
     }
 }
+const KosarPost = async (url,object) => {
+    try {
+        const valasz = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:JSON.stringify(object)
+        });
+        if (valasz.redirected) {
+            //console.log(valasz.url);
+            window.location.href = valasz.url;
+        }
+        if (valasz.ok) {
+            return valasz.json();
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 const TermekKepLekeres=async(url)=>{
     try {
         const valasz=await fetch(url,{
@@ -210,7 +234,7 @@ const oldalGenerálás =  async () =>{
     {
         //a felhasználó maximum 99 terméket tud rendelni!
       
-        let max = 100
+        let max = 100;
           if (max > LekertTermekek.termek[0].TermekKeszlet) 
             {
                 max = LekertTermekek.termek[0].TermekKeszlet
@@ -339,7 +363,7 @@ const KosarbaRak = async()=>
 
     let postObj = {id:Termekid,mennyiseg:mennyiseg}
 
-    const KosarData = await PostFetch("/api/Termek/KosarKuldes",postObj)
+    const KosarData = await KosarPost("/api/Termek/KosarKuldes",postObj)
     console.log(KosarData)
     if(KosarData.hiba == "bejel")
     {

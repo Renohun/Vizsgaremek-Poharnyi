@@ -2288,8 +2288,7 @@ router.post('/termek/ErtekelesKuldes/', async (request, response) => {
 });
 
 router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, response) => {
-    if (request.cookies.auth_token != null) //be van e jelentkezve a felhasználó
-    {
+    
         try {
             const id = request.body.id;
 
@@ -2330,9 +2329,7 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
             console.log(error);
             response.status(500).json({ hiba: error });
         }
-    } else {
-        response.status(200).json({ hiba: 'bejel' });
-    }
+    
 });
 
 router.get('/Termek/HasonloTermekek/:kateg/:id', async (request, response) => {
