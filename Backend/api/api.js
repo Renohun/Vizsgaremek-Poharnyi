@@ -2634,9 +2634,7 @@ router.post('/Webshop/szures', async (request, response) => {
     }
 });
 
-router.post('/Webshop/KosarKuldes/:id', async (request, response) => {
-    if (request.cookies.auth_token != null) //be van e jelentkezve a felhasználó
-    {
+router.post('/Webshop/KosarKuldes/:id', authenticationMiddleware, async (request, response) => {
         try {
             const id = request.params.id;
             const mennyiseg = 1;
@@ -2669,7 +2667,6 @@ router.post('/Webshop/KosarKuldes/:id', async (request, response) => {
             console.log(error);
             response.status(500).json({ hiba: error });
         }
-    }
 });
 router.get('/WebShop/TermekErtekeles/:id', async (request, response) => {
     try {
