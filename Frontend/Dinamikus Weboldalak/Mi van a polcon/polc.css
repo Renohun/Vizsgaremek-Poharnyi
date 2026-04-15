@@ -1,0 +1,46 @@
+.form-control{
+    flex-grow: inherit;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border: 0px;
+    border-top: 1px solid #ced4da;
+    border-left: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+}
+
+.form-select{
+    border-top-left-radius: 0px;
+}
+#hozzaad{
+    background-color: green;
+    color: aliceblue;
+    border-top: 1px solid #ced4da;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-right: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+}
+
+#ideOpciok{
+    background-color: rgb(182, 182, 182) ;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.bgomb,.ogomb{
+    border: 0px;
+    padding: 0px;
+    background: transparent;
+}
+.ogomb{
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: left;
+    font-size: large;
+}
+.ogomb:hover{
+    background-color: rgb(150, 150, 150);
+}
+.badge{
+    --bs-badge-font-weight: 500;
+}
