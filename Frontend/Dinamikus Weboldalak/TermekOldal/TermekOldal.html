@@ -58,7 +58,7 @@
                             />
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
-                                <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item" id="adminPanelHref"><a href="/AdminPanel">Admin Panel</a></li>
                                 <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
                             </ul>
                         </div>
@@ -90,16 +90,13 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div id="hasonloTermekek">
                                 <h2>Hasonló Termékek</h2>
-                                
-                                    <div id="TermekSor">
-                                        
-                                    </div>
+
+                                <div id="TermekSor"></div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
 
@@ -121,15 +118,14 @@
                     <div id="Ertekeles">
                         <h2 id="ertekelesCim">Értékelés</h2>
                         <div id="csillagok">
-                            <input type="button" value="☆" id="star1" class="btn fs-1 p-0 border-0 csillag">
-                            <input type="button" value="☆" id="star2" class="btn fs-1 p-0 border-0 csillag">
-                            <input type="button" value="☆" id="star3" class="btn fs-1 p-0 border-0 csillag">
-                            <input type="button" value="☆" id="star4" class="btn fs-1 p-0 border-0 csillag">
-                            <input type="button" value="☆" id="star5" class="btn fs-1 p-0 border-0 csillag">
+                            <input type="button" value="☆" id="star1" class="btn fs-1 p-0 border-0 csillag" />
+                            <input type="button" value="☆" id="star2" class="btn fs-1 p-0 border-0 csillag" />
+                            <input type="button" value="☆" id="star3" class="btn fs-1 p-0 border-0 csillag" />
+                            <input type="button" value="☆" id="star4" class="btn fs-1 p-0 border-0 csillag" />
+                            <input type="button" value="☆" id="star5" class="btn fs-1 p-0 border-0 csillag" />
                         </div>
                         <button type="button" id="ErtekelesKuldes" value="">Küldés</button>
                         <p id="ErtekelPar">Kérjük értékelje a terméket!</p>
-                        
                     </div>
                 </div>
             </div>
