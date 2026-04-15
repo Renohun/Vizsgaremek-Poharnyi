@@ -7,6 +7,10 @@
     border-left: 1px solid #ced4da;
     border-bottom: 1px solid #ced4da;
 }
+
+.form-select{
+    border-top-left-radius: 0px;
+}
 #hozzaad{
     background-color: green;
     color: aliceblue;
@@ -29,6 +33,7 @@
     background: transparent;
 }
 .ogomb{
+    margin-bottom: 5px;
     width: 100%;
     text-align: left;
     font-size: large;

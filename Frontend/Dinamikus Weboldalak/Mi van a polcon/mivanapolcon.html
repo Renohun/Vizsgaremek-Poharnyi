@@ -64,7 +64,7 @@
         </nav>
         <div class="container mt-2">
             <div class="text-center fs-1">
-                Polc Koktél
+                Mi van a polcon?
             </div>
             <div class="container">
                 <label for="osszetevo" class="form-label">Add meg mi van nálad otthon</label>
@@ -72,12 +72,31 @@
                         <input type="text" class="form-control" id="osszetevo">
                         <input type="button" value="Hozzáadás" class="btn" id="hozzaad" disabled>
                 </div>   
-                <div id="ideOpciok" class="" hidden></div>
+                <select id="ideOpciok" class="form-select" size="10" autofocus hidden></select>
                 <div id="ideJelzok" class="d-flex mt-2 flex-wrap">
                 </div>
                 <div class="row w-100 mt-3 d-flex justify-content-center ms-0">
                     <input type="button" value="Keresés" class="btn btn-success" id="kereses">   
                 </div>
+                <div class="row mt-2" id="ideKoktel">
+
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" id="Visszajelzes">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="text-center mt-1">
+                  <h3>Hiányos Adat</h3>
+                  <hr>
+                </div>
+                <div class="p-3 row">
+                    <h5 id="infoSzoveg" class="text-center">
+                        Kérem válasszon ki, vagy írjon be egy összetevőt a keresés előtt!
+                    </h5>
+                    <button type="button" class="btn btn-success"id="Okezo">Rendben</button>
+                </div>
+              </div>
             </div>
         </div>
         <script type="module" src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>

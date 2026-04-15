@@ -2180,14 +2180,27 @@ router.post("/PolcKoktel/HelyesKoktelLekeres",async(request,response)=>{
 
     try {
         let osszetevok=request.body.osszetevok
-        console.log(osszetevok);
-        
-        const koktelLekeres=await lekeres("SELECT KoktélID FROM koktelokosszetevoi WHERE Osszetevő IN (?) GROUP BY KoktélID")
-        const [valasz]=await lekeres(koktelLekeres,[osszetevok])
+        const koktelLekeres="SELECT KoktélID FROM koktelokosszetevoi WHERE Osszetevő IN (?) GROUP BY KoktélID"
+        const koktelAdat="SELECT KoktélID,KoktelCim,BoritoKepUtvonal FROM koktél WHERE KoktélID LIKE ?"
+        const koktelErtekeles="SELECT AVG(Ertekeles) AS AtlagErt FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+        const koktelOsszetevok="SELECT Osszetevő FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+        const koktelok=await lekeres(koktelLekeres,[osszetevok])
+
+        let koktelAdatok=[]
+        for (let i = 0; i < koktelok.length; i++) {
+            let adatok=(await lekeres(koktelAdat,koktelok[i].KoktélID))[0]
+            console.log(adatok);
+            
+            let ertekeles=(await lekeres(koktelErtekeles,[koktelok[i].KoktélID,"Koktél"]))[0]
+            console.log(ertekeles);
+            
+            let osszetevok=await lekeres(koktelOsszetevok,koktelok[i].KoktélID)
+            koktelAdatok.push({adatok,ertekeles,osszetevok})
+        }
         response.status(200).json({
             message:"siker",
-            adat:valasz
-        })
+            adatok:koktelAdatok
+        })  
     } 
     catch (error) {
         console.log(error);
