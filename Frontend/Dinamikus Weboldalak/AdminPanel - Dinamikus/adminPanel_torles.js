@@ -27,7 +27,7 @@ async function POSTfetch(url, obj) {
 }
 document.addEventListener('DOMContentLoaded', () => {
     (async () => {
-        const data = await GETfetch('http://127.0.0.1:3000/api/koktelNevek');
+        const data = await GETfetch('/api/koktelNevek');
         const selectElement = document.getElementById('koktelSelect');
 
         data.lekertAdat.forEach((nev) => {
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('torlesGomb').addEventListener('click', async () => {
         const valasztottErtek = document.getElementById('koktelSelect').value;
         if (valasztottErtek.length > 0) {
-            const data = await POSTfetch(`http://127.0.0.1:3000/api/koktelTorles/${valasztottErtek}`);
+            const data = await POSTfetch(`/api/koktelTorles/${valasztottErtek}`);
             var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
             modalElement.show();
 

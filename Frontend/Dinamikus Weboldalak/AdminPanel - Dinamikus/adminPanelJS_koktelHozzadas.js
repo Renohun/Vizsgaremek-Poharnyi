@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     (async () => {
-        const data = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/JelvenyekLetoltese');
+        const data = await POSTfetch('/api/AdminPanel/JelvenyekLetoltese');
 
         const koktelErossegeSelect = document.getElementById('koktelErossegek');
         const koktelIzeSelect = document.getElementById('koktelIz');
@@ -276,18 +276,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 (async () => {
                     const nevObj = { nev: koktelNev.value };
 
-                    const ellenorzes = await POSTfetch(
-                        'http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes/NevEllenorzes',
-                        nevObj
-                    );
+                    const ellenorzes = await POSTfetch('/api/AdminPanel/KoktelFeltoltes/NevEllenorzes', nevObj);
                     //alert(ellenorzes.duplikacio);
                     //alert(alapMennyiseg.value);
 
                     if (ellenorzes.duplikacio == false) {
-                        const kapottFajlNev1 = await POSTkepFeltoltes(
-                            'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
-                            kepTarolas
-                        );
+                        const kapottFajlNev1 = await POSTkepFeltoltes('/api/AdatlapLekeres/KepFeltoltes', kepTarolas);
                         //alert(kapottFajlNev.message);
                         //alert('teszt');
                         const POSTobj = {
@@ -301,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             fajlNeve: kapottFajlNev1.message
                         };
 
-                        await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/KoktelFeltoltes', POSTobj);
+                        await POSTfetch('/api/AdminPanel/KoktelFeltoltes', POSTobj);
                         //alert(JSON.stringify(data));
                         var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
                         modalElement.show();

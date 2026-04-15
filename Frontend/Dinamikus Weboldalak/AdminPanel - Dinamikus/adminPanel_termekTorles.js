@@ -26,7 +26,7 @@ async function DELETEfetch(url) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const termekek = await GETfetch('http://127.0.0.1:3000/api/AdminPanel/TermekLekeres');
+    const termekek = await GETfetch('/api/AdminPanel/TermekLekeres');
     const selectTag = document.getElementById('termekTorles');
     for (let index = 0; index < termekek.result.length; index++) {
         const optTag = document.createElement('option');
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('termekTorlesGomb').addEventListener('click', async () => {
         const id = document.getElementById('termekTorles').value;
         if (id.length > 0) {
-            const data = await DELETEfetch(`http://127.0.0.1:3000/api/AdminPanel/TermekTorles/${id}`);
+            const data = await DELETEfetch(`/api/AdminPanel/TermekTorles/${id}`);
             var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
             modalElement.show();
 
