@@ -11,10 +11,10 @@
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter shadow">
             <div class="container-fluid hatter">
                 <div class="navbar-brand">
-                    <a class="navbar-brand" id="marka" href="#">Pohárnyi</a>
+                    <a class="navbar-brand" id="marka" href="/Fooldal">Pohárnyi</a>
                     <p id="alszoveg">Az online koktélbár</p>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable">
@@ -23,41 +23,54 @@
                 <div class="navbar-collapse collapse justify-content-between" id="collapsable">
                     <div class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active jelenlegi" href="/Fooldal" aria-current="page">Főoldal</a>
+                            <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/Koktelok" class="nav-link">Koktelok</a>
+                            <a href="/Koktelok " class="nav-link">Koktelok</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/PolcKoktel" class="nav-link">Mi van a polcon?</a>
+                            <a href="/WebShop" class="nav-link">Webshop</a>
+                        </li>                        
+                        <li class="nav-item">
+                            <a href="/PolcKoktel" class="nav-link active jelenlegi">Mi van a polcon?</a>
                         </li>
                     </div>
-                    <div>
-                        <input type="button" value="" id="ThemeSwitcher" />
-                        <a href="/Regisztralj">
-                            <input
-                                type="button"
-                                class="btn btn-secondary nav-item"
-                                value="Regisztárció"
-                                id="regisztracio"
+                    <div class="navbar-nav d-flex align-items-center">
+                        <div id="ThemeSwitcher">
+                            <img
+                                src="../kellékek/free-moon-icon-2304-thumb.png"
+                                id="themeSwitcherimg"
+                                style="height: 50px; width: 50px"
+                                alt=""
                             />
+                        </div>
+                        <a href="/Regisztralj" id="regisztracio">
+                            <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
-                        <a href="/LepjBe">
-                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" id="belepes" />
+                        <a href="/LepjBe" id="belepes">
+                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" />
                         </a>
 
-                        <a href="/Keszites">
+                        <a href="/Keszites" id="sajatKoktelKeszites" hidden>
                             <input
                                 type="button"
-                                class="nav-item btn btn-warning"
-                                hidden
+                                class="nav-item btn btn-warning mx-2"
                                 value="Saját koktél létrehozása"
-                                id="sajatKoktelKeszites"
                             />
                         </a>
-                        <a href="/Adatlap">
-                            <input type="button" class="nav-item profil" hidden value="     " id="Profile" />
-                        </a>
+                        <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                            <img
+                                class="nav-link dropdown-toggle profil"
+                                data-bs-toggle="dropdown"
+                                role="button"
+                                aria-expanded="false"
+                            />
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
+                                <li class="dropdown-item" id="adminPanelHref"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -100,9 +113,9 @@
             </div>
         </div>
         <script type="module" src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
-        <script type="module" src="../kellékek/navBar.js"></script>
-        <script type="module" src="../kellékek/themeSwitcher.js"></script>
         <script type="module" src="../Mi van a polcon/polc.js"></script>
+        <script type="module" src="../kellékek/themeSwitcher.js"></script>
+        <script type="module" src="../kellékek/navBar.js"></script>
 
     </body>
 </html>

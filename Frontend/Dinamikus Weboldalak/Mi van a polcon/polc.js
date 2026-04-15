@@ -98,6 +98,8 @@ document.addEventListener("DOMContentLoaded",async()=>{
         if (vane==false) {
             let valasztek=document.createElement("option")
             valasztek.innerHTML="Nincs ilyen összetevőnk"
+            valasztek.setAttribute("disabled","")
+            valasztek.classList.add("text-dark")
             opciokLista.innerHTML=""
             opciokLista.appendChild(valasztek)
             hozzaadasGomb.setAttribute("disabled","")
