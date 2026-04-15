@@ -18,6 +18,9 @@ const PostFetch=async(url,object)=>{
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(object)
     })
+    if(valasz.redirected){
+        window.location.href = valasz.url;
+    }
     if (valasz.ok) {
         return valasz.json()
     }
