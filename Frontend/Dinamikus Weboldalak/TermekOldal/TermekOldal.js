@@ -64,6 +64,7 @@ const KepLekeres = async () =>
 }
 
 const oldalGenerálás =  async () =>{
+    
     //Backendből kapott objectek
     const LekertTermekek = await termek_lekeres();
     console.log("awe")
@@ -341,19 +342,22 @@ const KosarbaRak = async()=>
     let Termekid = url[4];
 
     let postObj = {id:Termekid,mennyiseg:mennyiseg}
-
+    let hiba = false;
     const KosarData = await PostFetch("/api/Termek/KosarKuldes",postObj)
     console.log(KosarData)
     if(KosarData.hiba == "bejel")
     {
         alert("A termék kosárba helyezéséhez kérem jelentkezzen be!")
     }
-    else if(KosarData.Siker != null){
-        alert("Sikeresen kosárba rakta a terméket!")
-    }
     else if(KosarData.hiba == "raktar"){
-        alert("nincs elég termék raktáron, vagy túl sokat próbált egyszerre rendelni!")
+      hiba = true
     }
+    if (hiba == true) {
+         modalHiba(hiba);
+    }else{
+        modalJo()
+    }
+   
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -365,7 +369,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     kosarGomb.addEventListener("click",KosarbaRak)
 
     var adat = document.getElementById('Tbtn');
-
+    let tovGomb = document.getElementById("tovabb")
+    tovGomb.addEventListener("click",()=>{
+        window.location.href = "/Adatlap"
+    })
     //mennyiség maximalizálása
     adat.addEventListener('click', function () {
             this.classList.add('active');
@@ -379,3 +386,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     
 });
+const modalHiba = (hiba)=>{
+//hibás kitöltés kezelése
+        
+        document.getElementById('vissza').style.display = 'block';
+        document.getElementById('Sokhiba').style.display = 'block';
+        document.getElementById('siker').setAttribute('hidden', true);
+         document.getElementById('tovabb').setAttribute('hidden', true);
+         hiba = false;
+        
+}
+const modalJo = ()=>{
+//hibás kitöltés kezelése
+        
+        document.getElementById('Sokhiba').style.display = 'none';
+    document.getElementById('vissza').style.display = 'none';
+    document.getElementById('siker').removeAttribute('hidden',false);
+    document.getElementById('tovabb').removeAttribute('hidden', true);
+}
