@@ -2128,6 +2128,14 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
     try {
         const felhaszanalo = jwt.decode(req.cookies.auth_token).userID;
         const { nev, mennyiseg, alap, alkoholose, osszetevok, leiras, erosseg, iz, allergen, kepUtvonala } = req.body;
+        const nevEllenorzes = "SELECT KoktelCim FROM koktél WHERE KoktelCim LIKE ?"
+        const [nevek] = await DBconnetion.promise().query(nevEllenorzes,[nev])
+        if (nevek[0] != null )
+        {
+            res.status(208).json({
+                hiba:"duplicate"
+            })
+        }else{
         const UjKoktel =
             'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?,?)';
 
@@ -2164,15 +2172,10 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
         }
         let JelvenyIdLista = [];
         for (let i = 0; i < jelvenyek.lista.length; i++) {
-            console.log(jelvenyek.lista[i]);
             for (let j = 0; j < jelvenyek.lista[i].length; j++) {
                 try {
-                    console.log(jelvenyek.lista[i][j]);
                     const [JelvenyId] = await DBconnetion.promise().query(UjKoktelJelvenyId, [jelvenyek.lista[i][j]]);
-                    console.log(JelvenyId[0].JelvényID);
-                    // console.log(JelvenyId[i][j].JelvényID)
                     JelvenyIdLista.push(JelvenyId[0].JelvényID);
-                    console.log(JelvenyIdLista);
                 } catch (error) {
                     console.log(error);
                 }
@@ -2180,18 +2183,17 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
         }
 
         for (let id = 0; id < JelvenyIdLista.length; id++) {
-            //console.log(JelvenyIdLista)
             const [JelvenyFeltolt] = await DBconnetion.promise().query(UjKoktelJelvenyIdFeltoltes, [
                 feltoltottId,
                 JelvenyIdLista[id]
             ]);
         }
-        console.log('sikeres');
-        console.log(feltoltottId);
         res.status(200).json({
             feltoltottid: feltoltottId
         });
+    }
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: 'Sikertelen feltöltés', hiba: error });
     }
 });
