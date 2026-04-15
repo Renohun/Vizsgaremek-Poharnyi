@@ -55,7 +55,11 @@ const AdatPost = async (url, data) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
-        if (ertek.ok) {
+        if(ertek.status == "208")
+        {
+            return "hiba"
+        }
+        else if (ertek.ok) {
             return ertek.json();
         } else {
             console.error(ertek.statusText);
@@ -490,18 +494,15 @@ const AdatStorage = async () => {
     if (hiba == true) {
         KoktelAdatok.kepUtvonala = kepUtvonal.message;
         data = await AdatPost('/api/Keszites/Feltoltes', KoktelAdatok);
-    } else if (hiba == false) {
-        //hibás kitöltés kezelése
-        document.getElementById('Ujra').style.display = 'block';
-        document.getElementById('vissza').style.display = 'block';
-        document.getElementById('hiba').style.display = 'block';
-        if (egyezoMl == false) 
+        if (data == "hiba") //Ha a végpont 208-at ad vissza, akkor más hibaüzenetet jelenítünk meg.
         {
-           document.getElementById('hiba').innerHTML += " és/vagy Kérem ügyeljen arra, hogy a megadott mililiter mennyiségek egyezzenek!"
-        }
-        document.getElementById('siker').setAttribute('hidden', true);
-        document.getElementById('visszaGomb').setAttribute('hidden', true);
-        document.getElementById('tovabb').setAttribute('hidden', true);
+            modalHiba(true,"Nev")
+            hiba = true
+            egyezoMl = true
+        }  
+    } 
+        else if (hiba == false) {
+        modalHiba(egyezoMl,"sima")
         hiba = true
         egyezoMl = true
     }
@@ -514,3 +515,20 @@ const AdatStorage = async () => {
         window.location.href = `Koktel/${data.feltoltottid}`;
     });
 };
+const modalHiba = (Ml,milyen)=>{
+//hibás kitöltés kezelése
+        document.getElementById('Ujra').style.display = 'block';
+        document.getElementById('vissza').style.display = 'block';
+        document.getElementById('hiba').style.display = 'block';
+        if (Ml == false) 
+        {
+           document.getElementById('hiba').innerHTML += " és/vagy Kérem ügyeljen arra, hogy a megadott mililiter mennyiségek egyezzenek!"
+        }
+        if(milyen == "Nev"){
+            document.getElementById('hiba').innerHTML = "a Koktél neve már foglalt! Kérem probálja újra más névvel!"
+        }
+        document.getElementById('siker').setAttribute('hidden', true);
+        document.getElementById('visszaGomb').setAttribute('hidden', true);
+        document.getElementById('tovabb').setAttribute('hidden', true);
+        
+}
