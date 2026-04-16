@@ -108,10 +108,41 @@ VALUES
 (13,"Fahéjas Jack Daniels",15,"Ml"),
 (13,"Fehér Monster",100,"Ml")
 ;
+--DELETE ONCE DONE
+--("","",4,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,8000)
+
 INSERT INTO WebshopTermek(TermekCim,TermekLeiras,TermekKiszereles,TermekUrtartalom,TermekKeszlet,TermekKepUtvonal,TermekKategoria,TermekMarka,TermekSzarmazas,TermekAlkoholSzazalek,Ar)
 VALUES
+/*Merch*/
 ("Pohárnyi Mintájú Felespohár","Szeretnéd közvetlen támogatni a csapatunkat? Akarsz is cserébe érte valamit? Vásárold meg ezt!",4,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,8000),
-("Jack Daniels","Amerikai Import Whiskey",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,7650),
+("Pohárnyi Póló","Szeretnéd közvetlen támogatni a csapatunkat? Akarsz is cserébe érte valamit? Vásárold meg ezt a pólót!",1,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,5500),
+("Pohárnyi Mintájú Alátét","Szeretnéd reprezentálni a következő koktélod forrását a következő facebook-bejegyzésedben? Ez az alátét tökéletes erre!",4,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,4000),
+("Pohárnyi Mintájú Jégkockakészítő","Szeretnél stílusos jégkockákat csinálni? Ez a jégkockakészítő tökéletes erre!",1,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,22000),
+
+/*Eszköz*/
+/*https://en.wikipedia.org/wiki/Cocktail_shaker*/
+("Bostoni shaker","A Bostoni shaker egy koktél készítéshez használt eszköz, amely kettő fém részből áll. Az egyik részbe öntve a kívánt összetevőket, lezárjuk a másikkal, majd folyamatos fel-le mozgással összekeverjük őket. Az elkészült folyaékot érdemes szűrni",1,0.8,50,"what.webp","Eszköz","Pohárnyi","Magyarország",0,5000),
+("Szűrő","A koktélszűrő célja szétválasztani a jeget a folyadéltól, miután azt összekevertük.",1,null,40,"what.webp","Eszköz","Pohárnyi","Magyarország",0,4000),
+("Koktélkanál","Egy hosszú, spirálos nyelvű kanál, aminek célja a koktél higénikus elkeverése, illetve a spirált felhasználva folyadékok egymásra rétegezése.",2,null,200,"what.webp","Eszköz","Pohárnyi","Magyarország",0,2000),
+("Citrushámozó","Egy specializált hámozó, mely kis reszelékeket szed le a gyümölcs héjjából, amiket a koktélhoz lehet adni",1,null,200,"what.webp","Eszköz","Pohárnyi","Magyarország",0,2000),
+
+/*Whiskey*/
+("Jack Daniels","A Jack Daniels egy az Amerikai tennessee államból származó kukorica alapú, faszénnel szűrt whiskey.",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,7650),
+("Jack Daniels Fire","A Jack Daniels egy az Amerikai tennessee államból származó kukorica alapú, faszénnel szűrt whiskey. Ennek a változatnak fahéjas utóíze van",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,8500),
+("Jack Daniels Blackberry","A Jack Daniels egy az Amerikai tennessee államból származó kukorica alapú, faszénnel szűrt whiskey. Ez a változata áfonyás ízű",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,8500),
+("Jack Daniels Honey","A Jack Daniels egy az Amerikai tennessee államból származó kukorica alapú, faszénnel szűrt whiskey. Ennek a változatnak mézes utóíze van.",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,8500),
+
+/*Sör*/
+/*https://www.kifli.hu/11245-heineken-minosegi-ueveges-vilagos-soer-5   valaki tényleg ittasan írt egy endpoint nevet a sörnek.*/
+("Heineken Original","A Heineken egy lager sör különleges A-élesztő felhasználásával készül, amely az összetéveszthetetlenül harmonikus, enyhén gyümölcsös ízjegyeket garantálja.",1,0.5,1000,"what.webp","Sör","Heineken","Hollandia",5,500),
+/*https://idrinks.hu/asahi-super-dry-japan-sor*/
+("Asahi Super Dry","Kiválóan kiegyensúlyozott ízvilágával és könnyed, kevésbé keserű karakterével a japán sörök egyik prémium képviselője.",1,0.5,1000,"what.webp","Sör","Asahi","Japán",5,500),
+/*https://www.kifli.hu/91084-peroni-nastro-azzurro-stile-capri-minosegi-vilagos-soerkeverek-4-2*/
+("Peroni Stile Capr"," Peroni Stile Caprit a hozzáadott olasz citrom és olajfalevél kivonata teszi még egyedibbé, ezzel megidézve az olasz tengerpart jellegzetes nyári hangulatát ennek a prémium lager sörnek",1,0.5,1000,"what.webp","Sör","Peroni","Olaszország",5,500),
+/*https://www.dreherzrt.hu/markaink_oldal/arany-aszok/ */
+("Arany Ászok","Közép-Magyarország egyik legnépszerűbb sörét, az Arany Ászokot, Dreher Antal által 1841-ben kifejlesztett, és később a magyar söriparban is meghonosított ászokolási technika alapján főzik.Nevét aranyló színéről és kiváló minőségéről kapta Kiegyensúlyozott íze, aranyló ragyogása és tömör habja tükrözi a kifogástalan minőséget, amit sok évtizedes hagyományokra visszatekintő szakértelmünk garantál.",1,0.5,1000,"what.webp","Sör","Dreher","Magyarország",5,500),
+
+/*Egyéb*/
 ("Ouzou","Görög alkohol, mentolos ízzel",1,0.5,200,"what.webp","Egyéb","Görög Varázs","Görögország",12,9500),
 ("Soju Eper","Koreai desztillált alkohol, eper ízben",1,0.35,200,"what.webp","Egyéb","Jinro","Korea",12,2500);
 
