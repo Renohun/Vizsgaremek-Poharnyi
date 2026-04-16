@@ -195,6 +195,60 @@ background-color: rgb(65, 65, 65);
     height: auto;
     border-radius: 15px;
 }
+#MiVanaPolcon{
+    height: auto;
+    width: 100%;
+    background-color: rgb(92, 92, 92);
+  
+}
+#PolcCim{
+    font-size: 4vw;
+    text-align: center;
+    background-color: rgb(36, 36, 36);
+    color: rgb(255, 255, 255);
+}
+#PolcDiv{
+    display: flex;
+    margin-bottom: 15px;
+}
+#szoveg{
+    width: 30%;
+    margin-top: 5%;
+    margin-right: 2%;
+    font-size: 1.5vw;
+    text-align: left;
+    margin: none ;
+    margin-left: 5%;
+    color: aliceblue;
+    background-color: rgb(73, 73, 73);
+    justify-self: flex-start;
+}
+#kattint{
+    width:60%;
+    background-image: url(../LandingPage/img/mivanapolcon.webp);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+      background-color: rgba(31, 31, 31, 0.5);
+    background-blend-mode: darken;
+    margin-right: 2%;
+    margin-top: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+#kattint:hover{
+    border: solid rgb(172, 172, 172) 2px;
+}
+#kiprobalom{
+    color: aliceblue;
+    font-size: 3vw;
+    text-align: center;
+    width: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    background-blend-mode: darken;
+}
 @media only screen and (max-width: 1710px) 
 {
 #NepszeruKoktelDiv{flex-wrap: wrap;}
