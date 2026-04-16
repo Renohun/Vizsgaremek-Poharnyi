@@ -90,16 +90,13 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div id="hasonloTermekek">
                                 <h2>Hasonló Termékek</h2>
-                                
-                                    <div id="TermekSor">
-                                        
-                                    </div>
+
+                                <div id="TermekSor"></div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
 
@@ -113,29 +110,29 @@
                     </div>
                     <div id="KosarDiv">
                         <div id="mennyiseg">
-                            <input type="number" id="mennyisegInput" class="form-control" min="1" max="100" />
+                            <input type="number" value="1" id="mennyisegInput" class="form-control" min="1" max="100" />
                         </div>
 
-                        <button id="kosarba" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Kosárba</button>
+                        <button id="kosarba" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Kosárba
+                        </button>
                     </div>
                     <div id="Ertekeles">
                         <h2 id="ertekelesCim">Értékelés</h2>
                         <div id="csillagok">
-                            <input type="button" value="☆" id="star1" class="btn fs-1 p-0 border-0 csillag">
-                            <input type="button" value="☆" id="star2" class="btn fs-1 p-0 border-0 csillag">
-                            <input type="button" value="☆" id="star3" class="btn fs-1 p-0 border-0 csillag">
-                            <input type="button" value="☆" id="star4" class="btn fs-1 p-0 border-0 csillag">
-                            <input type="button" value="☆" id="star5" class="btn fs-1 p-0 border-0 csillag">
+                            <input type="button" value="☆" id="star1" class="btn fs-1 p-0 border-0 csillag" />
+                            <input type="button" value="☆" id="star2" class="btn fs-1 p-0 border-0 csillag" />
+                            <input type="button" value="☆" id="star3" class="btn fs-1 p-0 border-0 csillag" />
+                            <input type="button" value="☆" id="star4" class="btn fs-1 p-0 border-0 csillag" />
+                            <input type="button" value="☆" id="star5" class="btn fs-1 p-0 border-0 csillag" />
                         </div>
                         <button type="button" id="ErtekelesKuldes" value="">Küldés</button>
                         <p id="ErtekelPar">Kérjük értékelje a terméket!</p>
-                        
                     </div>
                 </div>
             </div>
-
         </main>
-         <!--Modal letrehozasa-->
+        <!--Modal letrehozasa-->
         <div
             class="modal fade"
             id="staticBackdrop"
@@ -156,8 +153,24 @@
                         <!--<img id="" src="img/test3 copy.gif" alt="Computer man" style="width: 100px; height: 100px" />-->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="tovabb" class="btn btn-primary" aria-haspopup="" data-bs-dismiss="modal">Irány a kosár!</button>
-                        <button type="button" style="display: none" id="vissza" class="btn btn-primary"  data-bs-dismiss="modal">vissza</button>
+                        <button
+                            type="button"
+                            id="tovabb"
+                            class="btn btn-primary"
+                            aria-haspopup=""
+                            data-bs-dismiss="modal"
+                        >
+                            Irány a kosár!
+                        </button>
+                        <button
+                            type="button"
+                            style="display: none"
+                            id="vissza"
+                            class="btn btn-primary"
+                            data-bs-dismiss="modal"
+                        >
+                            vissza
+                        </button>
                     </div>
                 </div>
             </div>
