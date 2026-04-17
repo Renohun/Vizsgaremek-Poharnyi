@@ -352,7 +352,8 @@ const kartyaGen = async (data, hova) => {
 
         if (data.data[i].TermekDiscount != null) {
             ar.style.textDecoration = 'line-through';
-            let AkciosAr = (data.data[i].Ar / 100) * (100 - data.data[i].TermekDiscount);
+            let akcio = 100 - data.data[i].TermekDiscount;
+            let AkciosAr = Math.round(((data.data[i].Ar/100)*akcio)/10)*10
             let AkciosArHely = document.createElement('h5');
             AkciosArHely.innerHTML = AkciosAr + 'Ft';
             AkciosArHely.style.color = 'red';
