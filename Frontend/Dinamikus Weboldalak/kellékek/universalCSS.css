@@ -23,7 +23,14 @@
 }
 
 footer{
-    margin-top: 100px;
+    color: white;
+    margin-top: 25%;
+    margin-bottom: 0px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    background-color: rgb(64, 76, 87);
+}
+
+body{
+    min-height: 800px;
 }
