@@ -446,11 +446,12 @@ router.post('/regisztracio', async (request, response) => {
                 request.body.ASZF
             ) {
                 const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
-
+                
                 const felhasznaloObjReg = {
                     email: request.body.email,
                     felhasznaloNev: request.body.felhasznaloNev,
-                    jelszo: hashed
+                    jelszo: hashed,
+                    hossz:request.body.jelszo.length
                 };
 
                 const duplikacioEll = 'SELECT FelhID FROM felhasználó WHERE Felhasználónév LIKE ? OR Email LIKE ?';
@@ -461,11 +462,11 @@ router.post('/regisztracio', async (request, response) => {
                 ]);
 
                 if (rows.length == 0) {
-                    const sqlQuery = 'INSERT INTO felhasználó (Felhasználónév, Email, Jelszó) VALUES (?,?,?)';
+                    const sqlQuery = 'INSERT INTO felhasználó (Felhasználónév, Email, Jelszó, JelszóHossza) VALUES (?,?,?,?)';
 
                     DBconnetion.query(
                         sqlQuery,
-                        [felhasznaloObjReg.felhasznaloNev, felhasznaloObjReg.email, felhasznaloObjReg.jelszo],
+                        [felhasznaloObjReg.felhasznaloNev, felhasznaloObjReg.email, felhasznaloObjReg.jelszo,felhasznaloObjReg.hossz],
                         (err, result) => {
                             if (err) {
                                 response.status(500).json({
