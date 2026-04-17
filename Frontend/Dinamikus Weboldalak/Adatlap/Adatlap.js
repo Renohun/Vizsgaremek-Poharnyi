@@ -147,7 +147,12 @@ async function AdatlapLekeres(){
     let AdatlapKep=document.getElementById("profilkep")
     AdatlapFelh.value=ertek.Felhasználónév
     AdatlapEmail.value=ertek.Email
-    AdatlapJelszo.value=ertek.Jelszó
+    let csillagok=""
+    for (let i = 0; i < ertek.JelszóHossza; i++) {
+        csillagok+="*"
+        
+    }
+    AdatlapJelszo.value=csillagok
     AdatlapKep.setAttribute("src",kapottkep)
 
 
