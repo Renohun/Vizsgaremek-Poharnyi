@@ -39,8 +39,9 @@ const koktelTovabb = async()=>{
 }
 const KeszitTovabb = async()=>{
         window.location.href = "/Keszites"
-    
-    
+}
+const polcTovabb = async()=>{
+    window.location.href = "/PolcKoktel"
 }
 //népszerű koktél
 const NepszeruKoktelok = async()=>{
@@ -88,5 +89,8 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
     let KeszitGomb = document.getElementById("KeszitGomb")
     KeszitGomb.addEventListener("click",KeszitTovabb)
+
+    let MivanApolcon = document.getElementById("kattint")
+    MivanApolcon.addEventListener("click",polcTovabb)
     NepszeruKoktelok()
 })
