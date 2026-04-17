@@ -280,6 +280,31 @@ const oldalGenerálás =  async () =>{
     }
     ertekeles(LekertTermekek.ertekelt,ertekelesSzam)
 
+    //kovetkezo termek
+    const hossz = await GETfetch("/api/WebShop/HosszLekeres")
+    let idszam = parseInt(id)
+
+    let kov = document.getElementById("koviTermek")
+    if (idszam == hossz.data) 
+    {
+        kov.disabled = "true"
+        kov.style.color ="gray"
+    }
+    else{
+        kov.href = `/Termek/${idszam+1}`
+    }
+    
+
+    //Elozo Termek
+    let elo = document.getElementById("EloTermek")
+    if (idszam == 1) {
+        elo.disabled = "true"
+        elo.style.color ="gray"
+    }else{
+        elo.href = `/Termek/${idszam-1}`
+    }
+   
+
 }
 
 const ertekeles = (ErtekeltE,ertek) =>
