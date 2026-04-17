@@ -223,6 +223,9 @@ background-color: rgb(65, 65, 65);
     background-color: rgb(73, 73, 73);
     justify-self: flex-start;
 }
+#attention{
+    font-size: 2vw;
+}
 #kattint{
     width:60%;
     background-image: url(../LandingPage/img/mivanapolcon.webp);
@@ -306,6 +309,9 @@ background-color: rgb(65, 65, 65);
     margin-top: 15px;
     font-size: 4vw;
     text-align: center;
+}
+#attention{
+    font-size: 5vw;
 }
 #kattint{
     width:80%;
