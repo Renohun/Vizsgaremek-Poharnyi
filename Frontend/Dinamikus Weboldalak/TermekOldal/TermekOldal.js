@@ -27,6 +27,7 @@ const PostFetch=async(url,object)=>{
 }
 const TermekKepLekeres=async(url)=>{
     try {
+        
         const valasz=await fetch(url,{
         method:"GET",
         headers:{"Content-Type":"image/jpg"}
@@ -177,14 +178,37 @@ const oldalGenerálás =  async () =>{
     }
     //Ar
     let ArHely = document.getElementById("arHely")
-    ArHely.innerHTML = LekertTermekek.termek[0].Ar + "Ft"
-    //EgysegAr
-    if (LekertTermekek.termek[0].TermekAlkoholSzazalek != 0) {
-        let EgysegArHely = document.getElementById("LiterAr")
-        let ar1Szazalek = LekertTermekek.termek[0].Ar/(LekertTermekek.termek[0].TermekUrtartalom*100)
-      
-        EgysegArHely.innerHTML = "Literár: " + Math.round(ar1Szazalek*100) + "Ft/l"
+     ArHely.innerHTML = LekertTermekek.termek[0].Ar + "Ft"
+    if(LekertTermekek.termek[0].TermekDiscount != null){
+        let akcioHely = document.getElementById("akciosAr")
+        let akcio = 100 - LekertTermekek.termek[0].TermekDiscount;
+        akcioHely.innerHTML = Math.round(((LekertTermekek.termek[0].Ar/100)*akcio)/10)*10+"Ft"
+        akcioHely.style.color = "red"
+        ArHely.style.textDecoration = "line-through"
     }
+   
+    //EgysegAr
+    let EgysegArHely = document.getElementById("LiterAr")
+     let ar1Szazalek;
+    if (LekertTermekek.termek[0].TermekKategoria == "Eszkozok" || LekertTermekek.termek[0].TermekKategoria == "Pohar" || LekertTermekek.termek[0].TermekKategoria == "Merch") {
+        
+          EgysegArHely.innerHTML =""
+        }
+        else
+        {
+            if (LekertTermekek.termek[0].TermekDiscount != null)
+            {
+                let akcio = 100 - LekertTermekek.termek[0].TermekDiscount;
+                let akciosar = ((LekertTermekek.termek[0].Ar/100)*akcio);
+                ar1Szazalek = akciosar/(LekertTermekek.termek[0].TermekUrtartalom*100)
+                EgysegArHely.innerHTML = "Literár: " + Math.round(ar1Szazalek*100) + "Ft/l"
+            }
+            else{
+                ar1Szazalek = LekertTermekek.termek[0].Ar/(LekertTermekek.termek[0].TermekUrtartalom*100)
+            EgysegArHely.innerHTML = "Literár: " + Math.round(ar1Szazalek*100) + "Ft/l"
+            }
+            
+        }
     //vanEPolcon
     let PolcLabelSzovegHely = document.getElementById("VaneSzoveg")
     let PolcLabelHely = document.getElementById("VanePolcon")
