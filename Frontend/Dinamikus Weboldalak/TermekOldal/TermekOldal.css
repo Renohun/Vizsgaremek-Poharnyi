@@ -16,6 +16,9 @@
     width: 70%;
     height: auto;
 }
+#visszaWebshop{
+    color: black;
+}
 #MegrendelesDiv {
     display: flex;
     flex-direction: column;
