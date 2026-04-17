@@ -83,10 +83,12 @@
         <main>
             <div id="main">
                 <div id="TermekAdatok">
+                      <a href="/WebShop" id="visszaWebshop">Vissza a webshopra</a>
                     <div id="TermekCimDiv">
                         <h2 id="TermekCim"></h2>
                     </div>
                     <div id="TermekAdatokMainContent">
+                      
                         <div id="TermekKep">
                             <img class="img-fluid" id="TermekImg" alt="koktelPic" />
                         </div>
@@ -119,14 +121,17 @@
                     </div>
                     <div id="ar">
                         <h1 id="arHely">67Ft</h1>
+                        <h3 id="akciosAr"></h3>
                         <p id="LiterAr">egységár ft/L: (dinamikus ár)</p>
                     </div>
                     <div id="KosarDiv">
                         <div id="mennyiseg">
-                            <input type="number" id="mennyisegInput" class="form-control" min="1" max="100" />
+                            <input type="number" value="1" id="mennyisegInput" class="form-control" min="1" max="100" />
                         </div>
 
-                        <button id="kosarba" type="button">Kosárba</button>
+                        <button id="kosarba" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Kosárba
+                        </button>
                     </div>
                     <div id="Ertekeles">
                         <h2 id="ertekelesCim">Értékelés</h2>
@@ -143,6 +148,49 @@
                 </div>
             </div>
         </main>
+        <!--Modal letrehozasa-->
+        <div
+            class="modal fade"
+            id="staticBackdrop"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 id="siker">A Terméket sikeresen kosárba rakta!</h5>
+                        <h5 id="Sokhiba" style="display: none">Kérem adja meg, hogy hány darabot szeretne rendelni!</h5>
+                        <!--<img id="" src="img/test3 copy.gif" alt="Computer man" style="width: 100px; height: 100px" />-->
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            id="tovabb"
+                            class="btn btn-primary"
+                            aria-haspopup=""
+                            data-bs-dismiss="modal"
+                        >
+                            Irány a kosár!
+                        </button>
+                        <button
+                            type="button"
+                            style="display: none"
+                            id="vissza"
+                            class="btn btn-primary"
+                            data-bs-dismiss="modal"
+                        >
+                            vissza
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/navBar.js"></script>

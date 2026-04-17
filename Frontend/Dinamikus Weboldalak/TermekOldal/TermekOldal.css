@@ -16,6 +16,9 @@
     width: 70%;
     height: auto;
 }
+#visszaWebshop{
+    color: black;
+}
 #MegrendelesDiv {
     display: flex;
     flex-direction: column;
@@ -360,4 +363,16 @@ tr{
     
 }
      #TermekSor{height: auto;}
+}
+
+/*NincsIlyentermék*/
+#link{
+    text-align: center;
+    color: black;
+}
+#NincsMain{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
