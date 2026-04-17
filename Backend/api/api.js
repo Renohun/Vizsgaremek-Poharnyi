@@ -1040,14 +1040,14 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
         //console.log('vegpont: ' + nev);
 
         const query =
-            'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?,?)';
+            'INSERT INTO koktél(Keszito,Alkoholos,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?)';
         const queryKoktel = 'SELECT KoktélID FROM koktél ORDER BY KoktélID DESC LIMIT 1';
         const queryJelvenyek = 'SELECT JelvényID FROM `jelvények` WHERE JelvényNeve IN (?)';
         const queryKoktelOsszetevok =
             'INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség, Mertekegyseg) VALUES(?,?,?,?)';
         const queryKoktelJelvenyInsert = 'INSERT INTO koktélokjelvényei(KoktélID, JelvényID) VALUES(?,?)';
 
-        DBconnetion.query(query, [payload.userID, alkoholos, 0, nev, fajlNeve, alap, recept, alapMennyiseg], (err) => {
+        DBconnetion.query(query, [payload.userID, alkoholos, nev, fajlNeve, alap, recept, alapMennyiseg], (err) => {
             if (err) {
                 res.status(500).json({ message: 'Sikertelen adat feltoltes' });
             }
@@ -2159,7 +2159,7 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
             });
         } else {
             const UjKoktel =
-                'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?,?)';
+                'INSERT INTO koktél(Keszito,Alkoholos,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?)';
 
             const UjKoktelJelvenyId = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve LIKE ?';
             const UjKoktelJelvenyIdFeltoltes = 'INSERT INTO koktélokjelvényei(KoktélID,JelvényID) VALUES(?,?)';
@@ -2169,7 +2169,6 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
             const [feltolt] = await DBconnetion.promise().query(UjKoktel, [
                 felhaszanalo,
                 alkoholose,
-                1,
                 nev,
                 kepUtvonala,
                 alap,
