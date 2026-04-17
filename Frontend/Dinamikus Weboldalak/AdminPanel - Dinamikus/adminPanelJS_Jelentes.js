@@ -32,9 +32,7 @@ async function POSTKepLekeres(url) {
 }
 
 async function elutasitasGombFv() {
-    const result = await POSTfetch(
-        'http://127.0.0.1:3000/api/AdminPanel/jelentesek/elutasitas/' + this.dataset.jelentesID
-    );
+    const result = await POSTfetch('/api/AdminPanel/jelentesek/elutasitas/' + this.dataset.jelentesID);
     //console.log(result);
     if (result.bool == true) {
         console.log(result.tipus[0].JelentesTipusa);
@@ -50,9 +48,7 @@ async function elutasitasGombFv() {
     }
 }
 async function elfogadasGombFv() {
-    const result = await POSTfetch(
-        'http://127.0.0.1:3000/api/AdminPanel/jelentesek/elfogadas/' + this.dataset.jelentesID
-    );
+    const result = await POSTfetch('/api/AdminPanel/jelentesek/elfogadas/' + this.dataset.jelentesID);
     //console.log(result);
     if (result.bool == true) {
         console.log(result.tipus[0].JelentesTipusa);
@@ -98,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         jelentesekSor.innerHTML = '';
         (async () => {
             try {
-                const rows = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/jelentesek');
+                const rows = await POSTfetch('/api/AdminPanel/jelentesek');
 
                 if (rows.felhasznalok.length == 0) {
                     let uzenetElement = document.createElement('p');
@@ -339,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         jelentesekSor.innerHTML = '';
         (async () => {
             try {
-                const rows = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/jelentesek');
+                const rows = await POSTfetch('/api/AdminPanel/jelentesek');
 
                 if (rows.koktelok.length == 0) {
                     let uzenetElement = document.createElement('p');
@@ -376,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             let imgTag = document.createElement('img');
                             (async () => {
                                 const koktelKep = await POSTKepLekeres(
-                                    `http://127.0.0.1:3000/api/AdminPanel/KepLekeres/${rows.koktelok[i][0].KoktélID}`
+                                    `/api/AdminPanel/KepLekeres/${rows.koktelok[i][0].KoktélID}`
                                 );
                                 imgTag.setAttribute('src', URL.createObjectURL(koktelKep));
                             })();
@@ -613,7 +609,7 @@ document.addEventListener('DOMContentLoaded', () => {
         jelentesekSor.innerHTML = '';
         (async () => {
             try {
-                const rows = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/jelentesek');
+                const rows = await POSTfetch('/api/AdminPanel/jelentesek');
 
                 if (rows.kommentek.length == 0) {
                     let uzenetElement = document.createElement('p');

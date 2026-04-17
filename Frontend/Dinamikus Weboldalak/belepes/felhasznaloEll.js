@@ -20,7 +20,7 @@ async function POSTfetch(url, obj) {
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('kuldesBTN').addEventListener('click', async () => {
         const email = document.getElementById('email').value;
-        const response = await POSTfetch('http://127.0.0.1:3000/api/felhasznaloEllenorzes', { email: email });
+        const response = await POSTfetch('/api/felhasznaloEllenorzes', { email: email });
         if (response.ures == true) {
             var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
             modalElement.show();

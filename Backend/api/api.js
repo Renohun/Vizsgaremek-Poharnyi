@@ -70,6 +70,29 @@ router.post('/sutiJelenlete', (req, res) => {
     }
 });
 
+router.post('/jogosultsagEll', async (req, res) => {
+    try {
+        if (req.cookies.auth_token != null) {
+            const payload = jwt.verify(req.cookies.auth_token_access, process.env.JWT_SECRET);
+            const query = 'SELECT Admin FROM felhasználó WHERE FelhID LIKE ?';
+
+            const [rows] = await DBconnetion.promise().query(query, [payload.userID]);
+
+            if (rows[0].Admin == 0) {
+                res.status(200).json({ message: false });
+            } else {
+                res.status(200).json({ message: true });
+            }
+        } else {
+            res.status(200).json({ message: false });
+        }
+    } catch (error) {
+        console.log(error);
+
+        res.sendStatus(500);
+    }
+});
+
 router.get('/Koktelok/Jelvenyek', async (req, res) => {
     try {
         let jelvenyObj = {};
@@ -2128,76 +2151,129 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
     try {
         const felhaszanalo = jwt.decode(req.cookies.auth_token).userID;
         const { nev, mennyiseg, alap, alkoholose, osszetevok, leiras, erosseg, iz, allergen, kepUtvonala } = req.body;
-        const nevEllenorzes = "SELECT KoktelCim FROM koktél WHERE KoktelCim LIKE ?"
-        const [nevek] = await DBconnetion.promise().query(nevEllenorzes,[nev])
-        if (nevek[0] != null )
-        {
+        const nevEllenorzes = 'SELECT KoktelCim FROM koktél WHERE KoktelCim LIKE ?';
+        const [nevek] = await DBconnetion.promise().query(nevEllenorzes, [nev]);
+        if (nevek[0] != null) {
             res.status(208).json({
-                hiba:"duplicate"
-            })
-        }else{
-        const UjKoktel =
-            'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?,?)';
-
-        const UjKoktelJelvenyId = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve LIKE ?';
-        const UjKoktelJelvenyIdFeltoltes = 'INSERT INTO koktélokjelvényei(KoktélID,JelvényID) VALUES(?,?)';
-        const UjKoktelOsszetevokFeltoltes =
-            'INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)';
-
-        const [feltolt] = await DBconnetion.promise().query(UjKoktel, [
-            felhaszanalo,
-            alkoholose,
-            1,
-            nev,
-            kepUtvonala,
-            alap,
-            leiras,
-            mennyiseg
-        ]);
-        const feltoltottId = feltolt.insertId;
-
-        for (let i = 0; i < osszetevok.length; i++) {
-            const [OsszetevoFel] = await DBconnetion.promise().query(UjKoktelOsszetevokFeltoltes, [
-                feltoltottId,
-                osszetevok[i][0],
-                osszetevok[i][1],
-                osszetevok[i][2]
-            ]);
-        }
-
-        if (allergen == undefined) {
-            jelvenyek = { lista: [iz, erosseg] };
+                hiba: 'duplicate'
+            });
         } else {
-            jelvenyek = { lista: [iz, erosseg, allergen] };
-        }
-        let JelvenyIdLista = [];
-        for (let i = 0; i < jelvenyek.lista.length; i++) {
-            for (let j = 0; j < jelvenyek.lista[i].length; j++) {
-                try {
-                    const [JelvenyId] = await DBconnetion.promise().query(UjKoktelJelvenyId, [jelvenyek.lista[i][j]]);
-                    JelvenyIdLista.push(JelvenyId[0].JelvényID);
-                } catch (error) {
-                    console.log(error);
+            const UjKoktel =
+                'INSERT INTO koktél(Keszito,Alkoholos,Közösségi,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?,?)';
+
+            const UjKoktelJelvenyId = 'SELECT JelvényID FROM jelvények WHERE JelvényNeve LIKE ?';
+            const UjKoktelJelvenyIdFeltoltes = 'INSERT INTO koktélokjelvényei(KoktélID,JelvényID) VALUES(?,?)';
+            const UjKoktelOsszetevokFeltoltes =
+                'INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)';
+
+            const [feltolt] = await DBconnetion.promise().query(UjKoktel, [
+                felhaszanalo,
+                alkoholose,
+                1,
+                nev,
+                kepUtvonala,
+                alap,
+                leiras,
+                mennyiseg
+            ]);
+            const feltoltottId = feltolt.insertId;
+
+            for (let i = 0; i < osszetevok.length; i++) {
+                const [OsszetevoFel] = await DBconnetion.promise().query(UjKoktelOsszetevokFeltoltes, [
+                    feltoltottId,
+                    osszetevok[i][0],
+                    osszetevok[i][1],
+                    osszetevok[i][2]
+                ]);
+            }
+
+            if (allergen == undefined) {
+                jelvenyek = { lista: [iz, erosseg] };
+            } else {
+                jelvenyek = { lista: [iz, erosseg, allergen] };
+            }
+            let JelvenyIdLista = [];
+            for (let i = 0; i < jelvenyek.lista.length; i++) {
+                for (let j = 0; j < jelvenyek.lista[i].length; j++) {
+                    try {
+                        const [JelvenyId] = await DBconnetion.promise().query(UjKoktelJelvenyId, [
+                            jelvenyek.lista[i][j]
+                        ]);
+                        JelvenyIdLista.push(JelvenyId[0].JelvényID);
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
             }
-        }
 
-        for (let id = 0; id < JelvenyIdLista.length; id++) {
-            const [JelvenyFeltolt] = await DBconnetion.promise().query(UjKoktelJelvenyIdFeltoltes, [
-                feltoltottId,
-                JelvenyIdLista[id]
-            ]);
+            for (let id = 0; id < JelvenyIdLista.length; id++) {
+                const [JelvenyFeltolt] = await DBconnetion.promise().query(UjKoktelJelvenyIdFeltoltes, [
+                    feltoltottId,
+                    JelvenyIdLista[id]
+                ]);
+            }
+            res.status(200).json({
+                feltoltottid: feltoltottId
+            });
         }
-        res.status(200).json({
-            feltoltottid: feltoltottId
-        });
-    }
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).json({ message: 'Sikertelen feltöltés', hiba: error });
     }
 });
+//
+//
+//PolcKoktél
+//
+//
+router.get("/PolcKoktel/OsszetevoLekeres",async(request,response)=>{
+    try {
+        const osszetevolekeres=await lekeres("SELECT Osszetevő FROM koktelokosszetevoi GROUP BY Osszetevő")
+        let osszetevok=[]
+        for (let i = 0; i < osszetevolekeres.length; i++) {
+            osszetevok.push(osszetevolekeres[i].Osszetevő)
+            
+        }
+        response.status(200).json({
+            message:"siker",
+            adat:osszetevok
+        })
+    } 
+    catch (error) {
+        console.log(error);
+    }
+})
 
+router.post("/PolcKoktel/HelyesKoktelLekeres",async(request,response)=>{
+
+    try {
+        let osszetevok=request.body.osszetevok
+        const koktelLekeres="SELECT KoktélID FROM koktelokosszetevoi WHERE Osszetevő IN (?) GROUP BY KoktélID"
+        const koktelAdat="SELECT KoktélID,KoktelCim,BoritoKepUtvonal FROM koktél WHERE KoktélID LIKE ?"
+        const koktelErtekeles="SELECT AVG(Ertekeles) AS AtlagErt FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+        const koktelOsszetevok="SELECT Osszetevő FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+        const koktelok=await lekeres(koktelLekeres,[osszetevok])
+
+        let koktelAdatok=[]
+        for (let i = 0; i < koktelok.length; i++) {
+            let adatok=(await lekeres(koktelAdat,koktelok[i].KoktélID))[0]
+            console.log(adatok);
+            
+            let ertekeles=(await lekeres(koktelErtekeles,[koktelok[i].KoktélID,"Koktél"]))[0]
+            console.log(ertekeles);
+            
+            let osszetevok=await lekeres(koktelOsszetevok,koktelok[i].KoktélID)
+            koktelAdatok.push({adatok,ertekeles,osszetevok})
+        }
+        response.status(200).json({
+            message:"siker",
+            adatok:koktelAdatok
+        })  
+    } 
+    catch (error) {
+        console.log(error);
+    }
+})
 //
 //
 //
@@ -2633,38 +2709,37 @@ router.post('/Webshop/szures', async (request, response) => {
 });
 
 router.post('/Webshop/KosarKuldes/:id', authenticationMiddleware, async (request, response) => {
-        try {
-            const id = request.params.id;
-            const mennyiseg = 1;
-            const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID; //"sessionId" lekérése
+    try {
+        const id = request.params.id;
+        const mennyiseg = 1;
+        const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID; //"sessionId" lekérése
 
-            const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
-            const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
+        const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
+        const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
 
-            const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? AND KosarID = ?';
-            const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
+        const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? AND KosarID = ?';
+        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
 
-            //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
-            if (vanEIlyen[0] == undefined) {
-                const kosarFeltoltQuery =
-                    'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
-                const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
-                    UserID,
-                    id,
-                    mennyiseg,
-                    ArLekeres[0][0].Ar
-                ]);
-                response.status(200).json({ Siker: KosarFeltolt.affectedRows });
-            } else {
-                const kosarUpdateQuery =
-                    'UPDATE kosártermék SET Darabszam = Darabszam+1 WHERE TermekID = ? AND KosarID = ?';
-                const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [id, UserID]);
-                response.status(200).json({ Siker: KosarUpdate.affectedRows });
-            }
-        } catch (error) {
-            console.log(error);
-            response.status(500).json({ hiba: error });
+        //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
+        if (vanEIlyen[0] == undefined) {
+            const kosarFeltoltQuery = 'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
+            const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
+                UserID,
+                id,
+                mennyiseg,
+                ArLekeres[0][0].Ar
+            ]);
+            response.status(200).json({ Siker: KosarFeltolt.affectedRows });
+        } else {
+            const kosarUpdateQuery =
+                'UPDATE kosártermék SET Darabszam = Darabszam+1 WHERE TermekID = ? AND KosarID = ?';
+            const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [id, UserID]);
+            response.status(200).json({ Siker: KosarUpdate.affectedRows });
         }
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({ hiba: error });
+    }
 });
 router.get('/WebShop/TermekErtekeles/:id', async (request, response) => {
     try {

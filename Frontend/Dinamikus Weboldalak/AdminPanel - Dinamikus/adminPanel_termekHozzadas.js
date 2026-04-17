@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const termekSelect = document.getElementById('termekLearazas');
     (async () => {
-        const data = await GETfetch('http://127.0.0.1:3000/api/AdminPanel/TermekLekeres');
+        const data = await GETfetch('/api/AdminPanel/TermekLekeres');
         data.result.forEach((element) => {
             const optTag = document.createElement('option');
             optTag.innerText = element.TermekCim;
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 (async () => {
                     const data = await GETfetch(
-                        `http://127.0.0.1:3000/api/AdminPanel/TermekLearazas/${kivalasztottTermek}/${parseInt(ellenorzes)}`
+                        `/api/AdminPanel/TermekLearazas/${kivalasztottTermek}/${parseInt(ellenorzes)}`
                     );
                     if (data.result == 'Leárazás sikeresen frissitve') {
                         document.getElementById('modalText').innerText =
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let kepTarolas = new FormData();
                                 kepTarolas.append('profilkep', formDiv.children[i].files[0]);
                                 const kapottFajlNev = await POSTkepFeltoltes(
-                                    'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
+                                    '/api/AdatlapLekeres/KepFeltoltes',
                                     kepTarolas
                                 );
 
@@ -210,9 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (hibasAdatok == false) {
             //ebbe az objektumba gyurjuk ossze a kapott adatokat
-            const ellResult = await GETfetch(
-                `http://127.0.0.1:3000/api/AdminPanel/TermekNev/Ellenorzes/${POSTobj.termekNev}`
-            );
+            const ellResult = await GETfetch(`/api/AdminPanel/TermekNev/Ellenorzes/${POSTobj.termekNev}`);
 
             //alert(JSON.stringify(ellResult));
             //MODALok megjelenitese
@@ -220,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
                 console.log(POSTobj);
 
-                const response = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
+                const response = await POSTfetch('/api/AdminPanel/TermekFeltoltes', POSTobj);
                 console.log(response);
                 var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
                 modalElement.show();

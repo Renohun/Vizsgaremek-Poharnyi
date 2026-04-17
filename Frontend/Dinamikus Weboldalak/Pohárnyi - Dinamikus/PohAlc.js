@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         //koktelok lekeredezese
-        const koktelok = await GETfetch('http://127.0.0.1:3000/api/Koktelok/lekeres');
+        const koktelok = await GETfetch('/api/Koktelok/lekeres');
         //console.log(koktelok);
 
         koktelRendereles(koktelok);
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 rendezes: document.getElementById('Rendezés').value
             };
 
-            const data = await POSTfetch('http://127.0.0.1:3000/api/Koktelok/lekeres/parameteres', OBJ);
+            const data = await POSTfetch('/api/Koktelok/lekeres/parameteres', OBJ);
             koktelRendereles(data);
         } catch (err) {
             console.error(err);
@@ -272,10 +272,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const keresettKoktelNeve = document.getElementById('searchBar').value;
             if (keresettKoktelNeve.length > 0) {
-                const koktelok = await GETfetch(`http://127.0.0.1:3000/api/Koktelok/lekeres/${keresettKoktelNeve}`);
+                const koktelok = await GETfetch(`/api/Koktelok/lekeres/${keresettKoktelNeve}`);
                 koktelRendereles(koktelok);
             } else {
-                const koktelok = await GETfetch('http://127.0.0.1:3000/api/Koktelok/lekeres');
+                const koktelok = await GETfetch('/api/Koktelok/lekeres');
                 //console.log(koktelok);
                 koktelRendereles(koktelok);
             }

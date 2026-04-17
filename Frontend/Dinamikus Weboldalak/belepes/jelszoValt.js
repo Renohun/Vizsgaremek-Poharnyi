@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('jelszoValt').addEventListener('click', async () => {
         const jelszo1 = document.getElementById('ujJelszo').value;
         const jelszo2 = document.getElementById('ujJelszoUjra').value;
-        const response = await PATCHfetch('http://127.0.0.1:3000/api/jelszoValtoztatas', {
+        const response = await PATCHfetch('/api/jelszoValtoztatas', {
             jelszo1: jelszo1,
             jelszo2: jelszo2
         });

@@ -29,6 +29,9 @@
                         </li>
                         <li class="nav-item">
                             <a href="/WebShop" class="nav-link">Webshop</a>
+                        </li>                        
+                        <li class="nav-item">
+                            <a href="/PolcKoktel" class="nav-link">Mi van a polcon?</a>
                         </li>
                     </div>
                     <div class="navbar-nav d-flex align-items-center">
@@ -44,7 +47,7 @@
                             <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
                         <a href="/LepjBe" id="belepes">
-                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" />
+                            <input type="button" class="btn btn-warning nav-item active jelenlegi" value="Bejelentkezés" />
                         </a>
 
                         <a href="/Keszites" id="sajatKoktelKeszites" hidden>
@@ -63,7 +66,7 @@
                             />
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
-                                <li class="dropdown-item"><a href="/AdminPanel">Admin Panel</a></li>
+                                <li class="dropdown-item" id="adminPanelHref"><a href="/AdminPanel">Admin Panel</a></li>
                                 <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
                             </ul>
                         </div>
@@ -114,7 +117,33 @@
                 </div>
             </div>
         </div>
-
+    <footer class="fs-5 shadow w-100">
+        <div class="container">
+            <div class="col-12 text-center">
+                © 2026 Pohárnyi. Minden jog fenntartva.
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-12"></div>
+                <div class="col-lg-2 col-md-12">
+                    <div class="text-lg-end text-center">
+                        <a href="">Elérhetőségek</a>
+                    </div>
+                    <div class="text-lg-end text-center">
+                        <a href="https://forms.gle/cp3o19kbEVdXiZ7L9">Hibajelenés</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="text-lg-start text-center">
+                        <a href="">Felhasználói kézikönyv</a>
+                    </div>
+                    <div class="text-lg-start text-center">
+                        <a href="">Adatkezelési Nyilatkozat</a> 
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-12"></div>
+            </div>
+        </div>
+    </footer>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/navBar.js"></script>

@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const jelszo = document.getElementById('jelszo').value;
         const jelszoIsmet = document.getElementById('jelszoIsmet').value;
 
-        const response = await POSTfetch('http://127.0.0.1:3000/api/regisztracio', {
+        const response = await POSTfetch('/api/regisztracio', {
             email: email,
             felhasznaloNev: felhaszanaloNev,
             jelszo: jelszo,
