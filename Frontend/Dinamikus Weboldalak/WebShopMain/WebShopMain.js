@@ -18,7 +18,6 @@ const KosarPost = async (url) => {
             headers: { 'Content-Type': 'application/json' }
         });
         if (valasz.redirected) {
-            //console.log(valasz.url);
             window.location.href = valasz.url;
         }
         if (valasz.ok) {
@@ -238,7 +237,6 @@ const SelectFeltolt = (data, Select1, Select2, Select3, Select4, Select5) => {
 //
 
 const kartyaGen = async (data, hova) => {
-    console.log(data);
     for (let i = 0; i < data.data.length; i++) {
         const oszlop = document.createElement('div');
         oszlop.classList.add(
@@ -303,10 +301,10 @@ const kartyaGen = async (data, hova) => {
             ertDiv.appendChild(ErtP);
         }
         const Ertek = await TermekLekeres(`/api/WebShop/TermekErtekeles/${data.data[i].TermekID}`);
-        for (let i = 0; i < Ertek.ert; i++) {
+        for (let i = 0; i < Ertek.ert; i++) 
+        {
             ertDiv.children[i].innerHTML = '★'; //a kiszámolt értékig átirjuk a csillagokat
         }
-
         //kateg
         let div1 = document.createElement('div');
         div1.classList.add('kulondiv');
@@ -376,9 +374,9 @@ const kartyaGen = async (data, hova) => {
                 modalHiba(true)
                
             }
-            else{
+            else
+            {
                 modalJo()
-                 console.log(valasz)
             }
         });
     }
@@ -441,7 +439,6 @@ async function szures() {
 
 const kereses = async () => {
     const keresendoSzo = document.getElementById('NevKereses').value;
-    console.log(keresendoSzo);
     if (keresendoSzo == '') {
         alert('Töltse Ki a keresőmezőt!');
     } else {
@@ -454,7 +451,6 @@ const kereses = async () => {
 
         if (dataHossz.data.length == 0) {
             alert('nincs ilyen Termék');
-            //window.location.reload();
         } else {
             TermekBetoltes(1, dataHossz.data.length, false, '', true);
         }
@@ -490,7 +486,6 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
     } else if (szurtE == true && !NevSzerinti) {
         const szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`, szuresiAdatok);
         await kartyaGen(szurtdata, KartyaHova);
-        console.log(oldalszam);
         PaginationGombok(true, hossz, szuresiAdatok);
     } else if (NevSzerinti == true && !szurtE) {
         const keresendoSzo = document.getElementById('NevKereses').value;
@@ -610,7 +605,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     let SzuresGomb = document.getElementById('kuldesGomb');
     SzuresGomb.addEventListener('click', async () => {
         const adatok = szures();
-        console.log(await adatok);
         const szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`, await adatok);
         TermekBetoltes(1, szurtDataHossz.hossz, true, await adatok);
         szuresiAdatok = {};
