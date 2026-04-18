@@ -2561,6 +2561,7 @@ router.post('/Webshop/szures', async (request, response) => {
         let OrderBy;
         let OrderByErtek;
         for (const item of Object.entries(feltetelek)) {
+            console.log(item[0] + ' ? '+item[1])
             if (item[0] == 'MaxAr') {
                 query += ' Ar <= ? AND';
             } else if (item[0] == 'MaxAlk') {
@@ -2589,7 +2590,8 @@ router.post('/Webshop/szures', async (request, response) => {
                 query += ` ${item[0]} like ? AND`;
             }
 
-            if (item[0] != 'rendezes') {
+            if (item[0] != 'rendezes' && item[0] != "akcio")//amennyiben a postobjectben lévő adat nem az akcio, vagy a rendezes szuresehez kell, akkor belerakjuk az értéklistába
+             {
                 ertekLista.push(item[1]);
             }
         }
@@ -2599,25 +2601,20 @@ router.post('/Webshop/szures', async (request, response) => {
         query += OrderBy;
         let limitoffset = ' LIMIT ? OFFSET ?';
         query += limitoffset;
-        // console.log(OrderByErtek)
-        for (let i = 0; i < ertekLista.length; i++) {
-            console.log(ertekLista[i]);
-        }
-
-        /* TEST
+       /* TEST
         const sql = mysql.format(query, [ertekLista[0]]);
             console.log(sql);
             console.log(typeof ertekLista[0]);
             console.log('2') 
         */
-
-        //SZÉPÍTENI KELL!!!
-
+        console.log(ertekLista)
         let szurtTermekek;
         if (ertekLista.length == 1) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], limit, offset]);
+           
         } else if (ertekLista.length == 2) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], ertekLista[1], limit, offset]);
+            
         } else if (ertekLista.length == 3) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [
                 ertekLista[0],
@@ -2625,6 +2622,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[2],
                 limit,
                 offset
+               
             ]);
         } else if (ertekLista.length == 4) {
             console.log('4')[szurtTermekek] = await DBconnetion.promise().query(query, [
