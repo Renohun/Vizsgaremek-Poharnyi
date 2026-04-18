@@ -49,7 +49,7 @@ const termek_lekeres = async () => {
     let url = window.location.href.split('/');
     let id = url[4];
   
-    const data = await GETfetch(`http://127.0.0.1:3000/api/termek/lekeres/${id}`);
+    const data = await GETfetch(`/api/termek/lekeres/${id}`);
       console.log(data);
      return data;
    
@@ -60,7 +60,7 @@ const KepLekeres = async () =>
     let url = window.location.href.split('/');
     let id = url[4];
     console.log(id);
-    const data = await TermekKepLekeres(`http://127.0.0.1:3000/api/termek/KepLekeres/${id}`)
+    const data = await TermekKepLekeres(`/api/termek/KepLekeres/${id}`)
     return data;
 }
 
@@ -80,7 +80,7 @@ const oldalGenerálás =  async () =>{
     let url = window.location.href.split('/');
     let id = url[4];
     console.log(id);
-    const data = await TermekKepLekeres(`http://127.0.0.1:3000/api/Webshop/Keplekeres/${id}`)//termek/keplekeres nem mukodik
+    const data = await TermekKepLekeres(`/api/Webshop/Keplekeres/${id}`)//termek/keplekeres nem mukodik
     let KepHely = document.getElementById("TermekImg")
     KepHely.setAttribute("src",URL.createObjectURL(data))
     console.log(KepHely)
@@ -125,7 +125,7 @@ const oldalGenerálás =  async () =>{
     console.log(HasonlokData)
     for (let i = 0; i < HasonlokData.hasonlok.length; i++)
     {
-        const KepData = await TermekKepLekeres(`http://127.0.0.1:3000/api/Webshop/KepLekeres/${HasonlokData.hasonlok[i].TermekID}`)
+        const KepData = await TermekKepLekeres(`/api/Webshop/KepLekeres/${HasonlokData.hasonlok[i].TermekID}`)
         let KepUrl = URL.createObjectURL(KepData)
         let kartya = document.createElement("div")
         kartya.classList.add("Termek")

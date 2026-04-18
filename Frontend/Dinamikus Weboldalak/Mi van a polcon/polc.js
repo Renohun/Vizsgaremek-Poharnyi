@@ -265,7 +265,7 @@ async function kartyakeszites(adatok){
 
     kartyaGomb.setAttribute("value","Tovább a Koktélra")
     kartyaGomb.addEventListener("click",()=>{
-        window.location.href=`http://127.0.0.1:3000/Koktel/${adatok.adatok.KoktélID}`
+        window.location.href=`/Koktel/${adatok.adatok.KoktélID}`
     })
 
     let osszetevokDiv=document.createElement("div")
