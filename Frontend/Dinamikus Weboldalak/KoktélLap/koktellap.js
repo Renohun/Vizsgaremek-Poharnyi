@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("KommSend").addEventListener("click",async()=>{await Kommentkuldes()})
         document.getElementById("komment").addEventListener("keyup",()=>{document.getElementById("szam").innerHTML=document.getElementById("komment").value.length})
         document.getElementById("Velemeny").classList.add("shadow-sm","p-2","koktelshadow")
-        if (eredmeny.UgyanazE) {
+        if (eredmeny.adat.UgyanazE) {
             document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
             document.getElementById("KoktJel").setAttribute("value","Koktél Törlése")
             document.getElementById("KoktJel").id="KoktDel"
