@@ -2795,4 +2795,5 @@ router.get('/Fooldal/BevaneJelentkezve', authenticationMiddleware, async (reques
     }
 });
 
+
 module.exports = router;
