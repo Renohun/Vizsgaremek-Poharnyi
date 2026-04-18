@@ -45,7 +45,7 @@ async function GETfetch(url) {
 }
 
 function inputFieldClear() {
-    const inputokFields = document.getElementsByName('termekFeltoltes')[1].children;
+    const inputokFields = document.getElementsByName('termekFeltoltes')[1].children[0].children;
     console.log(inputokFields);
     console.log(typeof inputokFields);
     for (let i = 2; i < inputokFields.length; i++) {
@@ -78,11 +78,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (termekKategoriaSelect.value != 'Eszkozok' && termekKategoriaSelect.value != 'Merch') {
             urtartalomLabel.removeAttribute('hidden');
             urtartalomInput.removeAttribute('hidden');
+
             if (termekKategoriaSelect.value != 'Pohar') {
                 alkoholSzazalekLabel.removeAttribute('hidden');
                 alkoholSzazalekInput.removeAttribute('hidden');
-                alkoholKoraLabel.removeAttribute('hidden');
-                alkoholKoraInput.removeAttribute('hidden');
+
+                if (termekKategoriaSelect.value == 'Sor') {
+                    alkoholKoraLabel.setAttribute('hidden', true);
+                    alkoholKoraInput.setAttribute('hidden', true);
+                } else {
+                    alkoholKoraLabel.removeAttribute('hidden');
+                    alkoholKoraInput.removeAttribute('hidden');
+                }
             } else {
                 alkoholSzazalekLabel.setAttribute('hidden', true);
                 alkoholSzazalekInput.setAttribute('hidden', true);
@@ -216,25 +223,38 @@ document.addEventListener('DOMContentLoaded', () => {
             //MODALok megjelenitese
             if (ellResult.duplikacio == false) {
                 POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
-                console.log(POSTobj);
+                //console.log(POSTobj);
 
                 const response = await POSTfetch('/api/AdminPanel/TermekFeltoltes', POSTobj);
-                console.log(response);
-                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
-                modalElement.show();
+                //console.log(response);
 
-                document.getElementById('modalText').innerText = 'Termék sikeresen hozzáadva!';
+                if (response.szazalek == true && response.siker == false) {
+                    var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                    modalElement.show();
 
-                document.getElementById('modalBtn').addEventListener('click', () => {
-                    modalElement.hide();
-                    inputFieldClear();
-                });
+                    document.getElementById('modalText').innerText = 'A szazalek meghaladja a 100-at!';
+
+                    document.getElementById('modalBtn').addEventListener('click', () => {
+                        modalElement.hide();
+                    });
+                } else {
+                    var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                    modalElement.show();
+
+                    document.getElementById('modalText').innerText = 'Termék sikeresen hozzáadva!';
+
+                    document.getElementById('modalBtn').addEventListener('click', () => {
+                        modalElement.hide();
+                        inputFieldClear();
+                    });
+                }
+
                 //console.log(fetchAdat);
             } else {
                 var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
                 modalElement.show();
 
-                document.getElementById('modalText').innerText = 'Ilyen nevű koktél már létezik';
+                document.getElementById('modalText').innerText = 'Ilyen nevű termék már létezik';
 
                 document.getElementById('modalBtn').addEventListener('click', () => {
                     modalElement.hide();
