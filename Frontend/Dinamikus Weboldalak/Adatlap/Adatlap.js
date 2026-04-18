@@ -1028,7 +1028,7 @@ async function koktelextrak(dolog,adat){
     let gomb=dolog.getElementsByClassName("btn-secondary")[0]
     gomb.setAttribute("value","Tovább a Koktélra")
     gomb.addEventListener("click",()=>{
-        window.location.href=`http://127.0.0.1:3000/Koktel/${adat.adat.KoktélID}`
+        window.location.href=`/Koktel/${adat.adat.KoktélID}`
     })
     
     let badgeDiv=document.createElement("div")
@@ -1098,7 +1098,7 @@ async function kosarextrak(dolog,adat){
     let gomb=dolog.getElementsByClassName("btn-secondary")[0]
     gomb.setAttribute("value","Tovább a Termékre")
     gomb.addEventListener("click",()=>{
-        window.location.href=`http://127.0.0.1:3000/Termek/${adat.kosarAdatok.TermekID}`
+        window.location.href=`/Termek/${adat.kosarAdatok.TermekID}`
     })
 
     //Rendelési adatok
