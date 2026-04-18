@@ -293,8 +293,6 @@ const oldalGenerálás =  async () =>{
     else{
         kov.href = `/Termek/${idszam+1}`
     }
-    
-
     //Elozo Termek
     let elo = document.getElementById("EloTermek")
     if (idszam == 1) {
