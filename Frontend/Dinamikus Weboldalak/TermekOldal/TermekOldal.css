@@ -19,6 +19,18 @@
 #visszaWebshop{
     color: black;
 }
+#koviTermek{
+    color: black;
+}
+#EloTermek{
+    color: black;
+}
+#TovabbVissza{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: auto;
+}
 #MegrendelesDiv {
     display: flex;
     flex-direction: column;

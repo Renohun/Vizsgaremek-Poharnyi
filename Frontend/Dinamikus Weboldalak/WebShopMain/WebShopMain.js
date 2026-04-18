@@ -1,3 +1,4 @@
+
 //FETCK-ek
 const TermekLekeres = async (url) => {
     try {
@@ -17,7 +18,6 @@ const KosarPost = async (url) => {
             headers: { 'Content-Type': 'application/json' }
         });
         if (valasz.redirected) {
-            //console.log(valasz.url);
             window.location.href = valasz.url;
         }
         if (valasz.ok) {
@@ -237,7 +237,6 @@ const SelectFeltolt = (data, Select1, Select2, Select3, Select4, Select5) => {
 //
 
 const kartyaGen = async (data, hova) => {
-    console.log(data);
     for (let i = 0; i < data.data.length; i++) {
         const oszlop = document.createElement('div');
         oszlop.classList.add(
@@ -302,10 +301,10 @@ const kartyaGen = async (data, hova) => {
             ertDiv.appendChild(ErtP);
         }
         const Ertek = await TermekLekeres(`/api/WebShop/TermekErtekeles/${data.data[i].TermekID}`);
-        for (let i = 0; i < Ertek.ert; i++) {
+        for (let i = 0; i < Ertek.ert; i++) 
+        {
             ertDiv.children[i].innerHTML = '★'; //a kiszámolt értékig átirjuk a csillagokat
         }
-
         //kateg
         let div1 = document.createElement('div');
         div1.classList.add('kulondiv');
@@ -352,7 +351,8 @@ const kartyaGen = async (data, hova) => {
 
         if (data.data[i].TermekDiscount != null) {
             ar.style.textDecoration = 'line-through';
-            let AkciosAr = (data.data[i].Ar / 100) * (100 - data.data[i].TermekDiscount);
+            let akcio = 100 - data.data[i].TermekDiscount;
+            let AkciosAr = Math.round(((data.data[i].Ar/100)*akcio)/10)*10
             let AkciosArHely = document.createElement('h5');
             AkciosArHely.innerHTML = AkciosAr + 'Ft';
             AkciosArHely.style.color = 'red';
@@ -362,11 +362,22 @@ const kartyaGen = async (data, hova) => {
         let kosarba = document.createElement('button');
         kosarba.classList.add('btn', 'kartyaGomb');
         kosarba.innerHTML = 'kosárba';
+        kosarba.setAttribute("data-bs-toggle","modal" )
+        kosarba.setAttribute( "data-bs-target","#staticBackdrop")
         kartyaMain.appendChild(kosarba);
 
         kosarba.addEventListener('click', async () => {
             const valasz = await KosarPost(`/api/WebShop/KosarKuldes/${data.data[i].TermekID}`);
-            console.log(valasz);
+           
+            if (valasz.Siker == undefined) 
+            {
+                modalHiba(true)
+               
+            }
+            else
+            {
+                modalJo()
+            }
         });
     }
 };
@@ -428,7 +439,6 @@ async function szures() {
 
 const kereses = async () => {
     const keresendoSzo = document.getElementById('NevKereses').value;
-    console.log(keresendoSzo);
     if (keresendoSzo == '') {
         alert('Töltse Ki a keresőmezőt!');
     } else {
@@ -441,7 +451,6 @@ const kereses = async () => {
 
         if (dataHossz.data.length == 0) {
             alert('nincs ilyen Termék');
-            //window.location.reload();
         } else {
             TermekBetoltes(1, dataHossz.data.length, false, '', true);
         }
@@ -477,7 +486,6 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
     } else if (szurtE == true && !NevSzerinti) {
         const szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`, szuresiAdatok);
         await kartyaGen(szurtdata, KartyaHova);
-        console.log(oldalszam);
         PaginationGombok(true, hossz, szuresiAdatok);
     } else if (NevSzerinti == true && !szurtE) {
         const keresendoSzo = document.getElementById('NevKereses').value;
@@ -515,12 +523,13 @@ const gombHozzaAdas = (hova, oldalszam, szurtE, szuresiAdatok, hossz, NevSzerint
 const PaginationGombok = async (SzurtE, hossz, szuresiAdatok, NevSzerinti) => {
     //oldalhosszok
 
-    let oldalszam = Math.ceil(hossz / 16);
+    let oldalszam = Math.ceil(hossz / 16)
     const paginationHely = document.getElementById('pagination');
     paginationHely.innerHTML = '';
 
-    let elsogomb = Math.max(1, jelenlegiOldal - 2);
-    let utolsoGomb = Math.min(oldalszam, jelenlegiOldal + 2);
+    let elsogomb = Math.max(1, jelenlegiOldal - 2); //kiszámoljuk, hogy melyik legyen az első gomb amit megjelenitunk.
+    //  az elso(1) és a jelenlegi oldal -2 között, erre azért van szükség, mert mindig a jelenlegi előtt 2-t mutatunk meg, és így biztosan nem lehet negatív ez a szám
+    let utolsoGomb = Math.min(oldalszam, jelenlegiOldal + 2);//ugyanaz csak forditva
 
     //első oldal a gombok között
     if (elsogomb > 1) {
@@ -596,9 +605,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     let SzuresGomb = document.getElementById('kuldesGomb');
     SzuresGomb.addEventListener('click', async () => {
         const adatok = szures();
-        console.log(await adatok);
         const szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`, await adatok);
         TermekBetoltes(1, szurtDataHossz.hossz, true, await adatok);
         szuresiAdatok = {};
     });
+    let kosarGomb = document.getElementById("tovabb")
+    kosarGomb.addEventListener("click",()=>{
+        window.location.href = "/adatlap"
+    })
 });
+const modalHiba = (hiba)=>{
+//hibás kitöltés kezelése
+        
+        document.getElementById('vissza').style.display = 'block';
+        document.getElementById('Sokhiba').style.display = 'block';
+        document.getElementById('siker').setAttribute('hidden', true);
+         document.getElementById('tovabb').setAttribute('hidden', true);
+         hiba = false;
+        
+}
+const modalJo = ()=>{
+//hibás kitöltés kezelése
+        
+        document.getElementById('Sokhiba').style.display = 'none';
+    document.getElementById('vissza').style.display = 'none';
+    document.getElementById('siker').removeAttribute('hidden',false);
+    document.getElementById('tovabb').removeAttribute('hidden', true);
+}
