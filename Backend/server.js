@@ -13,7 +13,7 @@ const app = express();
 const router = express.Router();
 
 const ip = '0.0.0.0';
-const port = 3000;
+const port = 3006;
 
 app.use(express.json()); //?Middleware JSON
 app.set('trust proxy', 1); //?Middleware Proxy
