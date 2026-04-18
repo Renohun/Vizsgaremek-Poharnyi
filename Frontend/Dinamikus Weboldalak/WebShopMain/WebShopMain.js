@@ -1,3 +1,4 @@
+
 //FETCK-ek
 const TermekLekeres = async (url) => {
     try {
@@ -363,11 +364,22 @@ const kartyaGen = async (data, hova) => {
         let kosarba = document.createElement('button');
         kosarba.classList.add('btn', 'kartyaGomb');
         kosarba.innerHTML = 'kosárba';
+        kosarba.setAttribute("data-bs-toggle","modal" )
+        kosarba.setAttribute( "data-bs-target","#staticBackdrop")
         kartyaMain.appendChild(kosarba);
 
         kosarba.addEventListener('click', async () => {
             const valasz = await KosarPost(`/api/WebShop/KosarKuldes/${data.data[i].TermekID}`);
-            console.log(valasz);
+           
+            if (valasz.Siker == undefined) 
+            {
+                modalHiba(true)
+               
+            }
+            else{
+                modalJo()
+                 console.log(valasz)
+            }
         });
     }
 };
@@ -516,12 +528,13 @@ const gombHozzaAdas = (hova, oldalszam, szurtE, szuresiAdatok, hossz, NevSzerint
 const PaginationGombok = async (SzurtE, hossz, szuresiAdatok, NevSzerinti) => {
     //oldalhosszok
 
-    let oldalszam = Math.ceil(hossz / 16);
+    let oldalszam = Math.ceil(hossz / 16)
     const paginationHely = document.getElementById('pagination');
     paginationHely.innerHTML = '';
 
-    let elsogomb = Math.max(1, jelenlegiOldal - 2);
-    let utolsoGomb = Math.min(oldalszam, jelenlegiOldal + 2);
+    let elsogomb = Math.max(1, jelenlegiOldal - 2); //kiszámoljuk, hogy melyik legyen az első gomb amit megjelenitunk.
+    //  az elso(1) és a jelenlegi oldal -2 között, erre azért van szükség, mert mindig a jelenlegi előtt 2-t mutatunk meg, és így biztosan nem lehet negatív ez a szám
+    let utolsoGomb = Math.min(oldalszam, jelenlegiOldal + 2);//ugyanaz csak forditva
 
     //első oldal a gombok között
     if (elsogomb > 1) {
@@ -602,4 +615,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         TermekBetoltes(1, szurtDataHossz.hossz, true, await adatok);
         szuresiAdatok = {};
     });
+    let kosarGomb = document.getElementById("tovabb")
+    kosarGomb.addEventListener("click",()=>{
+        window.location.href = "/adatlap"
+    })
 });
+const modalHiba = (hiba)=>{
+//hibás kitöltés kezelése
+        
+        document.getElementById('vissza').style.display = 'block';
+        document.getElementById('Sokhiba').style.display = 'block';
+        document.getElementById('siker').setAttribute('hidden', true);
+         document.getElementById('tovabb').setAttribute('hidden', true);
+         hiba = false;
+        
+}
+const modalJo = ()=>{
+//hibás kitöltés kezelése
+        
+        document.getElementById('Sokhiba').style.display = 'none';
+    document.getElementById('vissza').style.display = 'none';
+    document.getElementById('siker').removeAttribute('hidden',false);
+    document.getElementById('tovabb').removeAttribute('hidden', true);
+}
