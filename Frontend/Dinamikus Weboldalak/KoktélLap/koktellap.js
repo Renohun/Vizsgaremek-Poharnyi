@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
             document.getElementById("KoktJel").setAttribute("value","Koktél Törlése")
             document.getElementById("KoktJel").id="KoktDel"
             document.getElementById("KoktDel").addEventListener("click",async()=>{
-                await AdatKuldes("/api/Koktel/DeleteKoktel",{id:id},"DELETE")
+                await AdatKuldes("/api/Koktel/DeleteKoktel",{id:koktel},"DELETE")
                 window.location.href="/Koktelok"
             })
         }
