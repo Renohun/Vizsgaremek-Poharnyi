@@ -141,7 +141,8 @@ VALUES
 ("Peroni Stile Capr"," Peroni Stile Caprit a hozzáadott olasz citrom és olajfalevél kivonata teszi még egyedibbé, ezzel megidézve az olasz tengerpart jellegzetes nyári hangulatát ennek a prémium lager sörnek",1,0.5,1000,"what.webp","Sör","Peroni","Olaszország",5,500),
 /*https://www.dreherzrt.hu/markaink_oldal/arany-aszok/ */
 ("Arany Ászok","Közép-Magyarország egyik legnépszerűbb sörét, az Arany Ászokot, Dreher Antal által 1841-ben kifejlesztett, és később a magyar söriparban is meghonosított ászokolási technika alapján főzik.Nevét aranyló színéről és kiváló minőségéről kapta Kiegyensúlyozott íze, aranyló ragyogása és tömör habja tükrözi a kifogástalan minőséget, amit sok évtizedes hagyományokra visszatekintő szakértelmünk garantál.",1,0.5,1000,"what.webp","Sör","Dreher","Magyarország",5,500),
-
+/*https://www.belgasormester.hu/sorfozdek/sint-benedictus-abdij-de-achelse-kluis/achel-brune-bs200323*/
+("Achel Dubbel","Mahagóni színű testes dubbel, a maláta és sötét gyümölcsök egyensúlyban lévő ízjegyeivel, és a füstös, csokoládés útóízével a belga sörfőzés megkerülhetetlen terméke",1,0.33,1000,"what.webp","Sör","Achel","Belgium",8,1670),
 /*Egyéb*/
 ("Ouzou","Görög alkohol, mentolos ízzel",1,0.5,200,"what.webp","Egyéb","Görög Varázs","Görögország",12,9500),
 ("Soju Eper","Koreai desztillált alkohol, eper ízben",1,0.35,200,"what.webp","Egyéb","Jinro","Korea",12,2500);
