@@ -12,7 +12,7 @@ const saveLastUrl = require('./api/saveLastURLMiddleware.js');
 const app = express();
 const router = express.Router();
 
-const ip = '127.0.0.1';
+const ip = '0.0.0.0';
 const port = 3000;
 
 app.use(express.json()); //?Middleware JSON
