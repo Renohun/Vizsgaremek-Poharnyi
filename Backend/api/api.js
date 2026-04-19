@@ -2172,6 +2172,43 @@ router.patch("/Koktel/KoktelModositas/:id", async (request, response)=>{
         })
     }
 })
+router.get("/Koktel/SzomszedosKoktelok/:id",async (request, response)=>{
+    try 
+    {
+        const ÖsszesKoktél="SELECT KoktélID FROM Koktél ORDER BY KoktélID"
+        let koktelok=await lekeres(ÖsszesKoktél);
+        let elotte
+        let utana
+        for (let i = 0; i < koktelok.length; i++) {
+            if (koktelok[i].KoktélID==request.params.id) {
+                if (i==0) {
+                    elotte=koktelok[koktelok.length-1].KoktélID
+                    utana=koktelok[i+1].KoktélID
+                }
+                else if(i==koktelok.length-1){
+                    elotte=koktelok[i-1].KoktélID
+                    utana=koktelok[0].KoktélID
+                }
+                else{
+                    elotte=koktelok[i-1].KoktélID
+                    utana=koktelok[i+1].KoktélID
+                }
+
+            }
+
+        }
+        response.status(200).json({
+            message:"Siker!",
+            prev:elotte,
+            next:utana
+        })
+    } 
+    catch (error) {
+        response.status(500).json({
+            message:"Hiba!"
+        })
+    }
+})
 //
 //
 //

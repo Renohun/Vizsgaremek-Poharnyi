@@ -2,7 +2,9 @@ let koktel=(window.location.href.split("/"))[4]
 document.addEventListener("DOMContentLoaded",async()=>{
     //ez alapján lekérjük az adatokat
     const eredmeny=await AdatLekeres(`/api/Koktel/${koktel}`)
-
+    let iranyok=await AdatLekeres(`/api/Koktel/SzomszedosKoktelok/${koktel}`)
+    document.getElementById("elozo").setAttribute("href",iranyok.prev)
+    document.getElementById("kovetkezo").setAttribute("href",iranyok.next)
     let bevanelepve=await statikusadatok(eredmeny)
     if (bevanelepve) {
         document.getElementById("KommSend").addEventListener("click",async()=>{await Kommentkuldes()})
