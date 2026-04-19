@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
             modalElement.show();
 
-            document.getElementById('modalText').innerText = 'A jelszo nem felelt meg a kriteriumoknak!';
+            document.getElementById('modalText').innerText = 'A jelszó nem felelt meg a kritériumoknak!';
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
             modalElement.show();
 
-            document.getElementById('modalText').innerText = 'A ket jelszo nem egyezett!';
+            document.getElementById('modalText').innerText = 'A két jelszó nem egyezik!';
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalElement.show();
 
             document.getElementById('modalText').innerText =
-                'A jelszo sikeresen megvaltoztatva! Kerjuk jelentkezzen be!';
+                'A jelszó sikeresen megváltoztatva! Kérjűk jelentkezzen be!';
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();

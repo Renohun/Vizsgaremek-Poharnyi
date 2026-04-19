@@ -25,11 +25,11 @@
                             <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/Koktelok " class="nav-link">Koktelok</a>
+                            <a href="/Koktelok " class="nav-link">Koktélok</a>
                         </li>
                         <li class="nav-item">
                             <a href="/WebShop" class="nav-link">Webshop</a>
-                        </li>                        
+                        </li>
                         <li class="nav-item">
                             <a href="/PolcKoktel" class="nav-link">Mi van a polcon?</a>
                         </li>
@@ -47,7 +47,11 @@
                             <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
                         <a href="/LepjBe" id="belepes">
-                            <input type="button" class="btn btn-warning nav-item active jelenlegi" value="Bejelentkezés" />
+                            <input
+                                type="button"
+                                class="btn btn-warning nav-item active jelenlegi"
+                                value="Bejelentkezés"
+                            />
                         </a>
 
                         <a href="/Keszites" id="sajatKoktelKeszites" hidden>
@@ -78,20 +82,22 @@
             <div class="row my-5">
                 <div class="col-md-12">
                     <div class="card shadow">
-                        <div class="card-header text-center fw-bold">Bejelentkezes</div>
+                        <div class="card-header text-center fw-bold">Bejelentkezés</div>
                         <div class="card-body">
                             <form action="/api/belepes" method="post" id="formTag">
-                                <label for="email">Email</label>
+                                <label for="email">Adja meg az email címét:</label>
                                 <!--Ez sajnos nem ellenorzi azt hogy van . vegen, hanem a csak a @-ot -->
                                 <input
                                     type="email"
                                     name="email"
                                     id="email"
                                     class="form-control"
-                                    placeholder="pelda@domain.com"
+                                    placeholder="pelda@gmail.com"
                                     required
                                 />
-                                <label for="jelszo" class="mt-3">Jelszo</label>
+                                <label for="jelszo" class="mt-3"
+                                    >Adja meg a jelszavát: (Hossz: 8 - 20) (speciális karakterek (min.: 1): #?!@$%^&*-)
+                                </label>
                                 <input
                                     type="password"
                                     name="jelszo"
@@ -101,24 +107,24 @@
                                     class="form-control"
                                     required
                                 />
-                                <a href="/felhasznaloEllenorzes" target="_self">Elfelejetettem a jelszot!</a>
+                                <a href="/felhasznaloEllenorzes" target="_self">Elfelejetettem a jelszót!</a>
                                 <input
                                     type="submit"
                                     id="bejelentkezesGomb"
-                                    value="Bejelentkezes"
+                                    value="Bejelentkezés"
                                     class="w-100 btn btn-success mt-3"
                                 />
                             </form>
-                            <label for="jelszomutatas">Jelszo megjelenitese</label>
+                            <label for="jelszomutatas">Jelszó megjelenítése</label>
                             <input type="checkbox" name="" id="jelszomutatas" class="mt-2" />
                         </div>
                         <div class="card-header d-flex flex-column align-items-center">
                             <span class="text-center fw-bold"
-                                >Nincs meg fiokod?
+                                >Nincs még fiókod?
                                 <a href="/Regisztralj"
                                     ><input
                                         type="button"
-                                        value="Regisztralas"
+                                        value="Regisztrálás"
                                         class="w-100 btn btn-secondary mt-3" /></a
                             ></span>
                         </div>
@@ -146,9 +152,7 @@
     </body>
     <footer class="fs-5 shadow w-100">
         <div class="container">
-            <div class="col-12 text-center">
-                © 2026 Pohárnyi. Minden jog fenntartva.
-            </div>
+            <div class="col-12 text-center">© 2026 Pohárnyi. Minden jog fenntartva.</div>
             <div class="row">
                 <div class="col-lg-4 col-md-12"></div>
                 <div class="col-lg-2 col-md-12">
@@ -164,7 +168,7 @@
                         <a href="">Felhasználói kézikönyv</a>
                     </div>
                     <div class="text-lg-start text-center">
-                        <a href="">Adatkezelési Nyilatkozat</a> 
+                        <a href="">Adatkezelési Nyilatkozat</a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-12"></div>

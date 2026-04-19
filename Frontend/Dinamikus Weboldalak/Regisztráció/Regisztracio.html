@@ -25,7 +25,7 @@
                             <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/Koktelok " class="nav-link">Koktelok</a>
+                            <a href="/Koktelok " class="nav-link">Koktélok</a>
                         </li>
                         <li class="nav-item">
                             <a href="/WebShop" class="nav-link">Webshop</a>
@@ -71,7 +71,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
                                 <li class="dropdown-item" id="adminPanelHref"><a href="/AdminPanel">Admin Panel</a></li>
-                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                             </ul>
                         </div>
                     </div>
@@ -85,31 +85,34 @@
                         <p class="text-center fs-1 card-title">Regisztrálj a weblapunkra</p>
                         <form action="" method="post" id="formTag">
                             <div>
-                                <label for="emailInp">Adj meg email címét:</label>
+                                <label for="emailInp">Adja meg az email címét:</label>
                                 <input
                                     type="email"
                                     class="form-control mb-2"
-                                    placeholder="example@gmail.com"
+                                    placeholder="pelda@gmail.com"
                                     id="emailInp"
                                     name="emailInp"
                                     required
                                 />
                             </div>
                             <div>
-                                <label for="felhasnzaloNev">Adja meg a felhasználónevét (Min: 3 Max: 30)</label>
+                                <label for="felhasnzaloNev">Adja meg a felhasználónevét: (Hossz: 3 - 30)</label>
                                 <input
                                     type="text"
                                     class="form-control mb-2"
                                     min="3"
                                     max="30"
-                                    placeholder="Felhasznalo Nev"
+                                    placeholder="felhasználó név"
                                     name="felhasnzaloNev"
                                     id="felhasnzaloNev"
                                     required
                                 />
                             </div>
                             <div>
-                                <label for="jelszo">Adja meg a jelszavát (Min: 8 Max: 20)</label>
+                                <label for="jelszo"
+                                    >Adja meg a jelszavát: (Hossz: 8 - 20) (speciális karakterek (min.: 1):
+                                    #?!@$%^&*-)</label
+                                >
                                 <input
                                     type="password"
                                     min="8"
@@ -121,7 +124,7 @@
                                 />
                             </div>
                             <div>
-                                <label for="jelszoIsmet">Ismételje meg jelszavát (Min: 8 Max: 20)</label>
+                                <label for="jelszoIsmet">Ismételje meg a jelszavát:</label>
                                 <input
                                     type="password"
                                     min="8"
@@ -144,11 +147,11 @@
 
                         <div>
                             <input type="checkbox" name="jelszoMutatas" id="jelszoMutatas" />
-                            <label for="jelszoMutatas">Jelszo mutatasa</label>
+                            <label for="jelszoMutatas">Jelszó mutatása</label>
                         </div>
                         <div>
                             <input type="checkbox" name="ASZFCheck" id="ASZFCheck" required />
-                            <label for="ASZFCheck">Elfogadom az <a href="" target="_blank">ASZF</a> felteteleit</label>
+                            <label for="ASZFCheck">Elfogadom az <a href="" target="_blank">ÁSZF</a> feltételeit</label>
                         </div>
                     </div>
                     <div class="card-footer d-flex flex-column text-center">
