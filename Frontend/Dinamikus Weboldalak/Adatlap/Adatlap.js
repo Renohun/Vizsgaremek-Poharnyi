@@ -178,7 +178,7 @@ async function AdatlapLekeres(){
         AdatlapFelh.removeAttribute("disabled","true")
         AdatlapEmail.removeAttribute("disabled","true")
         titkos.removeAttribute("disabled","true")
-        modosit.setAttribute("disabled","true")
+        modosit.setAttribute("hidden","true")
 
         document.getElementById("pwChangeDiv").removeAttribute("hidden","true")
         
@@ -229,7 +229,7 @@ async function AdatlapLekeres(){
                 AdatlapEmail.value=tempMail
                 AdatlapJelszo.value=tempJelszo
                 AdatlapKep.setAttribute("src",tempKep)
-                modal("Siker","Sikeres Törlés!")
+                modal("Siker","Sikeres Visszavonás!")
             } 
             catch (error) {
                 modal("Hiba","Váratlan Hiba Történt!")
@@ -309,7 +309,7 @@ async function AdatlapLekeres(){
         }
         AdatlapFelh.setAttribute("disabled","true")
         AdatlapEmail.setAttribute("disabled","true")
-        modosit.removeAttribute("disabled","true")
+        modosit.removeAttribute("hidden","true")
         titkos.setAttribute("disabled","true")
         AdatlapJelszo.setAttribute("disabled","true")
         AdatlapJelszo2.setAttribute("disabled","true")        

@@ -319,15 +319,15 @@ async function jelentes(mit,tipus,kit) {
             document.getElementById("visszajelzes").innerHTML="Már tett jelentést ez ellen!"
         }
         //Kikapcsoljuk a küldési lehetőséget
-        document.getElementById("JelNvm").setAttribute("disabled","true")
-        document.getElementById("JelSend").setAttribute("disabled","true")
+        document.getElementById("JelNvm").setAttribute("hidden","true")
+        document.getElementById("JelSend").setAttribute("hidden","true")
         //És előhozzuk a nyugtázó gombot
         document.getElementById("JelKonf").removeAttribute("hidden","true")
         document.getElementById("JelKonf").addEventListener("click",()=>
         {
             //elrejtük a felületet, és visszaállítjuk az alaphelyzetbe, hogyha megint rányom a felhasználó, ugyan úgy nézzen ki mint amikor betölt az oldal
-            document.getElementById("JelNvm").removeAttribute("disabled","true")
-            document.getElementById("JelSend").removeAttribute("disabled","true")
+            document.getElementById("JelNvm").removeAttribute("hidden","true")
+            document.getElementById("JelSend").removeAttribute("hidden","true")
             document.getElementById("JelKonf").setAttribute("hidden","true")
             document.getElementById("visszajelzes").innerHTML=""
             document.getElementById("indok").value=""
