@@ -402,14 +402,6 @@ async function szures() {
     //max ár hozzaadasa
     szuresiAdatok.MaxAr = arSlider.value;
     //max alkoholtartalom hozáaadása
-    if(NevKereses.value != "")
-    {
-        szuresiAdatok.Nev = NevKereses.value
-    }
-    else
-    {
-        szuresiAdatok.Nev = "'%'"
-    }
     if (KategoriaSelect.value == 'alkohol') {
         szuresiAdatok.MaxAlk = alkoholSlider.value;
     }
