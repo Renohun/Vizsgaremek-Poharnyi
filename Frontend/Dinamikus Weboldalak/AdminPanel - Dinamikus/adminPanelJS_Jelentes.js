@@ -436,6 +436,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             tovabbKoktelraGomb.setAttribute('value', 'Tovább a receptre');
                             tovabbKoktelraGomb.classList.add('btn', 'btn-secondary', 'w-100');
                             tovabbKoktelraGomb.dataset.koktelID = rows.koktelok[i][0].KoktélID;
+
+                            tovabbKoktelraGomb.addEventListener('click', () => {
+                                window.location.href = `http://127.0.0.1:3000/Koktel/${rows.koktelok[i][0].KoktélID}`;
+                            });
+
                             cardBody.appendChild(tovabbKoktelraGomb);
 
                             let separator2 = document.createElement('hr');
