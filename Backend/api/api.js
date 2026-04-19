@@ -2648,7 +2648,7 @@ router.post('/Webshop/szures', async (request, response) => {
 
             if (
                 item[0] != 'rendezes' &&
-                item[0] != 'akcio'
+                item[0] != 'akcio' && item[0] != "Nev"
             ) //amennyiben a postobjectben lévő adat nem az akcio, vagy a rendezes szuresehez kell, akkor belerakjuk az értéklistába
             {
                 ertekLista.push(item[1]);
@@ -2656,7 +2656,8 @@ router.post('/Webshop/szures', async (request, response) => {
         }
         // a query utolso 3 elemenek (AND) levágása
         query = query.slice(query[0], query.length - 4);
-
+        console.log(feltetelek)
+        console.log(query)
         query += OrderBy;
         let limitoffset = ' LIMIT ? OFFSET ?';
         query += limitoffset;

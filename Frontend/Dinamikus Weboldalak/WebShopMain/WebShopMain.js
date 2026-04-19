@@ -388,6 +388,7 @@ const kartyaGen = async (data, hova) => {
 
 async function szures() {
     let OrszagSelect = document.getElementById('OrszagSelect');
+    let NevKereses = document.getElementById("NevKereses")
     let MarkaSelect = document.getElementById('MarkaSelect');
     let KategoriaSelect = document.getElementById('KategoriaSelect');
     let RendezesSelect = document.getElementById('RendezesSelect');
@@ -401,6 +402,14 @@ async function szures() {
     //max ár hozzaadasa
     szuresiAdatok.MaxAr = arSlider.value;
     //max alkoholtartalom hozáaadása
+    if(NevKereses.value != "")
+    {
+        szuresiAdatok.Nev = NevKereses.value
+    }
+    else
+    {
+        szuresiAdatok.Nev = "'%'"
+    }
     if (KategoriaSelect.value == 'alkohol') {
         szuresiAdatok.MaxAlk = alkoholSlider.value;
     }
