@@ -27,11 +27,11 @@
                             <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/Koktelok " class="nav-link">Koktelok</a>
+                            <a href="/Koktelok " class="nav-link">Koktélok</a>
                         </li>
                         <li class="nav-item">
                             <a href="/WebShop" class="nav-link">Webshop</a>
-                        </li>                        
+                        </li>
                         <li class="nav-item">
                             <a href="/PolcKoktel" class="nav-link">Mi van a polcon?</a>
                         </li>
@@ -68,8 +68,10 @@
                             />
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
-                                <li class="dropdown-item jelenlegi nav-item" id="adminPanelHref"><a href="/AdminPanel">Admin Panel</a></li>
-                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                                <li class="dropdown-item jelenlegi nav-item" id="adminPanelHref">
+                                    <a href="/AdminPanel">Admin Panel</a>
+                                </li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                             </ul>
                         </div>
                     </div>
@@ -80,13 +82,13 @@
             <div class="row">
                 <div class="d-flex flex-column col-md-3 col-sm-4 col-lg-2 col-xl-1 col-4 vh-100 shadow" id="Sidebar">
                     <div class="mb-auto mt-auto">
-                        <p class="text-dark fs-5 sideBarGomb" name="jelentesekKezelese">Jelenetesek Kezelese</p>
+                        <p class="text-dark fs-5 sideBarGomb" name="jelentesekKezelese">Jelenetések Kezelése</p>
                     </div>
                     <div class="mb-auto mt-auto">
-                        <p class="text-dark fs-5 sideBarGomb" name="koktelokKezelese">Koktelok kezelés</p>
+                        <p class="text-dark fs-5 sideBarGomb" name="koktelokKezelese">Koktélok Kezelés</p>
                     </div>
                     <div class="mb-auto mt-auto">
-                        <p class="text-dark fs-5 sideBarGomb" name="termekFeltoltes">Termek Kezeles</p>
+                        <p class="text-dark fs-5 sideBarGomb" name="termekFeltoltes">Termékek Kezeles</p>
                     </div>
                 </div>
                 <div name="jelentesekKezelese" class="col-md-9 col-sm-8 col-lg-10 col-xl-11 col-8 mt-5">
@@ -94,13 +96,13 @@
                         <input
                             type="button"
                             id="felhasznalokJelentesei"
-                            value="Felhasznalok"
+                            value="Felhasználók"
                             class="btn btn-success text-white p-3 col-9 col-sm-3 mb-5 shadow-sm"
                         />
                         <input
                             type="button"
                             id="koktelokJelentesei"
-                            value="Koktelok"
+                            value="Koktélok"
                             class="btn btn-success text-white p-3 col-9 col-sm-3 mb-5 shadow-sm"
                         />
                         <input
@@ -123,13 +125,14 @@
                             required
                         />
 
-                        <label for="koktelNeve">Koktel neve: </label>
+                        <label for="koktelNeve">Koktél neve: </label>
                         <input
                             type="text"
                             name="koktelNeve"
                             id="koktelNeve"
                             class="form-control mb-3 ms-2 me-2"
                             max="50"
+                            placeholder="Név"
                             tabindex="1"
                             required
                         />
@@ -139,22 +142,24 @@
                             <input type="checkbox" name="alkoholosE" id="alkoholosE" tabindex="2" />
                         </div>
 
-                        <label for="koktelAlapja">Koktel alapja: </label>
+                        <label for="koktelAlapja">Koktél alapja: </label>
                         <input
                             type="text"
                             name="koktelAlapja"
                             id="koktelAlapja"
                             class="form-control mb-3 ms-2"
                             max="50"
+                            placeholder="Alap"
                             tabindex="3"
                             required
                         />
-                        <label for="koktelAlapjaMennyiseg">Koktel alap mennyiseg: </label>
+                        <label for="koktelAlapjaMennyiseg">Koktél alap mennyisége: </label>
                         <input
                             type="number"
                             name="koktelAlapjaMennyiseg"
                             id="koktelAlapjaMennyiseg"
                             class="form-control mb-3 ms-2"
+                            placeholder="Alap mennyisége (ml)"
                             tabindex="4"
                             required
                         />
@@ -165,19 +170,19 @@
                             </div>
 
                             <div class="d-flex flex-column w-100 text-center gap-2" id="koktelIz">
-                                <label for="koktelIze">Iz:(min 1)</label>
+                                <label for="koktelIze">Íz:(min 1)</label>
                             </div>
 
                             <div class="d-flex flex-column w-100 text-center gap-2" id="koktelAllergen">
-                                <label for="koktelAllergenek">Allergenek (nem kotelezo)</label>
+                                <label for="koktelAllergenek">Allergenek (Nem kötelező)</label>
                             </div>
                         </div>
 
                         <div id="koktelOsszetevok" class="p-0 ms-2">
                             <label for="koktelOszztevoi" class="mt-3">Koktel 1. osszetevoje:</label>
                             <div class="d-flex justify-content-between">
-                                <input type="text" class="form-control" required />
-                                <input type="number" class="form-control" required />
+                                <input type="text" class="form-control" placeholder="Összetevő neve" required />
+                                <input type="number" class="form-control" placeholder="Mérték" required />
                                 <select name="osszetevoMertekegyseg" id="osszetevoMertekegyseg" class="form-control">
                                     <option value="Ml">Ml</option>
                                     <option value="Darab">Darab</option>
@@ -188,19 +193,19 @@
                         <div class="p-0 ms-2">
                             <input
                                 type="button"
-                                value="Uj osszetevo"
+                                value="Új összetevő"
                                 id="ujOsszetevo"
                                 class="btn btn-success mt-3 mb-3 shadow-sm"
                             />
                             <input
                                 type="button"
-                                value="Osszetevo torlese"
+                                value="Összetevő törlése"
                                 id="osszetevoDel"
                                 class="btn btn-danger mt-3 mb-3 shadow-sm"
                             />
                         </div>
 
-                        <label for="koktelRecept">Koktel receptje: </label>
+                        <label for="koktelRecept">Koktél receptje: </label>
                         <textarea
                             type="text"
                             name="koktelRecept"
@@ -236,7 +241,7 @@
                     <div class="container-fluid d-flex flex-column">
                         <!--nev, leiras, kiszereles, keszlet, kep, kategoria, marka,  szarmazas(orszag), alkohol szazalek, kora?, ar-->
                         <!--learazashoz egy extra resz ahol nev alapu kereses alapjan lehet allitani a learazas osszeget-->
-                        <h4>Termek feltoltes</h4>
+                        <h4>Termék feltöltés</h4>
                         <input
                             type="file"
                             id="termekKepFeltoltes"
@@ -244,10 +249,17 @@
                             class="form-control mb-2"
                             required
                         />
-                        <label for="termekNev">Termek neve:</label>
-                        <input type="text" id="termekNev" class="form-control mb-2" name="termekNev" required />
+                        <label for="termekNev">Termék neve:</label>
+                        <input
+                            type="text"
+                            id="termekNev"
+                            class="form-control mb-2"
+                            name="termekNev"
+                            placeholder="Név"
+                            required
+                        />
 
-                        <label for="termekLeiras">Termek leirasa:</label>
+                        <label for="termekLeiras">Termék leírása:</label>
                         <textarea
                             name="termekLeiras"
                             id="termekLeiras"
@@ -257,70 +269,81 @@
                             maxlength="300"
                             required
                         ></textarea>
-                        <label for="termekKategoria">Termek kategoria:</label>
+                        <label for="termekKategoria">Termék kategoria:</label>
                         <select name="termekKategoria" id="termekKategoria" class="form-control mb-2" required>
-                            <option value="Eszkozok" selected>Eszkozok</option>
-                            <option value="Sor">Sor</option>
+                            <option value="Eszkozok" selected>Eszközök</option>
+                            <option value="Sor">Sör</option>
                             <option value="Bor">Bor</option>
-                            <option value="Palinka">Palinka</option>
-                            <option value="Likor">Likor</option>
+                            <option value="Palinka">Pálinka</option>
+                            <option value="Likor">Likör</option>
                             <option value="Vodka">Vodka</option>
                             <option value="Whisky">Whisky</option>
                             <option value="Rum">Rum</option>
                             <option value="Konyak">Konyak</option>
-                            <option value="Pezsgo">Pezsgo</option>
+                            <option value="Pezsgo">Pezsgő</option>
                             <option value="Szirup">Szirup</option>
                             <option value="Tequila">Tequila</option>
                             <option value="Gin">Gin</option>
                             <option value="Cider">Cider</option>
-                            <option value="Pohar">Pohar</option>
+                            <option value="Pohar">Pohár</option>
                             <option value="Merch">Merch</option>
-                            <option value="Egyeb">Egyeb</option>
+                            <option value="Egyeb">Egyéb</option>
                         </select>
 
-                        <label for="termekKiszereles">Termek kiszerelese:</label>
+                        <label for="termekKiszereles">Termék kiszerelese:</label>
                         <input
                             type="number"
                             id="termekKiszereles"
                             class="form-control"
                             name="termekKiszereles"
+                            placeholder="Kiszerelés"
                             required
                         />
 
-                        <label for="termekKeszlet">Termek keszlete:</label>
+                        <label for="termekKeszlet">Termék készlete:</label>
                         <input
                             type="number"
                             class="form-control mb-2"
                             id="termekKeszlet"
                             name="termekKeszlet"
+                            placeholder="Készlete"
                             required
                         />
 
                         <label for="termekUrtartalom" id="termekUrtartalomLabel" class="form-label" hidden
-                            >Termek urtaltalma</label
+                            >Termék űrtaltalma</label
                         >
                         <input
                             type="text"
                             class="form-control mb-2"
                             id="termekUrtartalom"
                             name="termekUrtartalom"
+                            placeholder="Űrtaltalma"
                             required
                             hidden
                         />
 
-                        <label for="termekMarka">Termek marka:</label>
-                        <input type="text" name="termekMarka" id="termekMarka" class="form-control mb-2" required />
+                        <label for="termekMarka">Termék márka:</label>
+                        <input
+                            type="text"
+                            name="termekMarka"
+                            placeholder="Márka"
+                            id="termekMarka"
+                            class="form-control mb-2"
+                            required
+                        />
 
-                        <label for="termekSzarmazas">Termek szarmazasa (orszag):</label>
+                        <label for="termekSzarmazas">Termék szarmazása (Ország):</label>
                         <input
                             type="text"
                             name="termekSzarmazas"
                             id="termekSzarmazas"
                             class="form-control mb-2"
+                            placeholder="Ország"
                             required
                         />
 
-                        <label for="termekAlkoholLabel" id="termekAlkoholLabel" hidden>Termek alkholol %-ka:</label>
+                        <label for="termekAlkoholLabel" id="termekAlkoholLabel" hidden>Termék alkholol %-ka:</label>
                         <input
                             type="number"
                             name="termekAlkohol"
@@ -328,47 +351,57 @@
                             min="0"
                             max="100"
                             class="form-control mb-2"
+                            placeholder="Alkholol %"
                             hidden
                             required
                         />
 
-                        <label for="termekKoraLabel" id="termekKoraLabel" hidden>Termek kora: </label>
+                        <label for="termekKoraLabel" id="termekKoraLabel" hidden>Termék kora: </label>
                         <input
                             type="number"
                             class="form-control mb-2"
                             id="termekKora"
                             name="termekKora"
+                            placeholder="Kor"
                             hidden
                             required
                         />
 
-                        <label for="termekAra">Termek ara: </label>
-                        <input type="number" class="form-control mb-2" id="termekAra" name="termekAra" required />
+                        <label for="termekAra">Termék ára: </label>
+                        <input
+                            type="number"
+                            placeholder="Ár"
+                            class="form-control mb-2"
+                            id="termekAra"
+                            name="termekAra"
+                            required
+                        />
 
                         <input
                             type="button"
                             id="termekFeltoltesGomd"
-                            value="Termek feltoltese"
+                            value="Termék feltöltés"
                             class="btn btn-success mt-5 w-100"
                             required
                         />
 
                         <hr />
                         <div>
-                            <h4>Termek learazas:</h4>
+                            <h4>Termék leárazás:</h4>
                             <select name="termekLearazas" id="termekLearazas" class="form-control mb-3"></select>
-                            <label for="termekLearazasanakErteke" class="form-label">Learazas erteke (1-100):</label>
+                            <label for="termekLearazasanakErteke" class="form-label">Leárazás értéke (1-100 %):</label>
                             <input
                                 type="number"
                                 id="termekLearazasanakErteke"
                                 name="termekLearazasanakErteke"
                                 class="form-control"
                                 min="0"
+                                placeholder="Értéke"
                                 max="100"
                             />
                             <input
                                 type="button"
-                                value="Termek learazasa"
+                                value="Termék leárazása"
                                 id="termekLearazasGomb"
                                 class="btn btn-success w-100 mt-3"
                             />
@@ -376,14 +409,14 @@
 
                         <hr />
                         <div>
-                            <h4>Termek torles</h4>
+                            <h4>Termék törlés</h4>
                             <select name="termekTorles" id="termekTorles" class="form-control mb-2">
                                 <option value="" selected></option>
                             </select>
                             <input
                                 type="button"
                                 class="btn btn-danger w-100 mt-2"
-                                value="Termek torlese"
+                                value="Termék törlése"
                                 id="termekTorlesGomb"
                             />
                         </div>
@@ -414,9 +447,7 @@
     </body>
     <footer class="fs-5 shadow w-100">
         <div class="container">
-            <div class="col-12 text-center">
-                © 2026 Pohárnyi. Minden jog fenntartva.
-            </div>
+            <div class="col-12 text-center">© 2026 Pohárnyi. Minden jog fenntartva.</div>
             <div class="row">
                 <div class="col-lg-4 col-md-12"></div>
                 <div class="col-lg-2 col-md-12">
@@ -432,7 +463,7 @@
                         <a href="">Felhasználói kézikönyv</a>
                     </div>
                     <div class="text-lg-start text-center">
-                        <a href="">Adatkezelési Nyilatkozat</a> 
+                        <a href="">Adatkezelési Nyilatkozat</a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-12"></div>

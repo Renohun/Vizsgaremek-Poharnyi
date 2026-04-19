@@ -25,11 +25,11 @@
                             <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/Koktelok " class="nav-link">Koktelok</a>
+                            <a href="/Koktelok " class="nav-link">Koktélok</a>
                         </li>
                         <li class="nav-item">
                             <a href="/WebShop" class="nav-link">Webshop</a>
-                        </li>                        
+                        </li>
                         <li class="nav-item">
                             <a href="/PolcKoktel" class="nav-link">Mi van a polcon?</a>
                         </li>
@@ -47,7 +47,11 @@
                             <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
                         </a>
                         <a href="/LepjBe" id="belepes">
-                            <input type="button" class="btn btn-warning nav-item active jelenlegi" value="Bejelentkezés" />
+                            <input
+                                type="button"
+                                class="btn btn-warning nav-item active jelenlegi"
+                                value="Bejelentkezés"
+                            />
                         </a>
 
                         <a href="/Keszites" id="sajatKoktelKeszites" hidden>
@@ -67,7 +71,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
                                 <li class="dropdown-item" id="adminPanelHref"><a href="/AdminPanel">Admin Panel</a></li>
-                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
+                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                             </ul>
                         </div>
                     </div>
@@ -79,23 +83,26 @@
             <div class="row my-5">
                 <div class="col-md-12">
                     <div class="card shadow">
-                        <div class="card-header text-center fw-bold">Jelszo valtoztatas</div>
+                        <div class="card-header text-center fw-bold">Jelszo változtatás</div>
                         <div class="card-body">
                             <form id="jelszoForm">
-                                <label for="ujJelszo" class="form-label">Uj jelszo:</label>
+                                <label for="ujJelszo" class="form-label"
+                                    >Adja meg az új jelszavát: (Hossz: 8 - 20) (speciális karakterek (min.: 1):
+                                    #?!@$%^&*-)</label
+                                >
                                 <input type="password" id="ujJelszo" name="ujJelszo" class="form-control w-100" />
-                                <label for="ujJelszoUjra" class="form-label">Uj jelszo ujra:</label>
+                                <label for="ujJelszoUjra" class="form-label">Új jelszo újra:</label>
                                 <input
                                     type="password"
                                     class="form-control w-100"
                                     name="ujJelszoUjra"
                                     id="ujJelszoUjra"
                                 />
-                                <label for="megJelenit" class="form-label">Jelszo megjelenitese</label>
+                                <label for="megJelenit" class="form-label">Jelszó megjelenítése</label>
                                 <input type="checkbox" name="megJelenit" id="megJelenit" />
                                 <input
                                     type="button"
-                                    value="Jelszo valtoztatas"
+                                    value="Jelszó változtatás"
                                     id="jelszoValt"
                                     class="btn btn-success w-100 mt-2"
                                 />
@@ -117,33 +124,31 @@
                 </div>
             </div>
         </div>
-    <footer class="fs-5 shadow w-100">
-        <div class="container">
-            <div class="col-12 text-center">
-                © 2026 Pohárnyi. Minden jog fenntartva.
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-12"></div>
-                <div class="col-lg-2 col-md-12">
-                    <div class="text-lg-end text-center">
-                        <a href="">Elérhetőségek</a>
+        <footer class="fs-5 shadow w-100">
+            <div class="container">
+                <div class="col-12 text-center">© 2026 Pohárnyi. Minden jog fenntartva.</div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-12"></div>
+                    <div class="col-lg-2 col-md-12">
+                        <div class="text-lg-end text-center">
+                            <a href="">Elérhetőségek</a>
+                        </div>
+                        <div class="text-lg-end text-center">
+                            <a href="https://forms.gle/cp3o19kbEVdXiZ7L9">Hibajelenés</a>
+                        </div>
                     </div>
-                    <div class="text-lg-end text-center">
-                        <a href="https://forms.gle/cp3o19kbEVdXiZ7L9">Hibajelenés</a>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="text-lg-start text-center">
+                            <a href="">Felhasználói kézikönyv</a>
+                        </div>
+                        <div class="text-lg-start text-center">
+                            <a href="">Adatkezelési Nyilatkozat</a>
+                        </div>
                     </div>
+                    <div class="col-lg-2 col-md-12"></div>
                 </div>
-                <div class="col-lg-4 col-md-12">
-                    <div class="text-lg-start text-center">
-                        <a href="">Felhasználói kézikönyv</a>
-                    </div>
-                    <div class="text-lg-start text-center">
-                        <a href="">Adatkezelési Nyilatkozat</a> 
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-12"></div>
             </div>
-        </div>
-    </footer>
+        </footer>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/navBar.js"></script>

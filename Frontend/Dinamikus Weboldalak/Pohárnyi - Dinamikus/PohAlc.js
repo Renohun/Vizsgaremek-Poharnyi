@@ -106,7 +106,7 @@ function koktelRendereles(koktelok) {
 
             if (koktel.ertekeles == 0) {
                 let ertekeles = document.createElement('span');
-                ertekeles.innerText = 'Nincs meg ertekeles!';
+                ertekeles.innerText = 'Nincs meg értékelés!';
                 cardBody.appendChild(ertekeles);
             } else {
                 let csillagert = Math.ceil(koktel.ertekeles);

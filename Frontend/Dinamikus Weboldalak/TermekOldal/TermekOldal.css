@@ -187,6 +187,7 @@ table,
     margin-top: 10px;
     padding-bottom: 0px;
     margin-bottom: 0px;
+    font-size: large;
 }
 .ErtekelesDiv{
     display: flex;
@@ -197,7 +198,7 @@ table,
     .Termek
     {
         width: 80%;
-        height: 80%;        
+        height: 400px;        
         align-self: center;
         margin: 5px;     
     }
@@ -378,7 +379,7 @@ tr{
 }
     .hasonloKep{
     width: 90%;
-    height: auto;
+    height:auto;
 }
 .Termek{
     height: auto;

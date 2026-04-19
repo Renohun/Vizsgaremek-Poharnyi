@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
         modalElement.show();
 
-        document.getElementById('modalText').innerText = 'Az uj email sikeresen elkuldve!';
+        document.getElementById('modalText').innerText = 'Az új email sikeresen elküldve!';
 
         document.getElementById('modalBtn').addEventListener('click', () => {
             modalElement.hide();
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
             modalElement.show();
 
-            document.getElementById('modalText').innerText = 'Nem adott meg kodot! Kerjuk adjon meg egy kodot!';
+            document.getElementById('modalText').innerText = 'Nem adott meg kódot! Kérjűk adjon meg egy kódot!';
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             modalElement.show();
 
             document.getElementById('modalText').innerText =
-                'Helytelen kodot adott meg! Kerjuk adja meg a helyes kodot vagy kerjen egy uj email-t!';
+                'Helytelen kódot adott meg! Kérjűk adja meg a helyes kódot vagy kérjen egy új email-t!';
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();

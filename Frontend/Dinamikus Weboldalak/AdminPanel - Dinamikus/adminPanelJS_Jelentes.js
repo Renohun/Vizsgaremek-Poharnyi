@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (rows.felhasznalok.length == 0) {
                     let uzenetElement = document.createElement('p');
-                    uzenetElement.innerText = 'Nincsen semmilyen jelentes jelenleg :)';
+                    uzenetElement.innerText = 'Nincsen semmilyen jeléntes jelenleg :)';
                     jelentesekSor.appendChild(uzenetElement);
                 } else {
                     const jelentesekSor = document.getElementById('jelentesekCard');
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             cardBody.appendChild(cardText);
 
                             let emailElement = document.createElement('p');
-                            emailElement.innerText = 'Felhasznalo email cime: ' + rows.felhasznalok[i][0].Email;
+                            emailElement.innerText = 'Felhasználó email címe: ' + rows.felhasznalok[i][0].Email;
                             cardText.appendChild(emailElement);
 
                             let regisztralasDatuma = document.createElement('p');
@@ -154,14 +154,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             let regDate = reg[0];
                             let regTime = reg[1].split('.')[0];
 
-                            regisztralasDatuma.innerText = 'Regisztracio ideje: ' + regDate + ' ' + regTime;
+                            regisztralasDatuma.innerText = 'Regisztráció ideje: ' + regDate + ' ' + regTime;
                             cardText.appendChild(regisztralasDatuma);
 
                             let separator2 = document.createElement('hr');
                             cardBody.appendChild(separator2);
 
                             let jelentesHeader = document.createElement('h4');
-                            jelentesHeader.innerText = 'Jelentes indokai:';
+                            jelentesHeader.innerText = 'Jelentés indokai:';
                             cardBody.appendChild(jelentesHeader);
 
                             let jelentesekLista = document.createElement('ul');
@@ -262,15 +262,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 const jelentesXIndok = document.createElement('li');
                                 jelentesXIndok.innerText =
-                                    'Tovabbi ' +
+                                    'További ' +
                                     parseInt(rows.felhasznalok[i][0].jelentesIndokok[0].length - 3) +
-                                    ' jelentes...';
+                                    ' jelentés...';
                                 jelentesekLista.appendChild(jelentesXIndok);
                             }
 
                             if (jelentesekLista.children.length <= 0) {
                                 let jelentesUres = document.createElement('li');
-                                jelentesUres.innerText = 'Indok még nincsen megadva';
+                                jelentesUres.innerText = 'Indok még nincsen megadva!';
                                 jelentesekLista.appendChild(jelentesUres);
                             }
                             cardBody.appendChild(jelentesekLista);
@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             elutasitasGomb.setAttribute('type', 'button');
                             elutasitasGomb.classList.add('btn');
                             elutasitasGomb.classList.add('btn-danger');
-                            elutasitasGomb.setAttribute('value', 'Elutasitas');
+                            elutasitasGomb.setAttribute('value', 'Elutasítás');
                             elutasitasGomb.dataset.jelentesID = rows.felhasznalok[i - 1];
                             gombDiv.appendChild(elutasitasGomb);
                             elutasitasGomb.addEventListener('click', elutasitasGombFv);
@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             elfogadasGomb.setAttribute('type', 'button');
                             elfogadasGomb.classList.add('btn');
                             elfogadasGomb.classList.add('btn-success');
-                            elfogadasGomb.setAttribute('value', 'Elfogadas');
+                            elfogadasGomb.setAttribute('value', 'Elfogadás');
                             elfogadasGomb.dataset.jelentesID = rows.felhasznalok[i - 1];
                             gombDiv.appendChild(elfogadasGomb);
                             elfogadasGomb.addEventListener('click', elfogadasGombFv);
@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (rows.koktelok.length == 0) {
                     let uzenetElement = document.createElement('p');
-                    uzenetElement.innerText = 'Nincsen semmilyen jelentes jelenleg :)';
+                    uzenetElement.innerText = 'Nincsen semmilyen jelentés jelenleg :)';
                     jelentesekSor.appendChild(uzenetElement);
                 } else {
                     const jelentesekSor = document.getElementById('jelentesekCard');
@@ -399,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             if (rows.koktelok[i][0].ertekeles[0][0].Osszert == null) {
                                 let ertekeles = document.createElement('span');
-                                ertekeles.innerText = 'Nincs meg ertekeles!';
+                                ertekeles.innerText = 'Nincs meg értékelés!';
                                 cardBody.appendChild(ertekeles);
                             } else {
                                 const ertekeles = Math.round(rows.koktelok[i][0].ertekeles[0][0].Osszert * 10) / 10;
@@ -433,9 +433,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             let tovabbKoktelraGomb = document.createElement('input');
                             tovabbKoktelraGomb.setAttribute('type', 'button');
-                            tovabbKoktelraGomb.setAttribute('value', 'Tovabb a receptre');
+                            tovabbKoktelraGomb.setAttribute('value', 'Tovább a receptre');
                             tovabbKoktelraGomb.classList.add('btn', 'btn-secondary', 'w-100');
                             tovabbKoktelraGomb.dataset.koktelID = rows.koktelok[i][0].KoktélID;
+
+                            tovabbKoktelraGomb.addEventListener('click', () => {
+                                window.location.href = `http://127.0.0.1:3000/Koktel/${rows.koktelok[i][0].KoktélID}`;
+                            });
+
                             cardBody.appendChild(tovabbKoktelraGomb);
 
                             let separator2 = document.createElement('hr');
@@ -444,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const jelentesDiv = document.createElement('div');
 
                             let jelentesHeader = document.createElement('h4');
-                            jelentesHeader.innerText = 'Jelentes indokai:';
+                            jelentesHeader.innerText = 'Jelentés indokai:';
                             jelentesDiv.appendChild(jelentesHeader);
 
                             let jelentesekLista = document.createElement('ul');
@@ -542,15 +547,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 const jelentesXIndok = document.createElement('li');
                                 jelentesXIndok.innerText =
-                                    'Tovabbi ' +
+                                    'További ' +
                                     parseInt(rows.koktelok[i][0].jelentesIndokok[0].length - 3) +
-                                    ' jelentes...';
+                                    ' jelentés...';
                                 jelentesekLista.appendChild(jelentesXIndok);
                             }
 
                             if (jelentesekLista.children.length <= 0) {
                                 let jelentesUres = document.createElement('li');
-                                jelentesUres.innerText = 'Indok még nincsen megadva';
+                                jelentesUres.innerText = 'Indok még nincsen megadva!';
                                 jelentesekLista.appendChild(jelentesUres);
                             }
                             jelentesDiv.appendChild(jelentesekLista);
@@ -564,7 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             elutasitasGomb.setAttribute('type', 'button');
                             elutasitasGomb.classList.add('btn');
                             elutasitasGomb.classList.add('btn-danger');
-                            elutasitasGomb.setAttribute('value', 'Elutasitas');
+                            elutasitasGomb.setAttribute('value', 'Elutasítás');
                             elutasitasGomb.dataset.jelentesID = rows.koktelok[i - 1];
                             gombDiv.appendChild(elutasitasGomb);
                             elutasitasGomb.addEventListener('click', elutasitasGombFv);
@@ -573,7 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             elfogadasGomb.setAttribute('type', 'button');
                             elfogadasGomb.classList.add('btn');
                             elfogadasGomb.classList.add('btn-success');
-                            elfogadasGomb.setAttribute('value', 'Elfogadas');
+                            elfogadasGomb.setAttribute('value', 'Elfogadás');
                             elfogadasGomb.dataset.jelentesID = rows.koktelok[i - 1];
                             gombDiv.appendChild(elfogadasGomb);
                             elfogadasGomb.addEventListener('click', elfogadasGombFv);
@@ -613,7 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (rows.kommentek.length == 0) {
                     let uzenetElement = document.createElement('p');
-                    uzenetElement.innerText = 'Nincsen semmilyen jelentes jelenleg :)';
+                    uzenetElement.innerText = 'Nincsen semmilyen jelentés jelenleg :)';
                     jelentesekSor.appendChild(uzenetElement);
                 } else {
                     const jelentesekSor = document.getElementById('jelentesekCard');
@@ -666,7 +671,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             jelentesContainer.classList.add('d-flex', 'flex-column', 'justify-content-start');
 
                             let jelentesHeader = document.createElement('h4');
-                            jelentesHeader.innerText = 'Jelentes indokai:';
+                            jelentesHeader.innerText = 'Jelentés indokai:';
                             cardBody.appendChild(jelentesHeader);
 
                             let jelentesekLista = document.createElement('ul');
@@ -766,14 +771,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 const jelentesXIndok = document.createElement('li');
                                 jelentesXIndok.innerText =
-                                    'Tovabbi ' +
+                                    'További ' +
                                     parseInt(rows.kommentek[i][0].jelentesIndokok[0].length - 3) +
-                                    ' jelentes...';
+                                    ' jelentés...';
                                 jelentesekLista.appendChild(jelentesXIndok);
                             }
                             if (jelentesekLista.children.length <= 0) {
                                 let jelentesUres = document.createElement('li');
-                                jelentesUres.innerText = 'Indok még nincsen megadva';
+                                jelentesUres.innerText = 'Indok még nincsen megadva!';
                                 jelentesekLista.appendChild(jelentesUres);
                             }
                             jelentesContainer.appendChild(jelentesHeader);
@@ -788,7 +793,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             elutasitasGomb.setAttribute('type', 'button');
                             elutasitasGomb.classList.add('btn');
                             elutasitasGomb.classList.add('btn-danger');
-                            elutasitasGomb.setAttribute('value', 'Elutasitas');
+                            elutasitasGomb.setAttribute('value', 'Elutasítás');
                             elutasitasGomb.dataset.jelentesID = rows.kommentek[i - 1];
                             ujOszlop.appendChild(elutasitasGomb);
                             elutasitasGomb.addEventListener('click', elutasitasGombFv);
@@ -798,7 +803,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             elfogadasGomb.setAttribute('type', 'button');
                             elfogadasGomb.classList.add('btn');
                             elfogadasGomb.classList.add('btn-success');
-                            elfogadasGomb.setAttribute('value', 'Elfogadas');
+                            elfogadasGomb.setAttribute('value', 'Elfogadás');
                             elfogadasGomb.dataset.jelentesID = rows.kommentek[i - 1];
                             ujOszlop.appendChild(elfogadasGomb);
                             elfogadasGomb.addEventListener('click', elfogadasGombFv);
