@@ -21,10 +21,6 @@
     background-color: rgb(146, 197, 7);
     border-radius: 0px;
 }
-
-div > li {
-    border-left: 1px solid gray;
-}
 .nav-link {
     margin-left: 5px;
 }
@@ -34,7 +30,7 @@ div > li {
     height: 50px;
     width: 50px;
 }
-.hatter{
+.hatter {
     background-color: rgb(146, 197, 7);
     border-bottom-right-radius: 5px;
 }
@@ -47,17 +43,16 @@ div > li {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     --bs-dropdown-link-hover-bg: #a7e727;
-
 }
-.navbar-nav > div > .dropdown-menu > li > a {
+.hatter > li > a {
     text-decoration: none;
     /*color: rgb(28, 180, 28);*/
     color: black;
 }
 
-#Sidebar{
+#Sidebar {
     background-color: rgb(146, 197, 7);
-    margin-top:5px;
+    margin-top: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
