@@ -99,13 +99,21 @@ async function statikusadatok(adatok)
 
     //Összetevők létrehozása
     const OssztevHely=document.getElementById("Ossztev")
+    const MennyisegHely=document.getElementById("mennyiseg")
     OssztevHely.innerHTML=""
     for (let i = 0; i < osszetevoAdat.length; i++) {
         let Ossztevo=document.createElement("li")
         Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${osszetevoAdat[i].Mennyiség} ${osszetevoAdat[i].Mertekegyseg}`
         OssztevHely.appendChild(Ossztevo)
     }
-
+    document.getElementById("mennyiseg").addEventListener("change",()=>{
+        OssztevHely.innerHTML=""
+        for (let i = 0; i < osszetevoAdat.length; i++) {
+            let Ossztevo=document.createElement("li")
+            Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round((osszetevoAdat[i].Mennyiség*(MennyisegHely.value/koktélAdat.AlapMennyiseg))*10)/10} ${osszetevoAdat[i].Mertekegyseg}`
+            OssztevHely.appendChild(Ossztevo)
+        }
+    })
     //A koktél képének lekérése és megadása
     const KepLekeres=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+koktélAdat.BoritoKepUtvonal)
     document.getElementById("KoktélKép").setAttribute("src",URL.createObjectURL(KepLekeres))
@@ -123,7 +131,7 @@ async function statikusadatok(adatok)
     document.getElementById("Madeby").innerHTML=koktélAdat.Felhasználónév + " -"
     document.getElementById("kokteldate").innerHTML="Készült: "+koktélAdat.KeszitesDatuma.split('T')[0]
     document.getElementById("recept").innerHTML=koktélAdat.Recept
-    document.getElementById("mennyiseg").value=koktélAdat.AlapMennyiseg 
+    MennyisegHely.value=koktélAdat.AlapMennyiseg 
 
     return adatok.belepette
 
