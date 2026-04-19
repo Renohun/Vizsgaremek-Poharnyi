@@ -47,7 +47,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('regisztracio').setAttribute('hidden', '');
         document.getElementById('belepes').setAttribute('hidden', '');
         document.getElementById('sajatKoktelKeszites').removeAttribute('hidden');
-        document.getElementById('dropdownMenu').removeAttribute('hidden');
+        document.getElementById('dropdownMenuMini').children[0].removeAttribute('hidden');
+        document.getElementById('dropdownMenuBig').children[0].removeAttribute('hidden');
 
         const koktelKep = await POSTKepLekeres(`/api/Koktelok/KepLekeres`);
         document.getElementsByClassName('profil')[0].setAttribute('src', URL.createObjectURL(koktelKep));
