@@ -21,60 +21,134 @@
                     <a class="navbar-brand" id="marka" href="/Fooldal">Pohárnyi</a>
                     <p id="alszoveg">Az online koktélbár</p>
                 </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable">
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasDarkNavbar"
+                >
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse justify-content-between" id="collapsable">
-                    <div class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/Koktelok " class="nav-link">Koktelok</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/WebShop" class="nav-link">Webshop</a>
-                        </li>                        
-                        <li class="nav-item">
-                            <a href="/PolcKoktel" class="nav-link">Mi van a polcon?</a>
-                        </li>
-                    </div>
-                    <div class="navbar-nav d-flex align-items-center">
-                        <div id="ThemeSwitcher">
-                            <img
-                                src="../kellékek/free-moon-icon-2304-thumb.png"
-                                id="themeSwitcherimg"
-                                style="height: 50px; width: 50px"
-                                alt=""
-                            />
-                        </div>
-                        <a href="/Regisztralj" id="regisztracio">
-                            <input type="button" class="btn btn-secondary nav-item mx-2" value="Regisztárció" />
-                        </a>
-                        <a href="/LepjBe" id="belepes">
-                            <input type="button" class="btn btn-warning nav-item" value="Bejelentkezés" />
-                        </a>
 
-                        <a href="/Keszites" id="sajatKoktelKeszites" hidden>
-                            <input
-                                type="button"
-                                class="nav-item btn btn-warning mx-2 jelenlegi"
-                                value="Saját koktél létrehozása"
-                            />
-                        </a>
-                        <div class="nav-item dropdown" id="dropdownMenu" hidden>
-                            <img
-                                class="nav-link dropdown-toggle profil"
-                                data-bs-toggle="dropdown"
-                                role="button"
-                                aria-expanded="false"
-                            />
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li class="dropdown-item"><a href="/Adatlap">Adatlap</a></li>
-                                <li class="dropdown-item" id="adminPanelHref"><a href="/AdminPanel">Admin Panel</a></li>
-                                <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezes</a></li>
-                            </ul>
-                        </div>
+                <div
+                    class="offcanvas offcanvas-end hatter"
+                    id="offcanvasDarkNavbar"
+                    tabindex="-1"
+                    aria-labelledby="offcanvasDarkNavbarLabel"
+                >
+                    <div class="offcanvas-header">
+                        <a href="/Fooldal" class="navbar-brand"
+                            ><h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">
+                                Pohárnyi<br /><span id="alszoveg">Az online koktélbár</span>
+                            </h5></a
+                        >
+                        <button
+                            type="button"
+                            class="btn-close btn-close-black"
+                            data-bs-dismiss="offcanvas"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 w-100">
+                            <div id="leftSideNavBar">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Koktelok " class="nav-link active jelenlegi">Koktélok</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/WebShop" class="nav-link">Webshop</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/PolcKoktel" class="nav-link">Mi van a polcon?</a>
+                                </li>
+                            </div>
+                            <div id="rightSideNavBar">
+                                <li class="nav-item" id="dropdownMenuMini">
+                                    <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                                        <a
+                                            class="nav-link dropdown-toggle"
+                                            role="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            href="#"
+                                            >Felhasználó</a
+                                        >
+                                        <ul class="dropdown-menu dropdown-menu-end hatter">
+                                            <li class="dropdown-item">
+                                                <a href="/Adatlap">Adatlap</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item" id="adminPanelHref">
+                                                <a href="/AdminPanel">Admin Panel</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <div id="ThemeSwitcher">
+                                        <img
+                                            src="../kellékek/free-moon-icon-2304-thumb.png"
+                                            id="themeSwitcherimg"
+                                            style="height: 50px; width: 50px"
+                                            alt=""
+                                        />
+                                    </div>
+                                </li>
+                                <li class="nav-item w-100">
+                                    <a href="/Regisztralj" id="regisztracio">
+                                        <input
+                                            type="button"
+                                            class="btn btn-secondary nav-item mt-2 w-100"
+                                            value="Regisztárció"
+                                        />
+                                    </a>
+                                </li>
+                                <li class="nav-item w-100">
+                                    <a href="/LepjBe" id="belepes">
+                                        <input
+                                            type="button"
+                                            class="btn btn-warning nav-item mt-2 w-100"
+                                            value="Bejelentkezés"
+                                        />
+                                    </a>
+                                </li>
+                                <li class="nav-item w-100">
+                                    <a href="/Keszites" id="sajatKoktelKeszites" hidden>
+                                        <input
+                                            type="button"
+                                            class="nav-item btn btn-warning mt-2 w-100"
+                                            value="Saját koktél létrehozása"
+                                        />
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="dropdownMenuBig">
+                                    <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                                        <img
+                                            class="nav-link dropdown-toggle profil"
+                                            data-bs-toggle="dropdown"
+                                            role="button"
+                                            aria-expanded="false"
+                                        />
+                                        <ul class="dropdown-menu dropdown-menu-end hatter">
+                                            <li class="dropdown-item">
+                                                <a href="/Adatlap">Adatlap</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item" id="adminPanelHref">
+                                                <a href="/AdminPanel">Admin Panel</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </div>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -300,33 +374,31 @@
                 </div>
             </div>
         </div>
-    <footer class="fs-5 shadow w-100">
-        <div class="container">
-            <div class="col-12 text-center">
-                © 2026 Pohárnyi. Minden jog fenntartva.
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-12"></div>
-                <div class="col-lg-2 col-md-12">
-                    <div class="text-lg-end text-center">
-                        <a href="">Elérhetőségek</a>
+        <footer class="fs-5 shadow w-100">
+            <div class="container">
+                <div class="col-12 text-center">© 2026 Pohárnyi. Minden jog fenntartva.</div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-12"></div>
+                    <div class="col-lg-2 col-md-12">
+                        <div class="text-lg-end text-center">
+                            <a href="">Elérhetőségek</a>
+                        </div>
+                        <div class="text-lg-end text-center">
+                            <a href="https://forms.gle/cp3o19kbEVdXiZ7L9">Hibajelenés</a>
+                        </div>
                     </div>
-                    <div class="text-lg-end text-center">
-                        <a href="https://forms.gle/cp3o19kbEVdXiZ7L9">Hibajelenés</a>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="text-lg-start text-center">
+                            <a href="">Felhasználói kézikönyv</a>
+                        </div>
+                        <div class="text-lg-start text-center">
+                            <a href="">Adatkezelési Nyilatkozat</a>
+                        </div>
                     </div>
+                    <div class="col-lg-2 col-md-12"></div>
                 </div>
-                <div class="col-lg-4 col-md-12">
-                    <div class="text-lg-start text-center">
-                        <a href="">Felhasználói kézikönyv</a>
-                    </div>
-                    <div class="text-lg-start text-center">
-                        <a href="">Adatkezelési Nyilatkozat</a> 
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-12"></div>
             </div>
-        </div>
-    </footer>
+        </footer>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/NavBar.js"></script>
