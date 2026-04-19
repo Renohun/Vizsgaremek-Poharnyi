@@ -149,7 +149,7 @@ table,
 }
 .Termek{
     width: 33%;
-    height: 100%;
+    height:250px;
     border: 1px black solid;
     background-color: gainsboro;
     border-radius: 10px;
@@ -378,6 +378,9 @@ tr{
 }
     .hasonloKep{
     width: 90%;
+    height: auto;
+}
+.Termek{
     height: auto;
 }
      #TermekSor{height: auto;}
