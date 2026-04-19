@@ -209,15 +209,43 @@ async function kommentek() {
         
         
         KommentHeader.appendChild(KommentIro)
-        //Ha a felhasználó be van lépve
         
-        if (belepette) {
+        //TODO:BACKEND,ELLENŐRZÉS
+        let pozitiv=document.createElement("span")
+        let pozitivSzam=document.createElement("span")
+        pozitivSzam.innerHTML=kommentek[i].pozitiv
+        let upvote=document.createElement("input")
+        upvote.setAttribute("type","button")
+        upvote.setAttribute("value","👍")
+        upvote.classList.add("btn")
+        pozitiv.classList.add("col-2")
+        pozitiv.appendChild(upvote)
+        pozitiv.appendChild(pozitivSzam)
 
+        let negativ=document.createElement("span")
+        let negativSzam=document.createElement("span")
+        negativSzam.innerHTML=kommentek[i].negativ
+        let downvote=document.createElement("input")
+        downvote.setAttribute("type","button")
+        downvote.setAttribute("value","👎")
+        downvote.classList.add("btn")
+        negativ.classList.add("col-2","ps-4")
+        negativ.appendChild(downvote)
+        negativ.appendChild(negativSzam)
+
+        //Ha a felhasználó be van lépve
+        if (belepette) {
             //Létrehozzuk a jelentés gombot minden komment felett
             KommentIroReport.setAttribute("type","button")
             KommentIroReport.classList.add("btn","text-danger","float-end","border-0")
-
             if (kommentek[i].UgyanazE==false) {
+                //Ellenőrzés hogy rányomott e már
+                upvote.addEventListener("click",()=>{
+                    pozitivSzam.innerHTML=parseInt(pozitivSzam.innerHTML)+1
+                })
+                downvote.addEventListener("click",()=>{
+                    negativSzam.innerHTML=parseInt(negativSzam.innerHTML)+1
+                })
                 KommentIroReport.setAttribute("value","Jelentés")
                 //Ha rányom
                 KommentIroReport.addEventListener("click",()=>{
@@ -239,6 +267,8 @@ async function kommentek() {
         
         Komment.appendChild(KommentHeader)
         Komment.appendChild(KommentTartalom)
+        Komment.appendChild(pozitiv)
+        Komment.appendChild(negativ)
         KommentekHelye.appendChild(Komment)
     }
     

@@ -1359,6 +1359,7 @@ router.delete('/AdminPanel/TermekTorles/:id', authenticationMiddleware, authoriz
 //
 //
 //
+//https://sidorares.github.io/node-mysql2/docs#using-promise-wrapper
 async function lekeres(query, param) {
     let result;
     await DBconnetion.promise()
@@ -1984,7 +1985,6 @@ router.post('/Koktel/SendKomment', authenticationMiddleware, async (request, res
         message: 'Sikeres Küldés'
     });
 });
-
 router.post('/Koktel/SendKedvenc', authenticationMiddleware, async (request, response) => {
     const KedvencKeres =
         'SELECT COUNT(*) as kedvelteE FROM kedvencek WHERE KikedvelteID LIKE ? AND MitkedveltID LIKE ?';
@@ -2010,7 +2010,6 @@ router.post('/Koktel/SendKedvenc', authenticationMiddleware, async (request, res
         message: 'Sikeres Küldés'
     });
 });
-
 router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE KommentID LIKE ?';
     const JelentesLekeres =
@@ -2030,7 +2029,6 @@ router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request,
         message: 'Sikeres Törlés'
     });
 });
-
 router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const ErtekelesTorles = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
@@ -2058,7 +2056,6 @@ router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, 
         message: 'Sikeres Törlés'
     });
 });
-
 router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, response) => {
     try {
         const Jelentesek = 'SELECT * FROM jelentesek';
@@ -2138,7 +2135,6 @@ router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, re
         });
     }
 });
-
 router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
     try {
         response.sendFile(path.join(__dirname, '..', 'images', request.params.utvonal));
@@ -2146,7 +2142,6 @@ router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) =>
         console.log(error);
     }
 });
-
 router.patch("/Koktel/KoktelModositas/:id", async (request, response)=>{
     try {
         const koktelChange="UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=? WHERE KoktélID LIKE ?"
@@ -2208,6 +2203,15 @@ router.get("/Koktel/SzomszedosKoktelok/:id",async (request, response)=>{
             message:"Hiba!"
         })
     }
+})
+
+router.patch("/Koktel/SendKommentRatingPozitiv",async (request, response)=>{
+    const RatingNoveles="UPDATE kommentek SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?"
+    const RatingCsokkentes="UPDATE kommentek SET pozitiv=pozitiv-1 WHERE KommentID LIKE ?"
+})
+router.patch("/Koktel/SendKommentRatingNegativ",async (request, response)=>{
+    const RatingNoveles="UPDATE kommentek SET negativ=negativ+1 WHERE KommentID LIKE ?"
+    const RatingCsokkentes="UPDATE kommentek SET negativ=negativ-1 WHERE KommentID LIKE ?"
 })
 //
 //
