@@ -375,6 +375,7 @@ const AdatStorage = async () => {
     document.getElementById('hiba').innerHTML = "Kérem töltse ki a Hiányzó adatokat!"
     document.getElementById('vissza').style.display = 'none';
     document.getElementById('siker').removeAttribute('hidden',false);
+     document.getElementById('siker').innerHTML = "A koktélt sikeresen feltöltötte!"
     document.getElementById('visszaGomb').removeAttribute('hidden', false);
     document.getElementById('tovabb').removeAttribute('hidden', true);
     //alap adatok kitöltésének ellenörzése
