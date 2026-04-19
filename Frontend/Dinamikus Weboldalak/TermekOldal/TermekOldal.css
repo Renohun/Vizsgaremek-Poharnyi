@@ -168,6 +168,7 @@ table,
 }
 .hasonloKep{
     width: 90%;
+    height: 150px;
 }
 .hasonloKepDiv{
     display: flex;
@@ -373,6 +374,11 @@ tr{
     width: 100%;
     height: 50px;
     
+
+}
+    .hasonloKep{
+    width: 90%;
+    height: auto;
 }
      #TermekSor{height: auto;}
 }
