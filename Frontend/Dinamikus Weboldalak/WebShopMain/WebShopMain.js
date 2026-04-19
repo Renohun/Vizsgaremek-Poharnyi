@@ -402,6 +402,14 @@ async function szures() {
     //max ár hozzaadasa
     szuresiAdatok.MaxAr = arSlider.value;
     //max alkoholtartalom hozáaadása
+    if(NevKereses.value != "")
+    {
+        szuresiAdatok.Nev = "%"+NevKereses.value+"%"
+    }
+    else
+    {
+        szuresiAdatok.Nev = "%"
+    }
     if (KategoriaSelect.value == 'alkohol') {
         szuresiAdatok.MaxAlk = alkoholSlider.value;
     }
@@ -622,6 +630,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let SzuresGomb = document.getElementById('kuldesGomb');
     SzuresGomb.addEventListener('click', async () => {
         const adatok = szures();
+        console.log(await adatok)
         const szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`, await adatok);
         console.log(szurtDataHossz)
         TermekBetoltes(1, szurtDataHossz.hossz, true, await adatok);

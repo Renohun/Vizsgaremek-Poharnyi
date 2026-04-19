@@ -2616,11 +2616,16 @@ router.post('/Webshop/szures', async (request, response) => {
         let ertekLista = [];
         let OrderBy;
         let OrderByErtek;
+        let nevErtek;
+          console.log(query)
         for (const item of Object.entries(feltetelek)) {
             console.log(item[0] + ' ? ' + item[1]);
             if (item[0] == 'MaxAr') {
                 query += ' Ar <= ? AND';
-            } else if (item[0] == 'MaxAlk') {
+            }else if (item[0] == 'Nev') {
+                nevErtek = ' AND TermekCim LIKE ?';
+            } 
+            else if (item[0] == 'MaxAlk') {
                 query += ' TermekAlkoholSzazalek <= ? AND';
             } else if (item[0] == 'TermekKategoria') {
                 query += ' TermekKategoria = ? AND';
@@ -2648,7 +2653,8 @@ router.post('/Webshop/szures', async (request, response) => {
 
             if (
                 item[0] != 'rendezes' &&
-                item[0] != 'akcio'
+                item[0] != 'akcio' && 
+                item[0] != "Nev"
             ) //amennyiben a postobjectben lévő adat nem az akcio, vagy a rendezes szuresehez kell, akkor belerakjuk az értéklistába
             {
                 ertekLista.push(item[1]);
@@ -2656,6 +2662,9 @@ router.post('/Webshop/szures', async (request, response) => {
         }
         // a query utolso 3 elemenek (AND) levágása
         query = query.slice(query[0], query.length - 4);
+        console.log(ertekLista)
+        console.log(query)
+        query += nevErtek
         query += OrderBy;
         let limitoffset = ' LIMIT ? OFFSET ?';
         query += limitoffset;
@@ -2665,17 +2674,18 @@ router.post('/Webshop/szures', async (request, response) => {
             console.log(typeof ertekLista[0]);
             console.log('2') 
         */
-        console.log(ertekLista);
+        console.log(query);
         let szurtTermekek;
         if (ertekLista.length == 1) {
-            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], limit, offset]);
+            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0],feltetelek.Nev, limit, offset]);
         } else if (ertekLista.length == 2) {
-            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], ertekLista[1], limit, offset]);
+            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], ertekLista[1],feltetelek.Nev, limit, offset]);
         } else if (ertekLista.length == 3) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [
                 ertekLista[0],
                 ertekLista[1],
                 ertekLista[2],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
@@ -2685,6 +2695,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[1],
                 ertekLista[2],
                 ertekLista[3],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
@@ -2695,6 +2706,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[2],
                 ertekLista[3],
                 ertekLista[4],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
@@ -2706,6 +2718,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[3],
                 ertekLista[4],
                 ertekLista[5],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
@@ -2718,12 +2731,13 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[4],
                 ertekLista[5],
                 ertekLista[6],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
         } else if (ertekLista.length == 8) {
             console.log('8')[szurtTermekek] = await DBconnetion.promise().query(query, [
-                ertekLista[0],
+               ertekLista[0],
                 ertekLista[1],
                 ertekLista[2],
                 ertekLista[3],
@@ -2731,6 +2745,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[5],
                 ertekLista[6],
                 ertekLista[7],
+                 feltetelek.Nev,
                 limit,
                 offset
             ]);
@@ -2745,6 +2760,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[6],
                 ertekLista[7],
                 ertekLista[8],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
