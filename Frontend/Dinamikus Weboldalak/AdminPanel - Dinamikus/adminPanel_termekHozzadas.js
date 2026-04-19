@@ -45,7 +45,7 @@ async function GETfetch(url) {
 }
 
 function inputFieldClear() {
-    const inputokFields = document.getElementsByName('termekFeltoltes')[1].children;
+    const inputokFields = document.getElementsByName('termekFeltoltes')[1].children[0].children;
     console.log(inputokFields);
     console.log(typeof inputokFields);
     for (let i = 2; i < inputokFields.length; i++) {
@@ -78,11 +78,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (termekKategoriaSelect.value != 'Eszkozok' && termekKategoriaSelect.value != 'Merch') {
             urtartalomLabel.removeAttribute('hidden');
             urtartalomInput.removeAttribute('hidden');
+
             if (termekKategoriaSelect.value != 'Pohar') {
                 alkoholSzazalekLabel.removeAttribute('hidden');
                 alkoholSzazalekInput.removeAttribute('hidden');
-                alkoholKoraLabel.removeAttribute('hidden');
-                alkoholKoraInput.removeAttribute('hidden');
+
+                if (termekKategoriaSelect.value == 'Sor') {
+                    alkoholKoraLabel.setAttribute('hidden', true);
+                    alkoholKoraInput.setAttribute('hidden', true);
+                } else {
+                    alkoholKoraLabel.removeAttribute('hidden');
+                    alkoholKoraInput.removeAttribute('hidden');
+                }
             } else {
                 alkoholSzazalekLabel.setAttribute('hidden', true);
                 alkoholSzazalekInput.setAttribute('hidden', true);
@@ -103,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const termekSelect = document.getElementById('termekLearazas');
     (async () => {
-        const data = await GETfetch('http://127.0.0.1:3000/api/AdminPanel/TermekLekeres');
+        const data = await GETfetch('/api/AdminPanel/TermekLekeres');
         data.result.forEach((element) => {
             const optTag = document.createElement('option');
             optTag.innerText = element.TermekCim;
@@ -127,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 (async () => {
                     const data = await GETfetch(
-                        `http://127.0.0.1:3000/api/AdminPanel/TermekLearazas/${kivalasztottTermek}/${parseInt(ellenorzes)}`
+                        `/api/AdminPanel/TermekLearazas/${kivalasztottTermek}/${parseInt(ellenorzes)}`
                     );
                     if (data.result == 'Leárazás sikeresen frissitve') {
                         document.getElementById('modalText').innerText =
@@ -182,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let kepTarolas = new FormData();
                                 kepTarolas.append('profilkep', formDiv.children[i].files[0]);
                                 const kapottFajlNev = await POSTkepFeltoltes(
-                                    'http://127.0.0.1:3000/api/AdatlapLekeres/KepFeltoltes',
+                                    '/api/AdatlapLekeres/KepFeltoltes',
                                     kepTarolas
                                 );
 
@@ -210,33 +217,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (hibasAdatok == false) {
             //ebbe az objektumba gyurjuk ossze a kapott adatokat
-            const ellResult = await GETfetch(
-                `http://127.0.0.1:3000/api/AdminPanel/TermekNev/Ellenorzes/${POSTobj.termekNev}`
-            );
+            const ellResult = await GETfetch(`/api/AdminPanel/TermekNev/Ellenorzes/${POSTobj.termekNev}`);
 
             //alert(JSON.stringify(ellResult));
             //MODALok megjelenitese
             if (ellResult.duplikacio == false) {
                 POSTobj.termekKategoria = document.getElementById('termekKategoria').value;
-                console.log(POSTobj);
+                //console.log(POSTobj);
 
-                const response = await POSTfetch('http://127.0.0.1:3000/api/AdminPanel/TermekFeltoltes', POSTobj);
-                console.log(response);
-                var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
-                modalElement.show();
+                const response = await POSTfetch('/api/AdminPanel/TermekFeltoltes', POSTobj);
+                //console.log(response);
 
-                document.getElementById('modalText').innerText = 'Termék sikeresen hozzáadva!';
+                if (response.szazalek == true && response.siker == false) {
+                    var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                    modalElement.show();
 
-                document.getElementById('modalBtn').addEventListener('click', () => {
-                    modalElement.hide();
-                    inputFieldClear();
-                });
+                    document.getElementById('modalText').innerText = 'A szazalek meghaladja a 100-at!';
+
+                    document.getElementById('modalBtn').addEventListener('click', () => {
+                        modalElement.hide();
+                    });
+                } else {
+                    var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
+                    modalElement.show();
+
+                    document.getElementById('modalText').innerText = 'Termék sikeresen hozzáadva!';
+
+                    document.getElementById('modalBtn').addEventListener('click', () => {
+                        modalElement.hide();
+                        inputFieldClear();
+                    });
+                }
+
                 //console.log(fetchAdat);
             } else {
                 var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
                 modalElement.show();
 
-                document.getElementById('modalText').innerText = 'Ilyen nevű koktél már létezik';
+                document.getElementById('modalText').innerText = 'Ilyen nevű termék már létezik';
 
                 document.getElementById('modalBtn').addEventListener('click', () => {
                     modalElement.hide();

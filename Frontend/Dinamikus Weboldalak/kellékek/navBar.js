@@ -31,7 +31,16 @@ async function POSTKepLekeres(url) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const value = await POSTreq('http://127.0.0.1:3000/api/sutiJelenlete');
+    const value = await POSTreq('/api/sutiJelenlete');
+    const response = await POSTreq('/api/jogosultsagEll');
+    console.log(document.getElementById('adminPanelHref'));
+
+    if (response.message == false) {
+        document.getElementById('adminPanelHref').setAttribute('hidden', '');
+    } else {
+        document.getElementById('adminPanelHref').removeAttribute('hidden');
+    }
+
     //console.log(value.message);
     //Ha be van jelentkezve
     if (value.message) {
@@ -40,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('sajatKoktelKeszites').removeAttribute('hidden');
         document.getElementById('dropdownMenu').removeAttribute('hidden');
 
-        const koktelKep = await POSTKepLekeres(`http://127.0.0.1:3000/api/Koktelok/KepLekeres`);
+        const koktelKep = await POSTKepLekeres(`/api/Koktelok/KepLekeres`);
         document.getElementsByClassName('profil')[0].setAttribute('src', URL.createObjectURL(koktelKep));
     } else {
         document.getElementById('regisztracio').removeAttribute('hidden');

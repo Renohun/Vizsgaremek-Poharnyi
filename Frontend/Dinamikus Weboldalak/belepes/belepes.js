@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //test function-nal teszteljuk hogy a regex-nek megfelel az inputunk
         //Hosszusag ellenorzes nem kell hiszen a form nem is engedi tovabb a ha ures az input mezo
 
-        const res = await POSTfetch('http://127.0.0.1:3000/api/belepes', { felhasznalo: email, jelszo: jelszo });
+        const res = await POSTfetch('/api/belepes', { felhasznalo: email, jelszo: jelszo });
         if (res.kriterium) {
             var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
             modalElement.show();

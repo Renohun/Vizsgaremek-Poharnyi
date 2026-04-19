@@ -125,6 +125,10 @@ router.get('/jogosultsag', saveLastUrl, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/hibaOldalak/jogosultsag.html'));
 });
 
+//Mi Van A Polcon?
+router.get('/PolcKoktel', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/Mi van a polcon/mivanapolcon.html'));
+});
 //!API endpoints
 app.use('/', router);
 const endpoints = require('./api/api.js');

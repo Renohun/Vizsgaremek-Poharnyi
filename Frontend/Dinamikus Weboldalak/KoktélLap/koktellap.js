@@ -7,12 +7,12 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("KommSend").addEventListener("click",async()=>{await Kommentkuldes()})
         document.getElementById("komment").addEventListener("keyup",()=>{document.getElementById("szam").innerHTML=document.getElementById("komment").value.length})
         document.getElementById("Velemeny").classList.add("shadow-sm","p-2","koktelshadow")
-        if (eredmeny.UgyanazE) {
+        if (eredmeny.adat.UgyanazE) {
             document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
             document.getElementById("KoktJel").setAttribute("value","Koktél Törlése")
             document.getElementById("KoktJel").id="KoktDel"
             document.getElementById("KoktDel").addEventListener("click",async()=>{
-                await AdatKuldes("/api/Koktel/DeleteKoktel",{id:id},"DELETE")
+                await AdatKuldes("/api/Koktel/DeleteKoktel",{id:koktel},"DELETE")
                 window.location.href="/Koktelok"
             })
         }
@@ -319,15 +319,15 @@ async function jelentes(mit,tipus,kit) {
             document.getElementById("visszajelzes").innerHTML="Már tett jelentést ez ellen!"
         }
         //Kikapcsoljuk a küldési lehetőséget
-        document.getElementById("JelNvm").setAttribute("disabled","true")
-        document.getElementById("JelSend").setAttribute("disabled","true")
+        document.getElementById("JelNvm").setAttribute("hidden","true")
+        document.getElementById("JelSend").setAttribute("hidden","true")
         //És előhozzuk a nyugtázó gombot
         document.getElementById("JelKonf").removeAttribute("hidden","true")
         document.getElementById("JelKonf").addEventListener("click",()=>
         {
             //elrejtük a felületet, és visszaállítjuk az alaphelyzetbe, hogyha megint rányom a felhasználó, ugyan úgy nézzen ki mint amikor betölt az oldal
-            document.getElementById("JelNvm").removeAttribute("disabled","true")
-            document.getElementById("JelSend").removeAttribute("disabled","true")
+            document.getElementById("JelNvm").removeAttribute("hidden","true")
+            document.getElementById("JelSend").removeAttribute("hidden","true")
             document.getElementById("JelKonf").setAttribute("hidden","true")
             document.getElementById("visszajelzes").innerHTML=""
             document.getElementById("indok").value=""
@@ -345,37 +345,44 @@ async function jelentes(mit,tipus,kit) {
 }
 async function erteksetup() {
 
-    let csillagok=document.getElementById("csillagok").children
-    //ez alapján lekérjük az adatokat
     const eredmeny=await AdatLekeres(`/api/Koktel/${koktel}`)
-    if (eredmeny.ertekeltee) {
-        csillagsetup(eredmeny.ertekeles)
-        csillagok=""
-        document.getElementById("rateDisplay").innerHTML="Ön már értékelte ezt a koktélt!"
-        document.getElementById("Velemeny").children[0].removeChild((document.getElementById("ErtSend")))
+    console.log(eredmeny.adat.UgyanazE);
+    
+    if (eredmeny.adat.UgyanazE) {
+        document.getElementById("ertekeles").innerHTML=""
     }
     else{
-        
-        for (let i = 0; i < csillagok.length; i++) {
-            csillagok[i].addEventListener("click",()=>{
-                csillagsetup(i+1)
+        let csillagok=document.getElementById("csillagok").children
+        //ez alapján lekérjük az adatokat
+        if (eredmeny.ertekeltee) {
+            csillagsetup(eredmeny.ertekeles)
+            csillagok=""
+            document.getElementById("rateDisplay").innerHTML="Ön már értékelte ezt a koktélt!"
+            document.getElementById("Velemeny").children[0].removeChild((document.getElementById("ErtSend")))
+        }
+        else{
+            
+            for (let i = 0; i < csillagok.length; i++) {
+                csillagok[i].addEventListener("click",()=>{
+                    csillagsetup(i+1)
+                })
+            }
+            document.getElementById("ErtSend").addEventListener("click",async()=>{
+                
+                let teliCsillagok=0
+                for (let i = 0; i < csillagok.length; i++) {
+                    if (csillagok[i].value=="★") {
+                        teliCsillagok++
+                    }
+                    
+                }
+                if (teliCsillagok!=0) {
+                    //Aminek a hosszát elküljük a backendre a koktél idjével
+                    await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:teliCsillagok,Koktél:koktel},"POST")
+                    await erteksetup()
+                }
             })
         }
-        document.getElementById("ErtSend").addEventListener("click",async()=>{
-        
-            let teliCsillagok=0
-            for (let i = 0; i < csillagok.length; i++) {
-                if (csillagok[i].value=="★") {
-                    teliCsillagok++
-                }
-                
-            }
-            if (teliCsillagok!=0) {
-                //Aminek a hosszát elküljük a backendre a koktél idjével
-                await AdatKuldes("/api/Koktel/SendErtekeles",{Tartalom:teliCsillagok,Koktél:koktel},"POST")
-                await erteksetup()
-            }
-        })
     }
 }
 function csillagsetup(meddig){

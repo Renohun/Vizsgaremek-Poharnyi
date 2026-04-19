@@ -48,6 +48,7 @@ const KosarPost = async (url,object) => {
 };
 const TermekKepLekeres=async(url)=>{
     try {
+        
         const valasz=await fetch(url,{
         method:"GET",
         headers:{"Content-Type":"image/jpg"}
@@ -69,7 +70,7 @@ const termek_lekeres = async () => {
     let url = window.location.href.split('/');
     let id = url[4];
   
-    const data = await GETfetch(`http://127.0.0.1:3000/api/termek/lekeres/${id}`);
+    const data = await GETfetch(`/api/termek/lekeres/${id}`);
       console.log(data);
      return data;
    
@@ -80,11 +81,12 @@ const KepLekeres = async () =>
     let url = window.location.href.split('/');
     let id = url[4];
     console.log(id);
-    const data = await TermekKepLekeres(`http://127.0.0.1:3000/api/termek/KepLekeres/${id}`)
+    const data = await TermekKepLekeres(`/api/termek/KepLekeres/${id}`)
     return data;
 }
 
 const oldalGenerálás =  async () =>{
+    
     //Backendből kapott objectek
     const LekertTermekek = await termek_lekeres();
     console.log("awe")
@@ -99,7 +101,7 @@ const oldalGenerálás =  async () =>{
     let url = window.location.href.split('/');
     let id = url[4];
     console.log(id);
-    const data = await TermekKepLekeres(`http://127.0.0.1:3000/api/Webshop/Keplekeres/${id}`)//termek/keplekeres nem mukodik
+    const data = await TermekKepLekeres(`/api/Webshop/Keplekeres/${id}`)//termek/keplekeres nem mukodik
     let KepHely = document.getElementById("TermekImg")
     KepHely.setAttribute("src",URL.createObjectURL(data))
     console.log(KepHely)
@@ -145,7 +147,7 @@ const oldalGenerálás =  async () =>{
     console.log(HasonlokData)
     for (let i = 0; i < HasonlokData.hasonlok.length; i++)
     {
-        const KepData = await TermekKepLekeres(`http://127.0.0.1:3000/api/Webshop/KepLekeres/${HasonlokData.hasonlok[i].TermekID}`)
+        const KepData = await TermekKepLekeres(`/api/Webshop/KepLekeres/${HasonlokData.hasonlok[i].TermekID}`)
         let KepUrl = URL.createObjectURL(KepData)
         let kartya = document.createElement("div")
         kartya.classList.add("Termek")
@@ -198,14 +200,37 @@ const oldalGenerálás =  async () =>{
     }
     //Ar
     let ArHely = document.getElementById("arHely")
-    ArHely.innerHTML = LekertTermekek.termek[0].Ar + "Ft"
-    //EgysegAr
-    if (LekertTermekek.termek[0].TermekAlkoholSzazalek != 0) {
-        let EgysegArHely = document.getElementById("LiterAr")
-        let ar1Szazalek = LekertTermekek.termek[0].Ar/(LekertTermekek.termek[0].TermekUrtartalom*100)
-      
-        EgysegArHely.innerHTML = "Literár: " + Math.round(ar1Szazalek*100) + "Ft/l"
+     ArHely.innerHTML = LekertTermekek.termek[0].Ar + "Ft"
+    if(LekertTermekek.termek[0].TermekDiscount != null){
+        let akcioHely = document.getElementById("akciosAr")
+        let akcio = 100 - LekertTermekek.termek[0].TermekDiscount;
+        akcioHely.innerHTML = Math.round(((LekertTermekek.termek[0].Ar/100)*akcio)/10)*10+"Ft"
+        akcioHely.style.color = "red"
+        ArHely.style.textDecoration = "line-through"
     }
+   
+    //EgysegAr
+    let EgysegArHely = document.getElementById("LiterAr")
+     let ar1Szazalek;
+    if (LekertTermekek.termek[0].TermekKategoria == "Eszkozok" || LekertTermekek.termek[0].TermekKategoria == "Pohar" || LekertTermekek.termek[0].TermekKategoria == "Merch") {
+        
+          EgysegArHely.innerHTML =""
+        }
+        else
+        {
+            if (LekertTermekek.termek[0].TermekDiscount != null)
+            {
+                let akcio = 100 - LekertTermekek.termek[0].TermekDiscount;
+                let akciosar = ((LekertTermekek.termek[0].Ar/100)*akcio);
+                ar1Szazalek = akciosar/(LekertTermekek.termek[0].TermekUrtartalom*100)
+                EgysegArHely.innerHTML = "Literár: " + Math.round(ar1Szazalek*100) + "Ft/l"
+            }
+            else{
+                ar1Szazalek = LekertTermekek.termek[0].Ar/(LekertTermekek.termek[0].TermekUrtartalom*100)
+            EgysegArHely.innerHTML = "Literár: " + Math.round(ar1Szazalek*100) + "Ft/l"
+            }
+            
+        }
     //vanEPolcon
     let PolcLabelSzovegHely = document.getElementById("VaneSzoveg")
     let PolcLabelHely = document.getElementById("VanePolcon")
@@ -363,19 +388,22 @@ const KosarbaRak = async()=>
     let Termekid = url[4];
 
     let postObj = {id:Termekid,mennyiseg:mennyiseg}
-
-    const KosarData = await KosarPost("/api/Termek/KosarKuldes",postObj)
+    let hiba = false;
+    const KosarData = await PostFetch("/api/Termek/KosarKuldes",postObj)
     console.log(KosarData)
     if(KosarData.hiba == "bejel")
     {
         alert("A termék kosárba helyezéséhez kérem jelentkezzen be!")
     }
-    else if(KosarData.Siker != null){
-        alert("Sikeresen kosárba rakta a terméket!")
-    }
     else if(KosarData.hiba == "raktar"){
-        alert("nincs elég termék raktáron, vagy túl sokat próbált egyszerre rendelni!")
+      hiba = true
     }
+    if (hiba == true) {
+         modalHiba(hiba);
+    }else{
+        modalJo()
+    }
+   
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -387,7 +415,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     kosarGomb.addEventListener("click",KosarbaRak)
 
     var adat = document.getElementById('Tbtn');
-
+    let tovGomb = document.getElementById("tovabb")
+    tovGomb.addEventListener("click",()=>{
+        window.location.href = "/Adatlap"
+    })
     //mennyiség maximalizálása
     adat.addEventListener('click', function () {
             this.classList.add('active');
@@ -401,3 +432,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     
 });
+const modalHiba = (hiba)=>{
+//hibás kitöltés kezelése
+        
+        document.getElementById('vissza').style.display = 'block';
+        document.getElementById('Sokhiba').style.display = 'block';
+        document.getElementById('siker').setAttribute('hidden', true);
+         document.getElementById('tovabb').setAttribute('hidden', true);
+         hiba = false;
+        
+}
+const modalJo = ()=>{
+//hibás kitöltés kezelése
+        
+        document.getElementById('Sokhiba').style.display = 'none';
+    document.getElementById('vissza').style.display = 'none';
+    document.getElementById('siker').removeAttribute('hidden',false);
+    document.getElementById('tovabb').removeAttribute('hidden', true);
+}

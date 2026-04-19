@@ -1,24 +1,10 @@
 //Globális változók létrehozása
-let kepfeltolt;
-let koktelnev;
-let koktelalap;
-let koktelmennyiseg;
-let osszetevogomb;
 let gombnyomasszam = 1;
-let koktelurlap = document.getElementById('koktelurlap');
-let osszetevodiv;
-let megsegomb;
-let radioMentes;
-let radioAlk;
-let alap;
-let alapInput;
-let osszetevoform;
-let torlesgomb;
-let DeleteOsszetevo;
-let osszetevo;
-
 let KivalasztottAllergenek = [];
 let KivalasztottIzek = [];
+//
+//Lekérések
+//
 const Getfetch = async (url) => {
     return await fetch(url)
         .then((Response) => {
@@ -55,7 +41,11 @@ const AdatPost = async (url, data) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
-        if (ertek.ok) {
+        if(ertek.status == "208")
+        {
+            return "hiba"
+        }
+        else if (ertek.ok) {
             return ertek.json();
         } else {
             console.error(ertek.statusText);
@@ -67,7 +57,9 @@ const AdatPost = async (url, data) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     //új összetevő meghívására szolgáló gomb értékadása
-    osszetevogomb = document.getElementById('osszetevogomb');
+    let osszetevogomb = document.getElementById('osszetevogomb');
+    OsztvDisable()
+    let osszetevodiv = document.getElementById('osszetevoDiv');
     //addeventlistener hozzáaadása
     osszetevogomb.addEventListener('click', osszetevohozzaadas);
 
@@ -80,31 +72,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('Ujra').addEventListener('click', () => {
         window.location.reload();
     });
-    megsegomb = document.getElementById('megse');
+    let megsegomb = document.getElementById('megse');
     megsegomb.addEventListener('click', megsefugv);
     //radiogombok értékének lekérése
-    radioMentes = document.getElementById('mentes');
-    radioAlk = document.getElementById('alkoholos');
+    let radioMentes = document.getElementById('mentes');
+    let radioAlk = document.getElementById('alkoholos');
     //melyik radiobutton van kiválasztva, ás attól függően eltüntetjük vagy visszahozzuk az alap div tartalmát
 
     radioAlk.addEventListener('change', () => {
         if (radioAlk.checked == true) {
-            alap = document.getElementById('alapEltuntet');
+            let alap = document.getElementById('alapEltuntet');
             alap.hidden = false;
         }
     });
     radioMentes.addEventListener('change', () => {
         if (radioMentes.checked == true) {
-            alapInput = document.getElementById('alap');
-            alap = document.getElementById('alapEltuntet');
+            let alapInput = document.getElementById('alap');
+            let alap = document.getElementById('alapEltuntet');
             alap.hidden = true;
             alapInput.value = '';
         }
     });
     //elso osztv törlése
-    osszetevo = document.getElementById('osztv1');
+    let osszetevo = document.getElementById('osztv1');
     osszetevo.addEventListener('click', () => {
-        osszetevodiv = document.getElementById('osszetevoDiv');
         let elsoOsztv = document.getElementById('elsoOsszetevo');
         osszetevodiv.removeChild(elsoOsztv);
         console.log('kala');
@@ -128,10 +119,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 //új összetevő hozzáadása function(alfa lol)
 function osszetevohozzaadas() {
     gombnyomasszam++;
+   
     //új összetevő input mezőjének létrehozása DOM segítségével és bootstrap osztályok hozzáadása
-    osszetevoform = document.createElement('form');
-    osszetevodiv = document.getElementById('osszetevoDiv');
-    torlesgomb = document.createElement('button');
+    let osszetevoform = document.createElement('form');
+    let osszetevodiv = document.getElementById('osszetevoDiv');
+    let torlesgomb = document.createElement('button');
     torlesgomb.type = 'button';
     torlesgomb.innerText = 'X';
     torlesgomb.classList.add('Osszetevobtn');
@@ -168,18 +160,36 @@ function osszetevohozzaadas() {
     mertekegyseg.appendChild(opcioDb);
     mertekegyseg.appendChild(opcioGr);
     //parent-child viszonyok meghatározása
-
+   
     col.appendChild(input);
     col.appendChild(mennyiseg);
     col.appendChild(mertekegyseg);
     col.appendChild(torlesgomb);
 
     osszetevodiv.appendChild(col);
-
+    OsztvDisable()
+    
     //torles
     torlesgomb.addEventListener('click', () => {
         osszetevodiv.removeChild(col);
+       OsztvDisable()
     });
+}
+
+//
+// összetevőfgvk
+//
+
+const OsztvDisable = ()=>{
+let osszetevodiv = document.getElementById("osszetevoDiv")
+if (osszetevodiv.children.length == 1) 
+    {
+        osszetevodiv.children[0].children[3].disabled = "true"
+    }
+    else if(osszetevodiv.children.length > 1)
+    {
+        osszetevodiv.children[0].children[3].disabled = false
+    }
 }
 
 //
@@ -360,13 +370,7 @@ const AdatStorage = async () => {
     let data;
     let hiba = true;
     let egyezoMl = true;
-    document.getElementById('Ujra').style.display = 'none';
-    document.getElementById('hiba').style.display = 'none';
-    document.getElementById('hiba').innerHTML = "Kérem töltse ki a Hiányzó adatokat!"
-    document.getElementById('vissza').style.display = 'none';
-    document.getElementById('siker').removeAttribute('hidden',false);
-    document.getElementById('visszaGomb').removeAttribute('hidden', false);
-    document.getElementById('tovabb').removeAttribute('hidden', true);
+    
     //alap adatok kitöltésének ellenörzése
     if (document.getElementById('nev').value == '') {
         hiba = false;
@@ -397,8 +401,8 @@ const AdatStorage = async () => {
 
     //alkoholose
     let alkoholose;
-    radioMentes = document.getElementById('mentes');
-    radioAlk = document.getElementById('alkoholos');
+    let radioMentes = document.getElementById('mentes');
+    let radioAlk = document.getElementById('alkoholos');
     if (radioAlk.checked == true) {
         alkoholose = true;
     } else if (radioMentes.checked == true) {
@@ -490,18 +494,20 @@ const AdatStorage = async () => {
     if (hiba == true) {
         KoktelAdatok.kepUtvonala = kepUtvonal.message;
         data = await AdatPost('/api/Keszites/Feltoltes', KoktelAdatok);
-    } else if (hiba == false) {
-        //hibás kitöltés kezelése
-        document.getElementById('Ujra').style.display = 'block';
-        document.getElementById('vissza').style.display = 'block';
-        document.getElementById('hiba').style.display = 'block';
-        if (egyezoMl == false) 
+       
+        if (data == "hiba") //Ha a végpont 208-at ad vissza, akkor más hibaüzenetet jelenítünk meg.
         {
-           document.getElementById('hiba').innerHTML += " és/vagy Kérem ügyeljen arra, hogy a megadott mililiter mennyiségek egyezzenek!"
+            modalHiba(true,"Nev")
+            hiba = true
+            egyezoMl = true
+        }  
+        else
+        {
+            modalJo()
         }
-        document.getElementById('siker').setAttribute('hidden', true);
-        document.getElementById('visszaGomb').setAttribute('hidden', true);
-        document.getElementById('tovabb').setAttribute('hidden', true);
+    } 
+        else if (hiba == false) {
+        modalHiba(egyezoMl,"sima")
         hiba = true
         egyezoMl = true
     }
@@ -514,3 +520,29 @@ const AdatStorage = async () => {
         window.location.href = `Koktel/${data.feltoltottid}`;
     });
 };
+const modalHiba = (Ml,milyen)=>{
+//hibás kitöltés kezelése
+        document.getElementById('Ujra').style.display = 'block';
+        document.getElementById('vissza').style.display = 'block';
+        document.getElementById('hiba').style.display = 'block';
+        if (Ml == false) 
+        {
+           document.getElementById('hiba').innerHTML = "Kérem töltse ki a Hiányzó adatokat és/vagy Kérem ügyeljen arra, hogy a megadott mililiter mennyiségek egyezzenek!"
+        }
+        if(milyen == "Nev"){
+            document.getElementById('hiba').innerHTML = "a Koktél neve már foglalt! Kérem probálja újra más névvel!"
+        }
+        document.getElementById('siker').setAttribute('hidden', true);
+        document.getElementById('visszaGomb').setAttribute('hidden', true);
+        document.getElementById('tovabb').setAttribute('hidden', true);
+        
+}
+const modalJo = ()=>{
+    document.getElementById('Ujra').style.display = 'none';
+    document.getElementById('hiba').style.display = 'none';
+    document.getElementById('vissza').style.display = 'none';
+    document.getElementById('siker').removeAttribute('hidden',false);
+     document.getElementById('siker').innerHTML = "A koktélt sikeresen feltöltötte!"
+    document.getElementById('visszaGomb').removeAttribute('hidden', false);
+    document.getElementById('tovabb').removeAttribute('hidden', true);
+}

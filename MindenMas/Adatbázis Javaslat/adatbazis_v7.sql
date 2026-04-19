@@ -11,10 +11,9 @@ CREATE TABLE Felhasználó(
 
 CREATE TABLE Koktél(
 	KoktélID INT AUTO_INCREMENT PRIMARY KEY,
-	Keszito INT  NOT NULL,
+	Keszito INT NOT NULL,
 	KeszitesDatuma DATE DEFAULT NOW(),
 	Alkoholos BOOLEAN,
-	Közösségi BOOLEAN,
 	KoktelCim TEXT NOT NULL,
 	KoktelNepszeruseg INT DEFAULT 0,
 	BoritoKepUtvonal TEXT DEFAULT ("cup.webp"),

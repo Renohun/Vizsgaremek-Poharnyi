@@ -198,6 +198,14 @@ display: flex;
     border-radius: 20px;
 
 }
+/*ures szures*/
+.UresTermek{
+    text-align: center;
+}
+.uresKep{
+    width: 25vh;
+    height: 25vh;
+}
 /*Oldal méretezése*/
 @media only screen and (max-width: 425px) {
     #maxAr {

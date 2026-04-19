@@ -19,21 +19,21 @@ UPDATE `felhasználó` SET `Admin` = '1' WHERE `felhasználó`.`FelhID` = 11;
 INSERT INTO Felhasználó(Felhasználónév,Email,Jelszó,ProfilKepUtvonal)
 VALUES
 ("BaluaFotomaniakus","imadomafurryket@gmail.com","$argon2id$v=19$m=65536,t=3,p=4$3r89if+yH0olMXDb+dZmjg$uZilKmrFYLMGza3VTnbJ+4YPrwFtccU2hCDalpuLO7o","dog.png");
-INSERT INTO Koktél(Keszito,KoktelCim,Recept,Alkoholos,Alap,Közösségi,AlapMennyiseg)
+INSERT INTO Koktél(Keszito,KoktelCim,Recept,Alkoholos,Alap,AlapMennyiseg)
 VALUES
-(1,"Citrom Húzó","Egy felespohárt töltsünk félig Ouzo-val, majd facsarjunk bele egy kis citromot",true,"Ouzou",false,10),
-(2,"Martini","nem fogom leírni kézzel a receptet",true,"Gin",false,50),
-(2,"A Bánat Eloszlatója","Tötsünk egy 0.5L-es poharat a tetejéig Jack Danielsel",true,"Jack Daniels",false,500),
-(3,"Sommersby Light","Almalevet keverjunk ossze ketszer annyi szodavizzel",true,"Almalé",false,45),
-(1,"Diétás Drakula","Tötsünk egy 0.5L-es pohárba tetszőleges mennyiségű szörpot, majd facsarjunk bele egy kis grapefruitot. Tálaljuk egy meggyel a tetején.",true,"Meggyszörp",false,300),
-(6,"Mennyei Elixir","200ml Szentelt vízhez adjunk hozzá 80mlnyi almalevet a jó és a rossz tudás fájáról és 100mlnyi Isten Vére bort és tálaljuk 3 kocka jéggel. Kivállóan illik egy szelet kovásztalan kenyérhez és szárított halhoz.",false,"Szentelt Víz",true,380),
-(4,"Daredevil","30ml rumot töltsünk egy pohárba amiben jég van, majd töltsünk rá 150ml narancslevet,75ml ananász és vörösáfonya lét, majd keverjük el és tálaljuk mentalevéllel.",true,"Rum",true,255),
-(10,"Hideg Fúzió","15ml everclearhez adjunk hozzá 10ml kék curacao-t és 5ml Ouzout.",true,"Everclear",true,30),
-(8,"Halászlé","20ml Sakehoz adjunk hozzá 40ml Gint és 1ml halsűrítményt",true,"Sake",true,61),
-(10,"Anti-Feral Serum","20ml Uborkaléhez adjunk 80ml sima Monstert",false,"Uborkalé",true,100),
-(9,"Folyékony Kokain","Everclearhez adjunk egy kis speedet",true,"Everclear",true,50),
-(1,"Silverhand","20ml Tequillahoz adjunk hozzá egy kiskanálnyi sört, és egy félkanálnyi csípőst.",true,"Tequilla",false,20),
-(5,"Sárrét","15ml Csokilikőrhöz adjunk hozzá 15ml Fahéjjas Jack Danielst és öntsük fel Fehér Monsterrel",true,"Csokilikőr",false,130)
+(1,"Citrom Húzó","Egy felespohárt töltsünk félig Ouzo-val, majd facsarjunk bele egy kis citromot",true,"Ouzou",10),
+(2,"Martini","nem fogom leírni kézzel a receptet",true,"Gin",50),
+(2,"A Bánat Eloszlatója","Tötsünk egy 0.5L-es poharat a tetejéig Jack Danielsel",true,"Jack Daniels",500),
+(3,"Sommersby Light","Almalevet keverjunk ossze ketszer annyi szodavizzel",true,"Almalé",45),
+(1,"Diétás Drakula","Tötsünk egy 0.5L-es pohárba tetszőleges mennyiségű szörpot, majd facsarjunk bele egy kis grapefruitot. Tálaljuk egy meggyel a tetején.",true,"Meggyszörp",300),
+(6,"Mennyei Elixir","200ml Szentelt vízhez adjunk hozzá 80mlnyi almalevet a jó és a rossz tudás fájáról és 100mlnyi Isten Vére bort és tálaljuk 3 kocka jéggel. Kivállóan illik egy szelet kovásztalan kenyérhez és szárított halhoz.",false,"Szentelt Víz",380),
+(4,"Daredevil","30ml rumot töltsünk egy pohárba amiben jég van, majd töltsünk rá 150ml narancslevet,75ml ananász és vörösáfonya lét, majd keverjük el és tálaljuk mentalevéllel.",true,"Rum",255),
+(10,"Hideg Fúzió","15ml everclearhez adjunk hozzá 10ml kék curacao-t és 5ml Ouzout.",true,"Everclear",30),
+(8,"Halászlé","20ml Sakehoz adjunk hozzá 40ml Gint és 1ml halsűrítményt",true,"Sake",61),
+(10,"Anti-Feral Serum","20ml Uborkaléhez adjunk 80ml sima Monstert",false,"Uborkalé",100),
+(9,"Folyékony Kokain","Everclearhez adjunk egy kis speedet",true,"Everclear",50),
+(1,"Silverhand","20ml Tequillahoz adjunk hozzá egy kiskanálnyi sört, és egy félkanálnyi csípőst.",true,"Tequilla",20),
+(5,"Sárrét","15ml Csokilikőrhöz adjunk hozzá 15ml Fahéjjas Jack Danielst és öntsük fel Fehér Monsterrel",true,"Csokilikőr",130)
 ;
 
 INSERT INTO Komment(Keszito,HovaIrták,Tartalom,MilyenDologhoz)
@@ -108,10 +108,42 @@ VALUES
 (13,"Fahéjas Jack Daniels",15,"Ml"),
 (13,"Fehér Monster",100,"Ml")
 ;
+--DELETE ONCE DONE
+--("","",4,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,8000)
+
 INSERT INTO WebshopTermek(TermekCim,TermekLeiras,TermekKiszereles,TermekUrtartalom,TermekKeszlet,TermekKepUtvonal,TermekKategoria,TermekMarka,TermekSzarmazas,TermekAlkoholSzazalek,Ar)
 VALUES
+/*Merch*/
 ("Pohárnyi Mintájú Felespohár","Szeretnéd közvetlen támogatni a csapatunkat? Akarsz is cserébe érte valamit? Vásárold meg ezt!",4,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,8000),
-("Jack Daniels","Amerikai Import Whiskey",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,7650),
+("Pohárnyi Póló","Szeretnéd közvetlen támogatni a csapatunkat? Akarsz is cserébe érte valamit? Vásárold meg ezt a pólót!",1,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,5500),
+("Pohárnyi Mintájú Alátét","Szeretnéd reprezentálni a következő koktélod forrását a következő facebook-bejegyzésedben? Ez az alátét tökéletes erre!",4,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,4000),
+("Pohárnyi Mintájú Jégkockakészítő","Szeretnél stílusos jégkockákat csinálni? Ez a jégkockakészítő tökéletes erre!",1,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,22000),
+
+/*Eszköz*/
+/*https://en.wikipedia.org/wiki/Cocktail_shaker*/
+("Bostoni shaker","A Bostoni shaker egy koktél készítéshez használt eszköz, amely kettő fém részből áll. Az egyik részbe öntve a kívánt összetevőket, lezárjuk a másikkal, majd folyamatos fel-le mozgással összekeverjük őket. Az elkészült folyaékot érdemes szűrni",1,0.8,50,"what.webp","Eszköz","Pohárnyi","Magyarország",0,5000),
+("Szűrő","A koktélszűrő célja szétválasztani a jeget a folyadéltól, miután azt összekevertük.",1,null,40,"what.webp","Eszköz","Pohárnyi","Magyarország",0,4000),
+("Koktélkanál","Egy hosszú, spirálos nyelvű kanál, aminek célja a koktél higénikus elkeverése, illetve a spirált felhasználva folyadékok egymásra rétegezése.",2,null,200,"what.webp","Eszköz","Pohárnyi","Magyarország",0,2000),
+("Citrushámozó","Egy specializált hámozó, mely kis reszelékeket szed le a gyümölcs héjjából, amiket a koktélhoz lehet adni",1,null,200,"what.webp","Eszköz","Pohárnyi","Magyarország",0,2000),
+
+/*Whiskey*/
+("Jack Daniels","A Jack Daniels egy az Amerikai tennessee államból származó kukorica alapú, faszénnel szűrt whiskey.",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,7650),
+("Jack Daniels Fire","A Jack Daniels egy az Amerikai tennessee államból származó kukorica alapú, faszénnel szűrt whiskey. Ennek a változatnak fahéjas utóíze van",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,8500),
+("Jack Daniels Blackberry","A Jack Daniels egy az Amerikai tennessee államból származó kukorica alapú, faszénnel szűrt whiskey. Ez a változata áfonyás ízű",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,8500),
+("Jack Daniels Honey","A Jack Daniels egy az Amerikai tennessee államból származó kukorica alapú, faszénnel szűrt whiskey. Ennek a változatnak mézes utóíze van.",1,0.75,200,"what.webp","Whiskey","Jack Daniels","Amerika",23,8500),
+
+/*Sör*/
+/*https://www.kifli.hu/11245-heineken-minosegi-ueveges-vilagos-soer-5   valaki tényleg ittasan írt egy endpoint nevet a sörnek.*/
+("Heineken Original","A Heineken egy lager sör különleges A-élesztő felhasználásával készül, amely az összetéveszthetetlenül harmonikus, enyhén gyümölcsös ízjegyeket garantálja.",1,0.5,1000,"what.webp","Sör","Heineken","Hollandia",5,500),
+/*https://idrinks.hu/asahi-super-dry-japan-sor*/
+("Asahi Super Dry","Kiválóan kiegyensúlyozott ízvilágával és könnyed, kevésbé keserű karakterével a japán sörök egyik prémium képviselője.",1,0.5,1000,"what.webp","Sör","Asahi","Japán",5,500),
+/*https://www.kifli.hu/91084-peroni-nastro-azzurro-stile-capri-minosegi-vilagos-soerkeverek-4-2*/
+("Peroni Stile Capr"," Peroni Stile Caprit a hozzáadott olasz citrom és olajfalevél kivonata teszi még egyedibbé, ezzel megidézve az olasz tengerpart jellegzetes nyári hangulatát ennek a prémium lager sörnek",1,0.5,1000,"what.webp","Sör","Peroni","Olaszország",5,500),
+/*https://www.dreherzrt.hu/markaink_oldal/arany-aszok/ */
+("Arany Ászok","Közép-Magyarország egyik legnépszerűbb sörét, az Arany Ászokot, Dreher Antal által 1841-ben kifejlesztett, és később a magyar söriparban is meghonosított ászokolási technika alapján főzik.Nevét aranyló színéről és kiváló minőségéről kapta Kiegyensúlyozott íze, aranyló ragyogása és tömör habja tükrözi a kifogástalan minőséget, amit sok évtizedes hagyományokra visszatekintő szakértelmünk garantál.",1,0.5,1000,"what.webp","Sör","Dreher","Magyarország",5,500),
+/*https://www.belgasormester.hu/sorfozdek/sint-benedictus-abdij-de-achelse-kluis/achel-brune-bs200323*/
+("Achel Dubbel","Mahagóni színű testes dubbel, a maláta és sötét gyümölcsök egyensúlyban lévő ízjegyeivel, és a füstös, csokoládés útóízével a belga sörfőzés megkerülhetetlen terméke",1,0.33,1000,"what.webp","Sör","Achel","Belgium",8,1670),
+/*Egyéb*/
 ("Ouzou","Görög alkohol, mentolos ízzel",1,0.5,200,"what.webp","Egyéb","Görög Varázs","Görögország",12,9500),
 ("Soju Eper","Koreai desztillált alkohol, eper ízben",1,0.35,200,"what.webp","Egyéb","Jinro","Korea",12,2500);
 
