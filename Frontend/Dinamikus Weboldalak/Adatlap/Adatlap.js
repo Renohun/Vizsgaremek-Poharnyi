@@ -42,7 +42,12 @@ const AdatGet=async(url)=>{
         headers:{"Content-Type":"application/json"}
       })  
       if (ertek.ok) {
-        return ertek.json()
+        if (ertek.status==200) {
+            return ertek.json()
+        }
+        else{
+            return "Üres"
+        }
       }
       else{
         console.log("hiba");
@@ -254,28 +259,38 @@ async function AdatlapLekeres(){
                     const data=new FormData()
                     //A Kép Eltárolása. Visszakapjuk a kép új nevét, amit továbbadunk az adatbázisnak   
                     if(titkos.files.length!=0){
+                        console.log(titkos.files[0].type);
+                        
                         if (titkos.files[0].type!="image/jpeg"&&titkos.files[0].type!="image/png"&&titkos.files[0].type!="image/bmp"&&titkos.files[0].type!="image/webp") {
                             hiba+="\t A megadott fájl nem felel meg a követelményeknek!"
                         }
                         else{
+                            console.log(titkos.files[0]);
+                            
                             data.append("profilkep",titkos.files[0])
-                            const kepUtvonal=await AdatPostKep("/api/AdatlapLekeres/KepFeltoltes",data)
-                            FelhAdatok.KépÚtvonal=kepUtvonal.message
+                            const kepUtvonal=(await AdatPostKep("/api/AdatlapLekeres/KepFeltoltes",data)).message
+                            console.log(kepUtvonal);
+                            
+                            FelhAdatok.KépÚtvonal=kepUtvonal
                         }
                     }
-                    if(AdatlapJelszo2.value!=AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true){
-                        hiba+="\t A kettő jelszó nem egyezik!"
-                    }
-                    else if(AdatlapJelszo2.value==AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true&&/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(AdatlapJelszo.value)==false){
-                        hiba+="\t A Jelszó nem felel meg a követelményeknek!"
+                    if (AdatlapJelszoValtozatas.checked==true) {
+                        
+                        if(AdatlapJelszo2.value!=AdatlapJelszo.value){
+                            hiba+="\t A kettő jelszó nem egyezik!"
+                        }
+                        else if(AdatlapJelszo2.value==AdatlapJelszo.value&&AdatlapJelszoValtozatas.checked==true&&/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(AdatlapJelszo.value)==false){
+                            hiba+="\t A Jelszó nem felel meg a követelményeknek!"
+                        }
+                        else{
+                            FelhAdatok.Jelszó=AdatlapJelszo.value
+                        }
                     }
                     else{
-
-                        FelhAdatok.Jelszó=AdatlapJelszo.value
-                        
                         let valasz=await AdatPost("/api/AdatlapLekeres/Adatmodositas/",FelhAdatok,"PUT")
                         if (valasz=="200") {
                             modal("Sikeres Adatmódosítás!","Az Adatai sikeresen frissültek!")
+                            document.getElementsByClassName("profil")[0].setAttribute("src",AdatlapKep.getAttribute("src"))
                             GombOles()
                         }
                         else{
@@ -341,7 +356,7 @@ async function KedvencekLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Kedvencek/")
 
     let hova=document.getElementById("IdeKedvenc")
-    if (valasz.message!="Üres Lekérés!") {
+    if (valasz!="Üres") {
         
         hova.innerHTML=""
         for (let i = 0; i < valasz.adat.length; i++) {
@@ -365,7 +380,7 @@ async function KoktelokLekeres() {
     const valasz=await AdatGet("/api/AdatlapLekeres/Koktelok/")
 
     let hova=document.getElementById("IdeSaját")
-    if (valasz.message!="Üres Lekérés!") {
+    if (valasz!="Üres") {
         hova.innerHTML=""
         for (let i = 0; i < valasz.adat.length; i++) {
             let koktel=kartyakeszites(valasz.adat[i])
