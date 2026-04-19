@@ -474,11 +474,27 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
         const data = await TermekLekeres(`/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`);
         await kartyaGen(data, KartyaHova);
         PaginationGombok(false, hossz);
-    } else if (szurtE == true && !NevSzerinti) {
+    } else if (szurtE == true && !NevSzerinti) 
+ 
+    {
         const szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`, szuresiAdatok);
+        console.log(szurtdata)
+        if (szurtdata.hossz == 0) 
+        {
+            let h1 = document.createElement("h1")
+            h1.innerHTML ="Nincs a keresésnek megfelelő termék!"
+            h1.classList.add("UresTermek")
+            KartyaHova.appendChild(h1)
+            let img = document.createElement("img")
+            img.src = "../WebShopMain/img/Szabadsag3__1_of_1_-removebg-preview.png"
+            img.classList.add("img-fluid","mx-auto","uresKep")
+            KartyaHova.appendChild(img)
+        }
         await kartyaGen(szurtdata, KartyaHova);
         console.log(oldalszam);
         PaginationGombok(true, hossz, szuresiAdatok);
+        
+        
     } else if (NevSzerinti == true && !szurtE) {
         const keresendoSzo = document.getElementById('NevKereses').value;
         const data = await TermekLekeres(
@@ -598,6 +614,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const adatok = szures();
         console.log(await adatok);
         const szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`, await adatok);
+        console.log(szurtDataHossz)
         TermekBetoltes(1, szurtDataHossz.hossz, true, await adatok);
         szuresiAdatok = {};
     });
