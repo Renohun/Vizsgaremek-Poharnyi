@@ -1724,13 +1724,16 @@ router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (re
             tomb.email = `${request.body.Email}`;
         } else {
             hiba = true;
+            
         }
         let profil = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
         if (request.body.KépÚtvonal != undefined && hiba == false) {
+
             adatmodositas += ',ProfilKepUtvonal=?';
             tomb.kepvonal = `${request.body.KépÚtvonal}`;
         }
-        if (request.body.Jelszó != 'undefined' && hiba == false) {
+
+        if (request.body.Jelszó != undefined && hiba == false) {
             if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.Jelszó)) {
                 adatmodositas += ',JelszóHossza=?,Jelszó=?';
                 tomb.hossz = `${request.body.Jelszó.length}`;
@@ -1740,7 +1743,9 @@ router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (re
             }
         }
         adatmodositas += ` WHERE FelhID LIKE ${profil}`;
+
         if (hiba == false) {
+            
             await lekeres(adatmodositas, Object.values(tomb));
             await kepculling();
             response.status(200).json({
