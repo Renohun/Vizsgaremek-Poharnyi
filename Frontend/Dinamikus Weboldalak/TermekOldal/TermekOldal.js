@@ -304,24 +304,37 @@ const oldalGenerálás =  async () =>{
 
     //kovetkezo termek
     const hossz = await GETfetch("/api/WebShop/HosszLekeres")
+    const idLista = await GETfetch("/api/termek/OsszIdLekeres")
+    
     let idszam = parseInt(id)
-
+    let jelenlegiIndex ;
+    for (let i = 0; i < idLista.idLista.length; i++) 
+    {//az éppen nézett termék indexét meghatarozom a listaban
+        
+        if (idszam == idLista.idLista[i].TermekID)
+        {
+            console.log(idLista.idLista[i])
+            jelenlegiIndex = i;
+        }
+    
+    }
     let kov = document.getElementById("koviTermek")
-    if (idszam == hossz.data) 
+    if (jelenlegiIndex == idLista.idLista.length-1) 
     {
         kov.disabled = "true"
         kov.style.color ="gray"
     }
     else{
-        kov.href = `/Termek/${idszam+1}`
+        console.log(jelenlegiIndex)
+        kov.href = `/Termek/${idLista.idLista[jelenlegiIndex+1].TermekID}`
     }
     //Elozo Termek
     let elo = document.getElementById("EloTermek")
-    if (idszam == 1) {
+    if (jelenlegiIndex == 0) {
         elo.disabled = "true"
         elo.style.color ="gray"
     }else{
-        elo.href = `/Termek/${idszam-1}`
+        elo.href = `/Termek/${idLista.idLista[jelenlegiIndex-1].TermekID}`
     }
    
 
