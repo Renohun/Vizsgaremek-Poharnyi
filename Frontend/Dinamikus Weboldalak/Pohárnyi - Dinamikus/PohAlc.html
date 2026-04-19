@@ -66,7 +66,7 @@
                                 </li>
                             </div>
                             <div id="rightSideNavBar">
-                                <li class="nav-item">
+                                <li class="nav-item" id="dropdownMenuMini">
                                     <div class="nav-item dropdown" id="dropdownMenu" hidden>
                                         <a
                                             class="nav-link dropdown-toggle"
@@ -78,9 +78,7 @@
                                         >
                                         <ul class="dropdown-menu dropdown-menu-end hatter">
                                             <li class="dropdown-item">
-                                                <a style="text-decoration: none; color: black" href="/Adatlap"
-                                                    >Adatlap</a
-                                                >
+                                                <a href="/Adatlap">Adatlap</a>
                                             </li>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item" id="adminPanelHref">
@@ -101,7 +99,7 @@
                                         />
                                     </div>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item w-100">
                                     <a href="/Regisztralj" id="regisztracio">
                                         <input
                                             type="button"
@@ -110,7 +108,7 @@
                                         />
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item w-100">
                                     <a href="/LepjBe" id="belepes">
                                         <input
                                             type="button"
@@ -119,14 +117,35 @@
                                         />
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item w-100">
                                     <a href="/Keszites" id="sajatKoktelKeszites" hidden>
                                         <input
                                             type="button"
-                                            class="nav-item btn btn-warning w-100 mt-2"
+                                            class="nav-item btn btn-warning mt-2 w-100"
                                             value="Saját koktél létrehozása"
                                         />
                                     </a>
+                                </li>
+                                <li class="nav-item" id="dropdownMenuBig">
+                                    <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                                        <img
+                                            class="nav-link dropdown-toggle profil"
+                                            data-bs-toggle="dropdown"
+                                            role="button"
+                                            aria-expanded="false"
+                                        />
+                                        <ul class="dropdown-menu dropdown-menu-end hatter">
+                                            <li class="dropdown-item">
+                                                <a href="/Adatlap">Adatlap</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item" id="adminPanelHref">
+                                                <a href="/AdminPanel">Admin Panel</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
+                                        </ul>
+                                    </div>
                                 </li>
                             </div>
                         </ul>

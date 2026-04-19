@@ -71,7 +71,12 @@
 #rightSideNavBar {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 15px;
+}
+
+#dropdownMenuMini {
+    display: none;
 }
 
 @media only screen and (max-width: 991px) {
@@ -86,6 +91,15 @@
     }
 
     #rightSideNavBar {
-        flex-direction: column;
+        flex-direction: column !important;
+        align-items: start;
+    }
+
+    #dropdownMenuMini {
+        display: inherit;
+    }
+
+    #dropdownMenuBig {
+        display: none;
     }
 }
