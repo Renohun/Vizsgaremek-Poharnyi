@@ -1850,6 +1850,7 @@ router.post('/AdatlapLekeres/Fizetes', authenticationMiddleware, async (request,
 router.get('/Koktel/:id', async (request, response) => {
     const KoktelLekeres =
         'SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg,ProfilkepUtvonal,BoritoKepUtvonal FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?';
+    const TiltottKomment="SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?"
     const KommentLekeres =
         'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const JelvenyLekeres = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
@@ -1870,7 +1871,21 @@ router.get('/Koktel/:id', async (request, response) => {
             jelvényinfo.push(await lekeres(MelyikJelvenyLekeres, jelvenyek[i].JelvényID));
         }
         let koktel = await lekeres(KoktelLekeres, request.params.id);
+        let gonoszkomment=await lekeres(TiltottKomment,["Komment",2])
         let komment = await lekeres(KommentLekeres, [request.params.id, 'Koktél']);
+        let jokomment=[]
+        for (let i = 0; i < komment.length; i++) {
+            let rossz=false
+            for (let j = 0; j < gonoszkomment.length; j++) {
+                if (komment[i].KommentID==gonoszkomment[j].JelentettTartalomID) {
+                    rossz=true
+                }
+            }
+            if (rossz==false) {
+                jokomment.push(komment[i])
+            }
+        }        
+        
         let kedv = false;
         let ert = false;
         let ertekeles;
@@ -1914,7 +1929,7 @@ router.get('/Koktel/:id', async (request, response) => {
         if (koktel.length != 0) {
             response.status(200).json({
                 adat: koktel[0],
-                komment: komment,
+                komment: jokomment,
                 jelvenyek: jelvényinfo,
                 osszetevok: osszetevok,
                 belepette: jwt.decode(request.cookies.auth_token) != null ? true : false,
