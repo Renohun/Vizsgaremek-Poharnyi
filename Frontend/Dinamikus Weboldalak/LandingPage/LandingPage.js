@@ -45,11 +45,11 @@ const polcTovabb = async()=>{
 }
 //népszerű koktél
 const NepszeruKoktelok = async()=>{
-    const data = await GetFetch("http://127.0.0.1:3000/api/Fooldal/NepszeruKoktelok")
+    const data = await GetFetch("/api/Fooldal/NepszeruKoktelok")
     console.log(data)
     let hova = document.getElementById("NepszeruKoktelDiv")
     for (let i = 0; i < data.data.length; i++) {
-        const kep = await KepFetch(`http://127.0.0.1:3000/api/Fooldal/KepLekeres/${data.data[i].KoktélID}`)
+        const kep = await KepFetch(`/api/Fooldal/KepLekeres/${data.data[i].KoktélID}`)
         let kartya = document.createElement("div")
         kartya.classList.add("NepszeruKartya")
         
