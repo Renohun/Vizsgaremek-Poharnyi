@@ -494,13 +494,17 @@ const AdatStorage = async () => {
     if (hiba == true) {
         KoktelAdatok.kepUtvonala = kepUtvonal.message;
         data = await AdatPost('/api/Keszites/Feltoltes', KoktelAdatok);
-        modalJo()
+       
         if (data == "hiba") //Ha a végpont 208-at ad vissza, akkor más hibaüzenetet jelenítünk meg.
         {
             modalHiba(true,"Nev")
             hiba = true
             egyezoMl = true
         }  
+        else
+        {
+            modalJo()
+        }
     } 
         else if (hiba == false) {
         modalHiba(egyezoMl,"sima")
