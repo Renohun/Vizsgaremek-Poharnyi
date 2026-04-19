@@ -10,16 +10,16 @@ async function AuthorizaitionMiddleware(req, res, next) {
     try {
         //hosszu tavu suti lekerese a requestbol
         const tokenAccess = req.cookies.auth_token_access;
-        const tokenRefresh = req.cookies.auth_token;
+        //const tokenRefresh = req.cookies.auth_token;
         //extra ellenorzes reven van ez itt, ha esetleg valaki atirja a sutiben szereprlo erteket
         const query = 'SELECT Admin FROM felhasználó WHERE FelhID LIKE ?';
         //console.log('Jogositas: ' + JSON.stringify(jwt.decode(req.cookies.auth_token)));
         const payload = jwt.verify(tokenAccess, process.env.JWT_SECRET);
-        const refreshPayload = jwt.verify(tokenRefresh, process.env.JWT_SECRET_REFRESH);
+        //const refreshPayload = jwt.verify(tokenRefresh, process.env.JWT_SECRET_REFRESH);
 
         const [rows] = await DBconnetion.promise().query(query, [payload.userID]);
 
-        if (rows[0].Admin == 0 && refreshPayload.adminStatus == 0) {
+        if (rows[0].Admin == 0) {
             //atiranyotjuk ha a felhasznalo jogosultsaga nem meg felelo
             res.redirect('/jogosultsag');
         } else {

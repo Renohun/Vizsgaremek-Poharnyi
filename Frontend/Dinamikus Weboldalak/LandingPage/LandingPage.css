@@ -75,9 +75,6 @@ background-color: rgb(65, 65, 65);
 #PhTeam{
     color: rgb(172, 0, 0);
 }
-#phTradeMark{
-    color: rgb(6, 85, 0);
-}
 #Szolgaltatasok{
     width: 100%;
     display: flex;
@@ -263,9 +260,31 @@ background-color: rgb(65, 65, 65);
 .NepszeruKartya{width: 50%;}
 #NepszeruCim{font-size: 7vw;}
 }
+@media only screen and (max-width: 600px) 
+{
+#NepszeruKoktelok{width: 100%;}
+.NepszeruKartya{width: 60%;}
+.nepszeruKepDiv{
+    width: 100%;
+}
+.nepszeruKep{
+    width: 100%;
+    height: auto ;
+    object-fit: cover;
+}
+}
 @media only screen and (max-width: 400px) 
 {
 #NepszeruKoktelok{width: 100%;}
+.NepszeruKartya{width: 100%;}
+.nepszeruKepDiv{
+    width: 100%;
+}
+.nepszeruKep{
+    width: 100%;
+    height: auto ;
+    object-fit: cover;
+}
 }
 @media only screen and (max-width: 1000px) 
 {
