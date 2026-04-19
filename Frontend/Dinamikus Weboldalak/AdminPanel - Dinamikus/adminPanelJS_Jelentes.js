@@ -438,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             tovabbKoktelraGomb.dataset.koktelID = rows.koktelok[i][0].KoktélID;
 
                             tovabbKoktelraGomb.addEventListener('click', () => {
-                                window.location.href = `http://127.0.0.1:3000/Koktel/${rows.koktelok[i][0].KoktélID}`;
+                                window.location.href = `/Koktel/${rows.koktelok[i][0].KoktélID}`;
                             });
 
                             cardBody.appendChild(tovabbKoktelraGomb);
