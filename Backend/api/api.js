@@ -440,7 +440,8 @@ router.post('/regisztracio', async (request, response) => {
                 /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.email) &&
                 /^[a-zA-Z0-9_]{2,30}$/.test(request.body.felhaszanaloNev) &&
                 /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.jelszo) &&
-                request.body.ASZF
+                request.body.ASZF &&
+                request.body.korEll
             ) {
                 const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
 
@@ -1724,11 +1725,9 @@ router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (re
             tomb.email = `${request.body.Email}`;
         } else {
             hiba = true;
-            
         }
         let profil = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
         if (request.body.KépÚtvonal != undefined && hiba == false) {
-
             adatmodositas += ',ProfilKepUtvonal=?';
             tomb.kepvonal = `${request.body.KépÚtvonal}`;
         }
@@ -1745,7 +1744,6 @@ router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (re
         adatmodositas += ` WHERE FelhID LIKE ${profil}`;
 
         if (hiba == false) {
-            
             await lekeres(adatmodositas, Object.values(tomb));
             await kepculling();
             response.status(200).json({
@@ -1855,7 +1853,8 @@ router.post('/AdatlapLekeres/Fizetes', authenticationMiddleware, async (request,
 router.get('/Koktel/:id', async (request, response) => {
     const KoktelLekeres =
         'SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg,ProfilkepUtvonal,BoritoKepUtvonal FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?';
-    const TiltottKomment="SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?"
+    const TiltottKomment =
+        'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?';
     const KommentLekeres =
         'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const JelvenyLekeres = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
@@ -1876,21 +1875,21 @@ router.get('/Koktel/:id', async (request, response) => {
             jelvényinfo.push(await lekeres(MelyikJelvenyLekeres, jelvenyek[i].JelvényID));
         }
         let koktel = await lekeres(KoktelLekeres, request.params.id);
-        let gonoszkomment=await lekeres(TiltottKomment,["Komment",2])
+        let gonoszkomment = await lekeres(TiltottKomment, ['Komment', 2]);
         let komment = await lekeres(KommentLekeres, [request.params.id, 'Koktél']);
-        let jokomment=[]
+        let jokomment = [];
         for (let i = 0; i < komment.length; i++) {
-            let rossz=false
+            let rossz = false;
             for (let j = 0; j < gonoszkomment.length; j++) {
-                if (komment[i].KommentID==gonoszkomment[j].JelentettTartalomID) {
-                    rossz=true
+                if (komment[i].KommentID == gonoszkomment[j].JelentettTartalomID) {
+                    rossz = true;
                 }
             }
-            if (rossz==false) {
-                jokomment.push(komment[i])
+            if (rossz == false) {
+                jokomment.push(komment[i]);
             }
-        }        
-        
+        }
+
         let kedv = false;
         let ert = false;
         let ertekeles;
@@ -2425,11 +2424,10 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
         const [MennyisegLe] = await DBconnetion.promise().query(mennyisegLekeres, [id]);
 
         const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? &&  KosarID = ?';
-        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id,UserID]);
+        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
         if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1) {
-                response.status(200).json({ hiba: 'raktar' });
-        } 
-        else {
+            response.status(200).json({ hiba: 'raktar' });
+        } else {
             //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
             if (vanEIlyen[0] == undefined) {
                 const kosarFeltoltQuery =
@@ -2448,7 +2446,6 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
                 response.status(200).json({ Siker: KosarUpdate.affectedRows });
             }
         }
-    
     } catch (error) {
         console.log(error);
         response.status(500).json({ hiba: error });
@@ -2461,30 +2458,29 @@ router.get('/Termek/HasonloTermekek/:kateg/:id', async (request, response) => {
         const id = request.params.id;
         const kategQuery = 'SELECT * FROM webshoptermek WHERE TermekKategoria LIKE ? AND TermekID <> ?';
         const [KategLeker] = await DBconnetion.promise().query(kategQuery, [kateg, id]);
-       
+
         let indexLista = [];
         for (let i = 0; i < KategLeker.length; i++) {
             indexLista.push(KategLeker[i].TermekID);
         }
-         console.log(indexLista)
+        console.log(indexLista);
         let Hasonlok = [];
         for (let i = 0; i < 3; i++) {
-            let random = Math.floor(Math.random()*indexLista.length)//random index gen
-            Hasonlok.push(indexLista[random])//hozzaadjuk az indexet az uj listahoz, majd az elozobol kitoroljuk
-            indexLista.splice(random,1)
-            console.log(indexLista)
+            let random = Math.floor(Math.random() * indexLista.length); //random index gen
+            Hasonlok.push(indexLista[random]); //hozzaadjuk az indexet az uj listahoz, majd az elozobol kitoroljuk
+            indexLista.splice(random, 1);
+            console.log(indexLista);
         }
         let hasonloTermekek = [];
-        for (let i = 0; i < Hasonlok.length; i++)//megkeressük az id-hez tartozó elemet és berakjuk a visszaküldendő listaba
-         {
-
+        for (
+            let i = 0;
+            i < Hasonlok.length;
+            i++ //megkeressük az id-hez tartozó elemet és berakjuk a visszaküldendő listaba
+        ) {
             for (let j = 0; j < KategLeker.length; j++) {
-                if (KategLeker[j].TermekID == Hasonlok[i]) 
-                {
-
-                    hasonloTermekek.push(KategLeker[j])
+                if (KategLeker[j].TermekID == Hasonlok[i]) {
+                    hasonloTermekek.push(KategLeker[j]);
                 }
-                
             }
         }
         response.status(200).json({
@@ -2621,7 +2617,7 @@ router.post('/Webshop/szures', async (request, response) => {
         let OrderBy;
         let OrderByErtek;
         for (const item of Object.entries(feltetelek)) {
-            console.log(item[0] + ' ? '+item[1])
+            console.log(item[0] + ' ? ' + item[1]);
             if (item[0] == 'MaxAr') {
                 query += ' Ar <= ? AND';
             } else if (item[0] == 'MaxAlk') {
@@ -2650,8 +2646,11 @@ router.post('/Webshop/szures', async (request, response) => {
                 query += ` ${item[0]} like ? AND`;
             }
 
-            if (item[0] != 'rendezes' && item[0] != "akcio")//amennyiben a postobjectben lévő adat nem az akcio, vagy a rendezes szuresehez kell, akkor belerakjuk az értéklistába
-             {
+            if (
+                item[0] != 'rendezes' &&
+                item[0] != 'akcio'
+            ) //amennyiben a postobjectben lévő adat nem az akcio, vagy a rendezes szuresehez kell, akkor belerakjuk az értéklistába
+            {
                 ertekLista.push(item[1]);
             }
         }
@@ -2661,20 +2660,18 @@ router.post('/Webshop/szures', async (request, response) => {
         query += OrderBy;
         let limitoffset = ' LIMIT ? OFFSET ?';
         query += limitoffset;
-       /* TEST
+        /* TEST
         const sql = mysql.format(query, [ertekLista[0]]);
             console.log(sql);
             console.log(typeof ertekLista[0]);
             console.log('2') 
         */
-        console.log(ertekLista)
+        console.log(ertekLista);
         let szurtTermekek;
         if (ertekLista.length == 1) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], limit, offset]);
-           
         } else if (ertekLista.length == 2) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], ertekLista[1], limit, offset]);
-            
         } else if (ertekLista.length == 3) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [
                 ertekLista[0],
@@ -2682,7 +2679,6 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[2],
                 limit,
                 offset
-               
             ]);
         } else if (ertekLista.length == 4) {
             console.log('4')[szurtTermekek] = await DBconnetion.promise().query(query, [
@@ -2852,6 +2848,5 @@ router.get('/Fooldal/BevaneJelentkezve', authenticationMiddleware, async (reques
         response.status(200).json({ siker: 'hiba' });
     }
 });
-
 
 module.exports = router;
