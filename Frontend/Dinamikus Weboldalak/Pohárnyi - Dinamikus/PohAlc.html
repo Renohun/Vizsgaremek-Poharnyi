@@ -51,7 +51,7 @@
                     </div>
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1 w-100">
-                            <div class="me-auto d-flex flex-column">
+                            <div id="leftSideNavBar">
                                 <li class="nav-item">
                                     <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
                                 </li>
@@ -65,67 +65,70 @@
                                     <a href="/PolcKoktel" class="nav-link">Mi van a polcon?</a>
                                 </li>
                             </div>
-
-                            <li class="nav-item">
-                                <div class="nav-item dropdown" id="dropdownMenu" hidden>
-                                    <a
-                                        class="nav-link dropdown-toggle"
-                                        role="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                        href="#"
-                                        >Felhasználó</a
-                                    >
-                                    <ul class="dropdown-menu dropdown-menu-end hatter">
-                                        <li class="dropdown-item">
-                                            <a style="text-decoration: none; color: black" href="/Adatlap">Adatlap</a>
-                                        </li>
-                                        <hr class="dropdown-divider" />
-                                        <li class="dropdown-item" id="adminPanelHref">
-                                            <a href="/AdminPanel">Admin Panel</a>
-                                        </li>
-                                        <hr class="dropdown-divider" />
-                                        <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div id="ThemeSwitcher">
-                                    <img
-                                        src="../kellékek/free-moon-icon-2304-thumb.png"
-                                        id="themeSwitcherimg"
-                                        style="height: 50px; width: 50px"
-                                        alt=""
-                                    />
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/Regisztralj" id="regisztracio">
-                                    <input
-                                        type="button"
-                                        class="btn btn-secondary nav-item mt-2 w-100"
-                                        value="Regisztárció"
-                                    />
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/LepjBe" id="belepes">
-                                    <input
-                                        type="button"
-                                        class="btn btn-warning nav-item mt-2 w-100"
-                                        value="Bejelentkezés"
-                                    />
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/Keszites" id="sajatKoktelKeszites" hidden>
-                                    <input
-                                        type="button"
-                                        class="nav-item btn btn-warning w-100 mt-2"
-                                        value="Saját koktél létrehozása"
-                                    />
-                                </a>
-                            </li>
+                            <div id="rightSideNavBar">
+                                <li class="nav-item">
+                                    <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                                        <a
+                                            class="nav-link dropdown-toggle"
+                                            role="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            href="#"
+                                            >Felhasználó</a
+                                        >
+                                        <ul class="dropdown-menu dropdown-menu-end hatter">
+                                            <li class="dropdown-item">
+                                                <a style="text-decoration: none; color: black" href="/Adatlap"
+                                                    >Adatlap</a
+                                                >
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item" id="adminPanelHref">
+                                                <a href="/AdminPanel">Admin Panel</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <div id="ThemeSwitcher">
+                                        <img
+                                            src="../kellékek/free-moon-icon-2304-thumb.png"
+                                            id="themeSwitcherimg"
+                                            style="height: 50px; width: 50px"
+                                            alt=""
+                                        />
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Regisztralj" id="regisztracio">
+                                        <input
+                                            type="button"
+                                            class="btn btn-secondary nav-item mt-2 w-100"
+                                            value="Regisztárció"
+                                        />
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/LepjBe" id="belepes">
+                                        <input
+                                            type="button"
+                                            class="btn btn-warning nav-item mt-2 w-100"
+                                            value="Bejelentkezés"
+                                        />
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Keszites" id="sajatKoktelKeszites" hidden>
+                                        <input
+                                            type="button"
+                                            class="nav-item btn btn-warning w-100 mt-2"
+                                            value="Saját koktél létrehozása"
+                                        />
+                                    </a>
+                                </li>
+                            </div>
                         </ul>
                     </div>
                 </div>
