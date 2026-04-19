@@ -2424,11 +2424,12 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
         const mennyisegLekeres = 'SELECT TermekKeszlet FROM webshoptermek WHERE TermekID = ?';
         const [MennyisegLe] = await DBconnetion.promise().query(mennyisegLekeres, [id]);
 
-        const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ?';
-        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id]);
+        const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? &&  KosarID = ?';
+        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id,UserID]);
         if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1) {
-            response.status(200).json({ hiba: 'raktar' });
-        } else {
+                response.status(200).json({ hiba: 'raktar' });
+        } 
+        else {
             //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
             if (vanEIlyen[0] == undefined) {
                 const kosarFeltoltQuery =
@@ -2447,6 +2448,7 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
                 response.status(200).json({ Siker: KosarUpdate.affectedRows });
             }
         }
+    
     } catch (error) {
         console.log(error);
         response.status(500).json({ hiba: error });
