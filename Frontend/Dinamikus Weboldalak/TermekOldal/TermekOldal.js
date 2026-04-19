@@ -124,6 +124,7 @@ const oldalGenerálás =  async () =>{
         }  
        
     }
+    //asd
     for (const element of Object.entries(TablazatElemek))
     {
         let tr = document.createElement("tr")
