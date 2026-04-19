@@ -2459,20 +2459,31 @@ router.get('/Termek/HasonloTermekek/:kateg/:id', async (request, response) => {
         const id = request.params.id;
         const kategQuery = 'SELECT * FROM webshoptermek WHERE TermekKategoria LIKE ? AND TermekID <> ?';
         const [KategLeker] = await DBconnetion.promise().query(kategQuery, [kateg, id]);
+       
         let indexLista = [];
-        for (let i = 0; i < 3; i++) {
-            indexLista.push(Math.floor(Math.random() * KategLeker.length));
+        for (let i = 0; i < KategLeker.length; i++) {
+            indexLista.push(KategLeker[i].TermekID);
         }
+         console.log(indexLista)
         let Hasonlok = [];
-        for (let i = 0; i < indexLista.length; i++) {
+        for (let i = 0; i < 3; i++) {
+            let random = Math.floor(Math.random()*indexLista.length)
+            Hasonlok.push(indexLista[random])
+            indexLista.splice(random,1)
+            console.log(indexLista)
+        }
+        let hasonloTermekek = [];
+        for (let i = 0; i < Hasonlok.length; i++) {
             for (let j = 0; j < KategLeker.length; j++) {
-                if (j == indexLista[i]) {
-                    Hasonlok.push(KategLeker[j]);
+                if (KategLeker[j] == Hasonlok[i]) 
+                {
+                    hasonloTermekek.push(KategLeker[j])
                 }
+                
             }
         }
         response.status(200).json({
-            hasonlok: Hasonlok
+            hasonlok: hasonloTermekek
         });
     } catch (error) {
         console.log(error);
