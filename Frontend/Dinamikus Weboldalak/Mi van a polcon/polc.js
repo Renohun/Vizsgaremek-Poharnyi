@@ -286,7 +286,7 @@ async function kartyakeszites(adatok){
                 osszetevok.appendChild(osszetevo)
             }
             let osszetevo=document.createElement("li")
-            osszetevo.innerHTML=`És további ${adatok.osszetevok.length-3} összetevő`
+            osszetevo.innerHTML=`És további ${hianyzoosszetevok.length-3} összetevő`
             osszetevok.appendChild(osszetevo)
             osszetevokDiv.appendChild(osszetevokHeader)
             osszetevokDiv.appendChild(osszetevok)
