@@ -1869,13 +1869,16 @@ router.get('/Koktel/:id', async (request, response) => {
         'SELECT Ertekeles FROM ertekeles WHERE Keszito LIKE ? AND HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
 
     try {
+        
         let osszetevok = await lekeres(OsszetevőLekeres, request.params.id);
         let jelvenyek = await lekeres(JelvenyLekeres, request.params.id);
         let jelvényinfo = [];
         for (let i = 0; i < jelvenyek.length; i++) {
             jelvényinfo.push(await lekeres(MelyikJelvenyLekeres, jelvenyek[i].JelvényID));
         }
+
         let koktel = await lekeres(KoktelLekeres, request.params.id);
+
         let gonoszkomment=await lekeres(TiltottKomment,["Komment",2])
         let komment = await lekeres(KommentLekeres, [request.params.id, 'Koktél']);
         let jokomment=[]

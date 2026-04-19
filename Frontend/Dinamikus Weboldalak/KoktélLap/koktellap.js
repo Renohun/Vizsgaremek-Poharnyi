@@ -2,6 +2,7 @@ let koktel=(window.location.href.split("/"))[4]
 document.addEventListener("DOMContentLoaded",async()=>{
     //ez alapján lekérjük az adatokat
     const eredmeny=await AdatLekeres(`/api/Koktel/${koktel}`)
+
     let bevanelepve=await statikusadatok(eredmeny)
     if (bevanelepve) {
         document.getElementById("KommSend").addEventListener("click",async()=>{await Kommentkuldes()})
@@ -30,6 +31,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("header").removeChild(document.getElementById("KoktJel"))
         document.getElementById("Cimsor").classList.remove("ps-4")
     }
+
     await kommentek(eredmeny,bevanelepve)
     await erteksetup()
 })
@@ -155,6 +157,9 @@ async function kommentek() {
         if (KommentekHelye.classList.contains("p-0")) {
             KommentekHelye.classList.remove("p-0")
         }
+        if (KommentekHelye.classList.contains("p-2")==false) {
+            KommentekHelye.classList.add("p-2")
+        }
     }
             
     KommentekHelye.innerHTML=""
@@ -278,6 +283,7 @@ async function kommentTorles(id){
 let csillag=document.createElement("input")
 async function kedvencek(){
     const eredmeny=await AdatLekeres(`/api/Koktel/${koktel}`)
+
     if (eredmeny.kedveltee) {
         csillag.setAttribute("value","★")
     }
@@ -354,8 +360,7 @@ async function jelentes(mit,tipus,kit) {
 async function erteksetup() {
 
     const eredmeny=await AdatLekeres(`/api/Koktel/${koktel}`)
-    console.log(eredmeny.adat.UgyanazE);
-    
+
     if (eredmeny.adat.UgyanazE) {
         document.getElementById("ertekeles").innerHTML=""
     }
