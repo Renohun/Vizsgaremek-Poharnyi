@@ -2146,6 +2146,32 @@ router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) =>
         console.log(error);
     }
 });
+
+router.patch("/Koktel/KoktelModositas/:id", async (request, response)=>{
+    try {
+        const koktelChange="UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=? WHERE KoktélID LIKE ?"
+        const OsszetevoCleanse="DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+        const UjOsszetevo="INSERT INTO koktelokosszetevoi (KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)"
+        await lekeres(koktelChange,[request.body.Cim,request.body.Recept,request.body.Mennyiseg,request.params.id])
+        await lekeres(OsszetevoCleanse,[request.params.id])
+        for (let i = 0; i < request.body.Osszetevok.length; i++) {
+            let osszetevo=request.body.Osszetevok[i]
+            await lekeres(UjOsszetevo,[request.params.id,osszetevo[0],osszetevo[1],osszetevo[2]])
+            
+        }
+        response.status(200).json({
+            message:"Siker"
+        })
+        
+    } 
+    catch (error) {
+        console.log(error);
+        
+        response.status(500).json({
+            message:"Hiba!"
+        })
+    }
+})
 //
 //
 //
