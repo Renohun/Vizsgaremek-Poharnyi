@@ -2467,16 +2467,19 @@ router.get('/Termek/HasonloTermekek/:kateg/:id', async (request, response) => {
          console.log(indexLista)
         let Hasonlok = [];
         for (let i = 0; i < 3; i++) {
-            let random = Math.floor(Math.random()*indexLista.length)
-            Hasonlok.push(indexLista[random])
+            let random = Math.floor(Math.random()*indexLista.length)//random index gen
+            Hasonlok.push(indexLista[random])//hozzaadjuk az indexet az uj listahoz, majd az elozobol kitoroljuk
             indexLista.splice(random,1)
             console.log(indexLista)
         }
         let hasonloTermekek = [];
-        for (let i = 0; i < Hasonlok.length; i++) {
+        for (let i = 0; i < Hasonlok.length; i++)//megkeressük az id-hez tartozó elemet és berakjuk a visszaküldendő listaba
+         {
+
             for (let j = 0; j < KategLeker.length; j++) {
-                if (KategLeker[j] == Hasonlok[i]) 
+                if (KategLeker[j].TermekID == Hasonlok[i]) 
                 {
+
                     hasonloTermekek.push(KategLeker[j])
                 }
                 
