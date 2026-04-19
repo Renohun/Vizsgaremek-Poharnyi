@@ -370,14 +370,7 @@ const AdatStorage = async () => {
     let data;
     let hiba = true;
     let egyezoMl = true;
-    document.getElementById('Ujra').style.display = 'none';
-    document.getElementById('hiba').style.display = 'none';
-    document.getElementById('hiba').innerHTML = "Kérem töltse ki a Hiányzó adatokat!"
-    document.getElementById('vissza').style.display = 'none';
-    document.getElementById('siker').removeAttribute('hidden',false);
-     document.getElementById('siker').innerHTML = "A koktélt sikeresen feltöltötte!"
-    document.getElementById('visszaGomb').removeAttribute('hidden', false);
-    document.getElementById('tovabb').removeAttribute('hidden', true);
+    
     //alap adatok kitöltésének ellenörzése
     if (document.getElementById('nev').value == '') {
         hiba = false;
@@ -501,6 +494,7 @@ const AdatStorage = async () => {
     if (hiba == true) {
         KoktelAdatok.kepUtvonala = kepUtvonal.message;
         data = await AdatPost('/api/Keszites/Feltoltes', KoktelAdatok);
+        modalJo()
         if (data == "hiba") //Ha a végpont 208-at ad vissza, akkor más hibaüzenetet jelenítünk meg.
         {
             modalHiba(true,"Nev")
@@ -529,7 +523,7 @@ const modalHiba = (Ml,milyen)=>{
         document.getElementById('hiba').style.display = 'block';
         if (Ml == false) 
         {
-           document.getElementById('hiba').innerHTML += " és/vagy Kérem ügyeljen arra, hogy a megadott mililiter mennyiségek egyezzenek!"
+           document.getElementById('hiba').innerHTML = "Kérem töltse ki a Hiányzó adatokat és/vagy Kérem ügyeljen arra, hogy a megadott mililiter mennyiségek egyezzenek!"
         }
         if(milyen == "Nev"){
             document.getElementById('hiba').innerHTML = "a Koktél neve már foglalt! Kérem probálja újra más névvel!"
@@ -538,4 +532,13 @@ const modalHiba = (Ml,milyen)=>{
         document.getElementById('visszaGomb').setAttribute('hidden', true);
         document.getElementById('tovabb').setAttribute('hidden', true);
         
+}
+const modalJo = ()=>{
+    document.getElementById('Ujra').style.display = 'none';
+    document.getElementById('hiba').style.display = 'none';
+    document.getElementById('vissza').style.display = 'none';
+    document.getElementById('siker').removeAttribute('hidden',false);
+     document.getElementById('siker').innerHTML = "A koktélt sikeresen feltöltötte!"
+    document.getElementById('visszaGomb').removeAttribute('hidden', false);
+    document.getElementById('tovabb').removeAttribute('hidden', true);
 }
