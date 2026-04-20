@@ -109,8 +109,11 @@ body {
 }
 
 /*Landing Page*/
-.szolgaltatasokDiv,#alcim,.nepszeruCim{
+.szolgaltatasokDiv,#alcim,.nepszeruCim,.hasonloNevDiv{
     color: black;
+}
+#szoveg{
+    color: white;
 }
 
 /*TermekOldal*/
@@ -120,8 +123,15 @@ body {
 #EloTermek,#koviTermek,#visszaWebshop{
     color: #9acd32;
 }
+.ErtekelesDiv{
+    color:yellow
+}
 
 /*Mi van a a polcon*/
 #hozzaad,#osszetevo{
     border: 0px;
+}
+
+.formElem{
+    color: black !important;
 }
