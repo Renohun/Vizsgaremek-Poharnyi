@@ -16,15 +16,24 @@
     margin-right: 4px;
 }
 
-.asd{
-    color: white;
-    background-color: rgb(12, 64, 12);
+.Onev,.Omer,.Oopc{
+    border-color: black;
+    border-width: 1px;
+    height: 40px;
+}
+.Onev{
+    border-right: 0px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
 
-    color: white;
-    background-color: rgb(60, 55, 55);
+.Omer{
+    border-right: 0px;
+}
 
-
-    background-color: rgb(12, 64, 12);
-    background-color: rgb(60, 55, 55);
-
+.Oopc{
+    padding-bottom: 2px;
+    padding: 0px !important; 
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }

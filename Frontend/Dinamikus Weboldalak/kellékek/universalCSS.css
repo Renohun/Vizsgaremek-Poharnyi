@@ -6,32 +6,29 @@
     font-family: Roboto;
 }
 
-.badge{
+.badge {
     font-weight: 500;
 }
 
-.img-fluid,.card-img-top{
+.img-fluid,
+.card-img-top {
     height: 400px;
 }
-#keresofelulet{
+#keresofelulet {
     margin-top: 20px;
 }
 
-#osszetevoDiv{
+#osszetevoDiv {
     padding: 10px;
     border-radius: 5px;
 }
 
-footer{
+footer {
     color: white;
-    margin-top: 25%;
-    margin-bottom: 0px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
     padding-bottom: 20px;
     background-color: rgb(64, 76, 87);
 }
 
-body{
+body {
     min-height: 800px;
 }

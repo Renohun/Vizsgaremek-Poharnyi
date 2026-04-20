@@ -191,7 +191,6 @@ if (osszetevodiv.children.length == 1)
         osszetevodiv.children[0].children[3].disabled = false
     }
 }
-
 //
 //
 //
@@ -371,6 +370,7 @@ const AdatStorage = async () => {
     let hiba = true;
     let egyezoMl = true;
     
+    document.getElementById('hiba').innerHTML = ""
     //alap adatok kitöltésének ellenörzése
     if (document.getElementById('nev').value == '') {
         hiba = false;
@@ -443,7 +443,6 @@ const AdatStorage = async () => {
 
     if (Ujmennyiseg != document.getElementById('mennyiseg').value) 
     {
-        hiba = false;
         egyezoMl = false
     }
     //leiras kiszedese
@@ -491,7 +490,7 @@ const AdatStorage = async () => {
     }
 
     //hibátlan kitöltés esetén elküldjük az értékeket
-    if (hiba == true) {
+    if (hiba == true && egyezoMl == true) {
         KoktelAdatok.kepUtvonala = kepUtvonal.message;
         data = await AdatPost('/api/Keszites/Feltoltes', KoktelAdatok);
        
@@ -506,10 +505,15 @@ const AdatStorage = async () => {
             modalJo()
         }
     } 
-        else if (hiba == false) {
-        modalHiba(egyezoMl,"sima")
+    else if (hiba == false) {
+        modalHiba(true,"sima")
         hiba = true
         egyezoMl = true
+    }
+    else if (hiba == true && egyezoMl == false)
+    {
+        console.log("asd")
+        modalHiba(false,"ml")
     }
     //uj koktel gomb funkcioja
     document.getElementById('visszaGomb').addEventListener('click', () => {
@@ -525,9 +529,12 @@ const modalHiba = (Ml,milyen)=>{
         document.getElementById('Ujra').style.display = 'block';
         document.getElementById('vissza').style.display = 'block';
         document.getElementById('hiba').style.display = 'block';
-        if (Ml == false) 
+        if (Ml == true) 
         {
-           document.getElementById('hiba').innerHTML = "Kérem töltse ki a Hiányzó adatokat és/vagy Kérem ügyeljen arra, hogy a megadott mililiter mennyiségek egyezzenek!"
+           document.getElementById('hiba').innerHTML = "Kérem töltse ki a Hiányzó adatokat!"
+        }
+        else if(Ml == false){
+            document.getElementById('hiba').innerHTML = "Kérem ügyeljen, hogy az összetevők(ml) mennyisége egyezzen a koktél alapmennyiségével!"
         }
         if(milyen == "Nev"){
             document.getElementById('hiba').innerHTML = "a Koktél neve már foglalt! Kérem probálja újra más névvel!"

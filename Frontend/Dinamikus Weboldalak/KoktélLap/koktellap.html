@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="../koktellap.css" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         <nav class="navbar navbar-expand-lg bg-body-tertiary hatter shadow">
             <div class="container-fluid hatter">
                 <div class="navbar-brand">
@@ -52,7 +52,7 @@
                                     <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/Koktelok " class="nav-link active jelenlegi">Koktélok</a>
+                                    <a href="/Koktelok " class="nav-link">Koktélok</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/WebShop" class="nav-link">Webshop</a>
@@ -149,12 +149,16 @@
                 </div>
             </div>
         </nav>
-        <div class="container">
+        <div class="container flex-grow-1">
             <div class="border-bottom border-2 border-dark text-center" id="header">
                 <h1><span id="Cimsor" class="ps-4"></span><span id="fav" class="float-end"></span></h1>
                 <span id="kokteldate"></span>
-                <div id="badgek"></div>
-                <input type="button" id="KoktJel" class="btn text-danger border-0" value="Koktél Jelentése" />
+                <div id="badgek" class="justify-content-center"></div>
+                <div id="ChangeSor">
+                    <a href="" id="elozo" class="float-start">&#x2190; Előző</a>
+                    <input type="button" id="KoktJel" class="btn text-danger border-0" value="Koktél Jelentése" />
+                    <a href="" id="kovetkezo" class="float-end">Következő &#8594;</a>
+                </div>
             </div>
             <div class="row border-bottom border-2 border-dark pb-3">
                 <p class="fs-4" id="maker">
@@ -244,6 +248,21 @@
                 </div>
             </div>
         </div>
+        <div class="modal" tabindex="-1" id="ReplyModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cim">Sikeres Módosítás</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p id="response"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" value="Ok" class="btn btn-success" data-bs-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="../koktellap.js"></script>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
@@ -256,10 +275,10 @@
                     <div class="col-lg-4 col-md-12"></div>
                     <div class="col-lg-2 col-md-12">
                         <div class="text-lg-end text-center">
-                            <a href="">Elérhetőségek</a>
+                            <a href="/KuldjUzenetet">Elérhetőségek</a>
                         </div>
                         <div class="text-lg-end text-center">
-                            <a href="https://forms.gle/cp3o19kbEVdXiZ7L9">Hibajelenés</a>
+                            <a href="https://forms.gle/cp3o19kbEVdXiZ7L9">Hibajelentés</a>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">

@@ -108,8 +108,6 @@ VALUES
 (13,"Fahéjas Jack Daniels",15,"Ml"),
 (13,"Fehér Monster",100,"Ml")
 ;
---DELETE ONCE DONE
---("","",4,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,8000)
 
 INSERT INTO WebshopTermek(TermekCim,TermekLeiras,TermekKiszereles,TermekUrtartalom,TermekKeszlet,TermekKepUtvonal,TermekKategoria,TermekMarka,TermekSzarmazas,TermekAlkoholSzazalek,Ar)
 VALUES
@@ -147,12 +145,6 @@ VALUES
 ("Ouzou","Görög alkohol, mentolos ízzel",1,0.5,200,"what.webp","Egyéb","Görög Varázs","Görögország",12,9500),
 ("Soju Eper","Koreai desztillált alkohol, eper ízben",1,0.35,200,"what.webp","Egyéb","Jinro","Korea",12,2500);
 
-
-INSERT INTO KosárTermék(KosarID,TermekID,Darabszam,Egysegar)
-VALUES
-(1,3,1,9500),
-(1,2,2,7650),
-(3,1,1,8000);
 
 INSERT INTO Jelentesek(JelentettID,JelentettTartalomID,JelentesTipusa)
 VALUES

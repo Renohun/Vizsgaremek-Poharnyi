@@ -351,6 +351,9 @@ async function erteksetup() {
     if (eredmeny.adat.UgyanazE) {
         document.getElementById("ertekeles").innerHTML=""
     }
+    else if(eredmeny.belepette==false){
+        
+    }
     else{
         let csillagok=document.getElementById("csillagok").children
         //ez alapján lekérjük az adatokat
@@ -364,7 +367,12 @@ async function erteksetup() {
             
             for (let i = 0; i < csillagok.length; i++) {
                 csillagok[i].addEventListener("click",()=>{
-                    csillagsetup(i+1)
+                    if (csillagok[i].value=="★"&&csillagok[i+1].value=="☆") {
+                        csillagsetup(0)
+                    }
+                    else{
+                        csillagsetup(i+1)
+                    }
                 })
             }
             document.getElementById("ErtSend").addEventListener("click",async()=>{

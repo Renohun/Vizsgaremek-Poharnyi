@@ -7,14 +7,14 @@
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
+        <link rel="stylesheet" href="../TermekOldal/TermekOldal.css" />
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
-        <link rel="stylesheet" href="../TermekOldal/TermekOldal.css" />
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         <nav class="navbar navbar-expand-lg bg-body-tertiary hatter shadow">
             <div class="container-fluid hatter">
                 <div class="navbar-brand">
@@ -56,7 +56,7 @@
                                     <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/Koktelok " class="nav-link active jelenlegi">Koktélok</a>
+                                    <a href="/Koktelok " class="nav-link">Koktélok</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/WebShop" class="nav-link">Webshop</a>
@@ -154,7 +154,7 @@
             </div>
         </nav>
 
-        <main>
+        <main class="flex-grow-1">
             <div id="main">
                 <div id="TermekAdatok">
                     <a href="/WebShop" id="visszaWebshop">&larr; Vissza a webshopra</a>
@@ -217,15 +217,15 @@
                             <input type="button" value="☆" id="star5" class="btn fs-1 p-0 border-0 csillag" />
                         </div>
                         <button type="button" id="ErtekelesKuldes" value="">Küldés</button>
-                    
                     </div>
                 </div>
             </div>
             <div id="TovabbVissza">
                 <a id="EloTermek"><span id="eloNyil"> &#x2190;</span><span id="eloSzoveg">az Előző termékre</span> </a>
-                <a id="koviTermek"><span id="KoviSzoveg">Tovább a következő termékre</span><span id="koviNyil"> &#8594;</span></a>
+                <a id="koviTermek"
+                    ><span id="KoviSzoveg">Tovább a következő termékre</span><span id="koviNyil"> &#8594;</span></a
+                >
             </div>
-            
         </main>
         <!--Modal letrehozasa-->
         <div
@@ -274,17 +274,17 @@
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/navBar.js"></script>
         <script src="../TermekOldal/TermekOldal.js"></script>
-        <footer class="fs-5 shadow w-100">
+        <footer class="fs-5 shadow w-100" style="margin-top: 50px">
             <div class="container">
                 <div class="col-12 text-center">© 2026 Pohárnyi. Minden jog fenntartva.</div>
                 <div class="row">
                     <div class="col-lg-4 col-md-12"></div>
                     <div class="col-lg-2 col-md-12">
                         <div class="text-lg-end text-center">
-                            <a href="">Elérhetőségek</a>
+                            <a href="/KuldjUzenetet">Elérhetőségek</a>
                         </div>
                         <div class="text-lg-end text-center">
-                            <a href="https://forms.gle/cp3o19kbEVdXiZ7L9">Hibajelenés</a>
+                            <a href="https://forms.gle/cp3o19kbEVdXiZ7L9">Hibajelentés</a>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">
