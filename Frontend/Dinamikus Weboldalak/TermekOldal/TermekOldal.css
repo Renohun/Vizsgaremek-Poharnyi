@@ -74,9 +74,7 @@
     width: 100%;
     border-top: solid rgb(207, 207, 198) 1px;
 }
-.content {
-   
-}
+
 
 .TovGomb {
     margin-top: 5px;
@@ -94,10 +92,13 @@
 table,
 .lol {
     border: 1px solid rgb(180, 180, 180);
+   
 }
 #Tablazat {
     border: 1px solid rgb(165, 165, 165);
     width: 100%;
+    background-color: rgb(255, 255, 255);
+    
 }
 .td1{
     text-align: end;
@@ -123,6 +124,7 @@ table,
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
+     border-radius: 2px;
 }
 /*HasonloTermekek*/
 #hasonloTermekek{
@@ -141,7 +143,7 @@ table,
     width: 33%;
     height:250px;
     border: 1px black solid;
-    background-color: gainsboro;
+    background-color: rgb(255, 255, 255);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -157,8 +159,9 @@ table,
     z-index: -1;
 }
 .hasonloKep{
-    width: 90%;
+    width: 100%;
     height: 150px;
+    border-radius: 10px;
 }
 .hasonloKepDiv{
     display: flex;
