@@ -50,7 +50,7 @@ body {
 }
 
 /*Koktel Oldal*/
-#fav>input,.star,.star:hover,.star:disabled{
+#fav>input,#csillagok>input{
     color: yellow;
 }
 
@@ -67,6 +67,9 @@ body {
     background-color: rgb(65, 65, 65)!important;
 }
 .dark>form.bg-light{
+    background-color: rgb(65, 65, 65)!important;
+}
+#Velemeny{
     background-color: rgb(65, 65, 65)!important;
 }
 
@@ -104,35 +107,21 @@ body {
 #osszetevoDiv>div{
     width: 100%;
 }
-/*Belepes*/
 
-
-/*Javaslat Kavicsnak
-.Osszetevobtn{
-    border-bottom-right-radius: 10px;
-    border-top-right-radius: 10px;
-}
-.OsszetevoBar{
-    border-bottom-left-radius: 10px;
-    border-top-left-radius: 10px;
+/*Landing Page*/
+.szolgaltatasokDiv,#alcim,.nepszeruCim{
+    color: black;
 }
 
-#eroDiv,#izDiv,#allergenDiv{
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
+/*TermekOldal*/
+#MegrendelesDiv{
+    background-color:rgb(124, 124, 124); ;
 }
-A gombra nyomás után i guess
-.jelvenygomb{
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}*/
+#EloTermek,#koviTermek,#visszaWebshop{
+    color: #9acd32;
+}
 
-#osszetevogomb{
-    background-color: #324ecd;
-    border-color:#324ecd ;
-    color: white;
-}
-#osszetevogomb:hover{
-    background-color: #2774e7;
-    border-color:#2774e7 ;
+/*Mi van a a polcon*/
+#hozzaad,#osszetevo{
+    border: 0px;
 }
