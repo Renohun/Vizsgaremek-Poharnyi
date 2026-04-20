@@ -532,6 +532,13 @@ async function KosarLekeres() {
                 kosárDbMod.setAttribute("min","1")
                 kosárDbMod.setAttribute("max",valasz.adat[i].termAdatok.TermekKeszlet)
                 kosárDbMod.setAttribute("value",mennyiseg.innerHTML)
+                kosárDbMod.addEventListener("change",()=>{
+                    console.log(parseInt(kosárDbMod.value)>parseInt(valasz.adat[i].termAdatok.TermekKeszlet));
+                    
+                    if (parseInt(kosárDbMod.value)>parseInt(valasz.adat[i].termAdatok.TermekKeszlet)) {
+                        kosárDbMod.value=valasz.adat[i].termAdatok.TermekKeszlet
+                    }
+                })
                 mennyiseg.innerHTML=""
                 mennyiseg.appendChild(kosárDbMod)
 
@@ -559,16 +566,22 @@ async function KosarLekeres() {
                         mennyiseg.innerHTML=ujMennyiseg
                         await AdatPost("/api/AdatlapLekeres/TermekFrissites",{termék:valasz.adat[i].kosarAdatok.TermekID,count:ujMennyiseg},"PATCH")
                     }
+                    console.log(hova.children[i].children[0].children[3]);
+                    
                     hova.children[i].children[0].removeChild(hova.children[i].children[0].children[3])
                 }
                 osszeg()
                 gombhivas()
-            })
+            },{once:true})
             kosárGombok.appendChild(kosárModIgen)
 
             kosárModMégse.setAttribute("type","button")
             kosárModMégse.setAttribute("value","Mégse")
             kosárModMégse.classList.add("btn","btn-danger")
+            kosárModMégse.addEventListener("click",()=>{
+                KosarLekeres()
+            },{once:true})
+            
             kosárGombok.appendChild(kosárModMégse)
 
         })
