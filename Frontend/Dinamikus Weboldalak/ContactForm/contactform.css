@@ -1,0 +1,28 @@
+#main{
+    display: flex;
+    flex-direction: column;
+}
+#cimSzov{
+    text-align: center;
+    font-size: 5vw;
+}
+#FormDiv{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: auto;
+    margin-top: 30px    ;
+}
+#ContactForm{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: auto;
+}
+.formElem{
+    margin: 10px;
+    width: 100%;
+}
+#szoveg{
+    height: 200px;
+}
