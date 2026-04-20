@@ -279,6 +279,47 @@
                 
             </div>
         </div>
+        <div
+            class="modal fade"
+            id="staticBackdrop"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 id="siker">A Terméket sikeresen kosárba rakta!</h5>
+                        <h5 id="Sokhiba" style="display: none">A terméket nem sikerült kosárba rakni</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            id="tovabb"
+                            class="btn btn-primary"
+                            aria-haspopup=""
+                            data-bs-dismiss="modal"
+                        >
+                            Irány a kosár!
+                        </button>
+                        <button
+                            type="button"
+                            style="display: none"
+                            id="vissza"
+                            class="btn btn-primary"
+                            data-bs-dismiss="modal"
+                        >
+                            vissza
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     <footer class="fs-5 shadow w-100">
         <div class="container">
             <div class="col-12 text-center">

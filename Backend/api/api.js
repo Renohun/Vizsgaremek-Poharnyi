@@ -440,7 +440,8 @@ router.post('/regisztracio', async (request, response) => {
                 /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(request.body.email) &&
                 /^[a-zA-Z0-9_]{2,30}$/.test(request.body.felhaszanaloNev) &&
                 /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(request.body.jelszo) &&
-                request.body.ASZF
+                request.body.ASZF &&
+                request.body.korEll
             ) {
                 const hashed = await argon.hash(request.body.jelszo, { type: argon.argon2id });
 
@@ -1359,6 +1360,7 @@ router.delete('/AdminPanel/TermekTorles/:id', authenticationMiddleware, authoriz
 //
 //
 //
+//https://sidorares.github.io/node-mysql2/docs#using-promise-wrapper
 async function lekeres(query, param) {
     let result;
     await DBconnetion.promise()
@@ -1724,11 +1726,9 @@ router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (re
             tomb.email = `${request.body.Email}`;
         } else {
             hiba = true;
-            
         }
         let profil = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
         if (request.body.KépÚtvonal != undefined && hiba == false) {
-
             adatmodositas += ',ProfilKepUtvonal=?';
             tomb.kepvonal = `${request.body.KépÚtvonal}`;
         }
@@ -1745,7 +1745,6 @@ router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (re
         adatmodositas += ` WHERE FelhID LIKE ${profil}`;
 
         if (hiba == false) {
-            
             await lekeres(adatmodositas, Object.values(tomb));
             await kepculling();
             response.status(200).json({
@@ -1855,9 +1854,10 @@ router.post('/AdatlapLekeres/Fizetes', authenticationMiddleware, async (request,
 router.get('/Koktel/:id', async (request, response) => {
     const KoktelLekeres =
         'SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg,ProfilkepUtvonal,BoritoKepUtvonal FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?';
-    const TiltottKomment="SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?"
+    const TiltottKomment =
+        'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?';
     const KommentLekeres =
-        'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+        'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal,Pozitiv,Negativ FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const JelvenyLekeres = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
     const OsszetevőLekeres = 'SELECT Osszetevő,Mennyiség,Mertekegyseg FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
     const MelyikJelvenyLekeres = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?';
@@ -1869,28 +1869,31 @@ router.get('/Koktel/:id', async (request, response) => {
         'SELECT Ertekeles FROM ertekeles WHERE Keszito LIKE ? AND HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
 
     try {
+        
         let osszetevok = await lekeres(OsszetevőLekeres, request.params.id);
         let jelvenyek = await lekeres(JelvenyLekeres, request.params.id);
         let jelvényinfo = [];
         for (let i = 0; i < jelvenyek.length; i++) {
             jelvényinfo.push(await lekeres(MelyikJelvenyLekeres, jelvenyek[i].JelvényID));
         }
+
         let koktel = await lekeres(KoktelLekeres, request.params.id);
+
         let gonoszkomment=await lekeres(TiltottKomment,["Komment",2])
         let komment = await lekeres(KommentLekeres, [request.params.id, 'Koktél']);
-        let jokomment=[]
+        let jokomment = [];
         for (let i = 0; i < komment.length; i++) {
-            let rossz=false
+            let rossz = false;
             for (let j = 0; j < gonoszkomment.length; j++) {
-                if (komment[i].KommentID==gonoszkomment[j].JelentettTartalomID) {
-                    rossz=true
+                if (komment[i].KommentID == gonoszkomment[j].JelentettTartalomID) {
+                    rossz = true;
                 }
             }
-            if (rossz==false) {
-                jokomment.push(komment[i])
+            if (rossz == false) {
+                jokomment.push(komment[i]);
             }
-        }        
-        
+        }
+
         let kedv = false;
         let ert = false;
         let ertekeles;
@@ -1981,7 +1984,6 @@ router.post('/Koktel/SendKomment', authenticationMiddleware, async (request, res
         message: 'Sikeres Küldés'
     });
 });
-
 router.post('/Koktel/SendKedvenc', authenticationMiddleware, async (request, response) => {
     const KedvencKeres =
         'SELECT COUNT(*) as kedvelteE FROM kedvencek WHERE KikedvelteID LIKE ? AND MitkedveltID LIKE ?';
@@ -2007,7 +2009,6 @@ router.post('/Koktel/SendKedvenc', authenticationMiddleware, async (request, res
         message: 'Sikeres Küldés'
     });
 });
-
 router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE KommentID LIKE ?';
     const JelentesLekeres =
@@ -2027,7 +2028,6 @@ router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request,
         message: 'Sikeres Törlés'
     });
 });
-
 router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const ErtekelesTorles = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
@@ -2055,7 +2055,6 @@ router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, 
         message: 'Sikeres Törlés'
     });
 });
-
 router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, response) => {
     try {
         const Jelentesek = 'SELECT * FROM jelentesek';
@@ -2135,7 +2134,6 @@ router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, re
         });
     }
 });
-
 router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
     try {
         response.sendFile(path.join(__dirname, '..', 'images', request.params.utvonal));
@@ -2143,6 +2141,139 @@ router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) =>
         console.log(error);
     }
 });
+router.patch("/Koktel/KoktelModositas/:id", async (request, response)=>{
+    try {
+        const koktelChange="UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=? WHERE KoktélID LIKE ?"
+        const OsszetevoCleanse="DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+        const UjOsszetevo="INSERT INTO koktelokosszetevoi (KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)"
+        await lekeres(koktelChange,[request.body.Cim,request.body.Recept,request.body.Mennyiseg,request.params.id])
+        await lekeres(OsszetevoCleanse,[request.params.id])
+        for (let i = 0; i < request.body.Osszetevok.length; i++) {
+            let osszetevo=request.body.Osszetevok[i]
+            await lekeres(UjOsszetevo,[request.params.id,osszetevo[0],osszetevo[1],osszetevo[2]])
+            
+        }
+        response.status(200).json({
+            message:"Siker"
+        })
+        
+    } 
+    catch (error) {
+        console.log(error);
+        
+        response.status(500).json({
+            message:"Hiba!"
+        })
+    }
+})
+router.get("/Koktel/SzomszedosKoktelok/:id",async (request, response)=>{
+    try 
+    {
+        const ÖsszesKoktél="SELECT KoktélID FROM Koktél ORDER BY KoktélID"
+        let koktelok=await lekeres(ÖsszesKoktél);
+        let elotte
+        let utana
+        for (let i = 0; i < koktelok.length; i++) {
+            if (koktelok[i].KoktélID==request.params.id) {
+                if (i==0) {
+                    elotte=koktelok[koktelok.length-1].KoktélID
+                    utana=koktelok[i+1].KoktélID
+                }
+                else if(i==koktelok.length-1){
+                    elotte=koktelok[i-1].KoktélID
+                    utana=koktelok[0].KoktélID
+                }
+                else{
+                    elotte=koktelok[i-1].KoktélID
+                    utana=koktelok[i+1].KoktélID
+                }
+
+            }
+
+        }
+        response.status(200).json({
+            message:"Siker!",
+            prev:elotte,
+            next:utana
+        })
+    } 
+    catch (error) {
+        response.status(500).json({
+            message:"Hiba!"
+        })
+    }
+})
+
+router.patch("/Koktel/SendKommentRatingPozitiv/:id",async (request, response)=>{
+    try 
+    {
+        const ErtekeltE="SELECT KommentID,Pozitiv FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?"
+        let ertekelesek=await lekeres(ErtekeltE,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id])
+        if (ertekelesek.length!=0) {
+            if (ertekelesek[0].Pozitiv!=1) {
+                const RatingNoveles="UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?"
+                const KommentRatingNoveles="UPDATE kommentertekeles SET Pozitiv=1 WHERE KommentID LIKE ?"
+                await lekeres(RatingNoveles,request.params.id)
+                await lekeres(KommentRatingNoveles,request.params.id)
+            }
+            else{
+                const RatingCsokkentes="UPDATE komment SET pozitiv=pozitiv-1 WHERE KommentID LIKE ?"
+                const KommentRatingCsokkentes="UPDATE kommentertekeles SET Pozitiv=0 WHERE KommentID LIKE ?"
+                await lekeres(RatingCsokkentes,request.params.id)
+                await lekeres(KommentRatingCsokkentes,request.params.id)
+            }
+        }
+        else{
+            await lekeres("INSERT INTO kommentertekeles (FelhID,KommentID,Pozitiv) VALUES(?,?,?)",[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id, 1])
+        }
+        response.status(200).json({
+            message:"Siker!"
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        
+        response.status(500).json({
+            message:"Hiba!"
+        })
+    }
+})
+router.patch("/Koktel/SendKommentRatingNegativ/:id",async (request, response)=>{
+    
+    
+    try 
+    {
+        const ErtekeltE="SELECT KommentID,Negativ FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?"
+        let ertekelesek=await lekeres(ErtekeltE,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id])
+        if (ertekelesek.length!=0) {
+            if (ertekelesek[0].Negativ!=1) {
+                const RatingNoveles="UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?"
+                const KommentRatingNoveles="UPDATE kommentertekeles SET Negativ=1 WHERE KommentID LIKE ?"
+                await lekeres(RatingNoveles,request.params.id)
+                await lekeres(KommentRatingNoveles,request.params.id)
+            }
+            else{
+                const RatingCsokkentes="UPDATE komment SET negativ=negativ-1 WHERE KommentID LIKE ?"
+                const KommentRatingCsokkentes="UPDATE kommentertekeles SET Negativ=0 WHERE KommentID LIKE ?"
+                await lekeres(RatingCsokkentes,request.params.id)
+                await lekeres(KommentRatingCsokkentes,request.params.id)
+            }
+        }
+        else{
+            await lekeres("INSERT INTO kommentertekeles (FelhID,KommentID,Negativ) VALUES(?,?,?)",[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id, 1])
+        }
+        response.status(200).json({
+            message:"Siker!"
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        
+        response.status(500).json({
+            message:"Hiba!"
+        })
+    }
+})
 //
 //
 //
@@ -2326,7 +2457,19 @@ router.post('/PolcKoktel/HelyesKoktelLekeres', async (request, response) => {
 //
 //
 //
-
+router.get("/termek/OsszIdLekeres",async(request,response)=>{
+    try {
+        const query = "SELECT TermekID FROM webshoptermek"
+        const [idList] = await DBconnetion.promise().query(query)
+        response.status(200).json({
+            idLista:idList
+        })
+    } catch (error) {
+        console.log(error)
+        response.status(500).json({hiba:error})
+    }
+    
+})
 router.get('/termek/lekeres/:id', async (request, response) => {
     try {
         const id = request.params.id;
@@ -2425,11 +2568,10 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
         const [MennyisegLe] = await DBconnetion.promise().query(mennyisegLekeres, [id]);
 
         const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? &&  KosarID = ?';
-        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id,UserID]);
+        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
         if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1) {
-                response.status(200).json({ hiba: 'raktar' });
-        } 
-        else {
+            response.status(200).json({ hiba: 'raktar' });
+        } else {
             //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
             if (vanEIlyen[0] == undefined) {
                 const kosarFeltoltQuery =
@@ -2448,7 +2590,6 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
                 response.status(200).json({ Siker: KosarUpdate.affectedRows });
             }
         }
-    
     } catch (error) {
         console.log(error);
         response.status(500).json({ hiba: error });
@@ -2461,30 +2602,29 @@ router.get('/Termek/HasonloTermekek/:kateg/:id', async (request, response) => {
         const id = request.params.id;
         const kategQuery = 'SELECT * FROM webshoptermek WHERE TermekKategoria LIKE ? AND TermekID <> ?';
         const [KategLeker] = await DBconnetion.promise().query(kategQuery, [kateg, id]);
-       
+
         let indexLista = [];
         for (let i = 0; i < KategLeker.length; i++) {
             indexLista.push(KategLeker[i].TermekID);
         }
-         console.log(indexLista)
+        console.log(indexLista);
         let Hasonlok = [];
         for (let i = 0; i < 3; i++) {
-            let random = Math.floor(Math.random()*indexLista.length)//random index gen
-            Hasonlok.push(indexLista[random])//hozzaadjuk az indexet az uj listahoz, majd az elozobol kitoroljuk
-            indexLista.splice(random,1)
-            console.log(indexLista)
+            let random = Math.floor(Math.random() * indexLista.length); //random index gen
+            Hasonlok.push(indexLista[random]); //hozzaadjuk az indexet az uj listahoz, majd az elozobol kitoroljuk
+            indexLista.splice(random, 1);
+            console.log(indexLista);
         }
         let hasonloTermekek = [];
-        for (let i = 0; i < Hasonlok.length; i++)//megkeressük az id-hez tartozó elemet és berakjuk a visszaküldendő listaba
-         {
-
+        for (
+            let i = 0;
+            i < Hasonlok.length;
+            i++ //megkeressük az id-hez tartozó elemet és berakjuk a visszaküldendő listaba
+        ) {
             for (let j = 0; j < KategLeker.length; j++) {
-                if (KategLeker[j].TermekID == Hasonlok[i]) 
-                {
-
-                    hasonloTermekek.push(KategLeker[j])
+                if (KategLeker[j].TermekID == Hasonlok[i]) {
+                    hasonloTermekek.push(KategLeker[j]);
                 }
-                
             }
         }
         response.status(200).json({
@@ -2620,10 +2760,16 @@ router.post('/Webshop/szures', async (request, response) => {
         let ertekLista = [];
         let OrderBy;
         let OrderByErtek;
+        let nevErtek;
+          console.log(query)
         for (const item of Object.entries(feltetelek)) {
+            console.log(item[0] + ' ? ' + item[1]);
             if (item[0] == 'MaxAr') {
                 query += ' Ar <= ? AND';
-            } else if (item[0] == 'MaxAlk') {
+            }else if (item[0] == 'Nev') {
+                nevErtek = ' AND TermekCim LIKE ?';
+            } 
+            else if (item[0] == 'MaxAlk') {
                 query += ' TermekAlkoholSzazalek <= ? AND';
             } else if (item[0] == 'TermekKategoria') {
                 query += ' TermekKategoria = ? AND';
@@ -2649,40 +2795,41 @@ router.post('/Webshop/szures', async (request, response) => {
                 query += ` ${item[0]} like ? AND`;
             }
 
-            if (item[0] != 'rendezes') {
+            if (
+                item[0] != 'rendezes' &&
+                item[0] != 'akcio' && 
+                item[0] != "Nev"
+            ) //amennyiben a postobjectben lévő adat nem az akcio, vagy a rendezes szuresehez kell, akkor belerakjuk az értéklistába
+            {
                 ertekLista.push(item[1]);
             }
         }
         // a query utolso 3 elemenek (AND) levágása
         query = query.slice(query[0], query.length - 4);
-
+        console.log(ertekLista)
+        console.log(query)
+        query += nevErtek
         query += OrderBy;
         let limitoffset = ' LIMIT ? OFFSET ?';
         query += limitoffset;
-        // console.log(OrderByErtek)
-        for (let i = 0; i < ertekLista.length; i++) {
-            console.log(ertekLista[i]);
-        }
-
         /* TEST
         const sql = mysql.format(query, [ertekLista[0]]);
             console.log(sql);
             console.log(typeof ertekLista[0]);
             console.log('2') 
         */
-
-        //SZÉPÍTENI KELL!!!
-
+        console.log(query);
         let szurtTermekek;
         if (ertekLista.length == 1) {
-            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], limit, offset]);
+            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0],feltetelek.Nev, limit, offset]);
         } else if (ertekLista.length == 2) {
-            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], ertekLista[1], limit, offset]);
+            [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0], ertekLista[1],feltetelek.Nev, limit, offset]);
         } else if (ertekLista.length == 3) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [
                 ertekLista[0],
                 ertekLista[1],
                 ertekLista[2],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
@@ -2692,6 +2839,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[1],
                 ertekLista[2],
                 ertekLista[3],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
@@ -2702,6 +2850,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[2],
                 ertekLista[3],
                 ertekLista[4],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
@@ -2713,6 +2862,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[3],
                 ertekLista[4],
                 ertekLista[5],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
@@ -2725,12 +2875,13 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[4],
                 ertekLista[5],
                 ertekLista[6],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);
         } else if (ertekLista.length == 8) {
             console.log('8')[szurtTermekek] = await DBconnetion.promise().query(query, [
-                ertekLista[0],
+               ertekLista[0],
                 ertekLista[1],
                 ertekLista[2],
                 ertekLista[3],
@@ -2738,6 +2889,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[5],
                 ertekLista[6],
                 ertekLista[7],
+                 feltetelek.Nev,
                 limit,
                 offset
             ]);
@@ -2752,6 +2904,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 ertekLista[6],
                 ertekLista[7],
                 ertekLista[8],
+                feltetelek.Nev,
                 limit,
                 offset
             ]);

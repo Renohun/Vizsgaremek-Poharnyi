@@ -19,6 +19,8 @@
 #visszaWebshop{
     color: black;
 }
+
+
 #MegrendelesDiv {
     display: flex;
     flex-direction: column;
@@ -294,7 +296,8 @@ table,
 #ErtekelesKuldes{
     border: none;
     border-radius: 5px;
-    height: 30px;
+    height: 50px;
+    width: 170px;
     background-color:  rgb(255, 186, 83);
     margin-top: 10px;
 }
@@ -302,7 +305,18 @@ table,
 tr{
     border-bottom: 1px black solid;
 }
+/*kovetkezo es elozo termek*/
+#TovabbVissza{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: auto;
+}
+/*1000px alatti valtozasok*/
 @media only screen and (max-width: 1000px) {
+    #TovabbVissza{
+        width: 70%;
+    }
     #main {
         display: flex;
         flex-direction: column;
@@ -372,7 +386,8 @@ tr{
 .Termek{
     height: auto;
 }
-     #TermekSor{height: auto;}
+#TermekSor{height: auto;}
+
 }
 
 /*NincsIlyentermék*/
@@ -385,4 +400,24 @@ tr{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+/*következő és előző gombok*/
+#koviTermek{
+    color: black;
+}
+#EloTermek{
+    color: black;
+}
+#koviNyil{font-size: x-large;} 
+#eloNyil{font-size: x-large;} 
+
+@media only screen and (max-width:580px)
+{
+    #KoviSzoveg{display: none;}
+    #eloSzoveg{display: none;}  
+    #koviNyil{font-size: xx-large;} 
+    #eloNyil{font-size: xx-large;} 
+    #TovabbVissza{
+        width: 70%;
+    }
 }
