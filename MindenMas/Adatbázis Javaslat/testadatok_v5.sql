@@ -108,8 +108,6 @@ VALUES
 (13,"Fahéjas Jack Daniels",15,"Ml"),
 (13,"Fehér Monster",100,"Ml")
 ;
---DELETE ONCE DONE
---("","",4,null,200,"what.webp","Merch","Pohárnyi","Magyarország",0,8000)
 
 INSERT INTO WebshopTermek(TermekCim,TermekLeiras,TermekKiszereles,TermekUrtartalom,TermekKeszlet,TermekKepUtvonal,TermekKategoria,TermekMarka,TermekSzarmazas,TermekAlkoholSzazalek,Ar)
 VALUES
