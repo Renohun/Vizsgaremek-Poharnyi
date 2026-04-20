@@ -5,7 +5,7 @@ CREATE TABLE Felhasználó(
 	Jelszó TEXT NOT NULL,
 	JelszóHossza INT NOT NULL,
 	ProfilkepUtvonal TEXT DEFAULT("whatever.png"),
-	RegisztracioDatuma DATETIME DEFAULT NOW(),
+	RegisztracioDatuma DATE DEFAULT NOW(),
 	Admin BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -50,8 +50,8 @@ CREATE TABLE kommentErtekeles(
 	FelhID INT,
 	KommentID INT,
 	Pozitiv INT,
-	Negativ INT
-    FOREIGN KEY(FelhID) REFERENCES Felhasználó(FelhID)
+	Negativ INT,
+    FOREIGN KEY(FelhID) REFERENCES Felhasználó(FelhID),
     FOREIGN KEY(KommentID) REFERENCES Komment(KommentID)
 
 );
