@@ -496,7 +496,6 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
  
     {
         const szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`, szuresiAdatok);
-        console.log(szurtdata)
         if (szurtdata.hossz == 0) 
         {
             let h1 = document.createElement("h1")
@@ -630,9 +629,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let SzuresGomb = document.getElementById('kuldesGomb');
     SzuresGomb.addEventListener('click', async () => {
         const adatok = szures();
-        console.log(await adatok)
         const szurtDataHossz = await SzuresPost(`/api/Webshop/szures?limit=${100}&offset=${0}`, await adatok);
-        console.log(szurtDataHossz)
         TermekBetoltes(1, szurtDataHossz.hossz, true, await adatok);
         szuresiAdatok = {};
     });

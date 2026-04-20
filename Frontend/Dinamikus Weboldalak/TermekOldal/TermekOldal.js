@@ -143,8 +143,6 @@ const oldalGenerálás =  async () =>{
     hova.innerHTML = ""
     const HasonlokData = await GETfetch(`/api/Termek/HasonloTermekek/${LekertTermekek.termek[0].TermekKategoria}/${LekertTermekek.termek[0].TermekID}`)
    
-
-    console.log(HasonlokData)
     for (let i = 0; i < HasonlokData.hasonlok.length; i++)
     {
         const KepData = await TermekKepLekeres(`/api/Webshop/KepLekeres/${HasonlokData.hasonlok[i].TermekID}`)
@@ -188,13 +186,11 @@ const oldalGenerálás =  async () =>{
             ErtekelesDiv.appendChild(csillag)
         }
         const meddig = await GETfetch(`/api/Termek/HasonloTermekErtekeles/${HasonlokData.hasonlok[i].TermekID}`)
-        console.log(meddig)
         if (meddig != 0) {
             
         }
         for (let i = 0; i < meddig.ert; i++) 
             {
-                console.log("kapa")
                 csillagok[i].innerHTML="★"
             }    
     }
@@ -254,7 +250,6 @@ const oldalGenerálás =  async () =>{
         })
         PolcLabelHely.innerHTML = "Utolsó Darabok!"
         PolcLabelHely.classList.add("Utolso")
-        console.log(PolcLabelHely)
     }
     else if(LekertTermekek.termek[0].TermekKeszlet > 5)
     {
@@ -278,7 +273,6 @@ const oldalGenerálás =  async () =>{
         
         PolcLabelHely.innerHTML = "Raktáron!"
         PolcLabelHely.classList.add("VanPolcon")
-        console.log(PolcLabelHely)
     }
     else
     {
@@ -325,7 +319,6 @@ const oldalGenerálás =  async () =>{
         kov.style.color ="gray"
     }
     else{
-        console.log(jelenlegiIndex)
         kov.href = `/Termek/${idLista.idLista[jelenlegiIndex+1].TermekID}`
     }
     //Elozo Termek
@@ -345,7 +338,6 @@ const ertekeles = (ErtekeltE,ertek) =>
     console.log(ErtekeltE)
     let Csillagok = document.getElementsByClassName("csillag")
     if(ErtekeltE == "nincsBejel"){
-        console.log("asd")
         const ertekelesHely = document.getElementById("Ertekeles")
         let h2 = document.createElement("h2")
         h2.innerHTML = "Az értékeléshez be kell jelentkeznie!"
@@ -357,7 +349,6 @@ const ertekeles = (ErtekeltE,ertek) =>
         //a felhasználó előző értékelését jelenítjük meg, ha a felhasznalo mar ertekelte ezt a termeket
         for (let i = 0; i < ertek; i++) 
         {
-            console.log("ad")
             Csillagok[i].value = "★"
         }
         //a csillagokon kikapcsolom a kattintást
@@ -373,7 +364,6 @@ const ertekeles = (ErtekeltE,ertek) =>
         for (let i = 0; i < Csillagok.length; i++) {
            
            Csillagok[i].addEventListener("click",()=>{
-            console.log("asd")
                 csillagvaltoztatas(Csillagok.length,"☆")
                 
                 csillagvaltoztatas(i+1,"★")
@@ -403,7 +393,6 @@ const ertekeles = (ErtekeltE,ertek) =>
                     ertekszam ++;
                 }
             }
-            console.log(ertekszam, Termekid)
             if (ertekszam == 0) 
             {
                 let ertszov = document.getElementById("ErtekelPar")
@@ -426,7 +415,6 @@ const KosarbaRak = async()=>
     let postObj = {id:Termekid,mennyiseg:mennyiseg}
     let hiba = false;
     const KosarData = await PostFetch("/api/Termek/KosarKuldes",postObj)
-    console.log(KosarData)
     if(KosarData.hiba == "bejel")
     {
         alert("A termék kosárba helyezéséhez kérem jelentkezzen be!")
