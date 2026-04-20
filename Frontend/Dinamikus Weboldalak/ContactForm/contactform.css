@@ -4,25 +4,68 @@
 }
 #cimSzov{
     text-align: center;
-    font-size: 5vw;
+    font-size: 2.5vw;
+}
+#Cim{
+    background-color: rgb(212, 212, 212);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
 }
 #FormDiv{
     display: flex;
     flex-direction: column;
     width: 50%;
+    height: 100%;
+    padding: 0px;
     margin: auto;
-    margin-top: 30px    ;
+    margin-top: 30px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 4px 4px 4px 4px rgb(199, 199, 199);
+    border-radius: 10px;
 }
 #ContactForm{
     display: flex;
     flex-direction: column;
-    width: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
     margin: auto;
 }
 .formElem{
     margin: 10px;
+    margin-top: 0px;
     width: 100%;
+    background-color: rgb(255, 255, 255);
+}
+.label{
+    margin: 10px;
+    margin-bottom: 0px;
+    justify-self: flex-start;
+    align-self: flex-start;
 }
 #szoveg{
     height: 200px;
+}
+#submitGomb{
+ margin: 10px;
+    width: 100%;
+}
+@media only screen and (max-width: 800px) 
+{
+    #cimSzov{
+        font-size: 4vw;
+    }    
+}
+@media only screen and (max-width: 600px) 
+{
+    #cimSzov{
+        font-size: 4.5vw;
+        
+    }    
+    #FormDiv{
+    width: 80%;  
+}
 }

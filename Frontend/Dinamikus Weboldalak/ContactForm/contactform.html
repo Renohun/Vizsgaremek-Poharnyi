@@ -154,20 +154,49 @@
             </div>
         </nav>
         <div id="main">
-            <div id="Cim">
-                <h1 id="cimSzov"> Küldj Nekünk üzenetet!</h1>
-            </div>
+           
             <div id="FormDiv">
+                 <div id="Cim">
+                    <h5 id="cimSzov"> Küldj Nekünk üzenetet!</h5>
+                </div>
                 <form id="ContactForm">
-
-                    <input class="formElem form-control" type="text" id="nev" name="nev" placeholder="Teljes Név">
-                    <input class="formElem form-control" type="email" id="email" name="email" placeholder="email-cím">
-                    <input class="formElem form-control" type="text" id="tema" name="tema" placeholder="Fő téma">
-                    <textarea class="formElem form-control" name="szoveg" id="szoveg" placeholder="tartalom"></textarea>
-                    <input type="submit" class="submit form-control formElem" id="submitGomb" value="Küldés">
+                    <label class="label form-label" for="nev">Név</label>
+                    <input class="formElem form-control" type="text" id="nev" name="nev" placeholder="Példa Péter">
+                    <label class="label form-label" for="email">Email cím</label>
+                    <input class="formElem form-control" type="email" id="email" name="email" placeholder="123@example.com">
+                    <label class="label form-label" for="tema">Tárgy</label>
+                    <input class="formElem form-control" type="text" id="tema" name="tema" placeholder="Kapcsolatfelvétel">
+                    <label class="label form-label" for="szoveg">Tartalom</label>
+                    <textarea class="formElem form-control" name="szoveg" id="szoveg" placeholder="A közlendő üzenet"></textarea>
+                    <input type="submit" class="submit form-control btn btn-success "  data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="submitGomb" value="Küldés">
                 </form>
             </div>
 
+        </div>
+        <!--Bootsrap modal-->
+        <div
+            class="modal fade"
+            id="staticBackdrop"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 id="siker" hidden></h5>
+                        <h5 id="hiba" style="display: none"></h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"id="vissza"class="btn btn-primary"data-bs-dismiss="modal">vissza</button>
+                    </div>
+                </div>
+            </div>
         </div>
     
          <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>

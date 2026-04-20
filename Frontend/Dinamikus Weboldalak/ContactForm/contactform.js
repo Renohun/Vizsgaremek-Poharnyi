@@ -25,6 +25,19 @@ const form = document.getElementById("ContactForm")
 
 form.addEventListener("submit",async(e)=>{
     e.preventDefault()
+    
+    let hiba = document.getElementById("hiba")
+    let siker = document.getElementById("siker")
+
+
+if (!name || !email || !subject || !message) 
+{
+    siker.setAttribute("hidden",true)
+    hiba.style.display = "block"
+    hiba.innerHTML = "Kérem ne hagyjon üres mezőt!"
+}
+else if(name || email || subject ||message)
+    {
 
     let formData = {
         name: name.value,
@@ -35,14 +48,19 @@ form.addEventListener("submit",async(e)=>{
     }
     
    const data = await AdatPost("/api/UzenetKuldes",formData)
+   console.log(data)
    if(data.siker != undefined)
-    {
-        alert("siker!")
-    name.value = "";
-    email.value = "";
-    subject.value = "";
-    message.value = "";
-   }
+        {
+        hiba.style.display = "none"
+        siker.innerHTML = "sikeresen elküldte az üzenetet"
+        siker.removeAttribute("hidden","false")
+        name.value = "";
+        email.value = "";
+        subject.value = "";
+        message.value = "";
+    }
+    }
+    
     
 })
 
