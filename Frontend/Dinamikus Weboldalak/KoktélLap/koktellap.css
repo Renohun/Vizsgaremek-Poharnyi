@@ -5,6 +5,12 @@
     
 }
 
+.kommentdiv{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom: 1px solid grey;
+}
+
 #Kommentek,#Velemeny{
     border-radius: 10px;
 }
