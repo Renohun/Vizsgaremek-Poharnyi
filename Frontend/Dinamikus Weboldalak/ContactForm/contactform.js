@@ -27,10 +27,10 @@ const form = document.getElementById("ContactForm")
     let email = document.getElementById('email')
     let subject = document.getElementById('tema')
     let message = document.getElementById("szoveg")
-
+    let modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+   
 form.addEventListener("submit",async(e)=>{
     e.preventDefault()
-    
     let hiba = document.getElementById("hiba")
     let siker = document.getElementById("siker")
 
@@ -56,9 +56,11 @@ else if(name.value != "" || email.value != ""  || subject.value != ""  ||message
    console.log(data)
    if(data.siker != undefined)
         {
+        
         hiba.style.display = "none"
         siker.innerHTML = "sikeresen elküldte az üzenetet"
         siker.removeAttribute("hidden","false")
+        modal.show()
         name.value = "";
         email.value = "";
         subject.value = "";

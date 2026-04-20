@@ -53,6 +53,9 @@
  margin: 10px;
     width: 100%;
 }
+textarea {
+  resize: none;
+}
 @media only screen and (max-width: 800px) 
 {
     #cimSzov{
