@@ -64,7 +64,10 @@ const AdatPost=async(url,data)=>{
 document.addEventListener("DOMContentLoaded",async()=>{
     //A koktélok összevetőit tartalmazó lista
     let valasz=await AdatGet("/api/PolcKoktel/OsszetevoLekeres")
-    lista=valasz.adat
+    for (let i = 0; i < valasz.adat.length; i++) {
+        lista.push(valasz.adat[i].toLowerCase())
+    }
+
     //A suggestion tömb létrehozása, és feltöltése
     
     //elemenként
@@ -147,7 +150,7 @@ function ossztetevoOpcio(nev){
     let valasz=document.createElement("option")
     valasz.classList.add("ogomb")
     //A gomb szövege a lista i-edik elemének a tartalma lesz
-    valasz.innerHTML=nev
+    valasz.innerHTML=nev[0].toUpperCase()+nev.slice(1,nev.length)
     //Hozzáadjuk a tömbhöz
     opciokLista.appendChild(valasz)
 }
@@ -156,7 +159,7 @@ function badge(nev){
     let jelveny=document.createElement("span")
     jelveny.classList.add("badge","text-bg-secondary","me-1")
     jelveny.innerHTML=nev+" "
-    felhosszetevok.push(nev)
+    felhosszetevok.push(nev.toLowerCase())
     let jelvenygomb=document.createElement("input")
     jelvenygomb.setAttribute("type","button")
     jelvenygomb.setAttribute("value","x")
@@ -272,7 +275,7 @@ async function kartyakeszites(adatok){
     let osszetevokHeader=document.createElement("div")
     let hianyzoosszetevok=[]
     for (let i = 0; i < adatok.osszetevok.length; i++) {
-        if (felhosszetevok.includes(adatok.osszetevok[i].Osszetevő)==false) {
+        if (felhosszetevok.includes(adatok.osszetevok[i].Osszetevő.toLowerCase())==false) {
             hianyzoosszetevok.push(adatok.osszetevok[i].Osszetevő)
         }
     }
