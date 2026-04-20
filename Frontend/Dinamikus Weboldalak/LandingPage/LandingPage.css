@@ -206,7 +206,7 @@ background-color: rgb(65, 65, 65);
 }
 #PolcDiv{
     display: flex;
-    margin-bottom: 15px;
+    margin-bottom: 5%;
 }
 #szoveg{
     width: 30%;
@@ -267,7 +267,7 @@ background-color: rgb(65, 65, 65);
 #KapcsDiv{
     display: flex;
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 5%;
 }
 #KapcsKep{
     width:60%;

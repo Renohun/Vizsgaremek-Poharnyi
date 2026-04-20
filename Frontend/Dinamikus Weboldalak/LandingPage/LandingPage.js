@@ -43,6 +43,9 @@ const KeszitTovabb = async()=>{
 const polcTovabb = async()=>{
     window.location.href = "/PolcKoktel"
 }
+const KontaktTovabb = async()=>{
+    window.location.href = "/KuldjUzenetet"
+}
 //népszerű koktél
 const NepszeruKoktelok = async()=>{
     const data = await GetFetch("/api/Fooldal/NepszeruKoktelok")
@@ -92,5 +95,8 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
     let MivanApolcon = document.getElementById("kattint")
     MivanApolcon.addEventListener("click",polcTovabb)
+
+    let Kapcsolat = document.getElementById("KapcsKep")
+    Kapcsolat.addEventListener("click",KontaktTovabb)
     NepszeruKoktelok()
 })
