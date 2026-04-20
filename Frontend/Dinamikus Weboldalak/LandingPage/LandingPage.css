@@ -386,7 +386,7 @@ background-color: rgb(65, 65, 65);
     font-size: 4vw;
     text-align: center;
 }
-#attention{
+.attention{
     font-size: 5vw;
 }
 #kattint{
@@ -400,5 +400,28 @@ background-color: rgb(65, 65, 65);
 }
 #PolcCim{
     font-size: 7vw;
+}
+#KapcsDiv{
+    flex-direction: column-reverse;
+}
+#KapcsKep{
+    width:80%;
+    margin: auto;
+    height: auto;
+}
+#kiprobalomKapcs{
+     text-align: center;
+     font-size: 7vw;;
+}
+#KapcsCim
+{
+    font-size: 7vw;
+}
+#KapcsSzoveg{
+     width: 80%;
+    margin: auto;
+    margin-top: 15px;
+    font-size: 4vw;
+    text-align: center;
 }
 }
