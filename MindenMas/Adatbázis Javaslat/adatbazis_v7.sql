@@ -41,19 +41,7 @@ CREATE TABLE Komment(
 	HovaIrták INT NOT NULL,
 	MilyenDologhoz TEXT NOT NULL,
 	Tartalom TEXT NOT NULL,
-	Pozitiv INT DEFAULT 0,
-	Negativ INT DEFAULT 0,
     FOREIGN KEY(Keszito) REFERENCES Felhasználó(FelhID)
-);
-
-CREATE TABLE kommentErtekeles(
-	FelhID INT,
-	KommentID INT,
-	Pozitiv INT,
-	Negativ INT
-    FOREIGN KEY(FelhID) REFERENCES Felhasználó(FelhID)
-    FOREIGN KEY(KommentID) REFERENCES Komment(KommentID)
-
 );
 
 CREATE TABLE Ertekeles(

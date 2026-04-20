@@ -1360,7 +1360,6 @@ router.delete('/AdminPanel/TermekTorles/:id', authenticationMiddleware, authoriz
 //
 //
 //
-//https://sidorares.github.io/node-mysql2/docs#using-promise-wrapper
 async function lekeres(query, param) {
     let result;
     await DBconnetion.promise()
@@ -1857,7 +1856,7 @@ router.get('/Koktel/:id', async (request, response) => {
     const TiltottKomment =
         'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?';
     const KommentLekeres =
-        'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal,Pozitiv,Negativ FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+        'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const JelvenyLekeres = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
     const OsszetevőLekeres = 'SELECT Osszetevő,Mennyiség,Mertekegyseg FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
     const MelyikJelvenyLekeres = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?';
@@ -1869,14 +1868,12 @@ router.get('/Koktel/:id', async (request, response) => {
         'SELECT Ertekeles FROM ertekeles WHERE Keszito LIKE ? AND HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
 
     try {
-        
         let osszetevok = await lekeres(OsszetevőLekeres, request.params.id);
         let jelvenyek = await lekeres(JelvenyLekeres, request.params.id);
         let jelvényinfo = [];
         for (let i = 0; i < jelvenyek.length; i++) {
             jelvényinfo.push(await lekeres(MelyikJelvenyLekeres, jelvenyek[i].JelvényID));
         }
-
         let koktel = await lekeres(KoktelLekeres, request.params.id);
         let gonoszkomment = await lekeres(TiltottKomment, ['Komment', 2]);
         let komment = await lekeres(KommentLekeres, [request.params.id, 'Koktél']);
@@ -1983,6 +1980,7 @@ router.post('/Koktel/SendKomment', authenticationMiddleware, async (request, res
         message: 'Sikeres Küldés'
     });
 });
+
 router.post('/Koktel/SendKedvenc', authenticationMiddleware, async (request, response) => {
     const KedvencKeres =
         'SELECT COUNT(*) as kedvelteE FROM kedvencek WHERE KikedvelteID LIKE ? AND MitkedveltID LIKE ?';
@@ -2008,6 +2006,7 @@ router.post('/Koktel/SendKedvenc', authenticationMiddleware, async (request, res
         message: 'Sikeres Küldés'
     });
 });
+
 router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE KommentID LIKE ?';
     const JelentesLekeres =
@@ -2027,6 +2026,7 @@ router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request,
         message: 'Sikeres Törlés'
     });
 });
+
 router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const ErtekelesTorles = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
@@ -2054,6 +2054,7 @@ router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, 
         message: 'Sikeres Törlés'
     });
 });
+
 router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, response) => {
     try {
         const Jelentesek = 'SELECT * FROM jelentesek';
@@ -2133,6 +2134,7 @@ router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, re
         });
     }
 });
+
 router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
     try {
         response.sendFile(path.join(__dirname, '..', 'images', request.params.utvonal));
@@ -2140,139 +2142,6 @@ router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) =>
         console.log(error);
     }
 });
-router.patch("/Koktel/KoktelModositas/:id", async (request, response)=>{
-    try {
-        const koktelChange="UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=? WHERE KoktélID LIKE ?"
-        const OsszetevoCleanse="DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
-        const UjOsszetevo="INSERT INTO koktelokosszetevoi (KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)"
-        await lekeres(koktelChange,[request.body.Cim,request.body.Recept,request.body.Mennyiseg,request.params.id])
-        await lekeres(OsszetevoCleanse,[request.params.id])
-        for (let i = 0; i < request.body.Osszetevok.length; i++) {
-            let osszetevo=request.body.Osszetevok[i]
-            await lekeres(UjOsszetevo,[request.params.id,osszetevo[0],osszetevo[1],osszetevo[2]])
-            
-        }
-        response.status(200).json({
-            message:"Siker"
-        })
-        
-    } 
-    catch (error) {
-        console.log(error);
-        
-        response.status(500).json({
-            message:"Hiba!"
-        })
-    }
-})
-router.get("/Koktel/SzomszedosKoktelok/:id",async (request, response)=>{
-    try 
-    {
-        const ÖsszesKoktél="SELECT KoktélID FROM Koktél ORDER BY KoktélID"
-        let koktelok=await lekeres(ÖsszesKoktél);
-        let elotte
-        let utana
-        for (let i = 0; i < koktelok.length; i++) {
-            if (koktelok[i].KoktélID==request.params.id) {
-                if (i==0) {
-                    elotte=koktelok[koktelok.length-1].KoktélID
-                    utana=koktelok[i+1].KoktélID
-                }
-                else if(i==koktelok.length-1){
-                    elotte=koktelok[i-1].KoktélID
-                    utana=koktelok[0].KoktélID
-                }
-                else{
-                    elotte=koktelok[i-1].KoktélID
-                    utana=koktelok[i+1].KoktélID
-                }
-
-            }
-
-        }
-        response.status(200).json({
-            message:"Siker!",
-            prev:elotte,
-            next:utana
-        })
-    } 
-    catch (error) {
-        response.status(500).json({
-            message:"Hiba!"
-        })
-    }
-})
-
-router.patch("/Koktel/SendKommentRatingPozitiv/:id",async (request, response)=>{
-    try 
-    {
-        const ErtekeltE="SELECT KommentID,Pozitiv FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?"
-        let ertekelesek=await lekeres(ErtekeltE,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id])
-        if (ertekelesek.length!=0) {
-            if (ertekelesek[0].Pozitiv!=1) {
-                const RatingNoveles="UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?"
-                const KommentRatingNoveles="UPDATE kommentertekeles SET Pozitiv=1 WHERE KommentID LIKE ?"
-                await lekeres(RatingNoveles,request.params.id)
-                await lekeres(KommentRatingNoveles,request.params.id)
-            }
-            else{
-                const RatingCsokkentes="UPDATE komment SET pozitiv=pozitiv-1 WHERE KommentID LIKE ?"
-                const KommentRatingCsokkentes="UPDATE kommentertekeles SET Pozitiv=0 WHERE KommentID LIKE ?"
-                await lekeres(RatingCsokkentes,request.params.id)
-                await lekeres(KommentRatingCsokkentes,request.params.id)
-            }
-        }
-        else{
-            await lekeres("INSERT INTO kommentertekeles (FelhID,KommentID,Pozitiv) VALUES(?,?,?)",[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id, 1])
-        }
-        response.status(200).json({
-            message:"Siker!"
-        })
-    } 
-    catch (error) {
-        console.log(error);
-        
-        response.status(500).json({
-            message:"Hiba!"
-        })
-    }
-})
-router.patch("/Koktel/SendKommentRatingNegativ/:id",async (request, response)=>{
-    
-    
-    try 
-    {
-        const ErtekeltE="SELECT KommentID,Negativ FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?"
-        let ertekelesek=await lekeres(ErtekeltE,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id])
-        if (ertekelesek.length!=0) {
-            if (ertekelesek[0].Negativ!=1) {
-                const RatingNoveles="UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?"
-                const KommentRatingNoveles="UPDATE kommentertekeles SET Negativ=1 WHERE KommentID LIKE ?"
-                await lekeres(RatingNoveles,request.params.id)
-                await lekeres(KommentRatingNoveles,request.params.id)
-            }
-            else{
-                const RatingCsokkentes="UPDATE komment SET negativ=negativ-1 WHERE KommentID LIKE ?"
-                const KommentRatingCsokkentes="UPDATE kommentertekeles SET Negativ=0 WHERE KommentID LIKE ?"
-                await lekeres(RatingCsokkentes,request.params.id)
-                await lekeres(KommentRatingCsokkentes,request.params.id)
-            }
-        }
-        else{
-            await lekeres("INSERT INTO kommentertekeles (FelhID,KommentID,Negativ) VALUES(?,?,?)",[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id, 1])
-        }
-        response.status(200).json({
-            message:"Siker!"
-        })
-    } 
-    catch (error) {
-        console.log(error);
-        
-        response.status(500).json({
-            message:"Hiba!"
-        })
-    }
-})
 //
 //
 //
