@@ -1,4 +1,8 @@
+/*forrasok
+https://www.youtube.com/watch?v=30VeUWxZjS8
+https://nodemailer.com/
 
+*/
 const AdatPost = async (url, data) => {
     try {
         const ertek = await fetch(url, {
