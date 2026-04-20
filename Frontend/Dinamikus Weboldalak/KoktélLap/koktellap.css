@@ -5,6 +5,12 @@
     
 }
 
+.kommentdiv{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom: 1px solid grey;
+}
+
 #Kommentek,#Velemeny{
     border-radius: 10px;
 }
@@ -14,6 +20,19 @@
     height: 40px;
     border-radius: 20px;
     margin-right: 4px;
+}
+
+.asd{
+    color: white;
+    background-color: rgb(12, 64, 12);
+
+    color: white;
+    background-color: rgb(60, 55, 55);
+
+
+    background-color: rgb(12, 64, 12);
+    background-color: rgb(60, 55, 55);
+
 }
 
 .Onev,.Omer,.Oopc{
