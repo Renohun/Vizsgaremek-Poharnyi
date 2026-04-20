@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             felhasznaloNev: felhaszanaloNev,
             jelszo: jelszo,
             jelszoIsmet: jelszoIsmet,
+            korEll: document.getElementById('18felett').checked,
             ASZF: document.getElementById('ASZFCheck').checked
         });
         if (response.megEgyezik) {
