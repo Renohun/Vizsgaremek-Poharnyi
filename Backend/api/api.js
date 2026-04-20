@@ -2870,15 +2870,15 @@ router.post('/UzenetKuldes',(request,response)=>{
             service: 'Gmail',
             auth:
             {
-                user:'poharnyi.info@gmail.com',
-                pass:"zlce dcop lthm zxdw"
+                user:process.env.GCONTACTUSER,
+                pass: process.env.GCONTACTPASS
             }
         })
         const mailOptions = {
             from: request.body.email,
             to:  "poharnyi.info@gmail.com",
-            subject: `Contact from üzenet`,
-            html: `<h2> Tartalom:</h2> Név: ${request.body.name} email cím: ${request.body.email} <br >téma: ${request.body.subject} tartalom:<br> <h5>${request.body.message}</h5>
+            subject: `Contact form üzenet`,
+            html: `<h2> Tartalom:</h2> Név: ${request.body.name}<br> email cím: ${request.body.email} <br >téma: ${request.body.subject}<br> tartalom:<br> <h3>${request.body.message}</h3>
             <a href="mailto:${request.body.email}">Válasz írása</a>`
         }
 
