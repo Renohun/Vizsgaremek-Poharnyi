@@ -220,7 +220,7 @@ background-color: rgb(65, 65, 65);
     background-color: rgb(73, 73, 73);
     justify-self: flex-start;
 }
-#attention{
+.attention{
     font-size: 2vw;
 }
 #kattint{
@@ -248,6 +248,63 @@ background-color: rgb(65, 65, 65);
     width: 50%;
     background-color: rgba(0, 0, 0, 0.6);
     background-blend-mode: darken;
+}
+/*Kapcsolat*/
+#Kapcsolat
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: rgb(92, 92, 92);
+}
+#KapcsCim
+{
+    font-size: 4vw;
+    text-align: center;
+    background-color: rgb(36, 36, 36);
+    color: rgb(255, 255, 255);
+}
+#KapcsDiv{
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+}
+#KapcsKep{
+    width:60%;
+    background-image: url(../LandingPage/img/kapcsolat.webp);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgba(31, 31, 31, 0.5);
+    background-blend-mode: darken;
+    margin-left: 3%;
+    margin-top: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#kiprobalomKapcs{
+      color: aliceblue;
+    font-size: 3vw;
+    text-align: center;
+    width: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    background-blend-mode: darken;
+}
+#KapcsKep:hover{
+    border: solid rgb(172, 172, 172) 2px;
+}
+#KapcsSzoveg{
+     width: 30%;
+    margin-top: 5%;
+    margin-right: 2%;
+    font-size: 1.5vw;
+    text-align: left;
+    margin: none ;
+    margin-left: 2%;
+    color: aliceblue;
+    background-color: rgb(73, 73, 73);
+    justify-self: flex-start;
 }
 @media only screen and (max-width: 1710px) 
 {
