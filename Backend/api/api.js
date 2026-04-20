@@ -1858,7 +1858,7 @@ router.get('/Koktel/:id', async (request, response) => {
     const TiltottKomment =
         'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?';
     const KommentLekeres =
-        'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+        'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal,Pozitiv,Negativ FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const JelvenyLekeres = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
     const OsszetevőLekeres = 'SELECT Osszetevő,Mennyiség,Mertekegyseg FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
     const MelyikJelvenyLekeres = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?';
@@ -2150,14 +2150,23 @@ router.patch("/Koktel/SendKommentRatingPozitiv/:id",async (request, response)=>{
     {
         const ErtekeltE="SELECT KommentID,Pozitiv FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?"
         let ertekelesek=await lekeres(ErtekeltE,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id])
+        console.log(ertekelesek.length);
+        console.log(ertekelesek);
+        
         if (ertekelesek.length!=0) {
+            console.log(ertekelesek[0].Pozitiv);
+            
             if (ertekelesek[0].Pozitiv!=1) {
+                console.log("fel");
+                
                 const RatingNoveles="UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?"
                 const KommentRatingNoveles="UPDATE kommentertekeles SET Pozitiv=1 WHERE KommentID LIKE ?"
                 await lekeres(RatingNoveles,request.params.id)
                 await lekeres(KommentRatingNoveles,request.params.id)
             }
             else{
+                console.log("le");
+                
                 const RatingCsokkentes="UPDATE komment SET pozitiv=pozitiv-1 WHERE KommentID LIKE ?"
                 const KommentRatingCsokkentes="UPDATE kommentertekeles SET Pozitiv=0 WHERE KommentID LIKE ?"
                 await lekeres(RatingCsokkentes,request.params.id)
@@ -2165,6 +2174,8 @@ router.patch("/Koktel/SendKommentRatingPozitiv/:id",async (request, response)=>{
             }
         }
         else{
+            const RatingNoveles="UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?"
+            await lekeres(RatingNoveles,request.params.id);
             await lekeres("INSERT INTO kommentertekeles (FelhID,KommentID,Pozitiv) VALUES(?,?,?)",[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id, 1])
         }
         response.status(200).json({
@@ -2186,6 +2197,8 @@ router.patch("/Koktel/SendKommentRatingNegativ/:id",async (request, response)=>{
     {
         const ErtekeltE="SELECT KommentID,Negativ FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?"
         let ertekelesek=await lekeres(ErtekeltE,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id])
+        console.log(ertekelesek.length);
+        
         if (ertekelesek.length!=0) {
             if (ertekelesek[0].Negativ!=1) {
                 const RatingNoveles="UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?"
@@ -2201,6 +2214,8 @@ router.patch("/Koktel/SendKommentRatingNegativ/:id",async (request, response)=>{
             }
         }
         else{
+            const RatingNoveles="UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?"
+            await lekeres(RatingNoveles,request.params.id);
             await lekeres("INSERT INTO kommentertekeles (FelhID,KommentID,Negativ) VALUES(?,?,?)",[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,request.params.id, 1])
         }
         response.status(200).json({
