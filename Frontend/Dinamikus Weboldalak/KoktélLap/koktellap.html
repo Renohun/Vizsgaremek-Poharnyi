@@ -152,15 +152,9 @@
         <div class="container">
             <div class="border-bottom border-2 border-dark text-center" id="header">
                 <h1><span id="Cimsor" class="ps-4"></span><span id="fav" class="float-end"></span></h1>
-                <div id="Gombok"></div>
                 <span id="kokteldate"></span>
-                <div id="badgek" class="justify-content-center"></div>
-                <div id="ChangeSor">
-                    <a href="" id="elozo" class="float-start">&#x2190; Előző</a>
-                    <input type="button" id="KoktJel" class="btn text-danger border-0" value="Koktél Jelentése" />
-                    <a href="" id="kovetkezo" class="float-end">Következő &#8594;</a>
-                </div>
-
+                <div id="badgek"></div>
+                <input type="button" id="KoktJel" class="btn text-danger border-0" value="Koktél Jelentése" />
             </div>
             <div class="row border-bottom border-2 border-dark pb-3">
                 <p class="fs-4" id="maker">
@@ -168,21 +162,21 @@
                     <span id="Tagsag" class="text-primary"></span
                     ><input type="button" id="FelhJel" class="btn text-danger border-0" value="Jelentés" />
                 </p>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6 row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 row">
                     <img
                         src=""
                         alt="KoktélKép"
                         id="KoktélKép"
                         class="img-fluid col-12 col-sm-6 col-md-6 col-lg-6 rounded"
                     />
-                    <div class="ps-4 flex-column col-12 col-sm-6 col-md-6 col-lg-6" id="Osszetevok">
+                    <div class="ps-4 flex-column col-12 col-sm-6 col-md-6 col-lg-6">
                         <label for="mennyiseg">Hány ml-nyit szeretne készíteni</label>
                         <input type="number" id="mennyiseg" step="5" class="form-control" min="0" />
                         <span class="fs-4">Összetevők</span>
                         <ul id="Ossztev"></ul>
                     </div>
                 </div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-6">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                     <div class="text-break" id="recept"></div>
                 </div>
             </div>
@@ -244,26 +238,6 @@
                             class="btn btn-success"
                             id="JelKonf"
                             hidden
-                            data-bs-dismiss="modal"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal" tabindex="-1" id="ReplyModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="cim">Sikeres Módosítás</h5>
-                    </div>
-                    <div class="modal-body">
-                        <p id="response"></p>
-                    </div>
-                    <div class="modal-footer">
-                        <input
-                            type="button"
-                            value="Ok"
-                            class="btn btn-success"
                             data-bs-dismiss="modal"
                         />
                     </div>
