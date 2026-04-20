@@ -11,6 +11,8 @@ const path = require('path');
 const fajlkezelo = require('fs/promises');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const { text } = require('stream/consumers');
+const { error } = require('console');
 require('dotenv').config();
 const datum = new Date();
 const storage = multer.diskStorage({
@@ -3007,5 +3009,50 @@ router.get('/Fooldal/BevaneJelentkezve', authenticationMiddleware, async (reques
         response.status(200).json({ siker: 'hiba' });
     }
 });
+//
+//
+//uzenetkuldes
+//
+//
+router.post('/UzenetKuldes',(request,response)=>{
+    try {
+        const obj = request.body
+        console.log(obj)
+        
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth:
+            {
+                user:process.env.GCONTACTUSER,
+                pass: process.env.GCONTACTPASS
+            }
+        })
+        const mailOptions = {
+            from: request.body.email,
+            to:  "poharnyi.info@gmail.com",
+            subject: `Contact form üzenet`,
+            html: `<h2> Tartalom:</h2> Név: ${request.body.name}<br> email cím: ${request.body.email} <br >téma: ${request.body.subject}<br> tartalom:<br> <h3>${request.body.message}</h3>
+            <a href="mailto:${request.body.email}">Válasz írása</a>`
+        }
 
+        transporter.sendMail(mailOptions,(error,info)=>{
+            if(error){
+                console.log(error);
+                response.send(error)
+            }else{
+                response.status(200).json({
+                siker:"siker",
+                adat : info.response
+                 })
+            }
+        })
+
+        
+    } catch (error) {
+        console.log(error)
+        response.status(500).json({
+            hiba:error
+        })
+    }
+})
 module.exports = router;
