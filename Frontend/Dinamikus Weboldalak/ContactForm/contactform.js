@@ -1,6 +1,7 @@
 /*forrasok
 https://www.youtube.com/watch?v=30VeUWxZjS8
 https://nodemailer.com/
+https://www.youtube.com/watch?v=MwGFKr6Zdbo
 
 */
 const AdatPost = async (url, data) => {
