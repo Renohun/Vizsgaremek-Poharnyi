@@ -428,6 +428,9 @@ async function erteksetup() {
     if (eredmeny.adat.UgyanazE) {
         document.getElementById("ertekeles").innerHTML=""
     }
+    else if(eredmeny.belepette==false){
+        
+    }
     else{
         let csillagok=document.getElementById("csillagok").children
         //ez alapján lekérjük az adatokat
