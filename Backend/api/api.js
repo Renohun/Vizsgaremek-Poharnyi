@@ -2463,11 +2463,9 @@ router.get('/termek/KepLekeres/:id', async (request, response) => {
 
 router.get('/termek/KepLekeres/:id', async (request, response) => {
     try {
-        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
         const id = request.params.id;
         const query = 'SELECT TermekKepUtvonal FROM webshoptermek WHERE termekID = ?';
         const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
-        console.log(lekertTermek + 'asasdasdadadasd');
         response.sendFile(path.join(__dirname, '..', 'images', lekertTermek[0].TermekKepUtvonal));
     } catch (error) {
         console.log(error);
@@ -2482,7 +2480,6 @@ router.post('/termek/ErtekelesKuldes/', async (request, response) => {
         const Ertek = request.body.ertek;
         const query = 'INSERT INTO ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
         const [ElkuldottErtekeles] = await DBconnetion.promise().query(query, [userID, TermekId, 'Termék', Ertek]);
-        console.log(TermekId, Ertek);
         response.status(200).json({
             ErtekelesId: ElkuldottErtekeles.insertId
         });
@@ -2500,7 +2497,6 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
 
         const mennyiseg = request.body.mennyiseg;
         const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID; //"sessionId" lekérése
-        console.log(UserID);
 
         const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
         const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
@@ -2548,13 +2544,11 @@ router.get('/Termek/HasonloTermekek/:kateg/:id', async (request, response) => {
         for (let i = 0; i < KategLeker.length; i++) {
             indexLista.push(KategLeker[i].TermekID);
         }
-        console.log(indexLista);
         let Hasonlok = [];
         for (let i = 0; i < 3; i++) {
             let random = Math.floor(Math.random() * indexLista.length); //random index gen
             Hasonlok.push(indexLista[random]); //hozzaadjuk az indexet az uj listahoz, majd az elozobol kitoroljuk
             indexLista.splice(random, 1);
-            console.log(indexLista);
         }
         let hasonloTermekek = [];
         for (
@@ -2579,7 +2573,6 @@ router.get('/Termek/HasonloTermekek/:kateg/:id', async (request, response) => {
 router.get('/Termek/HasonloTermekErtekeles/:id', async (request, response) => {
     try {
         const id = request.params.id;
-        console.log(id);
         const query =
             "SELECT AVG(Ertekeles) AS 'atlag' FROM ertekeles WHERE HovaIrták = ? AND MilyenDologhoz = 'Termék'";
         const [Ertekeles] = await DBconnetion.promise().query(query, [id]);
@@ -2678,7 +2671,6 @@ router.get('/Webshop/Keplekeres/:id', async (request, response) => {
         const { id } = request.params;
         const query = 'SELECT  TermekKepUtvonal FROM webshoptermek WHERE TermekID = ?';
         const [termekek] = await DBconnetion.promise().query(query, [id]);
-        console.log(termekek[0].TermekKepUtvonal);
         response.sendFile(path.join(__dirname, '..', 'images', termekek[0].TermekKepUtvonal));
     } catch (error) {
         console.log(error);
@@ -2702,9 +2694,8 @@ router.post('/Webshop/szures', async (request, response) => {
         let OrderBy;
         let OrderByErtek;
         let nevErtek;
-          console.log(query)
+        
         for (const item of Object.entries(feltetelek)) {
-            console.log(item[0] + ' ? ' + item[1]);
             if (item[0] == 'MaxAr') {
                 query += ' Ar <= ? AND';
             }else if (item[0] == 'Nev') {
@@ -2747,8 +2738,6 @@ router.post('/Webshop/szures', async (request, response) => {
         }
         // a query utolso 3 elemenek (AND) levágása
         query = query.slice(query[0], query.length - 4);
-        console.log(ertekLista)
-        console.log(query)
         query += nevErtek
         query += OrderBy;
         let limitoffset = ' LIMIT ? OFFSET ?';
@@ -2759,7 +2748,7 @@ router.post('/Webshop/szures', async (request, response) => {
             console.log(typeof ertekLista[0]);
             console.log('2') 
         */
-        console.log(query);
+       
         let szurtTermekek;
         if (ertekLista.length == 1) {
             [szurtTermekek] = await DBconnetion.promise().query(query, [ertekLista[0],feltetelek.Nev, limit, offset]);
@@ -2775,7 +2764,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 offset
             ]);
         } else if (ertekLista.length == 4) {
-            console.log('4')[szurtTermekek] = await DBconnetion.promise().query(query, [
+           [szurtTermekek] = await DBconnetion.promise().query(query, [
                 ertekLista[0],
                 ertekLista[1],
                 ertekLista[2],
@@ -2785,7 +2774,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 offset
             ]);
         } else if (ertekLista.length == 5) {
-            console.log('5')[szurtTermekek] = await DBconnetion.promise().query(query, [
+           [szurtTermekek] = await DBconnetion.promise().query(query, [
                 ertekLista[0],
                 ertekLista[1],
                 ertekLista[2],
@@ -2796,7 +2785,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 offset
             ]);
         } else if (ertekLista.length == 6) {
-            console.log('6')[szurtTermekek] = await DBconnetion.promise().query(query, [
+            [szurtTermekek] = await DBconnetion.promise().query(query, [
                 ertekLista[0],
                 ertekLista[1],
                 ertekLista[2],
@@ -2808,7 +2797,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 offset
             ]);
         } else if (ertekLista.length == 7) {
-            console.log('7')[szurtTermekek] = await DBconnetion.promise().query(query, [
+            [szurtTermekek] = await DBconnetion.promise().query(query, [
                 ertekLista[0],
                 ertekLista[1],
                 ertekLista[2],
@@ -2821,7 +2810,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 offset
             ]);
         } else if (ertekLista.length == 8) {
-            console.log('8')[szurtTermekek] = await DBconnetion.promise().query(query, [
+           [szurtTermekek] = await DBconnetion.promise().query(query, [
                ertekLista[0],
                 ertekLista[1],
                 ertekLista[2],
@@ -2835,7 +2824,7 @@ router.post('/Webshop/szures', async (request, response) => {
                 offset
             ]);
         } else if (ertekLista.length == 9) {
-            console.log('9')[szurtTermekek] = await DBconnetion.promise().query(query, [
+            [szurtTermekek] = await DBconnetion.promise().query(query, [
                 ertekLista[0],
                 ertekLista[1],
                 ertekLista[2],
@@ -2956,7 +2945,6 @@ router.get('/Fooldal/BevaneJelentkezve', authenticationMiddleware, async (reques
 router.post('/UzenetKuldes',(request,response)=>{
     try {
         const obj = request.body
-        console.log(obj)
         
         const transporter = nodemailer.createTransport({
             service: 'Gmail',

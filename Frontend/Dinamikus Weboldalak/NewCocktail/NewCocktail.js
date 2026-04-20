@@ -98,7 +98,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     osszetevo.addEventListener('click', () => {
         let elsoOsztv = document.getElementById('elsoOsszetevo');
         osszetevodiv.removeChild(elsoOsztv);
-        console.log('kala');
     });
     //adott pixelszám alatti classok addolasa
     if (window.innerWidth < 992) {
@@ -512,7 +511,6 @@ const AdatStorage = async () => {
     }
     else if (hiba == true && egyezoMl == false)
     {
-        console.log("asd")
         modalHiba(false,"ml")
     }
     //uj koktel gomb funkcioja
