@@ -56,11 +56,20 @@ const AdatLekeresKep=async(url)=>{
 }
 
 const AdatKuldes=async(url,adat,tipus)=>{
-    const valasz=await fetch(url,{
-        method:tipus,
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(adat)
-    })
+    let valasz
+    if (adat!="") {
+        valasz=await fetch(url,{
+            method:tipus,
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(adat)
+        })
+    }
+    else{
+        valasz=await fetch(url,{
+            method:tipus,
+            headers:{"Content-Type":"application/json"}
+        })
+    }
     if (valasz.ok) {
         return valasz.json()
     }
@@ -185,7 +194,7 @@ async function kommentek() {
         
         //Jelentés Gomb formázása
         let KommentIroReport=document.createElement("input")
-        KommentIroReport.classList.add("col-3","col-sm-3","col-md-3","col-lg-1","col-xl-1","p-0","text-end","flex-fill")
+        KommentIroReport.classList.add("col-3","col-sm-1","col-md-1","col-lg-1","col-xl-1","p-0","text-end","flex-fill")
         
         //Felhasználónév mező megadása
         let KommentIro=document.createElement("label")
@@ -197,8 +206,9 @@ async function kommentek() {
         let KommentCollapse=document.createElement("input")
         KommentCollapse.setAttribute("type","button")
         KommentCollapse.setAttribute("value","↑")
-        KommentCollapse.classList.add("btn")
+        KommentCollapse.classList.add("btn","col-md-1","col-sm-2")
         KommentHeader.appendChild(KommentCollapse)
+
         //Átszínezés
         let KommIroRegDate=(kommentek[i].RegisztracioDatuma.split("T"))[0].split("-")
         let KommentIroTagsag=document.createElement("span")
@@ -224,13 +234,9 @@ async function kommentek() {
             }
         })
         
-        
-        
-        
-        //TODO:BACKEND,ELLENŐRZÉS
         let pozitiv=document.createElement("span")
         let pozitivSzam=document.createElement("span")
-        pozitivSzam.innerHTML=kommentek[i].pozitiv
+        pozitivSzam.innerHTML=kommentek[i].Pozitiv
         let upvote=document.createElement("input")
         upvote.setAttribute("type","button")
         upvote.setAttribute("value","👍")
@@ -241,7 +247,7 @@ async function kommentek() {
 
         let negativ=document.createElement("span")
         let negativSzam=document.createElement("span")
-        negativSzam.innerHTML=kommentek[i].negativ
+        negativSzam.innerHTML=kommentek[i].Negativ
         let downvote=document.createElement("input")
         downvote.setAttribute("type","button")
         downvote.setAttribute("value","👎")
@@ -256,12 +262,14 @@ async function kommentek() {
             KommentIroReport.setAttribute("type","button")
             KommentIroReport.classList.add("btn","text-danger","float-end","border-0")
             if (kommentek[i].UgyanazE==false) {
-                //Ellenőrzés hogy rányomott e már
-                upvote.addEventListener("click",()=>{
-                    pozitivSzam.innerHTML=parseInt(pozitivSzam.innerHTML)+1
+                //Értékelések
+                upvote.addEventListener("click",async()=>{
+                    await AdatKuldes("/api/Koktel/SendKommentRatingPozitiv/"+kommentek[i].KommentID,"","PATCH")
+                    pozitivSzam.innerHTML=((await AdatLekeres(`/api/Koktel/${koktel}`)).komment[i].Pozitiv)
                 })
-                downvote.addEventListener("click",()=>{
-                    negativSzam.innerHTML=parseInt(negativSzam.innerHTML)+1
+                downvote.addEventListener("click",async()=>{
+                    await AdatKuldes("/api/Koktel/SendKommentRatingNegativ/"+kommentek[i].KommentID,"","PATCH")
+                    negativSzam.innerHTML=((await AdatLekeres(`/api/Koktel/${koktel}`)).komment[i].Negativ)
                 })
                 KommentIroReport.setAttribute("value","Jelentés")
                 //Ha rányom
@@ -270,8 +278,14 @@ async function kommentek() {
                     jelentes(kommentek[i].KommentID,"Komment",kommentek[i].Keszito)
                 })
             }
-            //Azonban magát nem tudja feljelenteni
+            //Azonban magát nem tudja feljelenteni sem értékelni
             else{
+                //Kikapcsoljuk az értékelést
+                downvote.setAttribute("disabled","true")
+                upvote.setAttribute("disabled","true")
+                upvote.classList.add("border-0")
+                downvote.classList.add("border-0")
+
                 //Ezért helyette ki tudja törölni a kommentet inkább
                 KommentIroReport.setAttribute("value","Törlés")
                 KommentIroReport.addEventListener("click",()=>{
