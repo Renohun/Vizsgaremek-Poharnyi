@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("Velemeny").innerHTML="Komment írásához és a Koktél Értékeléséhez lépj be!"
         //Leromboljuk a jelentési gombokat, visszaélés elkerülése érdekében
         document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
-        document.getElementById("header").removeChild(document.getElementById("KoktJel"))
+        document.getElementById("ChangeSor").removeChild(document.getElementById("KoktJel"))
         document.getElementById("Cimsor").classList.remove("ps-4")
     }
 
@@ -182,6 +182,7 @@ async function kommentek() {
         KommentHeader.classList.add("mb-1","d-flex","w-100")
         KommentHeader.appendChild(KommenteloKep)
         
+        
         //Jelentés Gomb formázása
         let KommentIroReport=document.createElement("input")
         KommentIroReport.classList.add("col-3","col-sm-3","col-md-3","col-lg-1","col-xl-1","p-0","text-end","flex-fill")
@@ -190,8 +191,14 @@ async function kommentek() {
         let KommentIro=document.createElement("label")
         KommentIro.classList.add("col-8","col-sm-8","col-md-8","col-lg-10","col-xl-10","flex-fill")
         KommentIro.innerHTML=kommentek[i].Felhasználónév+" - "
-        
-        
+        KommentHeader.appendChild(KommentIro)
+
+        //Komment Összecsukása
+        let KommentCollapse=document.createElement("input")
+        KommentCollapse.setAttribute("type","button")
+        KommentCollapse.setAttribute("value","↑")
+        KommentCollapse.classList.add("btn")
+        KommentHeader.appendChild(KommentCollapse)
         //Átszínezés
         let KommIroRegDate=(kommentek[i].RegisztracioDatuma.split("T"))[0].split("-")
         let KommentIroTagsag=document.createElement("span")
@@ -206,9 +213,19 @@ async function kommentek() {
         KommentTartalom.classList.add("w-100","komment")
         KommentTartalom.innerHTML=kommentek[i].Tartalom
         
+        KommentCollapse.addEventListener("click",()=>{
+            if (KommentTartalom.hasAttribute("hidden")) {
+                KommentTartalom.removeAttribute("hidden","true")
+                KommentCollapse.setAttribute("value","↑")
+            }
+            else{
+                KommentTartalom.setAttribute("hidden","true")
+                KommentCollapse.setAttribute("value","↓")
+            }
+        })
         
         
-        KommentHeader.appendChild(KommentIro)
+        
         
         //TODO:BACKEND,ELLENŐRZÉS
         let pozitiv=document.createElement("span")
