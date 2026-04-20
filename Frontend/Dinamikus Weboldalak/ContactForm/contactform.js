@@ -35,13 +35,13 @@ form.addEventListener("submit",async(e)=>{
     let siker = document.getElementById("siker")
 
 
-if (!name || !email || !subject || !message) 
+if (!name.value || !email.value || !subject.value || !message.value) 
 {
     siker.setAttribute("hidden",true)
     hiba.style.display = "block"
     hiba.innerHTML = "Kérem ne hagyjon üres mezőt!"
 }
-else if(name || email || subject ||message)
+else if(name.value != "" || email.value != ""  || subject.value != ""  ||message.value != "" )
     {
 
     let formData = {
