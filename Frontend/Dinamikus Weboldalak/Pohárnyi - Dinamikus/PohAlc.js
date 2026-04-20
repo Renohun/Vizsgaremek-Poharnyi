@@ -65,8 +65,8 @@ async function GETKepLekeres(url) {
 
 async function atvitelKoktelra() {
     const id = this.dataset.id;
-    await PATCHfetch(`http://127.0.0.1:3000/api/Koktelok/nepszeruseg/${id}`);
-    window.location.href = `http://127.0.0.1:3000/Koktel/${id}`;
+    await PATCHfetch(`/api/Koktelok/nepszeruseg/${id}`);
+    window.location.href = `/Koktel/${id}`;
 }
 
 function koktelRendereles(koktelok) {
@@ -90,7 +90,7 @@ function koktelRendereles(koktelok) {
 
             (async () => {
                 const koktelKep = await GETKepLekeres(
-                    `http://127.0.0.1:3000/api/AdatlapLekeres/KepLekeres/${koktel.BoritoKepUtvonal}`
+                    `/api/AdatlapLekeres/KepLekeres/${koktel.BoritoKepUtvonal}`
                 );
                 imgTag.setAttribute('src', URL.createObjectURL(koktelKep));
             })();
@@ -106,7 +106,7 @@ function koktelRendereles(koktelok) {
 
             if (koktel.ertekeles == 0) {
                 let ertekeles = document.createElement('span');
-                ertekeles.innerText = 'Nincs meg ertekeles!';
+                ertekeles.innerText = 'Nincs meg értékelés!';
                 cardBody.appendChild(ertekeles);
             } else {
                 let csillagert = Math.ceil(koktel.ertekeles);
@@ -219,7 +219,7 @@ function koktelRendereles(koktelok) {
 document.addEventListener('DOMContentLoaded', () => {
     (async () => {
         //Jelvenyek avagy rendezesek lekerese
-        const jelvenyek = await GETfetch('http://127.0.0.1:3000/api/Koktelok/Jelvenyek');
+        const jelvenyek = await GETfetch('/api/Koktelok/Jelvenyek');
         //console.log(jelvenyek.data);
 
         const erossegSelect = document.getElementById('Erősség');

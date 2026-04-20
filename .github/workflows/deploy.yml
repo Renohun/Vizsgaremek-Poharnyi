@@ -14,8 +14,11 @@ jobs:
                   host: ${{ secrets.REMOTE_HOST }}
                   username: ${{ secrets.REMOTE_USER }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  port: 2222
                   script: |
                     cd /testweb/
+                    git fetch --all
+                    git reset --hard origin/main
                     git pull origin main
 
                     cd Backend

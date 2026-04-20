@@ -3,9 +3,11 @@
 async function GETfetch(url) {
     try {
         const data = await fetch(url);
+       
         if (data.ok) {
             return await data.json();
-        } else {
+        }
+         else {
             throw new err('Hiba tortent a fetch-el');
         }
     } catch (err) {
@@ -18,13 +20,32 @@ const PostFetch=async(url,object)=>{
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(object)
     })
-    if(valasz.redirected){
-        window.location.href = valasz.url;
-    }
+      if (valasz.redirected) 
+        {
+            console.log("asd")
+        }
     if (valasz.ok) {
         return valasz.json()
     }
 }
+const KosarPost = async (url,object) => {
+    try {
+        const valasz = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:JSON.stringify(object)
+        });
+        if (valasz.redirected) {
+            //console.log(valasz.url);
+            window.location.href = valasz.url;
+        }
+        if (valasz.ok) {
+            return valasz.json();
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 const TermekKepLekeres=async(url)=>{
     try {
         
@@ -105,6 +126,7 @@ const oldalGenerálás =  async () =>{
         }  
        
     }
+    //asd
     for (const element of Object.entries(TablazatElemek))
     {
         let tr = document.createElement("tr")
@@ -238,7 +260,7 @@ const oldalGenerálás =  async () =>{
     {
         //a felhasználó maximum 99 terméket tud rendelni!
       
-        let max = mennyisegHely.max
+        let max = 100;
           if (max > LekertTermekek.termek[0].TermekKeszlet) 
             {
                 max = LekertTermekek.termek[0].TermekKeszlet
@@ -279,6 +301,42 @@ const oldalGenerálás =  async () =>{
         ertekelesSzam  = LekertTermekek.ertekelt[0].Ertekeles 
     }
     ertekeles(LekertTermekek.ertekelt,ertekelesSzam)
+
+    //kovetkezo termek
+    const hossz = await GETfetch("/api/WebShop/HosszLekeres")
+    const idLista = await GETfetch("/api/termek/OsszIdLekeres")
+    
+    let idszam = parseInt(id)
+    let jelenlegiIndex ;
+    for (let i = 0; i < idLista.idLista.length; i++) 
+    {//az éppen nézett termék indexét meghatarozom a listaban
+        
+        if (idszam == idLista.idLista[i].TermekID)
+        {
+            console.log(idLista.idLista[i])
+            jelenlegiIndex = i;
+        }
+    
+    }
+    let kov = document.getElementById("koviTermek")
+    if (jelenlegiIndex == idLista.idLista.length-1) 
+    {
+        kov.disabled = "true"
+        kov.style.color ="gray"
+    }
+    else{
+        console.log(jelenlegiIndex)
+        kov.href = `/Termek/${idLista.idLista[jelenlegiIndex+1].TermekID}`
+    }
+    //Elozo Termek
+    let elo = document.getElementById("EloTermek")
+    if (jelenlegiIndex == 0) {
+        elo.disabled = "true"
+        elo.style.color ="gray"
+    }else{
+        elo.href = `/Termek/${idLista.idLista[jelenlegiIndex-1].TermekID}`
+    }
+   
 
 }
 

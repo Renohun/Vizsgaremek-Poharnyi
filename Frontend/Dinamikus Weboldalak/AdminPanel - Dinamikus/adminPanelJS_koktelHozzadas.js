@@ -75,12 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const osszetevoInput = document.createElement('input');
         osszetevoInput.setAttribute('type', 'text');
+        osszetevoInput.setAttribute('placeholder', 'Összetevő neve');
         osszetevoInput.dataset.num = osszetevoNum;
         osszetevoInput.setAttribute('required', '');
         osszetevoInput.classList.add('form-control');
 
         const osszetevoMenny = document.createElement('input');
         osszetevoMenny.setAttribute('type', 'number');
+        osszetevoMenny.setAttribute('placeholder', 'Mérték');
         osszetevoMenny.dataset.num = osszetevoNum;
         osszetevoMenny.setAttribute('required', '');
         osszetevoMenny.classList.add('form-control');

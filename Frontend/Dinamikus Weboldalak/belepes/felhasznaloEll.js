@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalElement.show();
 
             document.getElementById('modalText').innerText =
-                'Nem adott meg egy olyan email cimet, amely megfelel a kriteriumoknak!';
+                'Nem adott meg egy olyan email címet, amely megfelel a kritériumoknak!';
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalElement.show();
 
             document.getElementById('modalText').innerText =
-                'Nem taltunk email cimmel rendelkezo felhasznalot! Lehet hogy elronttta az email cimet?';
+                'Nem táltunk ilyen email címmel rendelkező felhasználót! Lehet hogy elronttta az email címet?';
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
