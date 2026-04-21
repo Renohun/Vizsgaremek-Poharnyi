@@ -1854,7 +1854,7 @@ router.post('/AdatlapLekeres/Fizetes', authenticationMiddleware, async (request,
 //
 router.get('/Koktel/:id', async (request, response) => {
     const KoktelLekeres =
-        'SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg,ProfilkepUtvonal,BoritoKepUtvonal FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?';
+        'SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg,ProfilkepUtvonal,BoritoKepUtvonal,Alkoholos FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?';
     const TiltottKomment =
         'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?';
     const KommentLekeres =

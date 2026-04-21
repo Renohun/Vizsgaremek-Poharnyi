@@ -26,7 +26,10 @@
     cursor: pointer;
 }
 
-
+.mentes{
+    background-color: rgb(6, 139, 201);
+    color: white;
+}
 
 .Onev,.Omer,.Oopc{
     border-color: black;

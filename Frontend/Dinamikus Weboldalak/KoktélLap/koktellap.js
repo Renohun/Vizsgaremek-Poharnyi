@@ -117,8 +117,19 @@ async function statikusadatok(adatok)
                 })
             break;
         }
+        console.log(koktélAdat);
+        
         //Majd hozzáadjuk a badge divhez
         BadgeHely.appendChild(badge)
+    }
+    if (koktélAdat.Alkoholos==1) {
+        let badge=document.createElement("span")
+        badge.innerHTML="Alkoholmentes"
+        badge.classList.add("badge","ms-1","mentes")
+        badge.addEventListener("click",()=>{
+            window.location.href="/Koktelok/#Alkoholmentes"
+        })
+        BadgeHely.appendChild(badge)  
     }
 
     //Összetevők létrehozása
