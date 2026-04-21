@@ -2292,6 +2292,25 @@ router.get("/Koktel/SzomszedosKoktelok/:id",async (request, response)=>{
         })
     }
 })
+router.get("/Koktel/FelhasznaloAdat/:id",async(request,response)=>{
+    try {
+        const FelhAdatok="SELECT Felhasználónév,ProfilkepUtvonal,RegisztracioDatuma FROM felhasználó WHERE FelhID LIKE ?"
+        const KoktelStat="SELECT COUNT(KoktélID) AS KoktelDB FROM koktél WHERE Keszito LIKE ?"
+        let adatok=(await lekeres(FelhAdatok,request.params.id))[0]
+        let stat=(await lekeres(KoktelStat,request.params.id))[0]
+        response.status(200).json({
+            message:"Siker!",
+            adat:adatok,
+            statisztika:stat
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message:"Hiba!"
+        })
+    }
+})
 //
 //
 //
