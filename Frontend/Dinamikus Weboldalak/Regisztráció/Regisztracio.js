@@ -61,7 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
             var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
             modalElement.show();
 
-            document.getElementById('modalText').innerText = 'A meg adott tartalmak nem egyeznek a kritériumoknak!';
+            document.getElementById('modalText').innerText =
+                'A kritériumoknak nem felelnek meg az általad megadott tartalmak!';
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
