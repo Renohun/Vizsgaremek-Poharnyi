@@ -35,11 +35,12 @@ form.addEventListener("submit",async(e)=>{
     let siker = document.getElementById("siker")
 
 
-if (!name.value || !email.value || !subject.value || !message.value) 
+if (name.value == "" || email.value == ""|| subject.value== "" || message.value== "") 
 {
     siker.setAttribute("hidden",true)
     hiba.style.display = "block"
     hiba.innerHTML = "Kérem ne hagyjon üres mezőt!"
+    modal.show()
 }
 else if(name.value != "" || email.value != ""  || subject.value != ""  ||message.value != "" )
     {
