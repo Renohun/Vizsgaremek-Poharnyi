@@ -129,14 +129,14 @@ display: flex;
 @media (min-width: 1900px) 
 {
     .kartya{
-    max-width: 400px;
+    max-width: 350px;
     margin-left:    0px;
     margin-right: 0px;
     padding: 0px;
     }
     .kartyaOszlop{
         gap: 0px;
-        max-width: 470px;
+        max-width: 390px;
     }
 
 }
