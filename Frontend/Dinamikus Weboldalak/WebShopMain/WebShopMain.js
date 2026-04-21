@@ -304,7 +304,10 @@ const kartyaGen = async (data, hova) => {
         for (let i = 0; i < Ertek.ert; i++) 
         {
             ertDiv.children[i].innerHTML = '★'; //a kiszámolt értékig átirjuk a csillagokat
-        }
+        } 
+        let ertszam = document.createElement("p")
+        ertszam.innerHTML = `(${Ertek.szam})`
+        ertDiv.appendChild(ertszam)
         //kateg
         let div1 = document.createElement('div');
         div1.classList.add('kulondiv');
