@@ -368,7 +368,7 @@ const AdatStorage = async () => {
     let data;
     let hiba = true;
     let egyezoMl = true;
-    
+   
     document.getElementById('hiba').innerHTML = ""
     //alap adatok kitöltésének ellenörzése
     if (document.getElementById('nev').value == '') {
@@ -498,6 +498,7 @@ const AdatStorage = async () => {
             modalHiba(true,"Nev")
             hiba = true
             egyezoMl = true
+            moda
         }  
         else
         {
@@ -524,6 +525,7 @@ const AdatStorage = async () => {
 };
 const modalHiba = (Ml,milyen)=>{
 //hibás kitöltés kezelése
+ let modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
         document.getElementById('Ujra').style.display = 'block';
         document.getElementById('vissza').style.display = 'block';
         document.getElementById('hiba').style.display = 'block';
@@ -540,9 +542,11 @@ const modalHiba = (Ml,milyen)=>{
         document.getElementById('siker').setAttribute('hidden', true);
         document.getElementById('visszaGomb').setAttribute('hidden', true);
         document.getElementById('tovabb').setAttribute('hidden', true);
+        modal.show();
         
 }
 const modalJo = ()=>{
+     let modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
     document.getElementById('Ujra').style.display = 'none';
     document.getElementById('hiba').style.display = 'none';
     document.getElementById('vissza').style.display = 'none';
@@ -550,4 +554,5 @@ const modalJo = ()=>{
      document.getElementById('siker').innerHTML = "A koktélt sikeresen feltöltötte!"
     document.getElementById('visszaGomb').removeAttribute('hidden', false);
     document.getElementById('tovabb').removeAttribute('hidden', true);
+    modal.show();
 }
