@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById("komment").addEventListener("keyup",()=>{document.getElementById("szam").innerHTML=document.getElementById("komment").value.length})
         document.getElementById("Velemeny").classList.add("shadow-sm","p-2","koktelshadow")
         if (eredmeny.adat.UgyanazE) {
-            document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
             document.getElementById("KoktJel").setAttribute("value","Koktél Törlése")
             document.getElementById("KoktJel").id="KoktDel"
             document.getElementById("KoktDel").addEventListener("click",async()=>{
@@ -21,7 +20,6 @@ document.addEventListener("DOMContentLoaded",async()=>{
             await szerkesztes()
         }
         else{
-            document.getElementById("FelhJel").addEventListener("click",()=>{jelentes(eredmeny.adat.FelhID,"Felhasználó",eredmeny.adat.FelhID)})
             document.getElementById("KoktJel").addEventListener("click",()=>{jelentes(eredmeny.adat.KoktélID,"Koktél",eredmeny.adat.FelhID)})
             await kedveles()
         }
@@ -30,7 +28,6 @@ document.addEventListener("DOMContentLoaded",async()=>{
         //Átalakítjuk a komment felületet egy tájékoztató szövegre
         document.getElementById("Velemeny").innerHTML="Komment írásához és a Koktél Értékeléséhez lépj be!"
         //Leromboljuk a jelentési gombokat, visszaélés elkerülése érdekében
-        document.getElementById("maker").removeChild(document.getElementById("FelhJel"))
         document.getElementById("ChangeSor").removeChild(document.getElementById("KoktJel"))
         document.getElementById("Cimsor").classList.remove("ps-4")
     }
@@ -100,25 +97,17 @@ async function statikusadatok(adatok)
         switch (adat.JelvenyKategoria) {
             case "ízek":
                 badge.classList.add("bg-success")
-                badge.addEventListener("click",()=>{
-                    window.location.href="/Koktelok/#"+adat.JelvényNeve
-                })
             break; 
             case "Allergének":
                 badge.classList.add("bg-warning")
-                badge.addEventListener("click",()=>{
-                    window.location.href="/Koktelok/#"+adat.JelvényNeve
-                })
             break; 
             case "Erősség":
                 badge.classList.add("bg-danger")
-                badge.addEventListener("click",()=>{
-                    window.location.href="/Koktelok/#"+adat.JelvényNeve
-                })
             break;
         }
-        console.log(koktélAdat);
-        
+        badge.addEventListener("click",()=>{
+            window.location.href=`/Koktelok/#${adat.JelvényNeve}`
+        })
         //Majd hozzáadjuk a badge divhez
         BadgeHely.appendChild(badge)
     }
@@ -168,15 +157,30 @@ async function statikusadatok(adatok)
     document.getElementById("recept").innerHTML=koktélAdat.Recept
     MennyisegHely.value=koktélAdat.AlapMennyiseg 
 
+    console.log(koktélAdat.UgyanazE);
+    console.log(adatok.belepette);
+    
+    
     document.getElementById("keszKep").addEventListener("click",async()=>{
-        let adatok=await AdatLekeres("/api/Koktel/FelhasznaloAdat/"+koktélAdat.FelhID)
-        console.log(adatok);
-        let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+adatok.adat.ProfilkepUtvonal)
-        document.getElementById("ProfilCim").innerHTML=`${adatok.adat.Felhasználónév} Adatai:`
+        let FelhAdatok=await AdatLekeres("/api/Koktel/FelhasznaloAdat/"+koktélAdat.FelhID)
+        let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+FelhAdatok.adat.ProfilkepUtvonal)
+        document.getElementById("ProfilCim").innerHTML=`${FelhAdatok.adat.Felhasználónév} Adatai:`
         document.getElementById("profkep").setAttribute("src",URL.createObjectURL(kep))
-        document.getElementById("RegDate").innerHTML=`Regisztráció dátuma: `+((adatok.adat.RegisztracioDatuma).split("T"))[0]
-        document.getElementById("Nev").innerHTML=`Felhasználónév: `+adatok.adat.Felhasználónév
-        document.getElementById("KeszitNum").innerHTML=`Készített koktélok: `+adatok.statisztika.KoktelDB
+        document.getElementById("RegDate").innerHTML=`Regisztráció dátuma: `+((FelhAdatok.adat.RegisztracioDatuma).split("T"))[0]
+        document.getElementById("Nev").innerHTML=`Felhasználónév: `+FelhAdatok.adat.Felhasználónév
+        document.getElementById("KeszitNum").innerHTML=`Készített koktélok: `+FelhAdatok.statisztika.KoktelDB
+        if (adatok.belepette==true&&koktélAdat.UgyanazE!=true) {
+                let jelentesGomb=document.createElement("input")
+                jelentesGomb.setAttribute("type","button")
+                jelentesGomb.setAttribute("value","Felhasználó Jelentése")
+                jelentesGomb.classList.add("btn","btn-danger","border-0","w-100")
+                document.getElementById("ReportGomb").innerHTML=""
+                document.getElementById("ReportGomb").appendChild(jelentesGomb)
+                jelentesGomb.addEventListener("click",()=>{
+                    jelentes(koktélAdat[i].FelhID,"Felhasználó",koktélAdat[i].FelhID)
+                    JelIv.hide()
+                })
+        }
         var JelIv = new bootstrap.Modal(document.getElementById('ProfilAdat'), {})   
         //és megmutatása
         JelIv.show()
@@ -209,7 +213,6 @@ async function kommentek() {
             KommentekHelye.classList.add("p-2")
         }
     }
-            
     KommentekHelye.innerHTML=""
     for (let i = kommentek.length-1; i > -1 ; i--) {
         //elemek létrehozása
@@ -223,14 +226,29 @@ async function kommentek() {
         KommenteloKep.classList.add("profilkep","col-1","col-sm-1","col-md-1","col-lg-1","col-xl-1")
 
         KommenteloKep.addEventListener("click",async()=>{
-            let adatok=await AdatLekeres("/api/Koktel/FelhasznaloAdat/"+kommentek[i].Keszito)
-            console.log(adatok);
-            let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+adatok.adat.ProfilkepUtvonal)
-            document.getElementById("ProfilCim").innerHTML=`${adatok.adat.Felhasználónév} Adatai:`
+            let Kommadatok=await AdatLekeres("/api/Koktel/FelhasznaloAdat/"+kommentek[i].Keszito)
+            let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+Kommadatok.adat.ProfilkepUtvonal)
+
+            document.getElementById("ProfilCim").innerHTML=`${Kommadatok.adat.Felhasználónév} Adatai:`
             document.getElementById("profkep").setAttribute("src",URL.createObjectURL(kep))
-            document.getElementById("RegDate").innerHTML=`Regisztráció dátuma: `+((adatok.adat.RegisztracioDatuma).split("T"))[0]
-            document.getElementById("Nev").innerHTML=`Felhasználónév: `+adatok.adat.Felhasználónév
-            document.getElementById("KeszitNum").innerHTML=`Készített koktélok: `+adatok.statisztika.KoktelDB
+            document.getElementById("RegDate").innerHTML=`Regisztráció dátuma: `+((Kommadatok.adat.RegisztracioDatuma).split("T"))[0]
+            document.getElementById("Nev").innerHTML=`Felhasználónév: `+Kommadatok.adat.Felhasználónév
+            document.getElementById("KeszitNum").innerHTML=`Készített koktélok: `+Kommadatok.statisztika.KoktelDB
+            
+            if (adatok.belepette==true&&(adatok.adat.FelhID!=kommentek[i].Keszito)==true) {
+                
+                let jelentesGomb=document.createElement("input")
+                jelentesGomb.setAttribute("type","button")
+                jelentesGomb.setAttribute("value","Felhasználó Jelentése")
+                jelentesGomb.classList.add("btn","btn-danger","border-0","w-100")
+                document.getElementById("ReportGomb").innerHTML=""
+                document.getElementById("ReportGomb").appendChild(jelentesGomb)
+                jelentesGomb.addEventListener("click",()=>{
+                    jelentes(kommentek[i].Keszito,"Felhasználó",kommentek[i].Keszito)
+                    JelIv.hide()
+                })
+            }
+
             var JelIv = new bootstrap.Modal(document.getElementById('ProfilAdat'), {})   
             //és megmutatása
             JelIv.show()
@@ -526,7 +544,6 @@ function csillagsetup(meddig){
         csillagok[i].setAttribute("value","☆")
     }
 }
-
 async function szerkesztes() {
     const eredmeny=await AdatLekeres(`/api/Koktel/${koktel}`)
     let szerk=document.createElement("input")
@@ -656,8 +673,6 @@ async function szerkesztes() {
     })
     document.getElementById("fav").appendChild(szerk)
 }
-
-
 async function osszetevo(adat)
 {
     let osszetevoLista=document.getElementById("Ossztev")
