@@ -122,7 +122,7 @@ async function statikusadatok(adatok)
         //Majd hozzáadjuk a badge divhez
         BadgeHely.appendChild(badge)
     }
-    if (koktélAdat.Alkoholos==1) {
+    if (koktélAdat.Alkoholos==0) {
         let badge=document.createElement("span")
         badge.innerHTML="Alkoholmentes"
         badge.classList.add("badge","ms-1","mentes")
