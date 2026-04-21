@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log(response);
 
     if (response.message == false) {
-        navBarDropDown.removeChild(1);
+        navBarDropDown.removeChild(navBarDropDown.children(1));
     }
     //console.log(value.message);
     //Ha be van jelentkezve
