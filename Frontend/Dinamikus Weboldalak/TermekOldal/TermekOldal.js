@@ -441,7 +441,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     var adat = document.getElementById('Tbtn');
     let tovGomb = document.getElementById("tovabb")
     tovGomb.addEventListener("click",()=>{
-        window.location.href = "/Adatlap"
+        window.location.href = "/Adatlap#Kosar"
     })
     //mennyiség maximalizálása
     adat.addEventListener('click', function () {
