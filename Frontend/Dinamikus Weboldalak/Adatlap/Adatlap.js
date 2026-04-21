@@ -647,7 +647,7 @@ function fioktorles(){
         //Ellenben ha jól írta be
         else{
             //Kitöröljük a fiókját
-            AdatPost("/api/AdatlapLekeres/Fioktorles",null,"DELETE")
+            await AdatPost("/api/AdatlapLekeres/Fioktorles",null,"DELETE")
             //Kidobjuk a főoldalra
             window.location.reload()
         } 

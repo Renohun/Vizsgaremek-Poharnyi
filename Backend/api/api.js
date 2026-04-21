@@ -71,7 +71,6 @@ router.post('/sutiJelenlete', (req, res) => {
         res.status(200).json({ message: true });
     }
 });
-
 router.post('/jogosultsagEll', async (req, res) => {
     try {
         if (req.cookies.auth_token != null) {
@@ -79,7 +78,6 @@ router.post('/jogosultsagEll', async (req, res) => {
             const query = 'SELECT Admin FROM felhasználó WHERE FelhID LIKE ?';
 
             const [rows] = await DBconnetion.promise().query(query, [payload.userID]);
-
             if (rows[0].Admin == 0) {
                 res.status(200).json({ message: false });
             } else {
@@ -1773,6 +1771,8 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         const KoktelLekeres = 'SELECT KoktélID FROM koktél WHERE Keszito LIKE ?';
         const JelvenyTorles = 'DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?';
         const KommentTorlesKoktel = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+        const KommentErtekelesLekeres="SELECT KommentID,Pozitiv,Negativ FROM kommentertekeles WHERE FelhID LIKE ?"
+        const KommentErtekelesTorles="DELETE FROM kommentertekeles WHERE FelhID LIKE ?"
         const KommentTorles = 'DELETE FROM komment WHERE Keszito LIKE ?';
         const JelentesTorles = 'DELETE FROM jelentesek WHERE JelentettID LIKE ?';
         const JelentesLekeres = 'SELECT JelentesID FROM jelentesek WHERE JelentettID LIKE ?';
@@ -1787,7 +1787,20 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         await lekeres(JelentoTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
         await lekeres(KedvencTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
         await lekeres(KosarTermekTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
-
+        
+        let ertekelesek=await lekeres(KommentErtekelesLekeres,jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID)
+        for (let i = 0; i < ertekelesek.length; i++) {
+            console.log(ertekelesek[i].Negativ);
+            console.log(ertekelesek[i].Pozitiv);
+            if (ertekelesek[i].Pozitiv==1) {
+                await lekeres("UPDATE komment SET Pozitiv=Pozitiv-1 WHERE KommentID LIKE ?",ertekelesek[i].KommentID)
+            }            
+            if (ertekelesek[i].Negativ==1) {
+                
+                await lekeres("UPDATE komment SET Negativ=Negativ-1 WHERE KommentID LIKE ?",ertekelesek[i].KommentID)
+            }
+        }
+        await lekeres(KommentErtekelesTorles,jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID)
         let koktel = await lekeres(
             KoktelLekeres,
             jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
@@ -1809,6 +1822,11 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         }
         await lekeres(JelentesTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
         await lekeres(FelhasznaloTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
+        response.clearCookie('auth_token');
+        response.clearCookie('auth_token_access');
+        response.status(200).json({
+            message:"Siker!"
+        })
     } catch (error) {
         console.log(error);
 
