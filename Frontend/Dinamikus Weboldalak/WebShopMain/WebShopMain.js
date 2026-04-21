@@ -635,7 +635,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     let kosarGomb = document.getElementById("tovabb")
     kosarGomb.addEventListener("click",()=>{
-        window.location.href = "/Adatlap"
+        window.location.href = `/Adatlap#Kosar`
     })
 });
 const modalHiba = (hiba)=>{
