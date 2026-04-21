@@ -127,10 +127,12 @@ display: flex;
 .ertDiv{
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 .ErtP{
-    min-width: 30px;
-    min-height: 30px;
+    min-width: 10px;
+    min-height: 10px;
+    font-size: x-large;
 }
 
 .kartya:has(.kartyakep:hover){
