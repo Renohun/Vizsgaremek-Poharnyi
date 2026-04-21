@@ -34,14 +34,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const value = await POSTreq('/api/sutiJelenlete');
     const response = await POSTreq('/api/jogosultsagEll');
     console.log(document.getElementById('adminPanelHref'));
+    const navBarDropDown = document.getElementById('navBarDropDown');
     console.log(response);
 
     if (response.message == false) {
-        document.getElementById('adminPanelHref').setAttribute('hidden', '');
-    } else {
-        document.getElementById('adminPanelHref').removeAttribute('hidden');
+        navBarDropDown.removeChild(1);
     }
-
     //console.log(value.message);
     //Ha be van jelentkezve
     if (value.message) {
