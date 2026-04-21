@@ -100,12 +100,21 @@ async function statikusadatok(adatok)
         switch (adat.JelvenyKategoria) {
             case "ízek":
                 badge.classList.add("bg-success")
+                badge.addEventListener("click",()=>{
+                    window.location.href="/Koktelok/#"+adat.JelvényNeve
+                })
             break; 
             case "Allergének":
                 badge.classList.add("bg-warning")
+                badge.addEventListener("click",()=>{
+                    window.location.href="/Koktelok/#"+adat.JelvényNeve
+                })
             break; 
             case "Erősség":
                 badge.classList.add("bg-danger")
+                badge.addEventListener("click",()=>{
+                    window.location.href="/Koktelok/#"+adat.JelvényNeve
+                })
             break;
         }
         //Majd hozzáadjuk a badge divhez
@@ -154,7 +163,7 @@ async function statikusadatok(adatok)
         let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+adatok.adat.ProfilkepUtvonal)
         document.getElementById("ProfilCim").innerHTML=`${adatok.adat.Felhasználónév} Adatai:`
         document.getElementById("profkep").setAttribute("src",URL.createObjectURL(kep))
-        document.getElementById("RegDate").innerHTML=`Regisztráció Dátuma: `+((adatok.adat.RegisztracioDatuma).split("T"))[0]
+        document.getElementById("RegDate").innerHTML=`Regisztráció dátuma: `+((adatok.adat.RegisztracioDatuma).split("T"))[0]
         document.getElementById("Nev").innerHTML=`Felhasználónév: `+adatok.adat.Felhasználónév
         document.getElementById("KeszitNum").innerHTML=`Készített koktélok: `+adatok.statisztika.KoktelDB
         var JelIv = new bootstrap.Modal(document.getElementById('ProfilAdat'), {})   
@@ -208,7 +217,7 @@ async function kommentek() {
             let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+adatok.adat.ProfilkepUtvonal)
             document.getElementById("ProfilCim").innerHTML=`${adatok.adat.Felhasználónév} Adatai:`
             document.getElementById("profkep").setAttribute("src",URL.createObjectURL(kep))
-            document.getElementById("RegDate").innerHTML=`Regisztráció Dátuma: `+((adatok.adat.RegisztracioDatuma).split("T"))[0]
+            document.getElementById("RegDate").innerHTML=`Regisztráció dátuma: `+((adatok.adat.RegisztracioDatuma).split("T"))[0]
             document.getElementById("Nev").innerHTML=`Felhasználónév: `+adatok.adat.Felhasználónév
             document.getElementById("KeszitNum").innerHTML=`Készített koktélok: `+adatok.statisztika.KoktelDB
             var JelIv = new bootstrap.Modal(document.getElementById('ProfilAdat'), {})   
