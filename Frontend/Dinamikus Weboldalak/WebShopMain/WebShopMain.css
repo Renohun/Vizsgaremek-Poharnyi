@@ -115,7 +115,13 @@ display: flex;
 }
 /*kártyák*/
 .kartya{
-    height: 100%    ;
+    height: 100%;
+    width: 100% !important;
+}
+#kartyak{
+    width: 76%;
+    margin: auto;
+    display: flex;
 }
 /*értékelés*/
 .ertDiv{
@@ -126,20 +132,7 @@ display: flex;
     min-width: 30px;
     min-height: 30px;
 }
-@media (min-width: 1900px) 
-{
-    .kartya{
-    max-width: 350px;
-    margin-left:    0px;
-    margin-right: 0px;
-    padding: 0px;
-    }
-    .kartyaOszlop{
-        gap: 0px;
-        max-width: 390px;
-    }
 
-}
 .kartya:has(.kartyakep:hover){
     border: rgb(48, 48, 48) 2px solid;
 }
@@ -226,7 +219,7 @@ display: flex;
     }
 
     .kartya {
-        width: 90%;
+        width: 100%;
         margin: auto;
     }
 
