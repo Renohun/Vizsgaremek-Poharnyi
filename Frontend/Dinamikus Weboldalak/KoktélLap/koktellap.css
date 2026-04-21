@@ -20,19 +20,15 @@
     height: 40px;
     border-radius: 20px;
     margin-right: 4px;
+    cursor: pointer;
+}
+.badge{
+    cursor: pointer;
 }
 
-.asd{
+.mentes{
+    background-color: rgb(6, 139, 201);
     color: white;
-    background-color: rgb(12, 64, 12);
-
-    color: white;
-    background-color: rgb(60, 55, 55);
-
-
-    background-color: rgb(12, 64, 12);
-    background-color: rgb(60, 55, 55);
-
 }
 
 .Onev,.Omer,.Oopc{

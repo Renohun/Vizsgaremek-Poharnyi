@@ -1854,7 +1854,7 @@ router.post('/AdatlapLekeres/Fizetes', authenticationMiddleware, async (request,
 //
 router.get('/Koktel/:id', async (request, response) => {
     const KoktelLekeres =
-        'SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg,ProfilkepUtvonal,BoritoKepUtvonal FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?';
+        'SELECT Felhasználónév,RegisztracioDatuma,KeszitesDatuma,KoktelCim,Alap,Recept,KoktélID,FelhID,AlapMennyiseg,ProfilkepUtvonal,BoritoKepUtvonal,Alkoholos FROM koktél INNER JOIN felhasználó ON koktél.Keszito=felhasználó.FelhID WHERE KoktélID LIKE ?';
     const TiltottKomment =
         'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?';
     const KommentLekeres =
@@ -1955,6 +1955,31 @@ router.get('/Koktel/:id', async (request, response) => {
         response.status(500).json({
             message: 'Hiba!'
         });
+    }
+});
+router.patch("/Koktel/KoktelModositas/:id", async (request, response)=>{
+    try {
+        const koktelChange="UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=? WHERE KoktélID LIKE ?"
+        const OsszetevoCleanse="DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+        const UjOsszetevo="INSERT INTO koktelokosszetevoi (KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)"
+        await lekeres(koktelChange,[request.body.Cim,request.body.Recept,request.body.Mennyiseg,request.params.id])
+        await lekeres(OsszetevoCleanse,[request.params.id])
+        for (let i = 0; i < request.body.Osszetevok.length; i++) {
+            let osszetevo=request.body.Osszetevok[i]
+            await lekeres(UjOsszetevo,[request.params.id,osszetevo[0],osszetevo[1],osszetevo[2]])
+            
+        }
+        response.status(200).json({
+            message:"Siker"
+        })
+        
+    } 
+    catch (error) {
+        console.log(error);
+        
+        response.status(500).json({
+            message:"Hiba!"
+        })
     }
 });
 router.post('/Koktel/SendErtekeles', authenticationMiddleware, async (request, response) => {
@@ -2262,6 +2287,25 @@ router.get("/Koktel/SzomszedosKoktelok/:id",async (request, response)=>{
         })
     } 
     catch (error) {
+        response.status(500).json({
+            message:"Hiba!"
+        })
+    }
+})
+router.get("/Koktel/FelhasznaloAdat/:id",async(request,response)=>{
+    try {
+        const FelhAdatok="SELECT Felhasználónév,ProfilkepUtvonal,RegisztracioDatuma FROM felhasználó WHERE FelhID LIKE ?"
+        const KoktelStat="SELECT COUNT(KoktélID) AS KoktelDB FROM koktél WHERE Keszito LIKE ?"
+        let adatok=(await lekeres(FelhAdatok,request.params.id))[0]
+        let stat=(await lekeres(KoktelStat,request.params.id))[0]
+        response.status(200).json({
+            message:"Siker!",
+            adat:adatok,
+            statisztika:stat
+        })
+    } 
+    catch (error) {
+        console.log(error);
         response.status(500).json({
             message:"Hiba!"
         })
@@ -2628,7 +2672,9 @@ router.get('/Termek/HasonloTermekErtekeles/:id', async (request, response) => {
         const query =
             "SELECT AVG(Ertekeles) AS 'atlag' FROM ertekeles WHERE HovaIrták = ? AND MilyenDologhoz = 'Termék'";
         const [Ertekeles] = await DBconnetion.promise().query(query, [id]);
-        let atlag = Math.round(Ertekeles[0].atlag);
+     
+        let atlag = Math.round(Ertekeles[0].atlag)
+           
         response.status(200).json({ ert: atlag });
     } catch (error) {
         console.log(error);
@@ -2943,7 +2989,9 @@ router.get('/WebShop/TermekErtekeles/:id', async (request, response) => {
             "SELECT AVG(Ertekeles) AS 'atlag' FROM ertekeles WHERE HovaIrták = ? AND MilyenDologhoz = 'Termék'";
         const [Ertekeles] = await DBconnetion.promise().query(query, [id]);
         let atlag = Math.round(Ertekeles[0].atlag);
-        response.status(200).json({ ert: atlag });
+          let Kerekitetlenatlag = Math.round(Ertekeles[0].atlag*10)/10;
+        response.status(200).json({ ert: atlag,
+                                    szam: Kerekitetlenatlag });
     } catch (error) {
         console.log(error);
         response.status(500).json({ hiba: error });

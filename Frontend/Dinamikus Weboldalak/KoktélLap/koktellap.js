@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
     await kommentek(eredmeny,bevanelepve)
     await erteksetup()
+
 })
 
 const AdatLekeres=async(url)=>{
@@ -99,16 +100,36 @@ async function statikusadatok(adatok)
         switch (adat.JelvenyKategoria) {
             case "ízek":
                 badge.classList.add("bg-success")
+                badge.addEventListener("click",()=>{
+                    window.location.href="/Koktelok/#"+adat.JelvényNeve
+                })
             break; 
             case "Allergének":
                 badge.classList.add("bg-warning")
+                badge.addEventListener("click",()=>{
+                    window.location.href="/Koktelok/#"+adat.JelvényNeve
+                })
             break; 
             case "Erősség":
                 badge.classList.add("bg-danger")
+                badge.addEventListener("click",()=>{
+                    window.location.href="/Koktelok/#"+adat.JelvényNeve
+                })
             break;
         }
+        console.log(koktélAdat);
+        
         //Majd hozzáadjuk a badge divhez
         BadgeHely.appendChild(badge)
+    }
+    if (koktélAdat.Alkoholos==1) {
+        let badge=document.createElement("span")
+        badge.innerHTML="Alkoholmentes"
+        badge.classList.add("badge","ms-1","mentes")
+        badge.addEventListener("click",()=>{
+            window.location.href="/Koktelok/#Alkoholmentes"
+        })
+        BadgeHely.appendChild(badge)  
     }
 
     //Összetevők létrehozása
@@ -146,6 +167,21 @@ async function statikusadatok(adatok)
     document.getElementById("kokteldate").innerHTML="Készült: "+koktélAdat.KeszitesDatuma.split('T')[0]
     document.getElementById("recept").innerHTML=koktélAdat.Recept
     MennyisegHely.value=koktélAdat.AlapMennyiseg 
+
+    document.getElementById("keszKep").addEventListener("click",async()=>{
+        let adatok=await AdatLekeres("/api/Koktel/FelhasznaloAdat/"+koktélAdat.FelhID)
+        console.log(adatok);
+        let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+adatok.adat.ProfilkepUtvonal)
+        document.getElementById("ProfilCim").innerHTML=`${adatok.adat.Felhasználónév} Adatai:`
+        document.getElementById("profkep").setAttribute("src",URL.createObjectURL(kep))
+        document.getElementById("RegDate").innerHTML=`Regisztráció dátuma: `+((adatok.adat.RegisztracioDatuma).split("T"))[0]
+        document.getElementById("Nev").innerHTML=`Felhasználónév: `+adatok.adat.Felhasználónév
+        document.getElementById("KeszitNum").innerHTML=`Készített koktélok: `+adatok.statisztika.KoktelDB
+        var JelIv = new bootstrap.Modal(document.getElementById('ProfilAdat'), {})   
+        //és megmutatása
+        JelIv.show()
+    })
+
 
     return adatok.belepette
 
@@ -185,7 +221,23 @@ async function kommentek() {
         let KommenteloKep=document.createElement("img")
         KommenteloKep.setAttribute("src",URL.createObjectURL(kep))
         KommenteloKep.classList.add("profilkep","col-1","col-sm-1","col-md-1","col-lg-1","col-xl-1")
-        
+
+        KommenteloKep.addEventListener("click",async()=>{
+            let adatok=await AdatLekeres("/api/Koktel/FelhasznaloAdat/"+kommentek[i].Keszito)
+            console.log(adatok);
+            let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+adatok.adat.ProfilkepUtvonal)
+            document.getElementById("ProfilCim").innerHTML=`${adatok.adat.Felhasználónév} Adatai:`
+            document.getElementById("profkep").setAttribute("src",URL.createObjectURL(kep))
+            document.getElementById("RegDate").innerHTML=`Regisztráció dátuma: `+((adatok.adat.RegisztracioDatuma).split("T"))[0]
+            document.getElementById("Nev").innerHTML=`Felhasználónév: `+adatok.adat.Felhasználónév
+            document.getElementById("KeszitNum").innerHTML=`Készített koktélok: `+adatok.statisztika.KoktelDB
+            var JelIv = new bootstrap.Modal(document.getElementById('ProfilAdat'), {})   
+            //és megmutatása
+            JelIv.show()
+        })
+
+
+
         //Hozzáadás a headerhez és alsó margin megadás
         let KommentHeader=document.createElement("div")
         KommentHeader.classList.add("mb-1","d-flex","w-100")
@@ -427,6 +479,9 @@ async function erteksetup() {
 
     if (eredmeny.adat.UgyanazE) {
         document.getElementById("ertekeles").innerHTML=""
+    }
+    else if(eredmeny.belepette==false){
+        
     }
     else{
         let csillagok=document.getElementById("csillagok").children
@@ -684,3 +739,4 @@ async function osszetevo(adat)
 
     return opcioDiv
 }
+
