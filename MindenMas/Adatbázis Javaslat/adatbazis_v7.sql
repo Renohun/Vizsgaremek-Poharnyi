@@ -5,7 +5,7 @@ CREATE TABLE Felhasználó(
 	Jelszó TEXT NOT NULL,
 	JelszóHossza INT NOT NULL,
 	ProfilkepUtvonal TEXT DEFAULT("whatever.png"),
-	RegisztracioDatuma DATE DEFAULT NOW(),
+	RegisztracioDatuma DATETIME DEFAULT NOW(),
 	Admin BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -41,6 +41,8 @@ CREATE TABLE Komment(
 	HovaIrták INT NOT NULL,
 	MilyenDologhoz TEXT NOT NULL,
 	Tartalom TEXT NOT NULL,
+	Pozitiv INT DEFAULT 0,
+	Negativ INT DEFAULT 0,
     FOREIGN KEY(Keszito) REFERENCES Felhasználó(FelhID)
 );
 
