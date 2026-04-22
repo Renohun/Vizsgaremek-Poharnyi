@@ -133,8 +133,15 @@ router.get('/PolcKoktel', (req, res) => {
 router.get('/KuldjUzenetet', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/ContactForm/contactform.html'));
 });
+
+router.get("/dev",authenticationMiddleware,authorizationMiddelware, (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/UnitTest/testing.html'));
+});
+
 //!API endpoints
 app.use('/', router);
+const testing=require("./api/testing.js")
+app.use("/test",testing)
 const endpoints = require('./api/api.js');
 app.use('/api', endpoints);
 
