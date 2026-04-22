@@ -132,8 +132,7 @@ let AdatMégse=document.createElement("input")
 async function AdatlapLekeres(){
     //Adatok Lekérése
     const valasz=await AdatGet("/api/AdatlapLekeres/FelhAdatok/")
-    console.log(valasz);
-    
+
     const kep=await AdatGetKep("/api/AdatlapLekeres/KepLekeres/"+valasz.tartalom.adat.ProfilkepUtvonal)
     //A Felhasználó Azon Adatai, amelyeket tud majd módosítani betöltése
     let ertek=valasz.tartalom.adat;
@@ -259,18 +258,15 @@ async function AdatlapLekeres(){
                     const data=new FormData()
                     //A Kép Eltárolása. Visszakapjuk a kép új nevét, amit továbbadunk az adatbázisnak   
                     if(titkos.files.length!=0){
-                        console.log(titkos.files[0].type);
-                        
+
                         if (titkos.files[0].type!="image/jpeg"&&titkos.files[0].type!="image/png"&&titkos.files[0].type!="image/bmp"&&titkos.files[0].type!="image/webp") {
                             hiba+="\t A megadott fájl nem felel meg a követelményeknek!"
                         }
                         else{
-                            console.log(titkos.files[0]);
-                            
+
                             data.append("profilkep",titkos.files[0])
                             const kepUtvonal=(await AdatPostKep("/api/AdatlapLekeres/KepFeltoltes",data)).message
-                            console.log(kepUtvonal);
-                            
+
                             FelhAdatok.KépÚtvonal=kepUtvonal
                         }
                     }
@@ -493,8 +489,7 @@ async function KosarLekeres() {
     //Ez a változó jelöli a tényleges kártyák számát
     let valodi=0
     hova.innerHTML=""
-    console.log(valasz);
-    
+
     if (valasz.message=="Üres Kosár") {
         document.getElementById("KosarAllapot").innerHTML="Üres A Kosarad!"
         kosárGombok.innerHTML=""
@@ -533,8 +528,6 @@ async function KosarLekeres() {
                 kosárDbMod.setAttribute("max",valasz.adat[i].termAdatok.TermekKeszlet)
                 kosárDbMod.setAttribute("value",mennyiseg.innerHTML)
                 kosárDbMod.addEventListener("change",()=>{
-                    console.log(parseInt(kosárDbMod.value)>parseInt(valasz.adat[i].termAdatok.TermekKeszlet));
-                    
                     if (parseInt(kosárDbMod.value)>parseInt(valasz.adat[i].termAdatok.TermekKeszlet)) {
                         kosárDbMod.value=valasz.adat[i].termAdatok.TermekKeszlet
                     }
@@ -566,8 +559,6 @@ async function KosarLekeres() {
                         mennyiseg.innerHTML=ujMennyiseg
                         await AdatPost("/api/AdatlapLekeres/TermekFrissites",{termék:valasz.adat[i].kosarAdatok.TermekID,count:ujMennyiseg},"PATCH")
                     }
-                    console.log(hova.children[i].children[0].children[3]);
-                    
                     hova.children[i].children[0].removeChild(hova.children[i].children[0].children[3])
                 }
                 osszeg()
@@ -1156,8 +1147,9 @@ async function kosarextrak(dolog,adat){
 
     //
     let termekEgysegar=document.createElement("div")
-    if (adat.kosarAdatok.TermekDiscount!=null) {
-        termekEgysegar.innerHTML="Egységár: "+adat.kosarAdatok.EgysegAr*(100-adatok.kosarAdatok.EgysegAr)/100+"/db"
+
+    if (adat.termAdatok.TermekDiscount!=null) {
+        termekEgysegar.innerHTML="Egységár: "+adat.kosarAdatok.EgysegAr*(100-adat.termAdatok.TermekDiscount)/100+"/db"
     }
     else{
         termekEgysegar.innerHTML="Egységár: "+adat.kosarAdatok.EgysegAr+"/db"

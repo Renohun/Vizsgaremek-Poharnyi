@@ -1554,7 +1554,7 @@ router.get('/AdatlapLekeres/Kosar/', authenticationMiddleware, async (request, r
     //Lekérések
     let KosarTermekLekeres = 'SELECT TermekID,Darabszam,EgysegAr FROM kosártermék WHERE KosarID LIKE ?';
     let TermekLekeres =
-        'SELECT TermekCim,TermekLeiras,TermekKepUtvonal,TermekKeszlet FROM webshoptermek WHERE TermekID LIKE ?';
+        'SELECT TermekCim,TermekLeiras,TermekKepUtvonal,TermekKeszlet,TermekDiscount FROM webshoptermek WHERE TermekID LIKE ?';
     let TermekErtekelesLekeres =
         'SELECT AVG(ertekeles) AS Osszert FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE "Termék"';
     //Adattárolók
