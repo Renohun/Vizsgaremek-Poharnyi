@@ -687,7 +687,7 @@ async function osszetevo(adat)
     
     let osszetevoMennyiseg=document.createElement("input")
     osszetevoMennyiseg.setAttribute("type","number")
-    osszetevoMennyiseg.classList.add("col-4","col-sm-2","Omer")
+    osszetevoMennyiseg.classList.add("col-2","col-sm-2","Omer")
 
     
     let mertekegysegek=document.createElement("select")
