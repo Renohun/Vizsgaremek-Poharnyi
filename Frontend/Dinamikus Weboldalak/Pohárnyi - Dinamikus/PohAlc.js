@@ -43,7 +43,7 @@ async function PATCHfetch(url) {
             throw new Error('Hiba tortent a POST fetchnel');
         }
     } catch (err) {
-        throw new Error(err);
+        console.error(err);
     }
 }
 
@@ -56,7 +56,7 @@ async function GETKepLekeres(url) {
         if (ertek.ok) {
             return ertek.blob();
         } else {
-            console.log('hiba');
+            throw new Error('Hiba');
         }
     } catch (error) {
         console.error(error);
@@ -71,7 +71,7 @@ async function atvitelKoktelra() {
 
 function koktelRendereles(koktelok) {
     const DOMsor = document.getElementById('koktelSor');
-    console.log(koktelok.koktelokAdat);
+    //console.log(koktelok.koktelokAdat);
     DOMsor.innerHTML = '';
     koktelok.koktelokAdat.forEach((koktel) => {
         if (koktel != null) {
@@ -191,7 +191,7 @@ function koktelRendereles(koktelok) {
         }
     });
     let oszlopokSzama = 0;
-    console.log(koktelok.koktelokAdat.length);
+    //console.log(koktelok.koktelokAdat.length);
 
     for (let i = 0; i < koktelok.koktelokAdat.length; i++) {
         if (koktelok.koktelokAdat[i] != null) {
@@ -199,7 +199,7 @@ function koktelRendereles(koktelok) {
         }
     }
 
-    console.log(oszlopokSzama);
+    //console.log(oszlopokSzama);
 
     while (oszlopokSzama % 4 != 0) {
         let ujOszlop = document.createElement('div');
@@ -214,15 +214,15 @@ function koktelRendereles(koktelok) {
 //Masik: ez parameterul kapja az elozo function visszateresi erteket - ami a szurt kokteleok lesznek - majd ez alapjan fogja oket rendeleni, de ezzel mar nem lesz gond
 //Hetvege a hataridom, addigra illene vegeznem, nem kene ezt mar tovabb huznom
 
-document.addEventListener('DOMContentLoaded', () => {
-    (async () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await (async () => {
         //Jelvenyek avagy rendezesek lekerese
         const jelvenyek = await GETfetch('/api/Koktelok/Jelvenyek');
         //console.log(jelvenyek.data);
 
         document.getElementById('feelingLuckyBtn').addEventListener('click', async () => {
             const randID = await GETfetch('/api/feelingLucky');
-            console.log(randID.id.KoktélID);
+            //console.log(randID.id.KoktélID);
 
             window.location.href = `/Koktel/${randID.id.KoktélID}`;
         });
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
             erossegSelect.appendChild(optionTag);
         }
 
-        const koktelIzek = document.getElementById('Alap');
+        const koktelIzek = document.getElementById('ízek');
         for (let i = 0; i < jelvenyek.data.izek.length; i++) {
             let optionTag = document.createElement('option');
             optionTag.innerText = jelvenyek.data.izek[i].JelvényNeve;
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const OBJ = {
                 nev: document.getElementById('searchBar').value,
                 erosseg: document.getElementById('Erősség').value,
-                ize: document.getElementById('Alap').value,
+                ize: document.getElementById('ízek').value,
                 allergenek: document.getElementById('Allergének').value,
                 alkoholosE: document.getElementById('AlkoholosE').value,
                 rendezes: document.getElementById('Rendezés').value
@@ -272,6 +272,29 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(err);
         }
     });
+
+    const url = window.location.href.split('/');
+
+    let kategoria = decodeURIComponent(url[url.length - 2]);
+    let jelveny = decodeURIComponent(url[url.length - 1]);
+
+    if (kategoria.includes('#') && jelveny.includes('#')) {
+        kategoria = kategoria.slice(1);
+        jelveny = jelveny.slice(1);
+
+        if (document.getElementById(kategoria) != null) {
+            const opt = document.getElementById(kategoria).children;
+
+            let index = 0;
+            for (let i = 0; i < opt.length; i++) {
+                if (opt[i].innerText == jelveny) {
+                    index = i;
+                }
+            }
+            opt[index].setAttribute('selected', '');
+            document.getElementById('szuresInditas').click();
+        }
+    }
 
     document.getElementById('Searchbtn').addEventListener('click', async () => {
         try {
