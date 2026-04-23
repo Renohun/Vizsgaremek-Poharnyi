@@ -106,7 +106,7 @@ async function statikusadatok(adatok)
             break;
         }
         badge.addEventListener("click",()=>{
-            window.location.href=`/Koktelok/#${adat.JelvényNeve}`
+            window.location.href=`/Koktelok/#${adat.JelvenyKategoria}/#${adat.JelvényNeve}`
         })
         //Majd hozzáadjuk a badge divhez
         BadgeHely.appendChild(badge)
