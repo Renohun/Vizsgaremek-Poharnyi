@@ -15,6 +15,10 @@
     border-radius: 10px;
 }
 
+#KoktélKép{
+    width: 500px;
+}
+
 .profilkep{
     width: 40px;
     height: 40px;
@@ -22,6 +26,13 @@
     margin-right: 4px;
     cursor: pointer;
 }
+.profilkep-mid{
+    width: 150px;
+    height: 150px;
+    border-radius: 20px;
+    margin-right: 4px;
+}
+
 .badge{
     cursor: pointer;
 }

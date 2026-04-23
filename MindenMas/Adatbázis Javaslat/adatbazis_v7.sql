@@ -72,6 +72,11 @@ CREATE TABLE Kedvencek(
 	FOREIGN KEY(MitkedveltID) REFERENCES Koktél(KoktélID)
 );
 
+CREATE TABLE WebshopOrszag(
+	OrszagID INT AUTO_INCREMENT PRIMARY KEY,
+	OrszagNev TEXT
+);
+
 CREATE TABLE WebshopTermek (
 	TermekID INT AUTO_INCREMENT,
 	TermekCim VARCHAR(255)  NOT NULL,
@@ -83,13 +88,17 @@ CREATE TABLE WebshopTermek (
 	TermekKategoria TEXT NOT NULL,
 	TermekMarka TEXT NOT NULL,
 	TermekHanyanVettekMeg INT DEFAULT 0,
-	TermekSzarmazas TEXT NOT NULL,
+	TermekSzarmazas INT NOT NULL,
 	TermekAlkoholSzazalek DOUBLE NOT NULL,
 	TermekKora INT NOT NULL,
 	TermekDiscount DOUBLE,
 	Ar INT  NOT NULL,
-	PRIMARY KEY Termek (TermekID,Ar)
+	PRIMARY KEY Termek (TermekID,Ar),
+	FOREIGN KEY (TermekSzarmazas) REFERENCES WebshopOrszag(OrszagID)
 );
+
+
+
 
 CREATE TABLE KoktelokOsszetevoi(
 	KoktélID INT,

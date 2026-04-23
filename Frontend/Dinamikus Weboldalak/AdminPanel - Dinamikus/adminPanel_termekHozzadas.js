@@ -60,8 +60,18 @@ function inputFieldClear() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     //alkohol valasztas eseten jelenjenek meg a megfelelo input mezok
+
+    const response = await GETfetch('/api/AdminPanel/OrszagLista');
+
+    for (let i = 0; i < response.orszagok.length; i++) {
+        const optTag = document.createElement('option');
+        optTag.innerText = response.orszagok[i].OrszagNev;
+        optTag.setAttribute('value', response.orszagok[i].OrszagNev);
+        document.getElementById('termekSzarmazas').appendChild(optTag);
+    }
+
     const termekKategoriaSelect = document.getElementById('termekKategoria');
     termekKategoriaSelect.addEventListener('change', () => {
         const urtartalomLabel = document.getElementById('termekUrtartalomLabel');
@@ -157,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const formDiv = document.getElementsByName('termekFeltoltes')[1].children[0];
 
         let POSTobj = {};
+        POSTobj['termekSzarmazas'] = document.getElementById('termekSzarmazas').value;
         let hibasAdatok = false;
         for (let i = 0; i < formDiv.children.length; i++) {
             if (formDiv.children[i].tagName == 'TEXTAREA') {

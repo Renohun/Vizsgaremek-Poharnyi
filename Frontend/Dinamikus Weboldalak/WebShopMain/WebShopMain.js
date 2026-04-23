@@ -163,13 +163,15 @@ const SelectFeltolt = (data, Select1, Select2, Select3, Select4, Select5) => {
 
     let kategoria = [];
     let Orszag = [];
+    OrszagId = [];
     let Marka = [];
     let kiszereles = [];
     let urtartalom = [];
     for (let i = 0; i < data.data.length; i++) {
         //orszag kivalasztasa
-        if (!Orszag.includes(data.data[i].TermekSzarmazas)) {
-            Orszag.push(data.data[i].TermekSzarmazas);
+        if (!Orszag.includes(data.data[i].OrszagNev)) {
+            Orszag.push(data.data[i].OrszagNev);
+            OrszagId.push(data.data[i].TermekSzarmazas)
         }
         //Márka kivalasztasa
         if (!Marka.includes(data.data[i].TermekMarka)) {
@@ -207,7 +209,7 @@ const SelectFeltolt = (data, Select1, Select2, Select3, Select4, Select5) => {
     //orszag select feltoltese
     for (let i = 0; i < Orszag.length; i++) {
         let option = document.createElement('option');
-        option.setAttribute('value', Orszag[i]);
+        option.setAttribute('value', OrszagId[i]);
         option.innerHTML = Orszag[i];
         option.setAttribute('id', `szarmazas${i}`);
         Select1.appendChild(option);
@@ -237,6 +239,7 @@ const SelectFeltolt = (data, Select1, Select2, Select3, Select4, Select5) => {
 //
 
 const kartyaGen = async (data, hova) => {
+    console.log(data)
     for (let i = 0; i < data.data.length; i++) {
         const oszlop = document.createElement('div');
         oszlop.classList.add(
@@ -329,7 +332,7 @@ const kartyaGen = async (data, hova) => {
         div2.appendChild(szarmazas);
         let szarmazasertek = document.createElement('p');
         szarmazasertek.classList.add('kulonErtek');
-        szarmazasertek.innerHTML = data.data[i].TermekSzarmazas;
+        szarmazasertek.innerHTML = data.data[i].OrszagNev;
         div2.appendChild(szarmazasertek);
         adatDiv.appendChild(div2);
         //marka
@@ -493,6 +496,7 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
 
     if (!szurtE && !NevSzerinti) {
         const data = await TermekLekeres(`/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`);
+        KartyaHova.classList.remove("kozep")
         await kartyaGen(data, KartyaHova);
         PaginationGombok(false, hossz);
     } else if (szurtE == true && !NevSzerinti) 
@@ -509,6 +513,7 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
             img.src = "../WebShopMain/img/Szabadsag3__1_of_1_-removebg-preview.png"
             img.classList.add("img-fluid","mx-auto","uresKep")
             KartyaHova.appendChild(img)
+            KartyaHova.classList.add("kozep")
         }
         await kartyaGen(szurtdata, KartyaHova);
         PaginationGombok(true, hossz, szuresiAdatok);
