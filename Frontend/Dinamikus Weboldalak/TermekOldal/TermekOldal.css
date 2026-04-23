@@ -1,366 +1,362 @@
 /*Az oldal fő elrendezése flexbox segitsegevel*/
 #main {
-    display: flex;
-    flex-direction: row;
-    justify-self: center;
-    align-self: center;
-    align-content: center;
-    justify-content: center;
-    width: 80%;
-    margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-self: center;
+  align-self: center;
+  align-content: center;
+  justify-content: center;
+  width: 80%;
+  margin-top: 50px;
 }
 #TermekAdatok {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    width: 70%;
-    height: auto;
+  width: 70%;
+  height: auto;
 }
-#visszaWebshop{
-    color: black;
+#visszaWebshop {
+  color: black;
 }
-
 
 #MegrendelesDiv {
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(238, 238, 210);
-    width: 30%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(238, 238, 210);
+  width: 30%;
 }
 #TermekCimDiv {
-    display: flex;
+  display: flex;
 }
 #TermekCim {
-    font-weight: 400;
-    text-shadow: 5px;
+  font-weight: 400;
+  text-shadow: 5px;
 }
 #TermekAdatokMainContent {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 
-    justify-content: space-around;
+  justify-content: space-around;
 }
 #TermekKep {
-    width: 50%;
-    height: auto;
-    display: flex;
-    justify-content: center;
+  width: 50%;
+  height: auto;
+  display: flex;
+  justify-content: center;
 
-    overflow: hidden;
-    position: relative;
+  overflow: hidden;
+  position: relative;
 }
 #TermekImg {
-    width: 100%;
-
-    height: 100%;
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
 }
 #TermekLeiras {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left: 5px;
-    margin-right: 5px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 #TermekSzovegDiv {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 #Tulajdonsagok {
-    width: 100%;
-    border-top: solid rgb(207, 207, 198) 1px;
+  width: 100%;
+  border-top: solid rgb(207, 207, 198) 1px;
 }
 #ReszletesAdatok {
-    width: 100%;
-    border-top: solid rgb(207, 207, 198) 1px;
+  width: 100%;
+  border-top: solid rgb(207, 207, 198) 1px;
 }
-
 
 .TovGomb {
-    margin-top: 5px;
-    margin-bottom: 10px;
-    padding: 0;
-    width: 25%;
-    height: 25px;
-    color: rgb(31, 31, 31);
-    border: none;
-    text-align: left;
-    background-color: rgb(223, 223, 223);
-    
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding: 0;
+  width: 25%;
+  height: 25px;
+  color: rgb(31, 31, 31);
+  border: none;
+  text-align: left;
+  background-color: rgb(223, 223, 223);
 }
-.TovGomb:hover {background-color: rgb(180, 180, 180);}
+.TovGomb:hover {
+  background-color: rgb(180, 180, 180);
+}
 table,
 .lol {
-    border: 1px solid rgb(180, 180, 180);
-   
+  border: 1px solid rgb(180, 180, 180);
 }
 #Tablazat {
-    border: 1px solid rgb(165, 165, 165);
-    width: 100%;
-    background-color: rgb(255, 255, 255);
-    
+  border: 1px solid rgb(165, 165, 165);
+  width: 100%;
+  background-color: rgb(255, 255, 255);
 }
-.td1{
-    text-align: end;
+.td1 {
+  text-align: end;
 }
 #TulGomb {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-     width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
 }
 #TulContent {
-    margin-top: 30px;
-    width:  300px;
-    text-align: left;
-    position: relative;
-    right: 18px;
-    z-index: -1;
-     padding-left: 18px;
-     margin: auto;
-     justify-self: center;
-     margin: auto ;
-    width: 100%;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-     border-radius: 2px;
+  margin-top: 30px;
+  width: 300px;
+  text-align: left;
+  position: relative;
+  right: 18px;
+  z-index: -1;
+  padding-left: 18px;
+  margin: auto;
+  justify-self: center;
+  margin: auto;
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  border-radius: 2px;
 }
 /*HasonloTermekek*/
-#hasonloTermekek{
-    width: 100%;
-    height: 100%;
+#hasonloTermekek {
+  width: 100%;
+  height: 100%;
 }
-#TermekSor{
-    margin-top: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: auto;
-    height: auto;
+#TermekSor {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: auto;
+  height: auto;
 }
-.Termek{
-    width: 33%;
-    height:250px;
-    border: 1px black solid;
-    background-color: rgb(255, 255, 255);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
+.Termek {
+  width: 33%;
+  height: 250px;
+  border: 1px black solid;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
 }
-.Termek:hover{
-    border:3px solid black;
+.Termek:hover {
+  border: 3px solid black;
 }
 #BovitContent {
-    margin-top: 15px;
-    text-align: left;
-    position: relative;
-    right: 18px;
-    z-index: -1;
+  margin-top: 15px;
+  text-align: left;
+  position: relative;
+  right: 18px;
+  z-index: -1;
 }
-.hasonloKep{
-    width: 100%;
-    height: 150px;
-    border-radius: 10px;
+.hasonloKep {
+  width: 100%;
+  height: 150px;
+  border-radius: 10px;
 }
-.hasonloKepDiv{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+.hasonloKepDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.hasonloNevDiv{
-    justify-self: flex-end;
-    align-content: flex-end;
-    justify-content: flex-end;
-
+.hasonloNevDiv {
+  justify-self: flex-end;
+  align-content: flex-end;
+  justify-content: flex-end;
 }
-.hasonloNev{
-    margin-left:5% ;
-    margin-top: 10px;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-    font-size: large;
+.hasonloNev {
+  margin-left: 5%;
+  margin-top: 10px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  font-size: large;
 }
-.ErtekelesDiv{
-    display: flex;
-    margin-left: 5px;
+.ErtekelesDiv {
+  display: flex;
+  margin-left: 5px;
 }
 @media only screen and (max-width: 500px) {
-    #TermekSor{flex-direction: column;}
-    .Termek
-    {
-        width: 80%;
-        height: 400px;        
-        align-self: center;
-        margin: 5px;     
-    }
-    .ErtekelesDiv{
-        margin-left: 10px;
-    }
+  #TermekSor {
+    flex-direction: column;
+  }
+  .Termek {
+    width: 80%;
+    height: 400px;
+    align-self: center;
+    margin: 5px;
+  }
+  .ErtekelesDiv {
+    margin-left: 10px;
+  }
 }
 .VanPolcon {
-    height: 30px;
-    width: 100px;
-    background-color: rgb(5, 228, 5);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-items: flex-end;
-    color: aliceblue;
-    margin-top: 15px;
-    padding: 3px;
-    font-size:medium;
+  height: 30px;
+  width: 100px;
+  background-color: rgb(5, 228, 5);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-items: flex-end;
+  color: aliceblue;
+  margin-top: 15px;
+  padding: 3px;
+  font-size: medium;
 }
 .Utolso {
-    height: 30px;
-    width: 140px;
-    padding: 10px;
-    background-color: rgb(251, 255, 0);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-items: center;
-    color: rgb(0, 0, 0);
-    margin-top: 15px;
-    padding: 3px;
-    font-size:medium;
+  height: 30px;
+  width: 140px;
+  padding: 10px;
+  background-color: rgb(251, 255, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  color: rgb(0, 0, 0);
+  margin-top: 15px;
+  padding: 3px;
+  font-size: medium;
 }
 .NincsPolcon {
-    height: 30px;
-    width: 100px;
-    background-color: rgb(180, 0, 0);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-items: flex-end;
-    color: aliceblue;
-    margin-top: 15px;
-    padding: 3px;
-    font-size:medium;
+  height: 30px;
+  width: 100px;
+  background-color: rgb(180, 0, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-items: flex-end;
+  color: aliceblue;
+  margin-top: 15px;
+  padding: 3px;
+  font-size: medium;
 }
 
-#sarga{
-    background-color: yellow;
+#sarga {
+  background-color: yellow;
 }
 #ar {
-    margin-left: 12px;
-    margin-top: 25px;
+  margin-left: 12px;
+  margin-top: 25px;
 }
 #LiterAr {
-    margin-top: 0;
-    font-size: x-small;
-    position: relative;
-    bottom: 10px;
-    color: gray;
+  margin-top: 0;
+  font-size: x-small;
+  position: relative;
+  bottom: 10px;
+  color: gray;
 }
 #KosarDiv {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 #mennyiseg {
-    margin-left: 10px;
-    width: 20%;
+  margin-left: 10px;
+  width: 20%;
 }
 #kosarba {
-    width: 70%;
-    border: 1px rgb(255, 186, 83) solid;
-    background-color: rgb(255, 186, 83);
-    border-radius: 3px;
-    margin-left: 10px;
-    margin-right: 10px;
-    text-align: center;
+  width: 70%;
+  border: 1px rgb(255, 186, 83) solid;
+  background-color: rgb(255, 186, 83);
+  border-radius: 3px;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-align: center;
 }
 #KosarbaSzoveg {
-    margin-top: auto;
-    margin-bottom: auto;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 #kosarba:hover {
-    background-color: rgb(250, 175, 62);
+  background-color: rgb(250, 175, 62);
 }
 #Ertekeles {
-    margin-left: 10px;
-    margin-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
-#ertekelesCim{
-     margin-top: 15px;
-     margin-bottom: 0px;
+#ertekelesCim {
+  margin-top: 15px;
+  margin-bottom: 0px;
 }
-#csillagok{
-    margin-top: 0px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: left;
+#csillagok {
+  margin-top: 0px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
 }
-#ErtekelPar{
-    margin: 0px;
+#ErtekelPar {
+  margin: 0px;
 }
-#ErtekelesKuldes{
-    border: none;
-    border-radius: 5px;
-    height: 50px;
-    width: 170px;
-    background-color:  rgb(255, 186, 83);
-    margin-top: 10px;
+#ErtekelesKuldes {
+  border: none;
+  border-radius: 5px;
+  height: 50px;
+  width: 170px;
+  background-color: rgb(255, 186, 83);
+  margin-top: 10px;
 }
 /*Tablazat*/
-tr{
-    border-bottom: 1px black solid;
+tr {
+  border-bottom: 1px black solid;
 }
 /*kovetkezo es elozo termek*/
-#TovabbVissza{
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-    margin: auto;
+#TovabbVissza {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: auto;
 }
 /*1000px alatti valtozasok*/
 @media only screen and (max-width: 1000px) {
-    #TovabbVissza{
-        width: 70%;
-    }
-    #main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 70%;
-    }
-    #TermekAdatok {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-    }
-    #MegrendelesDiv {
-        width: 100%;
-        height: 100%;
-    }
-    #TermekAdatokMainContent {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    #TermekKep {
-        width: 100%;
-        height: auto;
-        display: flex;
-        justify-content: center;
-        overflow: hidden;
-        position: relative;
-        margin-bottom: 10px;
-    }
-    #TermekLeiras {
-        width: 100%;
-    }
-    #Tulajdonsagok {
-        margin-bottom: 15px;
-    }
-    #Tablazat{
-        width: 100%;
-    }
-    #csillagok{
+  #TovabbVissza {
+    width: 70%;
+  }
+  #main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+  }
+  #TermekAdatok {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  #MegrendelesDiv {
+    width: 100%;
+    height: 100%;
+  }
+  #TermekAdatokMainContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #TermekKep {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  #TermekLeiras {
+    width: 100%;
+  }
+  #Tulajdonsagok {
+    margin-bottom: 15px;
+  }
+  #Tablazat {
+    width: 100%;
+  }
+  #csillagok {
     width: 100%;
     margin-top: 0px;
     height: 100%;
@@ -368,59 +364,68 @@ tr{
     align-items: center;
     justify-content: center;
     background-color: rgb(223, 223, 223);
-    }
-    .csillag{
-        width: 100%;
-        height: 100%;
-        margin: auto;
-        padding: 5px;
-
-    }
-    #ErtekelesKuldes{
+  }
+  .csillag {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    padding: 5px;
+  }
+  #ErtekelesKuldes {
     width: 100%;
     height: 50px;
-    
-
-}
-    .hasonloKep{
+  }
+  .hasonloKep {
     width: 90%;
-    height:auto;
-}
-.Termek{
     height: auto;
-}
-#TermekSor{height: auto;}
-
+  }
+  .Termek {
+    height: auto;
+  }
+  #TermekSor {
+    height: auto;
+  }
 }
 
 /*NincsIlyentermék*/
-#link{
-    text-align: center;
-    color: black;
+#link {
+  text-align: center;
+  color: black;
 }
-#NincsMain{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+#NincsMain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 /*következő és előző gombok*/
-#koviTermek{
-    color: black;
+#koviTermek {
+  color: black;
 }
-#EloTermek{
-    color: black;
+#EloTermek {
+  color: black;
 }
-#koviNyil{font-size: x-large;} 
-#eloNyil{font-size: x-large;} 
+#koviNyil {
+  font-size: x-large;
+}
+#eloNyil {
+  font-size: x-large;
+}
 
-@media only screen and (max-width:580px)
-{
-    #KoviSzoveg{display: none;}
-    #eloSzoveg{display: none;}  
-    #koviNyil{font-size: xx-large;} 
-    #eloNyil{font-size: xx-large;} 
-    #TovabbVissza{
-        width: 70%;
-    }
+@media only screen and (max-width: 580px) {
+  #KoviSzoveg {
+    display: none;
+  }
+  #eloSzoveg {
+    display: none;
+  }
+  #koviNyil {
+    font-size: xx-large;
+  }
+  #eloNyil {
+    font-size: xx-large;
+  }
+  #TovabbVissza {
+    width: 70%;
+  }
 }
