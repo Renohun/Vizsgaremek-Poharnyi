@@ -201,6 +201,7 @@ display: flex;
     width: 25vh;
     height: 25vh;
 }
+.kozep{margin: auto;}
 /*Oldal méretezése*/
 @media only screen and (max-width: 425px) {
     #maxAr {

@@ -493,6 +493,7 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
 
     if (!szurtE && !NevSzerinti) {
         const data = await TermekLekeres(`/api/WebShop/TermekLekeresPag?limit=${limit}&offset=${offset}`);
+        KartyaHova.classList.remove("kozep")
         await kartyaGen(data, KartyaHova);
         PaginationGombok(false, hossz);
     } else if (szurtE == true && !NevSzerinti) 
@@ -509,6 +510,7 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
             img.src = "../WebShopMain/img/Szabadsag3__1_of_1_-removebg-preview.png"
             img.classList.add("img-fluid","mx-auto","uresKep")
             KartyaHova.appendChild(img)
+            KartyaHova.classList.add("kozep")
         }
         await kartyaGen(szurtdata, KartyaHova);
         PaginationGombok(true, hossz, szuresiAdatok);
