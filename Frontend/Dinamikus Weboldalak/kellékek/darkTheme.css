@@ -115,6 +115,9 @@ body {
 #szoveg{
     color: white;
 }
+.bemutatSzoveg{
+    color:rgb(103, 194, 103)
+}
 
 /*TermekOldal*/
 #MegrendelesDiv{
