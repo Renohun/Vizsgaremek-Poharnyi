@@ -116,7 +116,7 @@ async function statikusadatok(adatok)
         badge.innerHTML="Alkoholmentes"
         badge.classList.add("badge","ms-1","mentes")
         badge.addEventListener("click",()=>{
-            window.location.href="/Koktelok/#Alkoholmentes"
+            window.location.href="/Koktelok/#Tipus/#Alkoholmentes"
         })
         BadgeHely.appendChild(badge)  
     }
@@ -157,10 +157,6 @@ async function statikusadatok(adatok)
     document.getElementById("recept").innerHTML=koktélAdat.Recept
     MennyisegHely.value=koktélAdat.AlapMennyiseg 
 
-    console.log(koktélAdat.UgyanazE);
-    console.log(adatok.belepette);
-    
-    
     document.getElementById("keszKep").addEventListener("click",async()=>{
         let FelhAdatok=await AdatLekeres("/api/Koktel/FelhasznaloAdat/"+koktélAdat.FelhID)
         let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+FelhAdatok.adat.ProfilkepUtvonal)
@@ -334,11 +330,13 @@ async function kommentek() {
             if (kommentek[i].UgyanazE==false) {
                 //Értékelések
                 upvote.addEventListener("click",async()=>{
-                    await AdatKuldes("/api/Koktel/SendKommentRatingPozitiv/"+kommentek[i].KommentID,"","PATCH")
+                    await AdatKuldes("/api/Koktel/SendKommentRating/"+kommentek[i].KommentID,{ert:"Pozitiv"},"PATCH")
                     pozitivSzam.innerHTML=((await AdatLekeres(`/api/Koktel/${koktel}`)).komment[i].Pozitiv)
+                    negativSzam.innerHTML=((await AdatLekeres(`/api/Koktel/${koktel}`)).komment[i].Negativ)
                 })
                 downvote.addEventListener("click",async()=>{
-                    await AdatKuldes("/api/Koktel/SendKommentRatingNegativ/"+kommentek[i].KommentID,"","PATCH")
+                    await AdatKuldes("/api/Koktel/SendKommentRating/"+kommentek[i].KommentID,{ert:"Negativ"},"PATCH")
+                    pozitivSzam.innerHTML=((await AdatLekeres(`/api/Koktel/${koktel}`)).komment[i].Pozitiv)
                     negativSzam.innerHTML=((await AdatLekeres(`/api/Koktel/${koktel}`)).komment[i].Negativ)
                 })
                 KommentIroReport.setAttribute("value","Jelentés")

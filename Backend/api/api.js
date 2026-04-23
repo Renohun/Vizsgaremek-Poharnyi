@@ -12,7 +12,7 @@ const fajlkezelo = require('fs/promises');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const { text } = require('stream/consumers');
-const { error } = require('console');
+const { error, log } = require('console');
 require('dotenv').config();
 const datum = new Date();
 const storage = multer.diskStorage({
@@ -2202,83 +2202,93 @@ router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) =>
         console.log(error);
     }
 });
-router.patch('/Koktel/SendKommentRatingPozitiv/:id', async (request, response) => {
+router.patch('/Koktel/SendKommentRating/:id', async (request, response) => {
     try {
-        const ErtekeltE = 'SELECT KommentID,Pozitiv FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?';
+        const ErtekeltE = 'SELECT KommentID,Pozitiv,Negativ FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?';
         let ertekelesek = await lekeres(ErtekeltE, [
-            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
-            request.params.id
-        ]);
-        console.log(ertekelesek.length);
-        console.log(ertekelesek);
-
-        if (ertekelesek.length != 0) {
-            console.log(ertekelesek[0].Pozitiv);
-
-            if (ertekelesek[0].Pozitiv != 1) {
-                console.log('fel');
-
-                const RatingNoveles = 'UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?';
-                const KommentRatingNoveles = 'UPDATE kommentertekeles SET Pozitiv=1 WHERE KommentID LIKE ?';
-                await lekeres(RatingNoveles, request.params.id);
-                await lekeres(KommentRatingNoveles, request.params.id);
-            } else {
-                console.log('le');
-
-                const RatingCsokkentes = 'UPDATE komment SET pozitiv=pozitiv-1 WHERE KommentID LIKE ?';
-                const KommentRatingCsokkentes = 'UPDATE kommentertekeles SET Pozitiv=0 WHERE KommentID LIKE ?';
-                await lekeres(RatingCsokkentes, request.params.id);
-                await lekeres(KommentRatingCsokkentes, request.params.id);
-            }
-        } else {
-            const RatingNoveles = 'UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?';
-            await lekeres(RatingNoveles, request.params.id);
-            await lekeres('INSERT INTO kommentertekeles (FelhID,KommentID,Pozitiv) VALUES(?,?,?)', [
                 jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
-                request.params.id,
-                1
-            ]);
-        }
-        response.status(200).json({
-            message: 'Siker!'
-        });
-    } catch (error) {
-        console.log(error);
-
-        response.status(500).json({
-            message: 'Hiba!'
-        });
-    }
-});
-router.patch('/Koktel/SendKommentRatingNegativ/:id', async (request, response) => {
-    try {
-        const ErtekeltE = 'SELECT KommentID,Negativ FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?';
-        let ertekelesek = await lekeres(ErtekeltE, [
-            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
-            request.params.id
+                request.params.id
         ]);
-        console.log(ertekelesek.length);
+        if (request.body.ert=="Pozitiv") {
+            
+            if (ertekelesek.length != 0) {
+                console.log(ertekelesek);
+                
+                if (ertekelesek[0].Pozitiv != 1) {
+                    if (ertekelesek[0].Negativ!=1) {
+                        
+                        const RatingNoveles = 'UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?';
+                        const KommentRatingNoveles = 'UPDATE kommentertekeles SET Pozitiv=1 WHERE KommentID LIKE ?';
+                        await lekeres(RatingNoveles, request.params.id);
+                        await lekeres(KommentRatingNoveles, request.params.id);
+                    }
+                    else{
+                        const RatingNoveles = 'UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?';
+                        const KommentRatingNoveles = 'UPDATE kommentertekeles SET Pozitiv=1 WHERE KommentID LIKE ?';                
+                        const RatingCsokkentes = 'UPDATE komment SET negativ=negativ-1 WHERE KommentID LIKE ?';
+                        const KommentRatingCsokkentes = 'UPDATE kommentertekeles SET Negativ=0 WHERE KommentID LIKE ?';
+                        await lekeres(RatingCsokkentes, request.params.id);
+                        await lekeres(KommentRatingCsokkentes, request.params.id);
+                        await lekeres(RatingNoveles, request.params.id);
+                        await lekeres(KommentRatingNoveles, request.params.id);
+                    }
 
-        if (ertekelesek.length != 0) {
-            if (ertekelesek[0].Negativ != 1) {
-                const RatingNoveles = 'UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?';
-                const KommentRatingNoveles = 'UPDATE kommentertekeles SET Negativ=1 WHERE KommentID LIKE ?';
-                await lekeres(RatingNoveles, request.params.id);
-                await lekeres(KommentRatingNoveles, request.params.id);
+                } else {
+
+                    const RatingCsokkentes = 'UPDATE komment SET pozitiv=pozitiv-1 WHERE KommentID LIKE ?';
+                    const KommentRatingCsokkentes = 'UPDATE kommentertekeles SET Pozitiv=0 WHERE KommentID LIKE ?';
+                    await lekeres(RatingCsokkentes, request.params.id);
+                    await lekeres(KommentRatingCsokkentes, request.params.id);
+                }
             } else {
+                const RatingNoveles = 'UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?';
+                await lekeres(RatingNoveles, request.params.id);
+                await lekeres('INSERT INTO kommentertekeles (FelhID,KommentID,Pozitiv,Negativ) VALUES(?,?,?,?)', [
+                    jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
+                    request.params.id,
+                    1,0
+                ]);
+            }
+        }
+        else if (request.body.ert=="Negativ") {
+                console.log(ertekelesek);
+            
+            if (ertekelesek.length != 0) {
+                if (ertekelesek[0].Negativ != 1) {
+                    if (ertekelesek[0].Pozitiv!=1) {
+                        
+                        const RatingNoveles = 'UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?';
+                        const KommentRatingNoveles = 'UPDATE kommentertekeles SET Negativ=1 WHERE KommentID LIKE ?';
+                        await lekeres(RatingNoveles, request.params.id);
+                        await lekeres(KommentRatingNoveles, request.params.id);
+                    }
+                    else{
+                        const RatingNoveles = 'UPDATE komment SET pozitiv=pozitiv-1 WHERE KommentID LIKE ?';
+                        const KommentRatingNoveles = 'UPDATE kommentertekeles SET Pozitiv=0 WHERE KommentID LIKE ?';                
+                        const RatingCsokkentes = 'UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?';
+                        const KommentRatingCsokkentes = 'UPDATE kommentertekeles SET Negativ=1 WHERE KommentID LIKE ?';
+                        await lekeres(RatingCsokkentes, request.params.id);
+                        await lekeres(KommentRatingCsokkentes, request.params.id);
+                        await lekeres(RatingNoveles, request.params.id);
+                        await lekeres(KommentRatingNoveles, request.params.id);
+                    }
+                } 
+                else {
                 const RatingCsokkentes = 'UPDATE komment SET negativ=negativ-1 WHERE KommentID LIKE ?';
                 const KommentRatingCsokkentes = 'UPDATE kommentertekeles SET Negativ=0 WHERE KommentID LIKE ?';
                 await lekeres(RatingCsokkentes, request.params.id);
                 await lekeres(KommentRatingCsokkentes, request.params.id);
-            }
-        } else {
+                }
+            } 
+            else {
             const RatingNoveles = 'UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?';
             await lekeres(RatingNoveles, request.params.id);
-            await lekeres('INSERT INTO kommentertekeles (FelhID,KommentID,Negativ) VALUES(?,?,?)', [
+            await lekeres('INSERT INTO kommentertekeles (FelhID,KommentID,Negativ,Pozitiv) VALUES(?,?,?,?)', [
                 jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
                 request.params.id,
-                1
+                1,0
             ]);
+        }
         }
         response.status(200).json({
             message: 'Siker!'
@@ -2291,6 +2301,7 @@ router.patch('/Koktel/SendKommentRatingNegativ/:id', async (request, response) =
         });
     }
 });
+
 router.get('/Koktel/SzomszedosKoktelok/:id', async (request, response) => {
     try {
         const ÖsszesKoktél = 'SELECT KoktélID FROM Koktél ORDER BY KoktélID';
