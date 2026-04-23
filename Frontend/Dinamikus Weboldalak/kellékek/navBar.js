@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const value = await POSTreq('/api/sutiJelenlete');
     const response = await POSTreq('/api/jogosultsagEll');
     console.log(document.getElementById('adminPanelHref'));
+    console.log(response);
 
     if (response.message == false) {
         document.getElementById('adminPanelHref').setAttribute('hidden', '');
