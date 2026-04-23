@@ -2765,7 +2765,7 @@ router.get('/Termek/HasonloTermekErtekeles/:id', async (request, response) => {
 //
 router.get('/WebShop/TermekLekeres', async (request, response) => {
     try {
-        const query = 'SELECT * FROM webshoptermek';
+        const query = 'SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID';
         //console.log(limit)
         const [termekek] = await DBconnetion.promise().query(query);
 
@@ -2799,7 +2799,7 @@ router.get('/WebShop/HosszLekeres', async (request, response) => {
 
 router.get('/WebShop/TermekLekeresPag', async (request, response) => {
     try {
-        const query = 'SELECT * FROM webshoptermek LIMIT ? OFFSET ?';
+        const query = 'SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID LIMIT ? OFFSET ?';
         const Lengthquery = 'SELECT COUNT(TermekID) FROM webshoptermek';
         const limit = parseInt(request.query.limit);
         const offset = parseInt(request.query.offset);
@@ -2823,7 +2823,7 @@ router.get('/WebShop/TermeklekeresByNev/:nev', async (request, response) => {
 
         const nev = request.params.nev;
 
-        const query = 'SELECT * FROM webshoptermek WHERE TermekCim like ? LIMIT ? OFFSET ?';
+        const query = 'SELECT * FROM webshoptermek  INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE TermekCim like ? LIMIT ? OFFSET ?';
 
         const [termekek] = await DBconnetion.promise().query(query, [`%${nev}%`, limit, offset]);
 
@@ -2858,7 +2858,7 @@ router.post('/Webshop/szures', async (request, response) => {
         const limit = parseInt(request.query.limit);
         const offset = parseInt(request.query.offset);
         const feltetelek = request.body;
-        let query = 'SELECT * FROM webshoptermek WHERE';
+        let query = 'SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE ';
         let whereErtekek;
         const elfogadott = ['csokkeno', 'novekvo', '-', 'TermekCim'];
         /*whitelist - ezzel ellenőrzöm, hogy csak az általam elfogadott dolgokat írta be a felhasználó, 
