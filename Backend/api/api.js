@@ -128,6 +128,17 @@ router.get('/Koktelok/Jelvenyek', async (req, res) => {
     }
 });
 
+router.get('/feelingLucky', async (req, res) => {
+    try {
+        const query = 'SELECT KoktélID FROM koktél';
+        const [id] = await DBconnetion.promise().query(query);
+        const random = Math.floor(Math.random() * (id.length - 1));
+        res.status(200).json({ id: id[random] });
+    } catch (error) {
+        res.status(500).json({ message: 'Hiba tortent', error: error });
+    }
+});
+
 router.get('/Koktelok/lekeres', async (req, res) => {
     try {
         const queryJelentettTartalmak =
