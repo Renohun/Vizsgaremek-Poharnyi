@@ -15,6 +15,10 @@ document.addEventListener("DOMContentLoaded",()=>{
     fajl.addEventListener("change",()=>{
         kep.setAttribute("src",URL.createObjectURL(fajl.files[0]))
     })
+    if (window.location.href.split("#")[1]!="") {
+        //https://stackoverflow.com/questions/2705583/how-to-simulate-a-click-with-javascript
+        document.getElementById("Kosár").click()
+    }
     AdatlapLekeres()
 })
 
