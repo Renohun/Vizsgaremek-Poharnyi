@@ -76,6 +76,16 @@ const AdatKuldes=async(url,adat,tipus)=>{
     }
 }
 
+const AdatKuldesKep=async(url,adat,tipus)=>{
+    let valasz=await fetch(url,{
+            method:tipus,
+            body:adat
+    })
+    if (valasz.ok) {
+        return valasz.json()
+    }
+}
+
 
 async function statikusadatok(adatok)
 {
@@ -632,6 +642,20 @@ async function szerkesztes() {
         })
         document.getElementById("Osszetevok").appendChild(more)
 
+        let kepFeltolt=document.createElement("input")
+        kepFeltolt.setAttribute("type","file")
+        kepFeltolt.setAttribute("hidden","true")
+        kepFeltolt.setAttribute("name","file")
+        document.getElementById("kepModosit").appendChild(kepFeltolt)
+        let kepvalt=false
+        kepFeltolt.addEventListener("change",()=>{
+            document.getElementById("KoktélKép").setAttribute("src",URL.createObjectURL(kepFeltolt.files[0]))
+            kepvalt=true
+        })
+
+
+
+
         yes.addEventListener("click",async()=>{
             let adatok={}
             adatok.Cim=cim.value
@@ -661,6 +685,8 @@ async function szerkesztes() {
             adatok.Osszetevok=osszetevok
             adatok.Mennyiseg=imposztor.value
 
+
+
             //A jelentési felület lekérése
             var ResIv = new bootstrap.Modal(document.getElementById('ReplyModal'), {})   
             if (parseInt(adatok.Mennyiseg)!=mltotal) {
@@ -677,6 +703,11 @@ async function szerkesztes() {
             }
             else{
                 //TODO:ENDPOINT
+                if (kepvalt) {
+                    let adat=new FormData()
+                    adat.append("profilkep",kepFeltolt.files[0]);
+                    adatok.Kep=(await AdatKuldesKep("/api/AdatlapLekeres/KepFeltoltes",adat,"POST")).message
+                }
                 let valasz=(await AdatKuldes("/api/Koktel/KoktelModositas/"+koktel,adatok,"PATCH")).message
                 if (valasz=="Siker") {
                     window.location.reload()
