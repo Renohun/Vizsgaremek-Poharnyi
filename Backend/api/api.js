@@ -1188,11 +1188,22 @@ router.post('/koktelTorles/:nev', (req, res) => {
 
 //adminpanel - termekfeltoltes
 
+router.get('/AdminPanel/OrszagLista', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
+    try {
+        const query = 'SELECT OrszagNev FROM webshoporszag';
+        const [rows] = await DBconnetion.promise().query(query);
+
+        res.status(200).json({ orszagok: rows });
+    } catch (error) {
+        res.status(500).json({ message: 'Hiba', error: error });
+    }
+});
+
 router.post('/AdminPanel/TermekFeltoltes', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
         console.log(req.body);
 
-        const {
+        let {
             fajlNeve,
             termekNev,
             termekLeiras,
@@ -1204,6 +1215,11 @@ router.post('/AdminPanel/TermekFeltoltes', authenticationMiddleware, authorizati
             termekKategoria,
             termekUrtartalom
         } = req.body;
+
+        const query = 'SELECT OrszagID FROM webshoporszag WHERE OrszagNev LIKE ?';
+        const [id] = await DBconnetion.promise().query(query, [termekSzarmazas]);
+
+        termekSzarmazas = id[0].OrszagID;
 
         if (termekKategoria == 'Eszkozok' || termekKategoria == 'Merch') {
             const termekQuery =
@@ -2204,27 +2220,25 @@ router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) =>
 });
 router.patch('/Koktel/SendKommentRating/:id', async (request, response) => {
     try {
-        const ErtekeltE = 'SELECT KommentID,Pozitiv,Negativ FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?';
+        const ErtekeltE =
+            'SELECT KommentID,Pozitiv,Negativ FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?';
         let ertekelesek = await lekeres(ErtekeltE, [
-                jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
-                request.params.id
+            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
+            request.params.id
         ]);
-        if (request.body.ert=="Pozitiv") {
-            
+        if (request.body.ert == 'Pozitiv') {
             if (ertekelesek.length != 0) {
                 console.log(ertekelesek);
-                
+
                 if (ertekelesek[0].Pozitiv != 1) {
-                    if (ertekelesek[0].Negativ!=1) {
-                        
+                    if (ertekelesek[0].Negativ != 1) {
                         const RatingNoveles = 'UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?';
                         const KommentRatingNoveles = 'UPDATE kommentertekeles SET Pozitiv=1 WHERE KommentID LIKE ?';
                         await lekeres(RatingNoveles, request.params.id);
                         await lekeres(KommentRatingNoveles, request.params.id);
-                    }
-                    else{
+                    } else {
                         const RatingNoveles = 'UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?';
-                        const KommentRatingNoveles = 'UPDATE kommentertekeles SET Pozitiv=1 WHERE KommentID LIKE ?';                
+                        const KommentRatingNoveles = 'UPDATE kommentertekeles SET Pozitiv=1 WHERE KommentID LIKE ?';
                         const RatingCsokkentes = 'UPDATE komment SET negativ=negativ-1 WHERE KommentID LIKE ?';
                         const KommentRatingCsokkentes = 'UPDATE kommentertekeles SET Negativ=0 WHERE KommentID LIKE ?';
                         await lekeres(RatingCsokkentes, request.params.id);
@@ -2232,9 +2246,7 @@ router.patch('/Koktel/SendKommentRating/:id', async (request, response) => {
                         await lekeres(RatingNoveles, request.params.id);
                         await lekeres(KommentRatingNoveles, request.params.id);
                     }
-
                 } else {
-
                     const RatingCsokkentes = 'UPDATE komment SET pozitiv=pozitiv-1 WHERE KommentID LIKE ?';
                     const KommentRatingCsokkentes = 'UPDATE kommentertekeles SET Pozitiv=0 WHERE KommentID LIKE ?';
                     await lekeres(RatingCsokkentes, request.params.id);
@@ -2246,25 +2258,23 @@ router.patch('/Koktel/SendKommentRating/:id', async (request, response) => {
                 await lekeres('INSERT INTO kommentertekeles (FelhID,KommentID,Pozitiv,Negativ) VALUES(?,?,?,?)', [
                     jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
                     request.params.id,
-                    1,0
+                    1,
+                    0
                 ]);
             }
-        }
-        else if (request.body.ert=="Negativ") {
-                console.log(ertekelesek);
-            
+        } else if (request.body.ert == 'Negativ') {
+            console.log(ertekelesek);
+
             if (ertekelesek.length != 0) {
                 if (ertekelesek[0].Negativ != 1) {
-                    if (ertekelesek[0].Pozitiv!=1) {
-                        
+                    if (ertekelesek[0].Pozitiv != 1) {
                         const RatingNoveles = 'UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?';
                         const KommentRatingNoveles = 'UPDATE kommentertekeles SET Negativ=1 WHERE KommentID LIKE ?';
                         await lekeres(RatingNoveles, request.params.id);
                         await lekeres(KommentRatingNoveles, request.params.id);
-                    }
-                    else{
+                    } else {
                         const RatingNoveles = 'UPDATE komment SET pozitiv=pozitiv-1 WHERE KommentID LIKE ?';
-                        const KommentRatingNoveles = 'UPDATE kommentertekeles SET Pozitiv=0 WHERE KommentID LIKE ?';                
+                        const KommentRatingNoveles = 'UPDATE kommentertekeles SET Pozitiv=0 WHERE KommentID LIKE ?';
                         const RatingCsokkentes = 'UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?';
                         const KommentRatingCsokkentes = 'UPDATE kommentertekeles SET Negativ=1 WHERE KommentID LIKE ?';
                         await lekeres(RatingCsokkentes, request.params.id);
@@ -2272,23 +2282,22 @@ router.patch('/Koktel/SendKommentRating/:id', async (request, response) => {
                         await lekeres(RatingNoveles, request.params.id);
                         await lekeres(KommentRatingNoveles, request.params.id);
                     }
-                } 
-                else {
-                const RatingCsokkentes = 'UPDATE komment SET negativ=negativ-1 WHERE KommentID LIKE ?';
-                const KommentRatingCsokkentes = 'UPDATE kommentertekeles SET Negativ=0 WHERE KommentID LIKE ?';
-                await lekeres(RatingCsokkentes, request.params.id);
-                await lekeres(KommentRatingCsokkentes, request.params.id);
+                } else {
+                    const RatingCsokkentes = 'UPDATE komment SET negativ=negativ-1 WHERE KommentID LIKE ?';
+                    const KommentRatingCsokkentes = 'UPDATE kommentertekeles SET Negativ=0 WHERE KommentID LIKE ?';
+                    await lekeres(RatingCsokkentes, request.params.id);
+                    await lekeres(KommentRatingCsokkentes, request.params.id);
                 }
-            } 
-            else {
-            const RatingNoveles = 'UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?';
-            await lekeres(RatingNoveles, request.params.id);
-            await lekeres('INSERT INTO kommentertekeles (FelhID,KommentID,Negativ,Pozitiv) VALUES(?,?,?,?)', [
-                jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
-                request.params.id,
-                1,0
-            ]);
-        }
+            } else {
+                const RatingNoveles = 'UPDATE komment SET negativ=negativ+1 WHERE KommentID LIKE ?';
+                await lekeres(RatingNoveles, request.params.id);
+                await lekeres('INSERT INTO kommentertekeles (FelhID,KommentID,Negativ,Pozitiv) VALUES(?,?,?,?)', [
+                    jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
+                    request.params.id,
+                    1,
+                    0
+                ]);
+            }
         }
         response.status(200).json({
             message: 'Siker!'
