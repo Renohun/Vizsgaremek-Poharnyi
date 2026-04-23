@@ -22,3 +22,32 @@
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
+
+#feelingLuckyBtn {
+    padding: 15px 25px;
+    font-size: 14px;
+    color: #ffffff;
+    text-transform: uppercase;
+    border-radius: 5px;
+    border: 1px solid black;
+    cursor: pointer;
+    background: linear-gradient(90deg, #f00, #ff9100, #ff0, #0f0, #0ff, #00f, #f0f, #fd058d, #ff0339);
+    background-size: 400%;
+    font-weight: bold;
+    animation: animate_67 25s linear infinite;
+    transition: transform 0.2s;
+}
+
+#feelingLuckyBtn:hover {
+    transform: scale(1.1);
+}
+
+@keyframes animate_67 {
+    0% {
+        background-position: 0%;
+    }
+
+    100% {
+        background-position: 400%;
+    }
+}

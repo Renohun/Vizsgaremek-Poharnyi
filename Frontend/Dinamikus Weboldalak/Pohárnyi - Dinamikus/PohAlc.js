@@ -89,9 +89,7 @@ function koktelRendereles(koktelok) {
             //console.log(koktel.KoktélID);
 
             (async () => {
-                const koktelKep = await GETKepLekeres(
-                    `/api/AdatlapLekeres/KepLekeres/${koktel.BoritoKepUtvonal}`
-                );
+                const koktelKep = await GETKepLekeres(`/api/AdatlapLekeres/KepLekeres/${koktel.BoritoKepUtvonal}`);
                 imgTag.setAttribute('src', URL.createObjectURL(koktelKep));
             })();
 
@@ -221,6 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
         //Jelvenyek avagy rendezesek lekerese
         const jelvenyek = await GETfetch('/api/Koktelok/Jelvenyek');
         //console.log(jelvenyek.data);
+
+        document.getElementById('feelingLuckyBtn').addEventListener('click', async () => {
+            const randID = await GETfetch('/api/feelingLucky');
+            console.log(randID.id.KoktélID);
+
+            window.location.href = `/Koktel/${randID.id.KoktélID}`;
+        });
 
         const erossegSelect = document.getElementById('Erősség');
         for (let i = 0; i < jelvenyek.data.erosseg.length; i++) {
