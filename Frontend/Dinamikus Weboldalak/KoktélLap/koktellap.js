@@ -116,7 +116,7 @@ async function statikusadatok(adatok)
         badge.innerHTML="Alkoholmentes"
         badge.classList.add("badge","ms-1","mentes")
         badge.addEventListener("click",()=>{
-            window.location.href="/Koktelok/#Tipus/#Alkoholmentes"
+            window.location.href="/Koktelok/#AlkoholosE/#Alkoholmentes"
         })
         BadgeHely.appendChild(badge)  
     }
