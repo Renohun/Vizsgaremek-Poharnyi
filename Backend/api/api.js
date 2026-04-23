@@ -1702,6 +1702,8 @@ router.post('/AdatlapLekeres/KepFeltoltes', fileStorage.array('profilkep'), asyn
             message: request.files[0].filename
         });
     } catch (error) {
+        console.log(error);
+        
         response.status(500).json({
             message: error
         });
@@ -2010,10 +2012,16 @@ router.get('/Koktel/:id', async (request, response) => {
 router.patch('/Koktel/KoktelModositas/:id', async (request, response) => {
     try {
         const koktelChange = 'UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=? WHERE KoktélID LIKE ?';
+        const koktelChangeKep = 'UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=?,BoritokepUtvonal=? WHERE KoktélID LIKE ?';
         const OsszetevoCleanse = 'DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
         const UjOsszetevo =
             'INSERT INTO koktelokosszetevoi (KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)';
-        await lekeres(koktelChange, [request.body.Cim, request.body.Recept, request.body.Mennyiseg, request.params.id]);
+        if (request.body.Kep!=undefined) {   
+            await lekeres(koktelChangeKep, [request.body.Cim, request.body.Recept, request.body.Mennyiseg, request.body.Kep,request.params.id]);
+        }
+        else{
+            await lekeres(koktelChange, [request.body.Cim, request.body.Recept, request.body.Mennyiseg, request.params.id]);
+        }
         await lekeres(OsszetevoCleanse, [request.params.id]);
         for (let i = 0; i < request.body.Osszetevok.length; i++) {
             let osszetevo = request.body.Osszetevok[i];
@@ -2030,6 +2038,7 @@ router.patch('/Koktel/KoktelModositas/:id', async (request, response) => {
         });
     }
 });
+
 router.post('/Koktel/SendErtekeles', authenticationMiddleware, async (request, response) => {
     const ErtekelesKuldes = 'INSERT INTO Ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
     console.log(request.body.Tartalom);

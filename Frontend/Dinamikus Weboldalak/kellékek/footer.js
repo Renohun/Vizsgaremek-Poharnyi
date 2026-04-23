@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     container.classList.add("container")
 
     let jogok=document.createElement("div")
-    jogok.classList.add("col-12","text-center","ms-5")
+    jogok.classList.add("col-12","text-center")
     jogok.innerHTML="© 2026 Pohárnyi. Minden jog fenntartva."
 
     let gombok=document.createElement("div")
