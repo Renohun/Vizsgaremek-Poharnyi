@@ -14,42 +14,6 @@ async function lekeres(query, param) {
     return result;
 }
 
-/*
-router.get("/koktélTest",async(request,response)=>{
-    try {
-        let mukodikKoktel=false
-        const feltoltes="INSERT INTO koktél (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg)"
-        const ertekeles="INSERT INTO ertekeles (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg)"
-        const komment="INSERT INTO koktél (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg)"
-        const kedvenc="INSERT INTO koktél (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg)"
-        const jelentes="INSERT INTO koktél (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg)"
-        const torles="INSERT INTO koktél (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg)"
-        
-        await lekeres(feltoltes,[1,1,"Alkohol","Alkohol","Tölts bele alkoholt",10])
-        const koktel="SELECT * FROM koktél"
-        let eredmeny=await lekeres(koktel)
-        for (let i = 0; i < eredmeny.length; i++) {
-            if (eredmeny[i].Keszito==1&&eredmeny[i].Alkoholos==1&&eredmeny[i].KoktelCim=="Alkohol"&&eredmeny[i].Recept=="Tölts bele alkoholt"&&eredmeny[i].AlapMennyiseg==10) {
-                mukodikKoktel=true
-            }
-        }
-        if (mukodikKoktel) {
-            
-        }
-        response.status(200).json({
-            koktel:mukodikKoktel
-        })
-        
-    } 
-    catch (error) {
-        let hiba=error
-        response.status(500).json({
-            message:"Hiba!",
-            hiba:hiba
-        })
-    }
-
-})*/
 
 router.get("/koktelTest",async(request,response)=>{
         let mukodikKoktel=false
@@ -70,7 +34,8 @@ router.get("/koktelTest",async(request,response)=>{
         const koktel="SELECT * FROM koktél"
         let eredmeny=await lekeres(koktel)
         let koktelid
-        for (let i = 0; i < eredmeny.length; i++) {
+        for (let i = 0; i < eredmeny.length; i++) 
+        {
             if (eredmeny[i].Keszito==1&&eredmeny[i].Alkoholos==1&&eredmeny[i].KoktelCim=="Alkohol"&&eredmeny[i].Recept=="Tölts bele alkoholt"&&eredmeny[i].AlapMennyiseg==10) {
                 mukodikKoktel=true
                 koktelid=eredmeny[i].KoktélID
