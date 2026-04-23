@@ -2352,6 +2352,23 @@ router.get('/Koktel/FelhasznaloAdat/:id', async (request, response) => {
         });
     }
 });
+
+router.get('/Koktel/KommentRendezes/:id', async (request, response) => {
+    try {
+        const FelhAdatok =
+            'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal,Pozitiv,Negativ FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ? ORDER BY Pozitiv';
+        let adatok = await lekeres(FelhAdatok, [request.params.id,"Koktél"]);
+        response.status(200).json({
+            message: 'Siker!',
+            adat: adatok
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            message: 'Hiba!'
+        });
+    }
+});
 //
 //
 //

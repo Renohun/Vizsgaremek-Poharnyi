@@ -34,7 +34,10 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
     await kommentek(eredmeny,bevanelepve)
     await erteksetup()
-
+    let rendezes=document.getElementById("order")
+    rendezes.addEventListener("change",async()=>{
+        await kommentek()
+    })
 })
 
 const AdatLekeres=async(url)=>{
@@ -192,11 +195,11 @@ async function kommentek() {
 
     let adatok=await AdatLekeres(`/api/Koktel/${koktel}`)
     let kommentek=adatok.komment
-    let belepette=adatok.belepette
 
     if (kommentek.length==0) {
         KommentekHelye.classList.add("p-0")
         KommentekHelye.classList.remove("koktelshadow","p-2")
+        document.getElementById("order").setAttribute("hidden","true")
     }
     else{
         if (KommentekHelye.classList.contains("koktelshadow")==false) {
@@ -208,21 +211,46 @@ async function kommentek() {
         if (KommentekHelye.classList.contains("p-2")==false) {
             KommentekHelye.classList.add("p-2")
         }
+        if (document.getElementById("order").hasAttribute("hidden","true")) {
+            document.getElementById("order").removeAttribute("hidden","true")
+        }
+
     }
-    KommentekHelye.innerHTML=""
-    for (let i = kommentek.length-1; i > -1 ; i--) {
+    let rendezes=document.getElementById("order")
+
+    if (rendezes.value=="date") {
+       KommentekHelye.innerHTML=""
+       for (let i = kommentek.length-1; i > -1 ; i--) {
+           KommentekHelye.appendChild(await kommentCreate(kommentek[i],i,adatok))
+       }
+    }
+   else if(rendezes.value=="rate"){
+        let sorrend=(await AdatLekeres("/api/Koktel/KommentRendezes/"+koktel)).adat
+        KommentekHelye.innerHTML=""
+
+        for (let i = sorrend.length-1; i > -1 ; i--) {
+
+           KommentekHelye.appendChild(await kommentCreate(sorrend[i],i,adatok))
+        }
+   }
+    
+    
+}
+
+async function kommentCreate(adat,i,adatok) {
         //elemek létrehozása
         let Komment=document.createElement("div")
         Komment.classList.add("kommentdiv")
         
         //Kommentelő képének megadása és classok megadása
-        let kep=await AdatLekeresKep("/api/Koktel/KommenteloKepLekeres/"+kommentek[i].ProfilkepUtvonal)
+
+        let kep=await AdatLekeresKep("/api/Koktel/KommenteloKepLekeres/"+adat.ProfilkepUtvonal)
         let KommenteloKep=document.createElement("img")
         KommenteloKep.setAttribute("src",URL.createObjectURL(kep))
         KommenteloKep.classList.add("profilkep","col-1","col-sm-1","col-md-1","col-lg-1","col-xl-1")
 
         KommenteloKep.addEventListener("click",async()=>{
-            let Kommadatok=await AdatLekeres("/api/Koktel/FelhasznaloAdat/"+kommentek[i].Keszito)
+            let Kommadatok=await AdatLekeres("/api/Koktel/FelhasznaloAdat/"+adat.Keszito)
             let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+Kommadatok.adat.ProfilkepUtvonal)
 
             document.getElementById("ProfilCim").innerHTML=`${Kommadatok.adat.Felhasználónév} Adatai:`
@@ -231,7 +259,7 @@ async function kommentek() {
             document.getElementById("Nev").innerHTML=`Felhasználónév: `+Kommadatok.adat.Felhasználónév
             document.getElementById("KeszitNum").innerHTML=`Készített koktélok: `+Kommadatok.statisztika.KoktelDB
             
-            if (adatok.belepette==true&&(adatok.adat.FelhID!=kommentek[i].Keszito)==true) {
+            if (adatok.belepette==true&&(adatok.adat.FelhID!=adat.Keszito)==true) {
                 
                 let jelentesGomb=document.createElement("input")
                 jelentesGomb.setAttribute("type","button")
@@ -240,7 +268,7 @@ async function kommentek() {
                 document.getElementById("ReportGomb").innerHTML=""
                 document.getElementById("ReportGomb").appendChild(jelentesGomb)
                 jelentesGomb.addEventListener("click",()=>{
-                    jelentes(kommentek[i].Keszito,"Felhasználó",kommentek[i].Keszito)
+                    jelentes(adat.Keszito,"Felhasználó",adat.Keszito)
                     JelIv.hide()
                 })
             }
@@ -265,7 +293,7 @@ async function kommentek() {
         //Felhasználónév mező megadása
         let KommentIro=document.createElement("label")
         KommentIro.classList.add("col-8","col-sm-8","col-md-8","col-lg-10","col-xl-10","flex-fill")
-        KommentIro.innerHTML=kommentek[i].Felhasználónév+" - "
+        KommentIro.innerHTML=adat.Felhasználónév+" - "
         KommentHeader.appendChild(KommentIro)
 
         //Komment Összecsukása
@@ -276,7 +304,7 @@ async function kommentek() {
         KommentHeader.appendChild(KommentCollapse)
 
         //Átszínezés
-        let KommIroRegDate=(kommentek[i].RegisztracioDatuma.split("T"))[0].split("-")
+        let KommIroRegDate=(adat.RegisztracioDatuma.split("T"))[0].split("-")
         let KommentIroTagsag=document.createElement("span")
         KommentIroTagsag.classList.add("text-primary")
         KommentIroTagsag.innerText=tagsagOta(KommIroRegDate)
@@ -287,7 +315,7 @@ async function kommentek() {
         KommentTartalom.setAttribute("style","resize: none; text-align: left; box-sizing: border-box")
         KommentTartalom.setAttribute("disabled","true")
         KommentTartalom.classList.add("w-100","komment")
-        KommentTartalom.innerHTML=kommentek[i].Tartalom
+        KommentTartalom.innerHTML=adat.Tartalom
         
         KommentCollapse.addEventListener("click",()=>{
             if (KommentTartalom.hasAttribute("hidden")) {
@@ -302,7 +330,7 @@ async function kommentek() {
         
         let pozitiv=document.createElement("span")
         let pozitivSzam=document.createElement("span")
-        pozitivSzam.innerHTML=kommentek[i].Pozitiv
+        pozitivSzam.innerHTML=adat.Pozitiv
         let upvote=document.createElement("input")
         upvote.setAttribute("type","button")
         upvote.setAttribute("value","👍")
@@ -313,7 +341,7 @@ async function kommentek() {
 
         let negativ=document.createElement("span")
         let negativSzam=document.createElement("span")
-        negativSzam.innerHTML=kommentek[i].Negativ
+        negativSzam.innerHTML=adat.Negativ
         let downvote=document.createElement("input")
         downvote.setAttribute("type","button")
         downvote.setAttribute("value","👎")
@@ -323,19 +351,19 @@ async function kommentek() {
         negativ.appendChild(negativSzam)
 
         //Ha a felhasználó be van lépve
-        if (belepette) {
+        if (adatok.belepette) {
             //Létrehozzuk a jelentés gombot minden komment felett
             KommentIroReport.setAttribute("type","button")
             KommentIroReport.classList.add("btn","text-danger","float-end","border-0")
-            if (kommentek[i].UgyanazE==false) {
+            if (adat.UgyanazE==false) {
                 //Értékelések
                 upvote.addEventListener("click",async()=>{
-                    await AdatKuldes("/api/Koktel/SendKommentRating/"+kommentek[i].KommentID,{ert:"Pozitiv"},"PATCH")
+                    await AdatKuldes("/api/Koktel/SendKommentRating/"+adat.KommentID,{ert:"Pozitiv"},"PATCH")
                     pozitivSzam.innerHTML=((await AdatLekeres(`/api/Koktel/${koktel}`)).komment[i].Pozitiv)
                     negativSzam.innerHTML=((await AdatLekeres(`/api/Koktel/${koktel}`)).komment[i].Negativ)
                 })
                 downvote.addEventListener("click",async()=>{
-                    await AdatKuldes("/api/Koktel/SendKommentRating/"+kommentek[i].KommentID,{ert:"Negativ"},"PATCH")
+                    await AdatKuldes("/api/Koktel/SendKommentRating/"+adat.KommentID,{ert:"Negativ"},"PATCH")
                     pozitivSzam.innerHTML=((await AdatLekeres(`/api/Koktel/${koktel}`)).komment[i].Pozitiv)
                     negativSzam.innerHTML=((await AdatLekeres(`/api/Koktel/${koktel}`)).komment[i].Negativ)
                 })
@@ -343,7 +371,7 @@ async function kommentek() {
                 //Ha rányom
                 KommentIroReport.addEventListener("click",()=>{
                     //Elküldjük jelentésre a kommentet
-                    jelentes(kommentek[i].KommentID,"Komment",kommentek[i].Keszito)
+                    jelentes(adat.KommentID,"Komment",adat.Keszito)
                 })
             }
             //Azonban magát nem tudja feljelenteni sem értékelni
@@ -357,7 +385,7 @@ async function kommentek() {
                 //Ezért helyette ki tudja törölni a kommentet inkább
                 KommentIroReport.setAttribute("value","Törlés")
                 KommentIroReport.addEventListener("click",()=>{
-                    kommentTorles(kommentek[i].KommentID,adatok,belepette)
+                    kommentTorles(adat.KommentID)
                 })
             }
             KommentHeader.appendChild(KommentIroReport)
@@ -368,11 +396,8 @@ async function kommentek() {
         Komment.appendChild(KommentTartalom)
         Komment.appendChild(pozitiv)
         Komment.appendChild(negativ)
-        KommentekHelye.appendChild(Komment)
-    }
-    
+        return Komment
 }
-
 
 
 function tagsagOta(regDate){
@@ -635,10 +660,7 @@ async function szerkesztes() {
             }
             adatok.Osszetevok=osszetevok
             adatok.Mennyiseg=imposztor.value
-            console.log(parseInt(adatok.Mennyiseg));
-            console.log(mltotal);
-            
-            
+
             //A jelentési felület lekérése
             var ResIv = new bootstrap.Modal(document.getElementById('ReplyModal'), {})   
             if (parseInt(adatok.Mennyiseg)!=mltotal) {
