@@ -3170,14 +3170,17 @@ router.post('/UzenetKuldes',Formupload.single('file'), (request, response) => {
             <h3>${obj.szoveg}</h3>
             <br>
             <a href="mailto:${request.body.email}"> Válasz írása</a>`,
-            attachments:[
-                {
-                    filename: file.originalname,
-                    content:  file.buffer,
-                }
-            ]
-        };
-
+            };
+            if(file != undefined){
+                mailOptions.attachments = 
+                [
+                    {
+                        filename: file.originalname,
+                        content:  file.buffer,
+                    }
+                ]   
+            }
+            console.log(mailOptions)
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log(error);
