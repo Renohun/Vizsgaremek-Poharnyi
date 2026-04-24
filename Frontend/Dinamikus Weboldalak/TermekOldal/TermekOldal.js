@@ -89,11 +89,15 @@ const oldalGenerálás =  async () =>{
     
     //Backendből kapott objectek
     const LekertTermekek = await termek_lekeres();
-    console.log("awe")
+   //focim
     if (LekertTermekek.termek.length == 0) {
         window.location.href = "/HianyzoTermek"
     }
+    //url
+    window.location.href += `#${LekertTermekek.termek[0].TermekCim}`
     //Cim
+    let oldalcim = document.getElementById("oldalCim")
+    oldalcim.innerHTML = `Pohárnyi | ${LekertTermekek.termek[0].TermekCim}`
     let termekCimHely = document.getElementById("TermekCim")
     termekCimHely.innerHTML = LekertTermekek.termek[0].TermekCim
 
