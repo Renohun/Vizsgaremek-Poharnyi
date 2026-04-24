@@ -137,6 +137,9 @@ router.get('/KuldjUzenetet', (req, res) => {
 router.get('/ASZF', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/ASZF_Adatkezeles/ASZF/ASZF.html'));
 });
+router.get('/Adatkezelesi-Tajekoztato', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/ASZF_Adatkezeles/Adatkezeles/AdKez.html'));
+});
 router.get("/dev",authenticationMiddleware,authorizationMiddelware, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/UnitTest/testing.html'));
 });

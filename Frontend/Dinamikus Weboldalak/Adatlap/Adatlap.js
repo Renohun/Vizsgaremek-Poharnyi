@@ -666,10 +666,10 @@ async function fizetes(){
     let gombSáv=document.getElementById("KosárGombok")
     
     //A felület ahol a fizetési panel és a számla fog helyezkedni
-    let Fizetes=document.getElementById("KosárFizetésGomb")
+    let Fizetes=document.getElementById("IdeKosár")
     //Mindent ami a fizetés felületen volt kitörlök
     gombSáv.innerHTML=""
-    document.getElementById("IdeKosár").innerHTML=""
+    document.getElementById("KosárGombok").innerHTML=""
     Fizetes.innerHTML=""
     Fizetes.classList.add("mt-2","dark","row","justify-content-md-center","justify-content-sm-center","justify-content-lg-between")
 
