@@ -37,6 +37,7 @@
     width: 100%;
     text-align: left;
     font-size: large;
+    cursor: pointer;
 }
 .ogomb:hover{
     background-color: rgb(150, 150, 150);
