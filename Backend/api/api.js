@@ -27,6 +27,7 @@ const storage = multer.diskStorage({
         );
     }
 });
+const Formupload = multer()
 let fileStorage = multer({ storage: storage });
 
 router.get('/test', (req, res) => {
@@ -3141,10 +3142,10 @@ router.get('/Fooldal/BevaneJelentkezve', authenticationMiddleware, async (reques
 //uzenetkuldes
 //
 //
-router.post('/UzenetKuldes', (request, response) => {
+router.post('/UzenetKuldes',Formupload.single('file'), (request, response) => {
     try {
         const obj = request.body;
-
+        const file = request.file;
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
@@ -3156,8 +3157,25 @@ router.post('/UzenetKuldes', (request, response) => {
             from: request.body.email,
             to: 'poharnyi.info@gmail.com',
             subject: `Contact form üzenet`,
-            html: `<h2> Tartalom:</h2> Név: ${request.body.name}<br> email cím: ${request.body.email} <br >téma: ${request.body.subject}<br> tartalom:<br> <h3>${request.body.message}</h3>
-            <a href="mailto:${request.body.email}">Válasz írása</a>`
+            html: `
+            <h2> Tartalom:</h2>
+             Név: ${obj.nev}
+             <br>
+             email cím: ${obj.email}
+            <br >
+            téma: ${obj.tema}
+            <br> 
+            tartalom:
+            <br> 
+            <h3>${obj.szoveg}</h3>
+            <br>
+            <a href="mailto:${request.body.email}"> Válasz írása</a>`,
+            attachments:[
+                {
+                    filename: file.originalname,
+                    content:  file.buffer,
+                }
+            ]
         };
 
         transporter.sendMail(mailOptions, (error, info) => {

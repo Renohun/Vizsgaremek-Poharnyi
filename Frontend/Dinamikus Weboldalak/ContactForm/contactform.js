@@ -8,10 +8,10 @@ const AdatPost = async (url, data) => {
     try {
         const ertek = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: data
         });
-        if (ertek.ok) {
+        if (ertek.ok) 
+        {
             return ertek.json();
         } else {
             console.error(ertek.statusText);
@@ -45,14 +45,8 @@ if (name.value.trim() == "" || email.value.trim() == ""|| subject.value.trim()==
 else if(name.value.trim() != "" || email.value.trim() != ""  || subject.value.trim() != ""  ||message.value != "" )
     {
 
-    let formData = {
-        name: name.value,
-        email : email.value,
-        subject: subject.value,
-        message: message.value
-
-    }
-    
+    let formData = new FormData(document.getElementById("ContactForm"))
+   
    const data = await AdatPost("/api/UzenetKuldes",formData)
    console.log(data)
    if(data.siker != undefined)
