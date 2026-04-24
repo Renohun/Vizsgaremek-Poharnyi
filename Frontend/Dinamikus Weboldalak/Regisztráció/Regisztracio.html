@@ -180,9 +180,9 @@
                             </div>
                             <div>
                                 <label for="jelszo"
-                                    >Adja meg a jelszavát: (Hossz: 8 - 20) (speciális karakterek (min.: 1):
-                                    #?!@$%^&*-)</label
-                                >
+                                    >Adja meg a jelszavát (Kis és nagy betű, min.: 1 db szám és speciális
+                                    karakter(#?!@$%^&*-)):
+                                </label>
                                 <input
                                     type="password"
                                     min="8"
@@ -221,11 +221,17 @@
                         </div>
                         <div>
                             <input type="checkbox" name="18felett" id="18felett" required />
-                            <label for="18felett">Elmúltam 18 éves!</label>
+                            <label for="18felett">Elmúltam 18 éves! <span style="color: red">*</span></label>
                         </div>
                         <div>
                             <input type="checkbox" name="ASZFCheck" id="ASZFCheck" required />
-                            <label for="ASZFCheck">Elfogadom az <a href="" target="_blank">ÁSZF</a> feltételeit</label>
+                            <label for="ASZFCheck"
+                                >Elfogadom az <a href="" target="_blank">ÁSZF</a> feltételeit
+                                <span style="color: red">*</span></label
+                            >
+                        </div>
+                        <div>
+                            <p style="color: red; margin: 0px">* Kötelező elfogadni!</p>
                         </div>
                     </div>
                     <div class="card-footer d-flex flex-column text-center">
