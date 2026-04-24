@@ -28,6 +28,7 @@ const form = document.getElementById("ContactForm")
     let subject = document.getElementById('tema')
     let message = document.getElementById("szoveg")
     let modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+    let file = document.getElementById("file")
    
 form.addEventListener("submit",async(e)=>{
     e.preventDefault()
@@ -48,7 +49,6 @@ else if(name.value.trim() != "" || email.value.trim() != ""  || subject.value.tr
     let formData = new FormData(document.getElementById("ContactForm"))
    
    const data = await AdatPost("/api/UzenetKuldes",formData)
-   console.log(data)
    if(data.siker != undefined)
         {
         
@@ -60,6 +60,7 @@ else if(name.value.trim() != "" || email.value.trim() != ""  || subject.value.tr
         email.value = "";
         subject.value = "";
         message.value = "";
+        file.value = "";
     }
     }
     
