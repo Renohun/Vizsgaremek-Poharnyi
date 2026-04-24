@@ -147,7 +147,12 @@ async function statikusadatok(adatok)
         OssztevHely.innerHTML=""
         for (let i = 0; i < osszetevoAdat.length; i++) {
             let Ossztevo=document.createElement("li")
-            Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round((osszetevoAdat[i].Mennyiség*(MennyisegHely.value/koktélAdat.AlapMennyiseg))*10)/10} ${osszetevoAdat[i].Mertekegyseg.toLowerCase()}`
+            if (osszetevoAdat[i].Mertekegyseg=="cl") {
+                Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round(((osszetevoAdat[i].Mennyiség*10)*(MennyisegHely.value/koktélAdat.AlapMennyiseg))*10)/100} ${osszetevoAdat[i].Mertekegyseg.toLowerCase()}`
+            }
+            else{
+                Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round((osszetevoAdat[i].Mennyiség*(MennyisegHely.value/koktélAdat.AlapMennyiseg))*10)/10} ${osszetevoAdat[i].Mertekegyseg.toLowerCase()}`
+            }
             OssztevHely.appendChild(Ossztevo)
         }
     })
