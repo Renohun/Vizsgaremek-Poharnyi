@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: column;
     width: 20%;
+    margin-left: 5%;
 }
 a{
     color: black;
@@ -15,5 +16,36 @@ a{
     display: flex;
     width: 80%;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: scroll;
+    background-color: white;
+    margin-right: 5%;
+    max-height: 800px;
+}
+.aszfSzoveg{
+    margin-left: 2%;
+}
+table{
+    margin-left: 2%;
+}
+td{width: auto;
+padding: 0;
+color: gray;
+font-size: medium;
+}
+.elsoT{
+    text-align: start;
+    width: 150px;
+}
+.masodT{
+    text-align: start;
+}
+#fogalmak{
+    color: black !important;
+}
+ul{
+    color: gray;
+    font-size: small;
+}
+section{
+    margin-left: 2%;
 }

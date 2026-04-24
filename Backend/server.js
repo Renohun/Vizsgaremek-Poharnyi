@@ -133,7 +133,10 @@ router.get('/PolcKoktel', (req, res) => {
 router.get('/KuldjUzenetet', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/ContactForm/contactform.html'));
 });
-
+//ASZF/Adatkezeles
+router.get('/ASZF', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/ASZF_Adatkezeles/ASZF/ASZF.html'));
+});
 router.get("/dev",authenticationMiddleware,authorizationMiddelware, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/UnitTest/testing.html'));
 });
