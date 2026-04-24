@@ -191,7 +191,9 @@ display: flex;
     background-color: #04aa6d;
     margin: auto;
     margin-bottom: 10px;
+    color: #ffffff;
 }
+.kartyaGomb:hover{background-color: #028051;color: #ffffff;}
 /*Pagination*/
 #pagination{
     display: flex;

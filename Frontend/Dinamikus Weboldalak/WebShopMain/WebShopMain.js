@@ -367,7 +367,7 @@ const kartyaGen = async (data, hova) => {
 
         let kosarba = document.createElement('button');
         kosarba.classList.add('btn', 'kartyaGomb');
-        kosarba.innerHTML = 'kosárba';
+        kosarba.innerHTML = 'Kosárba';
         kosarba.setAttribute("data-bs-toggle","modal" )
         kosarba.setAttribute( "data-bs-target","#staticBackdrop")
         kartyaMain.appendChild(kosarba);
