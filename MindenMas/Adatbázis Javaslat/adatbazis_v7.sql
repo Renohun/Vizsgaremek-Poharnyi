@@ -32,7 +32,8 @@ CREATE TABLE KoktélokJelvényei(
 	KoktélID INT,
 	JelvényID INT,
 	FOREIGN KEY(KoktélID) REFERENCES Koktél(KoktélID),
-	FOREIGN KEY(JelvényID) REFERENCES Jelvények(JelvényID)
+	FOREIGN KEY(JelvényID) REFERENCES Jelvények(JelvényID),
+	PRIMARY KEY Jelvény(KoktélID,JelvényID)
 );
 
 CREATE TABLE Komment(
@@ -52,8 +53,8 @@ CREATE TABLE kommentErtekeles(
 	Pozitiv INT,
 	Negativ INT,
     FOREIGN KEY(FelhID) REFERENCES Felhasználó(FelhID),
-    FOREIGN KEY(KommentID) REFERENCES Komment(KommentID)
-
+    FOREIGN KEY(KommentID) REFERENCES Komment(KommentID),
+	PRIMARY KEY komment(FelhID,KommentID)
 );
 
 CREATE TABLE Ertekeles(
@@ -69,7 +70,8 @@ CREATE TABLE Kedvencek(
 	KikedvelteID INT,
 	MitkedveltID INT,
 	FOREIGN KEY(KikedvelteID) REFERENCES Felhasználó(FelhID),
-	FOREIGN KEY(MitkedveltID) REFERENCES Koktél(KoktélID)
+	FOREIGN KEY(MitkedveltID) REFERENCES Koktél(KoktélID),
+	PRIMARY KEY Kedvenc(KikedvelteID,MitkedveltID)
 );
 
 CREATE TABLE WebshopOrszag(
@@ -105,12 +107,13 @@ CREATE TABLE KoktelokOsszetevoi(
 	Osszetevő VARCHAR(255),
 	Mennyiség DOUBLE,
 	Mertekegyseg TEXT,
-    FOREIGN KEY(KoktélID) REFERENCES Koktél(KoktélID)
+    FOREIGN KEY(KoktélID) REFERENCES Koktél(KoktélID),
+	PRIMARY KEY KoktélÖsszetevő(KoktélID,Osszetevő)
 );
 
 
 CREATE TABLE KosárTermék(
-	KosarID INT NOT NULL,
+	KosarID INT NOT NULL PRIMARY KEY,
 	TermekID INT NOT NULL,
 	Darabszam INT DEFAULT 1,
 	EgysegAr INT NOT NULL,
@@ -134,5 +137,6 @@ CREATE TABLE Jelentők(
 	JelentésID INT,
 	JelentesIndoka TEXT,
 	FOREIGN KEY(JelentőID) REFERENCES Felhasználó(FelhID),
-	FOREIGN KEY(JelentésID) REFERENCES Jelentesek(JelentesID)
+	FOREIGN KEY(JelentésID) REFERENCES Jelentesek(JelentesID),
+	PRIMARY KEY Jelentés(JelentőID,JelentésID)
 );
