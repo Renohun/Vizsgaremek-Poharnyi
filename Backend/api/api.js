@@ -2605,7 +2605,7 @@ router.get('/termek/lekeres/:id', async (request, response) => {
     try {
         const id = request.params.id;
 
-        const query = 'SELECT * FROM webshoptermek WHERE termekID = ?';
+        const query = 'SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE termekID = ?';
         const ErtekeltE = 'SELECT * FROM ertekeles WHERE MilyenDologhoz = ? AND HovaIrták = ? AND Keszito = ?';
         const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
         let ertekeltE;

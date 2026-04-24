@@ -117,7 +117,7 @@ const oldalGenerálás =  async () =>{
     let tablaHely = document.getElementById("Tablazat")
     tablaHely.innerHTML = "";
     //szűrések
-    let TablazatElemek = {"Kategória" : LekertTermekek.termek[0].TermekKategoria,"Márka" : LekertTermekek.termek[0].TermekMarka, "Származási Hely" : LekertTermekek.termek[0].TermekSzarmazas};
+    let TablazatElemek = {"Kategória" : LekertTermekek.termek[0].TermekKategoria,"Márka" : LekertTermekek.termek[0].TermekMarka, "Származási Hely" : LekertTermekek.termek[0].OrszagNev};
     if (LekertTermekek.termek[0].TermekAlkoholSzazalek != 0) 
     {
          TablazatElemek.alkoholtartalom = LekertTermekek.termek[0].TermekAlkoholSzazalek + "%";
