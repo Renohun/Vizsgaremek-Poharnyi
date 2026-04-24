@@ -110,7 +110,15 @@ router.get('/termekFeltoltesTest', async (req, res) => {
             555
         ]);
 
-        res.status(200).json({ szazalek: false, eredemny: true });
+        const query2 = 'SELECT TermekCim FROM webshoptermek WHERE TermekCim LIKE ?';
+        const [eredemny] = await DBconnetion.promise().query(query2, ['testBor']);
+
+        if (eredemny.length > 0) {
+            //tehat ha talalt ilyen testTermeket, azert ellenorzom tobbre, mert lehet hogy tobbszor is le lett futattva a teszt
+            res.status(200).json({ szazalek: false, eredemny: true });
+        } else {
+            res.status(200).json({ szazalek: false, eredemny: false });
+        }
     } catch (error) {
         console.log(error);
 
