@@ -1,0 +1,19 @@
+#main{
+    display: flex;
+    flex-direction: row;
+}
+#cimsorok{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
+a{
+    color: black;
+    font-size: x-large;
+}
+#szoveg{
+    display: flex;
+    width: 80%;
+    flex-direction: column;
+    overflow-y: auto;
+}
