@@ -2065,7 +2065,6 @@ router.post('/Koktel/SendKomment', authenticationMiddleware, async (request, res
         message: 'Sikeres Küldés'
     });
 });
-
 router.post('/Koktel/SendKedvenc', authenticationMiddleware, async (request, response) => {
     const KedvencKeres =
         'SELECT COUNT(*) as kedvelteE FROM kedvencek WHERE KikedvelteID LIKE ? AND MitkedveltID LIKE ?';
@@ -2091,7 +2090,6 @@ router.post('/Koktel/SendKedvenc', authenticationMiddleware, async (request, res
         message: 'Sikeres Küldés'
     });
 });
-
 router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE KommentID LIKE ?';
     const JelentesLekeres =
@@ -2111,7 +2109,6 @@ router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request,
         message: 'Sikeres Törlés'
     });
 });
-
 router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const ErtekelesTorles = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
@@ -2139,7 +2136,6 @@ router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, 
         message: 'Sikeres Törlés'
     });
 });
-
 router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, response) => {
     try {
         const Jelentesek = 'SELECT * FROM jelentesek';
@@ -2219,7 +2215,6 @@ router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, re
         });
     }
 });
-
 router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
     try {
         response.sendFile(path.join(__dirname, '..', 'images', request.params.utvonal));
@@ -2319,7 +2314,6 @@ router.patch('/Koktel/SendKommentRating/:id', async (request, response) => {
         });
     }
 });
-
 router.get('/Koktel/SzomszedosKoktelok/:id', async (request, response) => {
     try {
         const ÖsszesKoktél = 'SELECT KoktélID FROM Koktél ORDER BY KoktélID';
@@ -2370,12 +2364,41 @@ router.get('/Koktel/FelhasznaloAdat/:id', async (request, response) => {
         });
     }
 });
-
 router.get('/Koktel/KommentRendezes/:id', async (request, response) => {
     try {
         const FelhAdatok =
             'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal,Pozitiv,Negativ FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ? ORDER BY Pozitiv';
+        const TiltottKomment =
+            'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?';
+    
         let adatok = await lekeres(FelhAdatok, [request.params.id,"Koktél"]);
+        let tiltott = await lekeres(TiltottKomment, ["Komment",2]);
+        let benne=false 
+        let hol=0
+        for (let i = 0; i < adatok.length; i++) {
+            for (let j = 0; j < tiltott.length; j++) {
+                if (adatok[i].KommentID==tiltott[j].JelentettTartalomID) {
+                    benne=true
+                    hol=i
+                }
+            }
+            if (benne) {
+                adatok.splice(hol,1)
+            }
+            
+        }
+        if (jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET)) {
+            
+            for (let i = 0; i < adatok.length; i++) {
+                if (
+                    adatok[i].Keszito == jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+                ) {
+                    adatok[i].UgyanazE = true;
+                } else {
+                    adatok[i].UgyanazE = false;
+                }
+            }
+        }
         response.status(200).json({
             message: 'Siker!',
             adat: adatok
