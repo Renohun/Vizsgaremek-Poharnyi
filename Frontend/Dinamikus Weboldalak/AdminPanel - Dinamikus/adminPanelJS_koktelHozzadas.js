@@ -98,12 +98,16 @@ document.addEventListener('DOMContentLoaded', () => {
         osszetevoMertekegysegOptMl.innerText = 'Ml';
 
         const osszetevoMertekegysegOptDB = document.createElement('option');
-        osszetevoMertekegysegOptDB.setAttribute('value', 'Darab');
-        osszetevoMertekegysegOptDB.innerText = 'Darab';
+        osszetevoMertekegysegOptDB.setAttribute('value', 'db');
+        osszetevoMertekegysegOptDB.innerText = 'db';
 
         const osszetevoMertekegysegOptGramm = document.createElement('option');
         osszetevoMertekegysegOptGramm.setAttribute('value', 'g');
-        osszetevoMertekegysegOptGramm.innerText = 'g (Gramm)';
+        osszetevoMertekegysegOptGramm.innerText = 'g';
+
+        const osszetevoMertekegysegOptCl = document.createElement('option');
+        osszetevoMertekegysegOptCl.setAttribute('value', 'Cl');
+        osszetevoMertekegysegOptCl.innerText = 'Cl';
 
         osszetevoInputDiv.appendChild(osszetevoInput);
         osszetevoInputDiv.appendChild(osszetevoMenny);
@@ -114,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         osszetevoMertekegysegSelect.appendChild(osszetevoMertekegysegOptMl);
         osszetevoMertekegysegSelect.appendChild(osszetevoMertekegysegOptDB);
         osszetevoMertekegysegSelect.appendChild(osszetevoMertekegysegOptGramm);
+        osszetevoMertekegysegSelect.appendChild(osszetevoMertekegysegOptCl);
 
         console.log(document.getElementById('koktelOsszetevok').children);
     });
