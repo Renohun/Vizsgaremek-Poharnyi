@@ -1742,7 +1742,6 @@ router.get('/Koktelok/KepLekeres', async (request, response) => {
         console.log(error);
     }
 });
-
 router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (request, response) => {
     try {
         let hiba = false;
@@ -1792,7 +1791,6 @@ router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (re
         });
     }
 });
-
 router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (request, response) => {
     try {
         const FelhasznaloTorles = 'DELETE FROM felhasználó WHERE FelhID LIKE ?';
@@ -1871,7 +1869,6 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         });
     }
 });
-
 router.post('/AdatlapLekeres/Fizetes', authenticationMiddleware, async (request, response) => {
     try {
         const KosarTermekLekeres = 'SELECT TermekID,Darabszam FROM kosártermék WHERE KosarID LIKE ?';
@@ -2051,10 +2048,8 @@ router.patch('/Koktel/KoktelModositas/:id', async (request, response) => {
         });
     }
 });
-
 router.post('/Koktel/SendErtekeles', authenticationMiddleware, async (request, response) => {
     const ErtekelesKuldes = 'INSERT INTO Ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
-    console.log(request.body.Tartalom);
 
     await lekeres(ErtekelesKuldes, [
         jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
@@ -2062,6 +2057,8 @@ router.post('/Koktel/SendErtekeles', authenticationMiddleware, async (request, r
         'Koktél',
         request.body.Tartalom
     ]);
+    await lekeres("UPDATE koktél SET KoktelNepszeruseg=KoktelNepszeruseg+1 WHERE KoktélID LIKE ?",[request.body.Koktél])
+
     response.status(200).json({
         message: 'Sikeres Küldés'
     });
@@ -2074,6 +2071,7 @@ router.post('/Koktel/SendKomment', authenticationMiddleware, async (request, res
         'Koktél',
         request.body.Tartalom
     ]);
+    await lekeres("UPDATE koktél SET KoktelNepszeruseg=KoktelNepszeruseg+1 WHERE KoktélID LIKE ?",[request.body.Koktél])
     response.status(200).json({
         message: 'Sikeres Küldés'
     });
@@ -2226,13 +2224,6 @@ router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, re
         response.status(500).json({
             message: 'Hiba!'
         });
-    }
-});
-router.get('/Koktel/KommenteloKepLekeres/:utvonal', async (request, response) => {
-    try {
-        response.sendFile(path.join(__dirname, '..', 'images', request.params.utvonal));
-    } catch (error) {
-        console.log(error);
     }
 });
 router.patch('/Koktel/SendKommentRating/:id', async (request, response) => {
@@ -2565,7 +2556,6 @@ router.get('/PolcKoktel/OsszetevoLekeres', async (request, response) => {
         console.log(error);
     }
 });
-
 router.post('/PolcKoktel/HelyesKoktelLekeres', async (request, response) => {
     try {
         let osszetevok = request.body.osszetevok;
@@ -2579,11 +2569,7 @@ router.post('/PolcKoktel/HelyesKoktelLekeres', async (request, response) => {
         let koktelAdatok = [];
         for (let i = 0; i < koktelok.length; i++) {
             let adatok = (await lekeres(koktelAdat, koktelok[i].KoktélID))[0];
-            console.log(adatok);
-
             let ertekeles = (await lekeres(koktelErtekeles, [koktelok[i].KoktélID, 'Koktél']))[0];
-            console.log(ertekeles);
-
             let osszetevok = await lekeres(koktelOsszetevok, koktelok[i].KoktélID);
             koktelAdatok.push({ adatok, ertekeles, osszetevok });
         }

@@ -254,7 +254,7 @@ async function kommentCreate(adat,i,adatok) {
         
         //Kommentelő képének megadása és classok megadása
 
-        let kep=await AdatLekeresKep("/api/Koktel/KommenteloKepLekeres/"+adat.ProfilkepUtvonal)
+        let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+adat.ProfilkepUtvonal)
         let KommenteloKep=document.createElement("img")
         KommenteloKep.setAttribute("src",URL.createObjectURL(kep))
         KommenteloKep.classList.add("profilkep","col-1","col-sm-1","col-md-1","col-lg-1","col-xl-1")
