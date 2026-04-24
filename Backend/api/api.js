@@ -11,8 +11,6 @@ const path = require('path');
 const fajlkezelo = require('fs/promises');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const { text } = require('stream/consumers');
-const { error, log } = require('console');
 require('dotenv').config();
 const datum = new Date();
 const storage = multer.diskStorage({
@@ -684,8 +682,12 @@ router.get('/emailKuldes', async (req, res) => {
             await transporter.sendMail({
                 from: process.env.GUSER,
                 to: emailDeCoded,
-                subject: 'Elfelejtett jelszo',
-                html: `<h2>Az On kodja:</h2><p style="color: blue;">${emailKod}</p>`
+                subject: 'Pohárnyi weboldal - Elfelejtett jelszó',
+                html: `<p>Az Ön email címére érkezett egy jelszó változtatási kérelem. Ebben email-ben lévő kódot megadva a weboldalon tud majd jelszót változtatni. 
+                Abban az esetben ha Ön nem kérvenyezett jelszó visszaállítást, akkor azt kérjük jelezze felénk a kapcsolatfévétel szekciónál!</p>
+                <h2>Az Ön jelszó visszaállítási kódja: </h2>
+                <p style="color: blue;">${emailKod}</p>
+                <p style="color: red; text-align: center">Ez egy automatizált email. Kérjük ne válaszoljon erre az email-re!</p>`
             });
 
             res.status(200).json({ message: 'sikeres email kuldes!' });
@@ -1703,7 +1705,7 @@ router.post('/AdatlapLekeres/KepFeltoltes', fileStorage.array('profilkep'), asyn
         });
     } catch (error) {
         console.log(error);
-        
+
         response.status(500).json({
             message: error
         });
@@ -2012,15 +2014,26 @@ router.get('/Koktel/:id', async (request, response) => {
 router.patch('/Koktel/KoktelModositas/:id', async (request, response) => {
     try {
         const koktelChange = 'UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=? WHERE KoktélID LIKE ?';
-        const koktelChangeKep = 'UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=?,BoritokepUtvonal=? WHERE KoktélID LIKE ?';
+        const koktelChangeKep =
+            'UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=?,BoritokepUtvonal=? WHERE KoktélID LIKE ?';
         const OsszetevoCleanse = 'DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
         const UjOsszetevo =
             'INSERT INTO koktelokosszetevoi (KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES(?,?,?,?)';
-        if (request.body.Kep!=undefined) {   
-            await lekeres(koktelChangeKep, [request.body.Cim, request.body.Recept, request.body.Mennyiseg, request.body.Kep,request.params.id]);
-        }
-        else{
-            await lekeres(koktelChange, [request.body.Cim, request.body.Recept, request.body.Mennyiseg, request.params.id]);
+        if (request.body.Kep != undefined) {
+            await lekeres(koktelChangeKep, [
+                request.body.Cim,
+                request.body.Recept,
+                request.body.Mennyiseg,
+                request.body.Kep,
+                request.params.id
+            ]);
+        } else {
+            await lekeres(koktelChange, [
+                request.body.Cim,
+                request.body.Recept,
+                request.body.Mennyiseg,
+                request.params.id
+            ]);
         }
         await lekeres(OsszetevoCleanse, [request.params.id]);
         for (let i = 0; i < request.body.Osszetevok.length; i++) {
@@ -2370,29 +2383,25 @@ router.get('/Koktel/KommentRendezes/:id', async (request, response) => {
             'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal,Pozitiv,Negativ FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ? ORDER BY Pozitiv';
         const TiltottKomment =
             'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?';
-    
-        let adatok = await lekeres(FelhAdatok, [request.params.id,"Koktél"]);
-        let tiltott = await lekeres(TiltottKomment, ["Komment",2]);
-        let benne=false 
-        let hol=0
+
+        let adatok = await lekeres(FelhAdatok, [request.params.id, 'Koktél']);
+        let tiltott = await lekeres(TiltottKomment, ['Komment', 2]);
+        let benne = false;
+        let hol = 0;
         for (let i = 0; i < adatok.length; i++) {
             for (let j = 0; j < tiltott.length; j++) {
-                if (adatok[i].KommentID==tiltott[j].JelentettTartalomID) {
-                    benne=true
-                    hol=i
+                if (adatok[i].KommentID == tiltott[j].JelentettTartalomID) {
+                    benne = true;
+                    hol = i;
                 }
             }
             if (benne) {
-                adatok.splice(hol,1)
+                adatok.splice(hol, 1);
             }
-            
         }
         if (jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET)) {
-            
             for (let i = 0; i < adatok.length; i++) {
-                if (
-                    adatok[i].Keszito == jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
-                ) {
+                if (adatok[i].Keszito == jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID) {
                     adatok[i].UgyanazE = true;
                 } else {
                     adatok[i].UgyanazE = false;
@@ -2822,7 +2831,8 @@ router.get('/WebShop/HosszLekeres', async (request, response) => {
 
 router.get('/WebShop/TermekLekeresPag', async (request, response) => {
     try {
-        const query = 'SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID LIMIT ? OFFSET ?';
+        const query =
+            'SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID LIMIT ? OFFSET ?';
         const Lengthquery = 'SELECT COUNT(TermekID) FROM webshoptermek';
         const limit = parseInt(request.query.limit);
         const offset = parseInt(request.query.offset);
@@ -2846,7 +2856,8 @@ router.get('/WebShop/TermeklekeresByNev/:nev', async (request, response) => {
 
         const nev = request.params.nev;
 
-        const query = 'SELECT * FROM webshoptermek  INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE TermekCim like ? LIMIT ? OFFSET ?';
+        const query =
+            'SELECT * FROM webshoptermek  INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE TermekCim like ? LIMIT ? OFFSET ?';
 
         const [termekek] = await DBconnetion.promise().query(query, [`%${nev}%`, limit, offset]);
 
