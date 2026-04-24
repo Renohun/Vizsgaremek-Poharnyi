@@ -3180,7 +3180,6 @@ router.post('/UzenetKuldes',Formupload.single('file'), (request, response) => {
                     }
                 ]   
             }
-            console.log(mailOptions)
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log(error);
