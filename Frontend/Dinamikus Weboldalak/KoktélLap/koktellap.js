@@ -310,7 +310,7 @@ async function kommentCreate(adat,i,adatok) {
         let KommentCollapse=document.createElement("input")
         KommentCollapse.setAttribute("type","button")
         KommentCollapse.setAttribute("value","↑")
-        KommentCollapse.classList.add("btn","col-md-1","col-sm-2")
+        KommentCollapse.classList.add("btn","col-md-1","col-sm-2","border-0")
         KommentHeader.appendChild(KommentCollapse)
 
         //Átszínezés
@@ -344,7 +344,7 @@ async function kommentCreate(adat,i,adatok) {
         let upvote=document.createElement("input")
         upvote.setAttribute("type","button")
         upvote.setAttribute("value","👍")
-        upvote.classList.add("btn")
+        upvote.classList.add("btn","border-0")
         pozitiv.classList.add("col-2")
         pozitiv.appendChild(upvote)
         pozitiv.appendChild(pozitivSzam)
@@ -355,7 +355,7 @@ async function kommentCreate(adat,i,adatok) {
         let downvote=document.createElement("input")
         downvote.setAttribute("type","button")
         downvote.setAttribute("value","👎")
-        downvote.classList.add("btn")
+        downvote.classList.add("btn","border-0")
         negativ.classList.add("col-2","ps-4")
         negativ.appendChild(downvote)
         negativ.appendChild(negativSzam)
@@ -677,6 +677,10 @@ async function szerkesztes() {
                         if (opctiok[j].innerHTML=="ml") {
                             mltotal+=parseInt(osszetevoDarab[1].value)
                         }
+                        else if(opctiok[j].innerHTML=="cl"){
+                            //1cl=10ml
+                            mltotal+=(parseInt(osszetevoDarab[1].value)*10)
+                        }
                     }
                 }
                 osszetevok.push(osszetev)
@@ -748,11 +752,14 @@ async function osszetevo(adat)
     let ml=document.createElement("option")
     ml.innerHTML="ml"
     let gr=document.createElement("option")
-    gr.innerHTML="gr"
+    gr.innerHTML="gr"    
+    let cl=document.createElement("option")
+    cl.innerHTML="cl"
     
     mertekegysegek.appendChild(ml)
     mertekegysegek.appendChild(db)
     mertekegysegek.appendChild(gr)
+    mertekegysegek.appendChild(cl)
 
     let selectopt=mertekegysegek.childNodes
     if (adat!="") {
