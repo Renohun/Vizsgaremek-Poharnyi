@@ -368,4 +368,52 @@ router.patch('/TermekFrissitesTeszt', async (request, response) => {
         });
     }
 });
+router.delete('/TermekUritesTest', async (request, response) => {
+    try {
+    let honnan = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
+    let ures = false;
+    let siker = true;
+    let alapures = false;
+    const KosarElsoLeker = "SELECT * FROM KosárTermék WHERE KosarID LIKE ?"
+    const [kosarElso] = await DBconnetion.promise().query(KosarElsoLeker, [honnan]);
+    if (kosarElso.length == 0) 
+        {
+                siker = false;
+                ures = false;
+                alapures = true;    
+                 console.log("asd")
+        }
+    else{
+       
+    let TermékTörlés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
+       const [torol] = await DBconnetion.promise().query(TermékTörlés, [honnan]);
+       if (torol.affectedRows == 0) {
+        siker=false;
+        }
+        else{
+            const KosarLeker = "SELECT * FROM KosárTermék WHERE KosarID LIKE ?"
+            const [kosar] = await DBconnetion.promise().query(KosarLeker, [honnan]);
+            if (kosar.length > 0) 
+            {
+                siker = false;
+                ures = false;    
+            }
+            else if(kosar.length == 0){
+                ures = true;
+            }
+        }  
+    }
+     response.status(200).json({
+            siker: siker,
+            ures:ures,
+            alapures: alapures
+        });
+    } catch (error) {
+        console.log(error)
+        response.status(500).json({
+            message: 'Hiba Történt!',
+            hiba: error
+        });
+    }
+});
 module.exports = router;

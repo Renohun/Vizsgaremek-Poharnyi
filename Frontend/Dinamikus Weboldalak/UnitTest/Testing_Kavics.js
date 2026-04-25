@@ -24,6 +24,15 @@ const TestpatchFetch=async(url,object)=>{
         return valasz.json()
     }
 }
+const TestDelFetch=async(url,object)=>{
+    const valasz=await fetch(url,{
+        method:"DELETE",
+        headers:{"Content-Type":"application/json"},
+    })
+    if (valasz.ok) {
+        return valasz.json()
+    }
+}
 document.addEventListener("DOMContentLoaded",async()=>{
 //Termék kosárba tétele
     document.getElementById("kosartest").addEventListener("click",async()=>{
@@ -113,4 +122,22 @@ document.addEventListener("DOMContentLoaded",async()=>{
             }
         }
     })
+    //kosarurites
+     document.getElementById('KosarTorolTesztBtn').addEventListener('click', async () => {
+      
+        const eredmeny = await TestDelFetch('/test/TermekUritesTest');
+
+        document.getElementById('TorolSiker').innerHTML = eredmeny.siker;
+        document.getElementById('Ures').innerHTML = eredmeny.ures;
+        document.getElementById('AUres').innerHTML = eredmeny.alapures;
+        
+        let ok = document.getElementsByTagName('span');
+        for (let i = 0; i < ok.length; i++) {
+            if (ok[i].innerHTML == 'true') {
+                ok[i].classList.add('text-success');
+            } else {
+                ok[i].classList.add('text-danger');
+            }
+        }
+    });
 })
