@@ -622,12 +622,13 @@ async function szerkesztes() {
     szerk.classList.add("btn","fs-1","m-0","p-0","border-0")
     szerk.addEventListener("click",async()=>{
         document.getElementById("fav").removeChild(szerk)
+        document.getElementById("adagok").innerHTML=""
 
         //ඞ Ugyan az az input mező, az eventlistener nélkül
         let imposztor=document.createElement("input")
         imposztor.classList.add("form-control")
-        imposztor.setAttribute("value",document.getElementById("Osszetevok").childNodes[3].value)
-        document.getElementById("Osszetevok").replaceChild(imposztor,document.getElementById("Osszetevok").childNodes[3]);
+        imposztor.setAttribute("value",document.getElementById("Osszetevok").childNodes[5].value)
+        document.getElementById("Osszetevok").replaceChild(imposztor,document.getElementById("Osszetevok").childNodes[5]);
         
         let yes=document.createElement("input")
         yes.setAttribute("type","button")
