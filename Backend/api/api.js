@@ -2709,12 +2709,13 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
                     mennyiseg,
                     ArLekeres[0][0].Ar
                 ]);
-                response.status(200).json({ Siker: KosarFeltolt.affectedRows });
+                console.log(KosarFeltolt)
+                response.status(200).json({ Siker: KosarFeltolt.affectedRows});
             } else {
                 const kosarUpdateQuery =
                     'UPDATE kosártermék SET Darabszam = Darabszam+? WHERE TermekID = ? AND KosarID = ?';
                 const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [mennyiseg, id, UserID]);
-                response.status(200).json({ Siker: KosarUpdate.affectedRows });
+                response.status(200).json({ Siker: KosarUpdate.affectedRows, id : KosarUpdate.insertId });
             }
         }
     } catch (error) {

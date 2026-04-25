@@ -2,7 +2,7 @@ const express = require('express');
 const DBconnetion = require('../database.js');
 const argon = require('argon2');
 const router = express.Router();
-
+const jwt = require('jsonwebtoken');
 async function lekeres(query, param) {
     let result;
     await DBconnetion.promise()
@@ -125,5 +125,103 @@ router.get('/termekFeltoltesTest', async (req, res) => {
         res.status(500).json({ eredemny: false });
     }
 });
+router.post('/TermekKosarTest', async(request,response)=>{
+     try {
+        let siker = false;
+        let mennyiseghiba = false;
+        let hozzaadott = false;
+        let bovitett = false;
+        let felkerultE = false;
+        let idHiba = false;
+        let insertId;
+        let id = parseInt(request.body.id);
+        const mennyiseg = request.body.mennyiseg;
+        
+        if (isNaN(id) || id == 0) 
+        {
+            idHiba = true;
+             response.status(200).json
+            ({
+            siker : siker,
+            mennyiseghiba :mennyiseghiba,
+            hozzaadott: hozzaadott,
+            bovitett: bovitett,
+            felkerulte: felkerultE,
+            idHiba : idHiba
+            })
+        }
+        console.log('asd')
+        const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
+
+        const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
+        const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
+
+        const mennyisegLekeres = 'SELECT TermekKeszlet FROM webshoptermek WHERE TermekID = ?';
+        const [MennyisegLe] = await DBconnetion.promise().query(mennyisegLekeres, [id]);
+
+        const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? &&  KosarID = ?';
+        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
+
+        if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1)
+        {
+            siker = false;mennyiseghiba = true;
+        } 
+        else {
+           
+            if (vanEIlyen[0] == undefined) {
+                const kosarFeltoltQuery =
+                    'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
+                const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
+                    UserID,
+                    id,
+                    mennyiseg,
+                    ArLekeres[0][0].Ar
+                ]);
+                hozzaadott = true;
+                siker = true;
+                insertId = KosarFeltolt.insertId;
+                const felkerulteQuery = "SELECT * FROM kosártermék WHERE KosarID = ? AND TermekID = ?"
+                const  [felkerulte] = await DBconnetion.promise().query(felkerulteQuery,[UserID,id])
+                    if (felkerulte != "") 
+                    {
+                        felkerultE = true    
+                    }
+            } else {
+                //lekérem az éppen változtatott rekordot
+                const valtozoTermekQ = "SELECT * FROM kosártermék WHERE KosarID = ? AND TermekID = ?"
+                const  [valtozo] = await DBconnetion.promise().query(valtozoTermekQ,[UserID ,id ])
+                const kosarUpdateQuery =
+                    'UPDATE kosártermék SET Darabszam = Darabszam+? WHERE TermekID = ? AND KosarID = ?';
+                const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [mennyiseg, id, UserID]);
+                bovitett = true;
+                siker = true;
+                insertId = KosarUpdate.insertId;
+                const osszkosar = "SELECT * FROM kosártermék"
+                const  [felkerulte] = await DBconnetion.promise().query(osszkosar)
+                
+                for (let i = 0; i < felkerulte.length; i++) 
+                {
+                    //a változtatás előtti rekordot összehasonlitom a valtoztatas utanival
+                    if (felkerulte[i].KosarID == valtozo[0].KosarID && felkerulte[i].TermekID == valtozo[0].TermekID && felkerulte[i].Darabszam == valtozo[0].Darabszam + parseInt(mennyiseg)) {
+                        felkerultE = true;
+                    }
+                    
+                }
+            }
+        }
+        
+        response.status(200).json({
+            siker : siker,
+            mennyiseghiba :mennyiseghiba,
+            hozzaadott: hozzaadott,
+            bovitett: bovitett,
+            felkerulte: felkerultE,
+            idHiba : idHiba
+        })
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({ hiba: error });
+    }
+})
 
 module.exports = router;
