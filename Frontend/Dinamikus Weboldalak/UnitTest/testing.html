@@ -149,14 +149,30 @@
             </div>
         </nav>
         <div class="container flex-grow-1">
-            
-            <div class="card mt-2">
-                <input type="button" class="btn btn-success" value="Koktél Teszt" id="ktest" />
-                <p>Készítés: <span id="make"></span></p>
-                <p>Értékelés: <span id="ert"></span></p>
-                <p>Kommentelés: <span id="komm"></span></p>
-                <p>Komment Értékelés: <span id="kommert"></span></p>
-                <p>Kedvelés: <span id="kedvenc"></span></p>
+            <div class="card mt-2 p-3">
+                <div class="row col-12">
+                    <h2 class="text-center col-11">Kotkél Teszt </h2>
+                    <input type="button" class="col-1 p-0 btn border-0 float-end" value="^" id="becsuk">
+                </div>
+                <div id="koktel">
+                    <p>Készítés: <span id="make"></span></p>
+                    <p>Jelvény hozzáadás: <span id="jelv"></span></p>
+                    <p>Összetevő hozzáadás: <span id="ossz"></span></p>
+                    <p>Értékelés: <span id="ert"></span></p>
+                    <p>Kommentelés: <span id="komm"></span></p>
+                    <p>Komment Értékelés: <span id="kommert"></span></p>
+                    <p>Kedvelés: <span id="kedvenc"></span></p>
+                    <hr>
+                    <p>Koktél Törlés: <span id="makedel"></span></p>
+                    <p>Jelvény Törlés: <span id="jelvdel"></span></p>
+                    <p>Összetevő Törlés: <span id="osszdel"></span></p>
+                    <p>Értékelés Törlés: <span id="ertdel"></span></p>
+                    <p>Komment Törlés: <span id="kommdel"></span></p>
+                    <p>Komment Értékelés Törlés: <span id="kommertdel"></span></p>
+                    <p>Kedvelés Törlés: <span id="kedvencdel"></span></p>
+                    <hr>
+                    <input type="button" class="btn btn-success mb-3 w-100" value="Indítás" id="ktest" />
+                </div>
             </div>
 
             <div class="card mt-2">
@@ -220,6 +236,7 @@
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/navBar.js"></script>
         <script src="../UnitTest/testing.js"></script>
-          <script src="../UnitTest/Testing_Kavics.js"></script>
+        <script src="../UnitTest/Testing_Kavics.js"></script>
+        <script src="../UnitTest/testingMarci.js"></script>
     </body>
 </html>
