@@ -1,0 +1,28 @@
+
+#cimsor>a{
+    color: black;
+    font-size: x-large;
+}
+#szoveg{
+    flex-direction: column;
+    overflow-y: scroll;
+    background-color: white;
+    max-height: 800px;
+}
+.aszfSzoveg{
+    margin-left: 2%;
+}
+
+.masodT{
+    text-align: start;
+}
+#fogalmak{
+    color: black !important;
+}
+.aszfSzoveg>ul{
+    color: gray;
+    font-size: small;
+}
+section{
+    margin-left: 2%;
+}

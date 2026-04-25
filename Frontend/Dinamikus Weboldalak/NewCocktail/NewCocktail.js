@@ -146,18 +146,23 @@ function osszetevohozzaadas() {
     let opcioMl = document.createElement('option');
     let opcioDb = document.createElement('option');
     let opcioGr = document.createElement('option');
-    opcioMl.value = 'ML';
+    let opcioCL = document.createElement('option');
+    opcioMl.value = 'ml';
     opcioDb.value = 'darab';
-    opcioGr.value = 'GR';
+    opcioGr.value = 'gr';
+    opcioCL.value = 'cl';
     opcioMl.innerHTML = 'ml';
     opcioDb.innerHTML = 'db';
     opcioGr.innerHTML = 'gr';
+    opcioCL.innerHTML = 'cl';
     opcioMl.classList.add('Mertekegyseg');
     opcioDb.classList.add('Mertekegyseg');
     opcioGr.classList.add('Mertekegyseg');
+    opcioCL.classList.add('Mertekegyseg');
     mertekegyseg.appendChild(opcioMl);
     mertekegyseg.appendChild(opcioDb);
     mertekegyseg.appendChild(opcioGr);
+    mertekegyseg.appendChild(opcioCL);
     //parent-child viszonyok meghatározása
    
     col.appendChild(input);
@@ -438,8 +443,13 @@ const AdatStorage = async () => {
             {
                 Ujmennyiseg += parseInt(osszetevoLista[i][1])
             }
+            else if (osszetevoLista[i][2] == "cl")
+            {
+                Ujmennyiseg += (parseInt(osszetevoLista[i][1]))*10
+            }
         }
 
+        console.log(Ujmennyiseg)
     if (Ujmennyiseg != document.getElementById('mennyiseg').value) 
     {
         egyezoMl = false

@@ -141,9 +141,11 @@ display: flex;
 
 .kartya:has(.kartyakep:hover){
     border: rgb(48, 48, 48) 2px solid;
+    cursor: pointer;
 }
 .kartya:has(.kartyaBody:hover){ /*:has - css pseudo class - egy parent elemet tudunk változtatni, ha valamelyik childrenjével történik egy esemény - stackoverflow*/
     border: rgb(48, 48, 48) 2px solid;
+    cursor: pointer;
 }
 .kartyaCim{
     height: 40px;
@@ -189,7 +191,9 @@ display: flex;
     background-color: #04aa6d;
     margin: auto;
     margin-bottom: 10px;
+    color: #ffffff;
 }
+.kartyaGomb:hover{background-color: #028051;color: #ffffff;}
 /*Pagination*/
 #pagination{
     display: flex;

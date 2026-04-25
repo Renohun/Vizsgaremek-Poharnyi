@@ -241,6 +241,7 @@ background-color: rgb(65, 65, 65);
 }
 #kattint:hover{
     border: solid rgb(172, 172, 172) 2px;
+     cursor: pointer;
 }
 #kiprobalom{
     color: aliceblue;
@@ -250,6 +251,7 @@ background-color: rgb(65, 65, 65);
     background-color: rgba(0, 0, 0, 0.6);
     background-blend-mode: darken;
 }
+
 /*Kapcsolat*/
 #Kapcsolat
 {
@@ -294,6 +296,7 @@ background-color: rgb(65, 65, 65);
 }
 #KapcsKep:hover{
     border: solid rgb(172, 172, 172) 2px;
+     cursor: pointer;
 }
 #KapcsSzoveg{
      width: 30%;

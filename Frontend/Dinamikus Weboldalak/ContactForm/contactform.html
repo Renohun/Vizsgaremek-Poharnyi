@@ -160,15 +160,18 @@
                     <h5 id="cimSzov"> Küldj Nekünk üzenetet!</h5>
                 </div>
                 <form id="ContactForm">
-                    <label class="label form-label" for="nev">Név</label>
+                    <label class="label form-label" for="nev">Név*</label>
                     <input class="formElem form-control" type="text" id="nev" name="nev" placeholder="Példa Péter">
-                    <label class="label form-label" for="email">Email cím</label>
+                    <label class="label form-label" for="email">Email cím*</label>
                     <input class="formElem form-control" type="email" id="email" name="email" placeholder="123@example.com">
-                    <label class="label form-label" for="tema">Tárgy</label>
+                    <label class="label form-label" for="tema">Tárgy*</label>
                     <input class="formElem form-control" type="text" id="tema" name="tema" placeholder="Kapcsolatfelvétel">
-                    <label class="label form-label" for="szoveg">Tartalom</label>
+                    <label class="label form-label" for="tema">Kép</label>
+                    <input class="formElem form-control" type="file" id="file" name="file" placeholder="Kép">
+                    <label class="label form-label" for="szoveg">Tartalom*</label>
                     <textarea class="formElem form-control" name="szoveg" id="szoveg"  placeholder="A közlendő üzenet"></textarea>
                     <input type="submit" class="submit form-control btn btn-success " id="submitGomb" value="Küldés">
+                    
                 </form>
             </div>
 

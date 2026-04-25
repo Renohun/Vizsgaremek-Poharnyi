@@ -1,0 +1,64 @@
+#main{
+    display: flex;
+    flex-direction: row;
+}
+#cim{
+    font-size: xx-large;
+    text-align: center;
+    margin-bottom: 5%;
+}
+#cimsorok{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    margin-left: 5%;
+}
+a{
+    color: black;
+    font-size: x-large;
+}
+#linkek{
+    font-size: x-large;
+}
+#szoveg{
+    display: flex;
+    width: 80%;
+    flex-direction: column;
+    overflow-y: scroll;
+    background-color: white;
+    margin-right: 5%;
+    max-height: 800px;
+}
+.aszfSzoveg{
+    margin-left: 2%;
+}
+table{
+    margin-left: 2%;
+}
+td{width: auto;
+padding: 0;
+color: gray;
+font-size: medium;
+}
+.elsoT{
+    text-align: start;
+    width: 150px;
+}
+.masodT{
+    text-align: start;
+}
+#fogalmak{
+    color: black !important;
+}
+ul{
+    color: gray;
+    font-size: small;
+}
+section{
+    margin-left: 2%;
+}
+@media only screen and (max-width:1000px){
+    #main{flex-direction: column;align-items: center;justify-content: center;}
+    #cimsorok{width: 100%; align-items: center;}
+    #szoveg{width: 100%;margin: 0px; width: 95%;}
+}

@@ -12,8 +12,8 @@ const saveLastUrl = require('./api/saveLastURLMiddleware.js');
 const app = express();
 const router = express.Router();
 
-const ip = '0.0.0.0';
-const port = 3006;
+const ip = '127.0.0.1';
+const port = 3000;
 
 app.use(express.json()); //?Middleware JSON
 app.set('trust proxy', 1); //?Middleware Proxy
@@ -133,7 +133,13 @@ router.get('/PolcKoktel', (req, res) => {
 router.get('/KuldjUzenetet', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/ContactForm/contactform.html'));
 });
-
+//ASZF/Adatkezeles
+router.get('/ASZF', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/ASZF_Adatkezeles/ASZF/ASZF.html'));
+});
+router.get('/Adatkezelesi-Tajekoztato', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/ASZF_Adatkezeles/Adatkezeles/AdKez.html'));
+});
 router.get("/dev",authenticationMiddleware,authorizationMiddelware, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/UnitTest/testing.html'));
 });

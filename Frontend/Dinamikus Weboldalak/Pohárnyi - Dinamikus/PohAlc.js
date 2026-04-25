@@ -183,7 +183,7 @@ function koktelRendereles(koktelok) {
 
             const tovabbBtn = document.createElement('input');
             tovabbBtn.setAttribute('type', 'button');
-            tovabbBtn.setAttribute('value', 'Tovább a Receptre');
+            tovabbBtn.setAttribute('value', 'Tovább a receptre');
             tovabbBtn.classList.add('btn', 'btn-secondary', 'w-100');
             tovabbBtn.dataset.id = koktel.KoktélID;
             cardBody.appendChild(tovabbBtn);

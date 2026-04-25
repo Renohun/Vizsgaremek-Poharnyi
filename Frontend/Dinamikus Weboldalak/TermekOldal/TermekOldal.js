@@ -89,11 +89,15 @@ const oldalGenerálás =  async () =>{
     
     //Backendből kapott objectek
     const LekertTermekek = await termek_lekeres();
-    console.log("awe")
+   //focim
     if (LekertTermekek.termek.length == 0) {
         window.location.href = "/HianyzoTermek"
     }
+    //url
+    window.location.href += `#${LekertTermekek.termek[0].TermekCim}`
     //Cim
+    let oldalcim = document.getElementById("oldalCim")
+    oldalcim.innerHTML = `Pohárnyi | ${LekertTermekek.termek[0].TermekCim}`
     let termekCimHely = document.getElementById("TermekCim")
     termekCimHely.innerHTML = LekertTermekek.termek[0].TermekCim
 
@@ -113,7 +117,7 @@ const oldalGenerálás =  async () =>{
     let tablaHely = document.getElementById("Tablazat")
     tablaHely.innerHTML = "";
     //szűrések
-    let TablazatElemek = {"Kategória" : LekertTermekek.termek[0].TermekKategoria,"Márka" : LekertTermekek.termek[0].TermekMarka, "Származási Hely" : LekertTermekek.termek[0].TermekSzarmazas};
+    let TablazatElemek = {"Kategória" : LekertTermekek.termek[0].TermekKategoria,"Márka" : LekertTermekek.termek[0].TermekMarka, "Származási Hely" : LekertTermekek.termek[0].OrszagNev};
     if (LekertTermekek.termek[0].TermekAlkoholSzazalek != 0) 
     {
          TablazatElemek.alkoholtartalom = LekertTermekek.termek[0].TermekAlkoholSzazalek + "%";

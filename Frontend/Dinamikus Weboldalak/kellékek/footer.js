@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     let gombDiv1=document.createElement("div")
     gombDiv1.classList.add("text-lg-end","text-center")
     let gomb1=document.createElement("a")
-    gomb1.innerHTML="Elérhetőségek"
+    gomb1.innerHTML="Kapcsolat"
     gomb1.setAttribute("href","/KuldjUzenetet")
     gomb1.setAttribute("target","_blank")
     gombDiv1.appendChild(gomb1)

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<!--Források:
+    https://www.reddit.com/r/webdev/comments/1iwzkvi/how_do_you_handle_terms_conditions_pages/
+    https://kiszervezettmarketing.hu/weboldal-keszites/aszf-minta/
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pohárnyi | Adatkezelés</title>
+      <link rel="stylesheet" href="../../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="../../kellékek/NavBar.css" />
+      <link rel="stylesheet" href="../../kellékek/universalCSS.css" />
+      <link rel="stylesheet" href="../../kellékek/lightTheme.css" />
+      <link rel="stylesheet" href="../../ASZF_Adatkezeles/Adatkezeles/AdKez.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
+</head>
+<body>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary hatter shadow">
+            <div class="container-fluid hatter">
+                <div class="navbar-brand">
+                    <a class="navbar-brand" id="marka" href="/Fooldal">Pohárnyi</a>
+                    <p id="alszoveg">Az online koktélbár</p>
+                </div>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasDarkNavbar"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div
+                    class="offcanvas offcanvas-end hatter"
+                    id="offcanvasDarkNavbar"
+                    tabindex="-1"
+                    aria-labelledby="offcanvasDarkNavbarLabel"
+                >
+                    <div class="offcanvas-header">
+                        <a href="/Fooldal" class="navbar-brand"
+                            ><h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">
+                                Pohárnyi<br /><span id="alszoveg">Az online koktélbár</span>
+                            </h5></a
+                        >
+                        <button
+                            type="button"
+                            class="btn-close btn-close-black"
+                            data-bs-dismiss="offcanvas"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 w-100">
+                            <div id="leftSideNavBar">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Fooldal" aria-current="page">Főoldal</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Koktelok " class="nav-link">Koktélok</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/WebShop" class="nav-link">Webshop</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/PolcKoktel" class="nav-link">Mi van a polcon?</a>
+                                </li>
+                            </div>
+                            <div id="rightSideNavBar">
+                                <li class="nav-item" id="dropdownMenuMini">
+                                    <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                                        <a
+                                            class="nav-link dropdown-toggle"
+                                            role="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            href="#"
+                                            >Felhasználó</a
+                                        >
+                                        <ul class="dropdown-menu dropdown-menu-end hatter">
+                                            <li class="dropdown-item">
+                                                <a href="/Adatlap">Adatlap</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item" id="adminPanelHref">
+                                                <a href="/AdminPanel">Admin Panel</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <div id="ThemeSwitcher">
+                                        <img
+                                            src="../kellékek/free-moon-icon-2304-thumb.png"
+                                            id="themeSwitcherimg"
+                                            style="height: 50px; width: 50px"
+                                            alt=""
+                                        />
+                                    </div>
+                                </li>
+                                <li class="nav-item w-100">
+                                    <a href="/Regisztralj" id="regisztracio">
+                                        <input
+                                            type="button"
+                                            class="btn btn-secondary nav-item mt-2 w-100"
+                                            value="Regisztráció"
+                                        />
+                                    </a>
+                                </li>
+                                <li class="nav-item w-100">
+                                    <a href="/LepjBe" id="belepes">
+                                        <input
+                                            type="button"
+                                            class="btn btn-warning nav-item mt-2 w-100"
+                                            value="Bejelentkezés"
+                                        />
+                                    </a>
+                                </li>
+                                <li class="nav-item w-100">
+                                    <a href="/Keszites" id="sajatKoktelKeszites" hidden>
+                                        <input
+                                            type="button"
+                                            class="nav-item btn btn-warning mt-2 w-100"
+                                            value="Saját koktél létrehozása"
+                                        />
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="dropdownMenuBig">
+                                    <div class="nav-item dropdown" id="dropdownMenu" hidden>
+                                        <img
+                                            class="nav-link dropdown-toggle profil"
+                                            data-bs-toggle="dropdown"
+                                            role="button"
+                                            aria-expanded="false"
+                                        />
+                                        <ul class="dropdown-menu dropdown-menu-end hatter">
+                                            <li class="dropdown-item">
+                                                <a href="/Adatlap">Adatlap</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item" id="adminPanelHref">
+                                                <a href="/AdminPanel">Admin Panel</a>
+                                            </li>
+                                            <hr class="dropdown-divider" />
+                                            <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <main class="">
+            <h1 class="text-center">Általános Szerződési Feltételek</h1>
+            <div id="main" class="row w-100">
+                <div id="cimsor"class="col-12 col-sm-12 col-md-2">
+                    
+                    <a href="#elsoCim">Bevezetés</a> <br>
+                    <a href="#MasodikCim">Adatkezelés Célja</a> <br>
+                    <a href="#HarmadikCim">Kezelt Adatok Köre</a> <br>
+                    <a href="#NegyedikCim">Jogalap</a> <br>
+                    <a href="#OtodikCim">Adatfeldolgozás</a> <br>
+                    <a href="#HatodikCim">Adattárolás</a> <br>
+                    <a href="#HetedikCim">Jogai</a> <br>
+                    <a href="#NyolcadikCim">Jótállás</a> <br>
+                    <a href="#KilencedikCim">Jogorvoslati lehetőségek</a> <br>
+                    <a href="#TizedikCim">Záró rendelkezések</a> <br>
+
+                </div>
+
+                <div id="szoveg" class="col-12 col-sm-12 col-md-9">
+                    <h2 id="elsoCim" class="cimsor">1 - Bevezetés</h2>
+                    <p id="elsoSzoveg" class="aszfSzoveg">Üdvözöljük a Pohárnyi weboldalon! Köszönjük, hogy minket választott!
+                       Jelen adatkezelési tájékoztató célja, hogy átfogó és közérthető módon ismertesse a PohárnyiTeam (a továbbiakban: „Adatkezelő”) által üzemeltetett weboldalon megvalósuló személyesadat-kezelési gyakorlatot.
+                       Az Adatkezelő elkötelezett a felhasználók személyes adatainak védelme iránt, és az adatkezelést minden esetben a hatályos jogszabályoknak megfelelően végzi.
+                    </p>
+                    <h2 id="MasodikCim" class="cimsor">2 - Adatkezelés Célja</h2>
+                    <p id="MasodikSzoveg" class="aszfSzoveg">
+                        Az Adatkezelő a weboldal használata során megadott személyes adatokat több, egymással összefüggő célból kezeli.
+                        Az adatkezelés elsődleges célja a felhasználói fiókok létrehozása és fenntartása, amely lehetővé teszi a felhasználók számára, hogy koktél recepteket osszanak meg, más felhasználók tartalmait megtekintsék, valamint közösségi funkciókat vegyenek igénybe.
+                        További cél a felhasználókkal való kapcsolattartás biztosítása, ideértve a rendszerüzenetek, technikai értesítések és – amennyiben a felhasználó ehhez hozzájárul – egyéb tájékoztatások küldését.
+                        Az adatkezelés ezen túlmenően szolgálhatja a szolgáltatás fejlesztését, a felhasználói élmény javítását, valamint a jogszabályi kötelezettségek teljesítését.
+                    </p>
+                    <h2 id="HarmadikCim" class="cimsor">3 - Kezelt Adatok Köre</h2>
+                    <p id="HarmadikSzoveg" class="aszfSzoveg">
+                        <p class="aszfSzoveg">
+                            Regisztráció során megadott adatok
+                            A weboldalon történő regisztráció során a felhasználó köteles megadni az email címét, amely a felhasználói fiók azonosítására és a kapcsolattartásra szolgál.
+                            Az Adatkezelő kizárólag ezt az adatot tárolja tartósan saját rendszerében.
+                        </p>
+                        <p class="aszfSzoveg">
+                            Egyéb, a szolgáltatás használata során megadott adatok
+                            A weboldal bizonyos funkcióinak igénybevétele során a felhasználónak lehetősége vagy kötelezettsége lehet további adatok megadására, így különösen:
+                            <ul>
+                                <li>telefonszám</li>
+                                <li>lakcím</li>
+                                <li>fizetési adatok (pl. bankkártya adatok)</li>
+                            </ul>
+                            <span class="aszfSzoveg">
+                                Ezen adatok megadása minden esetben célhoz kötött, és kizárólag az adott szolgáltatás teljesítéséhez szükséges mértékben történik.
+                            </span> 
+                        </p>
+                        <p class="aszfSzoveg">
+                            Az Adatkezelő rögzíti, hogy:
+                            <ul>
+                                <li>a telefonszámot és lakcímet nem tárolja tartósan saját adatbázisában,</li>
+                                <li>a fizetési adatokat (különösen bankkártya adatokat) nem kezeli és nem tárolja, azok megadása esetén az adatkezelés közvetlenül külső fizetési szolgáltató rendszerében történik.</li>
+                                <li> Az Adatkezelő ezen adatokhoz nem fér hozzá, azokat nem rögzíti, és nem is őrzi meg.</li>
+                            </ul>
+                        </p>
+                            
+                    </p>
+                    <h2 id="NegyedikCim" class="cimsor">4 - Jogalap</h2>
+                    <p id="NegyedikSzoveg" class="aszfSzoveg">
+                        Az adatkezelés jogalapja több tényezőn alapulhat. <br>
+                        A felhasználói fiók létrehozása és működtetése esetében az adatkezelés jogalapja a felhasználó önkéntes hozzájárulása, amelyet a regisztráció során ad meg. <br>
+                        Amennyiben az adatkezelés a szolgáltatás nyújtásához szükséges, úgy annak jogalapja a felhasználó és az Adatkezelő közötti szerződés teljesítése. <br>
+                        Bizonyos esetekben az adatkezelés jogszabályi kötelezettségen is alapulhat, például számviteli vagy adózási kötelezettségek teljesítése érdekében. <br>
+                    </p>
+                    <h2 id="OtodikCim" class="cimsor">5 - Adatfeldolgozás</h2>
+                    <p id="OtodikSzoveg" class="aszfSzoveg">
+                    Az Adatkezelő a szolgáltatás működtetése során harmadik feleket vehet igénybe adatfeldolgozóként. <br>
+                                        
+                    Ilyen adatfeldolgozók lehetnek különösen: <br>
+                    
+                    <ul>
+                        <li>tárhelyszolgáltatók, amelyek a weboldal működéséhez szükséges infrastruktúrát biztosítják</li>
+                        <li>email szolgáltatók, amelyek a kommunikáció lebonyolítását végzik</li>
+                        <li>fizetési szolgáltatók, amelyek a pénzügyi tranzakciókat kezelik</li>
+                    </ul>
+                    <br>            
+                    <p class="aszfSzoveg">
+                        A fizetési adatok kezelése minden esetben közvetlenül a fizetési szolgáltató rendszerében történik, így az Adatkezelő ezen adatokhoz nem fér hozzá. <br>
+                        
+                        Az adatfeldolgozók kizárólag az Adatkezelő utasításai alapján, szerződéses keretek között jogosultak az adatok kezelésére. <br>
+                    </p> 
+                    </p>
+                    <h2 id="HatodikCim" class="cimsor">6 - Adattárolás</h2>
+                    <p id="HatodikSzoveg" class="aszfSzoveg">
+                        Az Adatkezelő a személyes adatokat kizárólag a szükséges ideig tárolja.
+
+                        Az email cím a felhasználói fiók fennállásának időtartamáig kerül megőrzésre, vagy addig, amíg a felhasználó nem kéri annak törlését.
+
+                        Az egyéb adatok – mivel azokat az Adatkezelő nem tárolja – nem képezik tartós adatkezelés tárgyát.
+                    </p>
+                    <h2 id="HetedikCim" class="cimsor">7 - Jogai</h2>
+                    <p id="HetedikSzoveg" class="aszfSzoveg">
+                        A felhasználók az adatkezeléssel kapcsolatban több joggal rendelkeznek.
+
+                        Jogosultak tájékoztatást kérni arról, hogy az Adatkezelő milyen személyes adataikat kezeli, milyen célból és milyen jogalapon. <br>
+
+                        Kérhetik személyes adataik helyesbítését, amennyiben azok pontatlanok vagy hiányosak. <br>
+
+                        Joguk van kérni adataik törlését, amennyiben az adatkezelés célja megszűnt, vagy az adatkezelés jogellenes. <br>
+
+                        Bizonyos esetekben kérhetik az adatkezelés korlátozását, illetve tiltakozhatnak az adatkezelés ellen. <br>
+
+                        Továbbá jogosultak arra, hogy az általuk rendelkezésre bocsátott adatokat tagolt, széles körben használt formátumban megkapják (adathordozhatóság joga). <br>
+                    </p>
+                    <h2 id="NyolcadikCim" class="cimsor">8 - Biztonság</h2>
+                    <p id="NyolcadikSzoveg" class="aszfSzoveg">
+                            Az Adatkezelő minden ésszerű technikai és szervezési intézkedést megtesz annak érdekében, hogy a kezelt személyes adatokat megvédje a jogosulatlan hozzáféréstől, megváltoztatástól, nyilvánosságra hozataltól vagy törléstől.<br>
+
+                            Ennek keretében különösen biztosítja:<br>
+                            <ul>
+                                <li>a titkosított adatátvitelt (HTTPS protokoll alkalmazása)</li>
+                                <li>a hozzáférések korlátozását</li>
+                                <li>a rendszerek rendszeres frissítését és biztonsági ellenőrzését</li>
+                            </ul>
+                    </p>
+                    <h2 id="KilencedikCim" class="cimsor">9 - Jogorvoslati lehetőségek</h2>
+                    <p id="KilencedikSzoveg" class="aszfSzoveg">
+                        Amennyiben a felhasználó úgy véli, hogy személyes adatainak kezelése sérti a vonatkozó jogszabályokat, jogosult panaszt benyújtani a hatáskörrel rendelkező felügyeleti hatósághoz, vagy bírósághoz fordulni.
+
+                        Magyarországon az illetékes hatóságok: <br>
+                        <ul>
+                            <li>Nemzeti Adatvédelmi és Információszabadság Hatóság (NAIH)</li>
+                            <li>BMSZC Trefort Ágoston Két Tanítási Nyelvű Technikum</li>
+                            <li>sajt32</li>
+                        </ul>
+
+
+
+                    </p>
+                    <h2 id="TizedikCim" class="cimsor">10 - Záró rendelkezések</h2>
+                    <p id="TizedikSzoveg" class="aszfSzoveg">
+                            Az Adatkezelő fenntartja a jogot arra, hogy jelen adatkezelési tájékoztatót egyoldalúan módosítsa, különösen jogszabályváltozás vagy a szolgáltatás módosítása esetén.<br>
+
+                            A módosítások a weboldalon történő közzététellel lépnek hatályba.<br>
+
+                            Jelen tájékoztató hatálybalépésének dátuma: 2026.04.24 <br>
+                    </p>
+                </div>
+            </div>
+            <!-- forrás:https://chatgpt.com/s/t_69eba6a0fb4081919306cf7ebb6b9351 -->
+        </main>
+        <script src="../../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../../kellékek/themeSwitcher.js"></script>
+        <script src="../../kellékek/footer.js"></script>
+        <script src="../../ASZF_Adatkezeles/ASZF/ASZF.js"></script>
+</body>
+</html>

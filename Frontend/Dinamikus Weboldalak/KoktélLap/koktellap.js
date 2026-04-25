@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
     }
     else{
         //Átalakítjuk a komment felületet egy tájékoztató szövegre
-        document.getElementById("Velemeny").innerHTML="Komment írásához és a Koktél Értékeléséhez lépj be!"
+        document.getElementById("Velemeny").innerHTML="Komment írásához és a koktél értékeléséhez lépjen be!"
         //Leromboljuk a jelentési gombokat, visszaélés elkerülése érdekében
         document.getElementById("ChangeSor").removeChild(document.getElementById("KoktJel"))
         document.getElementById("Cimsor").classList.remove("ps-4")
@@ -143,20 +143,25 @@ async function statikusadatok(adatok)
         Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${osszetevoAdat[i].Mennyiség} ${osszetevoAdat[i].Mertekegyseg.toLowerCase()}`
         OssztevHely.appendChild(Ossztevo)
     }
-    MennyisegHely.addEventListener("change",()=>{
-        OssztevHely.innerHTML=""
-        for (let i = 0; i < osszetevoAdat.length; i++) {
-            let Ossztevo=document.createElement("li")
-            Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round((osszetevoAdat[i].Mennyiség*(MennyisegHely.value/koktélAdat.AlapMennyiseg))*10)/10} ${osszetevoAdat[i].Mertekegyseg.toLowerCase()}`
-            OssztevHely.appendChild(Ossztevo)
-        }
+    document.getElementById("adag").addEventListener("click",async()=>{
+        MennyisegHely.value=1
+        MennyisegHely.setAttribute("step",1)
+        await mennyisegValtozas()
+    })
+    document.getElementById("ml").addEventListener("click",async()=>{
+        MennyisegHely.setAttribute("step",50)
+        MennyisegHely.value=koktélAdat.AlapMennyiseg
+        await mennyisegValtozas()
+    })
+    MennyisegHely.addEventListener("change",async()=>{
+        await mennyisegValtozas()
     })
     //A koktél képének lekérése és megadása
     const KepLekeres=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+koktélAdat.BoritoKepUtvonal)
     document.getElementById("KoktélKép").setAttribute("src",URL.createObjectURL(KepLekeres))
 
     //A koktél készítőjének képének lekérése és megadása
-    const FelhKep=await AdatLekeresKep("/api/Koktel/KommenteloKepLekeres/"+koktélAdat.ProfilkepUtvonal)
+    const FelhKep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+koktélAdat.ProfilkepUtvonal)
     document.getElementById("keszKep").setAttribute("src",URL.createObjectURL(FelhKep))
     document.getElementById("keszKep").classList.add("profilkep","m-0")
 
@@ -199,6 +204,38 @@ async function statikusadatok(adatok)
     return adatok.belepette
 
 }
+
+async function mennyisegValtozas() {
+    const OssztevHely=document.getElementById("Ossztev")
+    const MennyisegHely=document.getElementById("mennyiseg")
+    const osszetevoAdat=(await AdatLekeres(`/api/Koktel/${koktel}`)).osszetevok
+    const koktélAdat=(await AdatLekeres(`/api/Koktel/${koktel}`)).adat
+    OssztevHely.innerHTML=""
+    for (let i = 0; i < osszetevoAdat.length; i++) {
+        let Ossztevo=document.createElement("li")
+        if (document.getElementById("adag").checked) 
+        {
+            if (osszetevoAdat[i].Mertekegyseg=="cl") {
+                Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round((osszetevoAdat[i].Mennyiség)*(MennyisegHely.value))} ${osszetevoAdat[i].Mertekegyseg.toLowerCase()}`
+            }
+            else{
+                Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round(osszetevoAdat[i].Mennyiség*(MennyisegHely.value))} ${osszetevoAdat[i].Mertekegyseg.toLowerCase()}`
+            }
+        }
+        else
+        {
+            if (osszetevoAdat[i].Mertekegyseg=="cl") {
+                Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round(((osszetevoAdat[i].Mennyiség*10)*(MennyisegHely.value/koktélAdat.AlapMennyiseg))*10)/100} ${osszetevoAdat[i].Mertekegyseg.toLowerCase()}`
+            }
+            else{
+                Ossztevo.innerHTML=`${osszetevoAdat[i].Osszetevő} - ${Math.round((osszetevoAdat[i].Mennyiség*(MennyisegHely.value/koktélAdat.AlapMennyiseg))*10)/10} ${osszetevoAdat[i].Mertekegyseg.toLowerCase()}`
+            }
+        }
+        OssztevHely.appendChild(Ossztevo)
+    }
+}
+
+
 
 async function kommentek() {
     let KommentekHelye=document.getElementById("Kommentek")
@@ -254,7 +291,7 @@ async function kommentCreate(adat,i,adatok) {
         
         //Kommentelő képének megadása és classok megadása
 
-        let kep=await AdatLekeresKep("/api/Koktel/KommenteloKepLekeres/"+adat.ProfilkepUtvonal)
+        let kep=await AdatLekeresKep("/api/AdatlapLekeres/KepLekeres/"+adat.ProfilkepUtvonal)
         let KommenteloKep=document.createElement("img")
         KommenteloKep.setAttribute("src",URL.createObjectURL(kep))
         KommenteloKep.classList.add("profilkep","col-1","col-sm-1","col-md-1","col-lg-1","col-xl-1")
@@ -310,7 +347,7 @@ async function kommentCreate(adat,i,adatok) {
         let KommentCollapse=document.createElement("input")
         KommentCollapse.setAttribute("type","button")
         KommentCollapse.setAttribute("value","↑")
-        KommentCollapse.classList.add("btn","col-md-1","col-sm-2")
+        KommentCollapse.classList.add("btn","col-md-1","col-sm-2","border-0")
         KommentHeader.appendChild(KommentCollapse)
 
         //Átszínezés
@@ -344,7 +381,7 @@ async function kommentCreate(adat,i,adatok) {
         let upvote=document.createElement("input")
         upvote.setAttribute("type","button")
         upvote.setAttribute("value","👍")
-        upvote.classList.add("btn")
+        upvote.classList.add("btn","border-0")
         pozitiv.classList.add("col-2")
         pozitiv.appendChild(upvote)
         pozitiv.appendChild(pozitivSzam)
@@ -355,7 +392,7 @@ async function kommentCreate(adat,i,adatok) {
         let downvote=document.createElement("input")
         downvote.setAttribute("type","button")
         downvote.setAttribute("value","👎")
-        downvote.classList.add("btn")
+        downvote.classList.add("btn","border-0")
         negativ.classList.add("col-2","ps-4")
         negativ.appendChild(downvote)
         negativ.appendChild(negativSzam)
@@ -585,12 +622,13 @@ async function szerkesztes() {
     szerk.classList.add("btn","fs-1","m-0","p-0","border-0")
     szerk.addEventListener("click",async()=>{
         document.getElementById("fav").removeChild(szerk)
+        document.getElementById("adagok").innerHTML=""
 
         //ඞ Ugyan az az input mező, az eventlistener nélkül
         let imposztor=document.createElement("input")
         imposztor.classList.add("form-control")
-        imposztor.setAttribute("value",document.getElementById("Osszetevok").childNodes[3].value)
-        document.getElementById("Osszetevok").replaceChild(imposztor,document.getElementById("Osszetevok").childNodes[3]);
+        imposztor.setAttribute("value",document.getElementById("Osszetevok").childNodes[5].value)
+        document.getElementById("Osszetevok").replaceChild(imposztor,document.getElementById("Osszetevok").childNodes[5]);
         
         let yes=document.createElement("input")
         yes.setAttribute("type","button")
@@ -677,6 +715,10 @@ async function szerkesztes() {
                         if (opctiok[j].innerHTML=="ml") {
                             mltotal+=parseInt(osszetevoDarab[1].value)
                         }
+                        else if(opctiok[j].innerHTML=="cl"){
+                            //1cl=10ml
+                            mltotal+=(parseInt(osszetevoDarab[1].value)*10)
+                        }
                     }
                 }
                 osszetevok.push(osszetev)
@@ -748,11 +790,14 @@ async function osszetevo(adat)
     let ml=document.createElement("option")
     ml.innerHTML="ml"
     let gr=document.createElement("option")
-    gr.innerHTML="gr"
+    gr.innerHTML="gr"    
+    let cl=document.createElement("option")
+    cl.innerHTML="cl"
     
     mertekegysegek.appendChild(ml)
     mertekegysegek.appendChild(db)
     mertekegysegek.appendChild(gr)
+    mertekegysegek.appendChild(cl)
 
     let selectopt=mertekegysegek.childNodes
     if (adat!="") {
