@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
     }
     else{
         //Átalakítjuk a komment felületet egy tájékoztató szövegre
-        document.getElementById("Velemeny").innerHTML="Komment írásához és a Koktél Értékeléséhez lépj be!"
+        document.getElementById("Velemeny").innerHTML="Komment írásához és a koktél értékeléséhez lépjen be!"
         //Leromboljuk a jelentési gombokat, visszaélés elkerülése érdekében
         document.getElementById("ChangeSor").removeChild(document.getElementById("KoktJel"))
         document.getElementById("Cimsor").classList.remove("ps-4")
