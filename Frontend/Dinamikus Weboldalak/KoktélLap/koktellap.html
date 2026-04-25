@@ -177,8 +177,15 @@
                         <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid rounded"/>
                     </label>
                     <div class="ps-4 flex-column col-12 col-sm-6 col-md-6 col-lg-6" id="Osszetevok">
+                        <div>
+                            <label for="ml">Mennyiség</label>
+                            <input type="radio" name="tipus" id="ml" class="me-2" checked>
+                            <label for="adag">Adag</label>
+                            <input type="radio" name="tipus" id="adag">
+                        </div>
+                        
                         <label for="mennyiseg">Hány ml-nyit szeretne készíteni</label>
-                        <input type="number" id="mennyiseg" step="5" class="form-control" min="0" />
+                        <input type="number" id="mennyiseg" step="50" class="form-control" min="0" />
                         <span class="fs-4">Összetevők</span>
                         <ul id="Ossztev"></ul>
                     </div>
