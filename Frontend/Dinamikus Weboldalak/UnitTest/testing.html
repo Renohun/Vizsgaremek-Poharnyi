@@ -163,8 +163,19 @@
                 <p>Szazalek Hiba (1 - 100 kivulre esik): <span id="termekSzazalekEredmeny"></span></p>
             </div>
             <div class="card mt-2">
-                <input class="form-control" type="text" id="termekId" placeholder="TermékId">
-                <input class="form-control" type="number" id="mennyiseg" placeholder="mennyiség">
+                <input
+                    type="button"
+                    name="termekLearazasBtn"
+                    value="Termek learazas teszt"
+                    class="btn btn-success"
+                    id="termekLearazasBtn"
+                />
+                <p>learazas: <span id="termekLearazasSpan"></span></p>
+                <p>Szazalek Hiba (1 - 100 kivulre esik): <span id="termekLearazasSzazalekSpan"></span></p>
+            </div>
+            <div class="card mt-2">
+                <input class="form-control" type="text" id="termekId" placeholder="TermékId" />
+                <input class="form-control" type="number" id="mennyiseg" placeholder="mennyiség" />
                 <input type="button" class="btn btn-success" value="Termék Kosár Teszt" id="kosartest" />
                 <p>siker: <span id="siker"></span></p>
                 <p>Mennyiség hiba: <span id="mennyErr"></span></p>
