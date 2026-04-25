@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     gombDiv4.classList.add("text-lg-start","text-center")
     let gomb4=document.createElement("a")
     gomb4.innerHTML="Adatkezelési Nyilatkozat"
-    gomb4.setAttribute("href","")
+    gomb4.setAttribute("href","/Adatkezelesi-Tajekoztato")
     gomb4.setAttribute("target","_blank")
     gombDiv4.appendChild(gomb4)
 
