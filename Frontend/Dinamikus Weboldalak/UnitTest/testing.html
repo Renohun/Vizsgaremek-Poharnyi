@@ -149,6 +149,7 @@
             </div>
         </nav>
         <div class="container flex-grow-1">
+            
             <div class="card mt-2">
                 <input type="button" class="btn btn-success" value="Koktél Teszt" id="ktest" />
                 <p>Készítés: <span id="make"></span></p>
@@ -157,11 +158,13 @@
                 <p>Komment Értékelés: <span id="kommert"></span></p>
                 <p>Kedvelés: <span id="kedvenc"></span></p>
             </div>
+
             <div class="card mt-2">
                 <input type="button" value="termek feltoltes teszt" id="termekTesztBtn" class="btn btn-success" />
                 <p>Feltoltes: <span id="termekFeltoltesEredmeny"></span></p>
                 <p>Szazalek Hiba (1 - 100 kivulre esik): <span id="termekSzazalekEredmeny"></span></p>
             </div>
+
             <div class="card mt-2">
                 <input
                     type="button"
@@ -184,6 +187,7 @@
                 <p>felkerült: <span id="fel"></span></p>
                 <p>IdHiba: <span id="IdErr"></span></p>
             </div>
+
              <div class="card mt-2">
                 <input type="button" value="Termék név teszt" id="termekNevTesztBtn" class="btn btn-success" />
                 <input class="form-control" type="text" id="TermekNev" placeholder="Termék Neve">
@@ -192,6 +196,17 @@
                 <p>Név hiba: <span id="NevHiba"></span></p>
                 <p>Nincs Ilyen Termék: <span id="NincsTermek"></span></p>
             </div>
+
+             <div class="card mt-2">
+                <input type="button" value="Kosár módosítása" id="KosarModositTesztBtn" class="btn btn-success" />
+                <select name="" id="TermekSel">
+                    <option value="ures">válassz terméket</option>
+                </select>
+                <input class="form-control" type="number" id="KMennyiseg" placeholder="Mennyiség">
+                <p>siker: <span id="modositSiker"></span></p>
+                <p>Módosított szám: <span id="HelyesSzam"></span></p>
+                <p>Negatív szám: <span id="NegSzam"></span></p>
+            </div>
         </div>
 
         <script src="../kellékek/footer.js"></script>
@@ -199,5 +214,6 @@
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/navBar.js"></script>
         <script src="../UnitTest/testing.js"></script>
+          <script src="../UnitTest/Testing_Kavics.js"></script>
     </body>
 </html>

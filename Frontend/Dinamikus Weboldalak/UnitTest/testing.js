@@ -13,7 +13,17 @@ const TestPostFetch = async (url, object) => {
     if (valasz.ok) {
         return valasz.json();
     }
-};
+}
+const TestPatchFetch=async(url,object)=>{
+    const valasz=await fetch(url,{
+        method:"PATCH",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(object)
+    })
+    if (valasz.ok) {
+        return valasz.json()
+    }
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('ktest').addEventListener('click', async () => {
@@ -48,48 +58,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('termekLearazasSpan').innerText = eredemny.eredemny;
         document.getElementById('termekLearazasSzazalekSpan').innerText = eredemny.szazalek;
     });
+})
 
-    document.getElementById('kosartest').addEventListener('click', async () => {
-        let id = document.getElementById('termekId').value;
-        let menny = document.getElementById('mennyiseg').value;
-        let postobj = {
-            id: id,
-            mennyiseg: menny
-        };
-        const eredmeny = await TestPostFetch('/test/TermekKosarTest', postobj);
-
-        document.getElementById('siker').innerHTML = eredmeny.siker;
-        document.getElementById('mennyErr').innerHTML = eredmeny.mennyiseghiba;
-        document.getElementById('UjSor').innerHTML = eredmeny.hozzaadott;
-        document.getElementById('bovitett').innerHTML = eredmeny.bovitett;
-        document.getElementById('fel').innerHTML = eredmeny.felkerulte;
-        document.getElementById('IdErr').innerHTML = eredmeny.idHiba;
-        let ok = document.getElementsByTagName('span');
-        for (let i = 0; i < ok.length; i++) {
-            if (ok[i].innerHTML == 'true') {
-                ok[i].classList.add('text-success');
-            } else {
-                ok[i].classList.add('text-danger');
-            }
-        }
-    });
-    document.getElementById('termekNevTesztBtn').addEventListener('click', async () => {
-        let nev = document.getElementById('TermekNev').value;
-        let postobj = {
-            nev: nev
-        };
-        const eredmeny = await TestPostFetch('/test/TermekNevTeszt', postobj);
-        document.getElementById('NevSiker').innerHTML = eredmeny.siker;
-        document.getElementById('TermekekHelyesekE').innerHTML = eredmeny.JoNevek;
-        document.getElementById('NevHiba').innerHTML = eredmeny.NevHiba;
-        document.getElementById('NincsTermek').innerHTML = eredmeny.NincsIlyenTermek;
-        let ok = document.getElementsByTagName('span');
-        for (let i = 0; i < ok.length; i++) {
-            if (ok[i].innerHTML == 'true') {
-                ok[i].classList.add('text-success');
-            } else {
-                ok[i].classList.add('text-danger');
-            }
-        }
-    });
-});

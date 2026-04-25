@@ -172,19 +172,18 @@ router.post('/TermekKosarTest', async (request, response) => {
         let insertId;
         let id = parseInt(request.body.id);
         const mennyiseg = request.body.mennyiseg;
-
-        if (isNaN(id) || id == 0) {
-            idHiba = true;
-            response.status(200).json({
-                siker: siker,
-                mennyiseghiba: mennyiseghiba,
-                hozzaadott: hozzaadott,
-                bovitett: bovitett,
-                felkerulte: felkerultE,
-                idHiba: idHiba
-            });
+        const Tidk = "SELECT TermekID FROM webshoptermek"
+        const [Termekidk] = await DBconnetion.promise().query(Tidk)
+        let Tid = []
+        for (let i = 0; i < Termekidk.length; i++) {
+            Tid.push(Termekidk[i].TermekID)
         }
-        console.log('asd');
+
+        if (isNaN(id) || id == 0 || !Tid.includes(id)) {
+            idHiba = true;
+            
+        }
+        else{      
         const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
 
         const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
@@ -242,7 +241,7 @@ router.post('/TermekKosarTest', async (request, response) => {
                 }
             }
         }
-
+        }
         response.status(200).json({
             siker: siker,
             mennyiseghiba: mennyiseghiba,
@@ -266,11 +265,15 @@ router.post('/TermekNevTeszt', async (request, response) => {
         let NincsIlyenTermek = false;
         if (nev == '') {
             NevHiba = true;
+            siker = false;
         }
-        const query =
-            'SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE TermekCim like ?';
-        const [orszagok] = await DBconnetion.promise().query(query, [`%${nev}%`]);
-        if (orszagok.length == 0) {
+        else{
+
+        
+        const query = "SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE TermekCim like ?"
+        const [orszagok] = await DBconnetion.promise().query(query,[`%${nev}%`])
+        if (orszagok.length == 0) 
+        {
             NincsIlyenTermek = true;
             siker = true;
         } else {
@@ -285,7 +288,7 @@ router.post('/TermekNevTeszt', async (request, response) => {
                 JoNevek = true;
             }
         }
-
+    }   
         response.status(200).json({
             siker: siker,
             JoNevek: JoNevek,
@@ -295,6 +298,72 @@ router.post('/TermekNevTeszt', async (request, response) => {
     } catch (error) {
         console.log(error);
         response.status(500).json({
+            hiba: error
+        });
+    }
+})
+router.get("/kosartermekek",async(request,response)=>{
+    
+    try {
+        const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
+        const query = "SELECT * FROM KosárTermék INNER JOIN webshoptermek ON KosárTermék.TermekID = webshoptermek.TermekID WHERE KosarID LIKE ?"
+        const [termekek] = await DBconnetion.promise().query(query,[UserID])
+        response.status(200).json({
+            termekek: termekek
+        })
+    } catch (error) {
+        console.log(error)
+        response.status(500).json({
+            hiba:error
+        })
+    }
+})
+router.patch('/TermekFrissitesTeszt', async (request, response) => {
+   
+    try {
+         let mit = request.body.id;
+        let mennyit = request.body.mennyiseg;
+        const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
+        let siker = true;
+        let JoSzam = false;
+        let negativszam = false;
+    if (mennyit < 1) 
+    {
+        negativszam = true;
+        siker = false;
+        JoSzam = false;
+    }
+    else{
+    let TermékTöltés = 'UPDATE KosárTermék SET Darabszam = ? WHERE KosarID LIKE ? AND TermekID LIKE ?';
+       const [frissit] = await DBconnetion.promise().query(TermékTöltés, [
+            mennyit,
+            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
+            mit
+        ]);
+        if (frissit.affectedRows == 0) {
+            siker = false;
+        }
+        else
+        {
+                const Testquery = "SELECT * FROM KosárTermék WHERE KosarID LIKE ? AND TermekID = ?"
+                const [termekek] = await DBconnetion.promise().query(Testquery,[UserID,mit])
+                if (termekek[0].Darabszam == mennyit) 
+                {
+                    JoSzam = true;    
+                }
+                
+        }
+    }
+                response.status(200).json({
+                    siker:siker,
+                    JoSzam: JoSzam,
+                    negativszam : negativszam
+                });
+    } catch (error) {
+        console.log(error);
+
+        response.status(500).json({
+            message: 'Hiba Történt!',
             hiba: error
         });
     }
