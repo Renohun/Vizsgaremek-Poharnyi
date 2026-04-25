@@ -536,6 +536,9 @@ async function KosarLekeres() {
                     if (parseInt(kosárDbMod.value)>parseInt(valasz.adat[i].termAdatok.TermekKeszlet)) {
                         kosárDbMod.value=valasz.adat[i].termAdatok.TermekKeszlet
                     }
+                    else if(parseInt(kosárDbMod.value)<0){
+                        kosárDbMod.value=1
+                    }
                 })
                 mennyiseg.innerHTML=""
                 mennyiseg.appendChild(kosárDbMod)
