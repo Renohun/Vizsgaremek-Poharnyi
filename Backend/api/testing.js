@@ -223,5 +223,52 @@ router.post('/TermekKosarTest', async(request,response)=>{
         response.status(500).json({ hiba: error });
     }
 })
+router.post("/TermekNevTeszt", async(request, response)=>{
+    try {
+        const nev = request.body.nev
+        console.log(nev)
+        let siker = true;
+        let JoNevek = false;
+        let NevHiba = false;
+        let NincsIlyenTermek = false;
+        if(nev == ""){
+            NevHiba = true;
+        }
+        const query = "SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE TermekCim like ?"
+        const [orszagok] = await DBconnetion.promise().query(query,[`%${nev}%`])
+        if (orszagok.length == 0) 
+        {
+            NincsIlyenTermek = true;
+            siker = true;    
+        }
+        else
+        {
+            siker = true;
+            let mennyi = 0;
+            for (let i = 0; i < orszagok.length; i++) {
+                if (orszagok[i].TermekCim.includes(nev)) {
+                    mennyi++;
+                }
+                
+            }
+            if (mennyi == orszagok.length) 
+            {
+                JoNevek = true;    
+            }
+        }
 
+        response.status(200).json({
+            siker:siker,
+            JoNevek:JoNevek,
+            NevHiba: NevHiba,
+            NincsIlyenTermek: NincsIlyenTermek
+        })
+        
+    } catch (error) {
+        console.log(error)
+        response.status(500).json({
+            hiba:error
+        })
+    }
+})
 module.exports = router;

@@ -65,4 +65,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
     })
+     document.getElementById('termekNevTesztBtn').addEventListener('click', async () => {
+        let nev = document.getElementById("TermekNev").value
+        let postobj = {
+            nev: nev
+        }
+        const eredmeny = await TestPostFetch("/test/TermekNevTeszt",postobj)
+        document.getElementById('NevSiker').innerHTML = eredmeny.siker;
+        document.getElementById('TermekekHelyesekE').innerHTML = eredmeny.JoNevek;
+        document.getElementById('NevHiba').innerHTML = eredmeny.NevHiba;
+        document.getElementById('NincsTermek').innerHTML = eredmeny.NincsIlyenTermek;
+         let ok = document.getElementsByTagName('span');
+        for (let i = 0; i < ok.length; i++) {
+            if (ok[i].innerHTML == 'true') {
+                ok[i].classList.add('text-success');
+            } else {
+                ok[i].classList.add('text-danger');
+            }
+        }
+    });
 });
