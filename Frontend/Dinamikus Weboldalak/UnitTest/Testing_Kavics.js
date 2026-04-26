@@ -28,6 +28,7 @@ const TestDelFetch=async(url,object)=>{
     const valasz=await fetch(url,{
         method:"DELETE",
         headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(object)
     })
     if (valasz.ok) {
         return valasz.json()
@@ -130,6 +131,24 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById('TorolSiker').innerHTML = eredmeny.siker;
         document.getElementById('Ures').innerHTML = eredmeny.ures;
         document.getElementById('AUres').innerHTML = eredmeny.alapures;
+        
+        let ok = document.getElementsByTagName('span');
+        for (let i = 0; i < ok.length; i++) {
+            if (ok[i].innerHTML == 'true') {
+                ok[i].classList.add('text-success');
+            } else {
+                ok[i].classList.add('text-danger');
+            }
+        }
+    });
+      document.getElementById('Felhasznalo_Torlese').addEventListener('click', async () => {
+        const id = document.getElementById("TorlesId").value
+        const obj = {id:id}
+        const eredmeny = await TestDelFetch('/test/FioktorlesTeszt',obj);
+        console.log(eredmeny)
+        //document.getElementById('TorolSiker').innerHTML = eredmeny.siker;
+       // document.getElementById('Ures').innerHTML = eredmeny.ures;
+       // document.getElementById('AUres').innerHTML = eredmeny.alapures;
         
         let ok = document.getElementsByTagName('span');
         for (let i = 0; i < ok.length; i++) {
