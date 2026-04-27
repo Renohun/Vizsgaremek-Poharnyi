@@ -63,4 +63,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('sikerErdemenyJelentes').innerText = eredemny.siker;
         document.getElementById('egyebEredmenyJelentes').innerText = eredemny.egyebHiba;
     });
+    document.getElementById('jelentesElutasitassBtn').addEventListener('click', async () => {
+        const eredemny = await AdatLekeres('/test/jelentesek/elfogadas');
+        document.getElementById('sikertelenErdemenyJelentesElu').innerText = eredemny.sikertelen;
+        document.getElementById('sikerErdemenyJelentesElu').innerText = eredemny.siker;
+        document.getElementById('egyebEredmenyJelentesElu').innerText = eredemny.egyebHiba;
+    });
 });
