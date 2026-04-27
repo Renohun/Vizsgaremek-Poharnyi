@@ -1,7 +1,14 @@
 const AdatLekeres = async (url) => {
-    const valasz = await fetch(url);
-    if (valasz.ok) {
-        return valasz.json();
+    try {
+        const valasz = await fetch(url);
+        if (valasz.ok) {
+            return valasz.json();
+        } else {
+            throw new Error('Hiba tortent a FETCH ben');
+        }
+    } catch (error) {
+        console.error(error);
+        return error;
     }
 };
 const TestPostFetch = async (url, object) => {
@@ -48,5 +55,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('egyebEredmeny').innerText = eredemny.egyebHiba;
         document.getElementById('sikertelensegEredmeny').innerText = eredemny.sikertelen;
         document.getElementById('sikerErdemeny').innerText = eredemny.sikeres;
+    });
+
+    document.getElementById('jelentesElfogadasBtn').addEventListener('click', async () => {
+        const eredemny = await AdatLekeres('/test/jelentesek/elfogadas');
+        document.getElementById('sikertelenErdemenyJelentes').innerText = eredemny.sikertelen;
+        document.getElementById('sikerErdemenyJelentes').innerText = eredemny.siker;
+        document.getElementById('egyebEredmenyJelentes').innerText = eredemny.egyebHiba;
     });
 });

@@ -299,6 +299,39 @@ router.get('/TermekLearazas', async (req, res) => {
         res.status(500).json({ eredemny: false, szazalek: false });
     }
 });
+router.get('/jelentesek/elfogadas', async (req, res) => {
+    try {
+        const jelentesID = 1;
+
+        const queryJelenlegi = 'SELECT JelentesAllapota FROM Jelentesek WHERE JelentesID LIKE ?';
+        //itt van a teszt elotti erteke
+        const [eredemny] = await DBconnetion.promise().query(queryJelenlegi, [jelentesID]);
+
+        const query = 'UPDATE Jelentesek SET JelentesAllapota = 2 WHERE JelentesID LIKE ?';
+        DBconnetion.query(query, [jelentesID], async (err) => {
+            if (err) {
+                res.status(200).json({
+                    sikertelen: true,
+                    siker: false,
+                    egyebHiba: false
+                });
+            } else {
+                //sikeres teszt utan visszaallitja a jelentes allapotot
+                const query = 'UPDATE Jelentesek SET JelentesAllapota = ? WHERE JelentesID LIKE ?';
+
+                await DBconnetion.promise().query(query, [eredemny[0].JelentesAllapota, jelentesID]);
+                res.status(200).json({ sikertelen: false, siker: true, egyebHiba: false });
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(200).json({
+            sikertelen: true,
+            siker: false,
+            egyebHiba: true
+        });
+    }
+});
 
 router.post('/TermekKosarTest', async (request, response) => {
     try {
