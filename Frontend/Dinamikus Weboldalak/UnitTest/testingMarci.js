@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
     })
     document.getElementById("felhasznaloTesztBtn").addEventListener("click",async()=>{
         document.getElementById('FelhMod').innerHTML = (await AdatPatch("/test/felhModositas")).eredmeny;
+        document.getElementById('FelhStat').innerHTML = (await AdatLekeres("/test/felhStatisztika")).eredmeny;
     })
 })
 

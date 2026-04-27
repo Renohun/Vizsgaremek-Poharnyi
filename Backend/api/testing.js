@@ -1161,6 +1161,7 @@ router.patch("/felhModositas", async (request, response) => {
         let felhasználók=await lekeres("SELECT * FROM Felhasználó")
         for (let i = 0; i < felhasználók.length; i++) {
             if (felhasználók[i].Felhasználónév=="tesztFelhasználó"&&felhasználók[i].Email=="teszt@Email.cim") {
+                melyiko=felhasználók[i].FelhID
                 await lekeres("UPDATE Felhasználó SET Felhasználónév = ?, Email = ?, Jelszó = ?,JelszóHossza=? WHERE FelhID LIKE ?",["módosultFelhasználó","módosult@Email.cim",await argon.hash("másJelsz0!", { type: argon.argon2id }),10,felhasználók[i].FelhID])
             }
         }
@@ -1170,6 +1171,9 @@ router.patch("/felhModositas", async (request, response) => {
                 modosultFelhasznalo=true
             }
         }
+
+        //Túl veszélyes ahhoz hogy élhessen
+        await lekeres("DELETE FROM felhasználó WHERE FelhID LIKE ?",melyiko)
         response.status(200).json({
             eredmeny:modosultFelhasznalo
         })
@@ -1179,6 +1183,48 @@ router.patch("/felhModositas", async (request, response) => {
         
         response.status(200).json({
             eredmeny:modosultFelhasznalo
+        })
+    }
+    
+});
+router.get("/felhStatisztika", async (request, response) => {
+    let felhasznaloStatisztika=false
+    try {
+        let melyiko
+        await lekeres("INSERT INTO Felhasználó (Felhasználónév,Email,Jelszó,JelszóHossza) VALUES (?,?,?,?)",["tesztFelhasználó","teszt@Email.cim",await argon.hash("tesztJelsz0!", { type: argon.argon2id }),12])
+        let felhasználók=await lekeres("SELECT * FROM Felhasználó")
+        for (let i = 0; i < felhasználók.length; i++) {
+            if (felhasználók[i].Felhasználónév=="tesztFelhasználó"&&felhasználók[i].Email=="teszt@Email.cim") {
+                melyiko=felhasználók[i].FelhID
+                //2 Kedvenc és 1 Saját
+                await lekeres("INSERT INTO koktél (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg) VALUES (?,?,?,?,?,?)",[melyiko,0,"TesztKotkél","Példa","Minta",200])
+                await lekeres("INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)",[melyiko,1])
+                await lekeres("INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)",[melyiko,2])
+            }
+        }
+        let sajat=(await lekeres("SELECT COUNT (Keszito) AS own FROM koktél WHERE Keszito LIKE ?",melyiko))[0]//1
+        let kedvenc=(await lekeres("SELECT COUNT (KikedvelteID) AS kedv FROM kedvencek WHERE KikedvelteID LIKE ?",melyiko))[0]//2
+        let komment=(await lekeres("SELECT COUNT (Keszito) AS ert FROM ertekeles WHERE Keszito LIKE ?",melyiko))[0]//0
+        let ertekeles=(await lekeres("SELECT COUNT (Keszito) AS kom FROM komment WHERE Keszito LIKE ?",melyiko))[0]//0
+   
+        if (sajat.own==1&&kedvenc.kedv==2&&komment.kom==undefined&&ertekeles.ert==undefined) {
+            felhasznaloStatisztika=true
+        }
+
+        //Túl veszélyes ahhoz hogy élhessen
+        await lekeres("DELETE FROM kedvencek WHERE KikedvelteID LIKE ?",melyiko)
+        await lekeres("DELETE FROM koktél WHERE Keszito LIKE ?",melyiko)
+        await lekeres("DELETE FROM felhasználó WHERE FelhID LIKE ?",melyiko)
+
+        response.status(200).json({
+            eredmeny:felhasznaloStatisztika
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        
+        response.status(200).json({
+            eredmeny:felhasznaloStatisztika
         })
     }
     
