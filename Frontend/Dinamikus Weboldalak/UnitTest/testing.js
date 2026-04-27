@@ -13,20 +13,19 @@ const TestPostFetch = async (url, object) => {
     if (valasz.ok) {
         return valasz.json();
     }
-}
-const TestPatchFetch=async(url,object)=>{
-    const valasz=await fetch(url,{
-        method:"PATCH",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(object)
-    })
+};
+const TestPatchFetch = async (url, object) => {
+    const valasz = await fetch(url, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(object)
+    });
     if (valasz.ok) {
-        return valasz.json()
+        return valasz.json();
     }
-}
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
-
     document.getElementById('termekTesztBtn').addEventListener('click', async () => {
         const eredemny = await AdatLekeres('/test/termekFeltoltesTest');
         document.getElementById('termekFeltoltesEredmeny').innerText = eredemny.eredemny;
@@ -40,5 +39,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('termekLearazasSpan').innerText = eredemny.eredemny;
         document.getElementById('termekLearazasSzazalekSpan').innerText = eredemny.szazalek;
     });
-})
 
+    document.getElementById('felhasznaloTesztBtn').addEventListener('click', async () => {
+        const eredemny = await AdatLekeres('/test/regisztracioTest');
+        document.getElementById('egyezesEredemeny').innerText = eredemny.megEgyezik;
+        document.getElementById('kriteriumEredemeny').innerText = eredemny.kriterium;
+        document.getElementById('duplikacioEredmeny').innerText = eredemny.duplikacio;
+        document.getElementById('egyebEredmeny').innerText = eredemny.egyebHiba;
+        document.getElementById('sikertelensegEredmeny').innerText = eredemny.sikertelen;
+        document.getElementById('sikerErdemeny').innerText = eredemny.sikeres;
+    });
+});

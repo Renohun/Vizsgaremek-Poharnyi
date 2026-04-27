@@ -834,4 +834,142 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
         });
     }
 });
+
+router.get('/regisztracioTest', async (request, response) => {
+    try {
+        const email = 'test@gmail.com';
+        const felhaszanaloNevReq = 'testFalhasznalo';
+        const jelszo = 'tesztJelszo12!';
+        const jelszoIsmet = 'tesztJelszo12!';
+        const ASZF = true;
+        const korEll = true;
+
+        if (jelszo == jelszoIsmet) {
+            if (
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) &&
+                /^[a-zA-Z0-9_]{2,30}$/.test(felhaszanaloNevReq) &&
+                /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/.test(jelszo) &&
+                ASZF &&
+                korEll
+            ) {
+                const hashed = await argon.hash(jelszo, { type: argon.argon2id });
+
+                const felhasznaloObjReg = {
+                    email: email,
+                    felhasznaloNev: felhaszanaloNevReq,
+                    jelszo: hashed,
+                    hossz: jelszo.length
+                };
+
+                const duplikacioEll = 'SELECT FelhID FROM felhasználó WHERE Felhasználónév LIKE ? OR Email LIKE ?';
+
+                const [rows] = await DBconnetion.promise().query(duplikacioEll, [
+                    felhasznaloObjReg.felhasznaloNev,
+                    felhasznaloObjReg.email
+                ]);
+
+                if (rows.length == 0) {
+                    const sqlQuery =
+                        'INSERT INTO felhasználó (Felhasználónév, Email, Jelszó, JelszóHossza) VALUES (?,?,?,?)';
+
+                    DBconnetion.query(
+                        sqlQuery,
+                        [
+                            felhasznaloObjReg.felhasznaloNev,
+                            felhasznaloObjReg.email,
+                            felhasznaloObjReg.jelszo,
+                            felhasznaloObjReg.hossz
+                        ],
+                        async (err) => {
+                            if (err) {
+                                response.status(200).json({
+                                    megEgyezik: false,
+                                    kriterium: false,
+                                    duplikacio: false,
+                                    sikeres: false,
+                                    egyebHiba: true,
+                                    sikertelen: true
+                                });
+                            } else {
+                                const queryFelhasznalo =
+                                    'SELECT Felhasználónév FROM felhasználó WHERE Felhasználónév LIKE ?';
+                                const [eredemny] = await DBconnetion.promise().query(queryFelhasznalo, [
+                                    felhasznaloObjReg.felhasznaloNev
+                                ]);
+
+                                if (eredemny[0].Felhasználónév == felhasznaloObjReg.felhasznaloNev) {
+                                    const queryFelhasznaloTorles =
+                                        'DELETE FROM felhasználó WHERE Felhasználónév LIKE ?';
+
+                                    await DBconnetion.promise().query(queryFelhasznaloTorles, [
+                                        felhasznaloObjReg.felhasznaloNev
+                                    ]);
+
+                                    response.status(200).json({
+                                        megEgyezik: false,
+                                        kriterium: false,
+                                        duplikacio: false,
+                                        sikeres: true,
+                                        egyebHiba: false,
+                                        sikertelen: false
+                                    });
+                                } else {
+                                    response.status(200).json({
+                                        megEgyezik: false,
+                                        kriterium: false,
+                                        duplikacio: false,
+                                        sikeres: false,
+                                        egyebHiba: false,
+                                        sikertelen: true
+                                    });
+                                }
+                            }
+                        }
+                    );
+                } else {
+                    response.status(200).json({
+                        megEgyezik: false,
+                        kriterium: false,
+                        duplikacio: true,
+                        sikeres: false,
+                        egyebHiba: false,
+                        sikertelen: true
+                    });
+                }
+            } else {
+                response.status(200).json({
+                    megEgyezik: false,
+                    kriterium: true,
+                    duplikacio: false,
+                    sikeres: false,
+                    egyebHiba: false,
+                    sikertelen: true
+                });
+            }
+        } else {
+            response.status(200).json({
+                megEgyezik: true,
+                kriterium: false,
+                duplikacio: false,
+                sikeres: false,
+                egyebHiba: false,
+                sikertelen: true
+            });
+        }
+
+        //console.log(felhasznaloObjReg.jelszo);
+    } catch (err) {
+        console.log(err);
+
+        response.status(200).json({
+            megEgyezik: false,
+            kriterium: false,
+            duplikacio: false,
+            sikeres: false,
+            egyebHiba: true,
+            sikertelen: true
+        });
+    }
+});
+
 module.exports = router;
