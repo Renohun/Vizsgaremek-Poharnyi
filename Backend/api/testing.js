@@ -1229,4 +1229,87 @@ router.get("/felhStatisztika", async (request, response) => {
     }
     
 });
+router.post('/FizetesTest', async (request, response) => {
+    try {
+        let uresKosar = false;
+        let sikeresTorles = false;
+        let RaktarKeszletModositas = false;
+        let hanyanvettekmegmodosit = false;
+        let vetelhiba = false;
+        let raktarhiba = false;
+        const KosarTermekLekeres = 'SELECT TermekID,Darabszam FROM kosártermék WHERE KosarID LIKE ?';
+        const TermekFrissites =
+            'UPDATE webshoptermek SET Termekkeszlet=Termekkeszlet-?,TermekHanyanVettekMeg=TermekHanyanVettekMeg+1  WHERE TermekID LIKE ?';
+        const KosárÜrítés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
+        const KosárÜrítésEllQ = 'SELECT * FROM KosárTermék WHERE KosarID LIKE ?';
+
+        let kosartermek = await lekeres(
+            KosarTermekLekeres,
+            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+        );
+        if (kosartermek.length == 0) 
+            {
+                uresKosar = true;
+                vetelhiba = true;
+                raktarhiba = true;
+            }
+        else
+            {
+
+                for (let i = 0; i < kosartermek.length; i++) {
+                        const TermekFrissitesEllQ1 = 'SELECT Termekkeszlet,TermekHanyanVettekMeg FROM webshoptermek WHERE TermekID LIKE ?';
+                        const [TermekFrissitesEll1] = await DBconnetion.promise().query(TermekFrissitesEllQ1,[kosartermek[i].TermekID])
+
+                    await lekeres(TermekFrissites, [kosartermek[i].Darabszam, kosartermek[i].TermekID]);
+
+                        const TermekFrissitesEllQ2 = 'SELECT Termekkeszlet,TermekHanyanVettekMeg FROM webshoptermek WHERE TermekID LIKE ?';
+                        const [TermekFrissitesEll2] = await DBconnetion.promise().query(TermekFrissitesEllQ2,[kosartermek[i].TermekID])
+                    if (TermekFrissitesEll2[i].TermekHanyanVettekMeg == TermekFrissitesEll1[i].TermekHanyanVettekMeg+1) 
+                    {
+                        hanyanvettekmegmodosit = true;
+                    }
+                    else
+                    {
+                        vetelhiba = true
+                    }
+                    if (TermekFrissitesEll2[i].Termekkeszlet == TermekFrissitesEll1[i].Termekkeszlet - kosartermek[i].Darabszam)
+                    {
+                        RaktarKeszletModositas = true;
+                    }
+                    else
+                    {
+                        raktarhiba = true
+                    }
+                }
+                if (vetelhiba == true) 
+                {
+                    hanyanvettekmegmodosit = false;    
+                }
+                if(raktarhiba == true){
+                    RaktarKeszletModositas = false;
+                }
+
+                await lekeres(KosárÜrítés, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
+                 const [KosarEll] = await DBconnetion.promise().query(KosárÜrítésEllQ,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID])
+                 console.log(KosarEll.length)
+                 if(KosarEll.length == 0){
+                    sikeresTorles=true;
+                 }
+            }
+        response.status(200).json({
+            sikeresTorles:sikeresTorles,
+            RaktarKeszletModositas:RaktarKeszletModositas,
+            hanyanvettekmegmodosit:hanyanvettekmegmodosit,
+            uresKosar:uresKosar,
+            raktarhiba:raktarhiba,
+            vetelhiba:vetelhiba
+        });
+    } catch (error) {
+        console.log(error);
+
+        response.status(500).json({
+            message: 'hiba'
+        });
+    }
+});
 module.exports = router;

@@ -174,4 +174,24 @@ document.addEventListener("DOMContentLoaded",async()=>{
             }
         }
     });
+      document.getElementById('FizetesTesztBtn').addEventListener('click', async () => {
+      
+        const eredmeny = await testPostFetch('/test/FizetesTest');
+
+        document.getElementById('FTorolSiker').innerHTML = eredmeny.sikeresTorles;
+        document.getElementById('RaktarKeszletModositas').innerHTML = eredmeny.RaktarKeszletModositas;
+        document.getElementById('hanyanvettekmegmodosit').innerHTML = eredmeny.hanyanvettekmegmodosit;
+         document.getElementById('uresKosar').innerHTML = eredmeny.uresKosar;
+        document.getElementById('raktarhiba').innerHTML = eredmeny.raktarhiba;
+        document.getElementById('vetelhiba').innerHTML = eredmeny.vetelhiba;
+        
+        let ok = document.getElementsByTagName('span');
+        for (let i = 0; i < ok.length; i++) {
+            if (ok[i].innerHTML == 'true') {
+                ok[i].classList.add('text-success');
+            } else {
+                ok[i].classList.add('text-danger');
+            }
+        }
+    });
 })
