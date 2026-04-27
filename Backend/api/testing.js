@@ -222,6 +222,7 @@ router.delete('/koktelTorles/:id', async (request, response) => {
         });
     }
 });
+//feltoltjuk a termeket majd toroljuk is egybol
 router.get('/termekFeltoltesTest', async (req, res) => {
     try {
         //Orszag nevet atalakitja ID-ra ami majd kesobb megy fel a termek tarolassal
@@ -271,7 +272,7 @@ router.get('/TermekLearazas', async (req, res) => {
         //lekerjuk az elozo jelenlegi learazas erteket
         const query = 'SELECT TermekDiscount FROM webshoptermek WHERE TermekID LIKE ?';
         const [discount] = await DBconnetion.promise().query(query, id);
-        console.log(discount[0].TermekDiscount);
+        //console.log(discount[0].TermekDiscount);
 
         if (ertek > 100 || ertek < 1) {
             res.status(422).json({ eredemny: false, szazalek: true });
@@ -282,10 +283,12 @@ router.get('/TermekLearazas', async (req, res) => {
 
             const query = 'SELECT TermekDiscount FROM webshoptermek WHERE TermekID LIKE ?';
             const [ujDiscount] = await DBconnetion.promise().query(query, id);
-            console.log(ujDiscount[0].TermekDiscount);
+            //console.log(ujDiscount[0].TermekDiscount);
 
             //random szazalek miatt elofordulhat hogy a jelenlegi ertekkel megegyezik az uj ertek
             if (ujDiscount[0].TermekDiscount != discount[0].TermekDiscount) {
+                const frissetesQuery = 'UPDATE webshoptermek SET TermekDiscount = ? WHERE TermekID LIKE ?';
+                await DBconnetion.promise().query(frissetesQuery, [discount[0].TermekDiscount, id]);
                 res.status(200).json({ eredemny: true, szazalek: false });
             } else {
                 res.status(200).json({ eredemny: false, szazalek: false });
