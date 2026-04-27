@@ -21,6 +21,7 @@ router.get('/koktelTest', async (request, response) => {
     let mukodikKommertErt = false;
     let mukodikErtekeles = false;
     let mukodikKedvenc = false;
+    let mukodikModosit=false;
     let keszito = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
     try {
         const koktelfeltoltes =
@@ -32,6 +33,7 @@ router.get('/koktelTest', async (request, response) => {
         const komment = 'INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)';
         const ertekeleskomment = 'INSERT INTO kommentertekeles (FelhID,KommentID,Pozitiv,Negativ) VALUES (?,?,?,?)';
         const kedvenc = 'INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)';
+        const modosit = "UPDATE koktél SET KoktelCim=? WHERE KoktélID LIKE ?"
 
         await lekeres(koktelfeltoltes, [keszito, 1, 'Alkohol', 'Alkohol', 'Tölts bele alkoholt', 10]);
         const koktel = 'SELECT * FROM koktél';
@@ -106,6 +108,16 @@ router.get('/koktelTest', async (request, response) => {
                     mukodikKedvenc = true;
                 }
             }
+
+            await lekeres(modosit,["Más Alkohol",koktelid])
+            let eredmeny = await lekeres(koktel);
+            for (let i = 0; i < eredmeny.length; i++) {
+                if (eredmeny[i].KoktelCim=="Más Alkohol"&& eredmeny[i].KoktélID==koktelid) {
+                    mukodikModosit=true
+                }
+                
+            }
+
         }
         response.status(200).json({
             koktel: mukodikKoktel,
@@ -115,7 +127,8 @@ router.get('/koktelTest', async (request, response) => {
             komm: mukodikKomment,
             kommert: mukodikKommertErt,
             kedv: mukodikKedvenc,
-            insertId: koktelid
+            insertId: koktelid,
+            mod:mukodikModosit
         });
     } catch (error) {
         console.log(error);
@@ -127,7 +140,8 @@ router.get('/koktelTest', async (request, response) => {
             ert: mukodikErtekeles,
             komm: mukodikKomment,
             kommert: mukodikKommertErt,
-            kedv: mukodikKedvenc
+            kedv: mukodikKedvenc,
+            mod:mukodikModosit
         });
     }
 });

@@ -33,6 +33,8 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById('kommdel').innerHTML = torles.komm;
         document.getElementById('kommertdel').innerHTML = torles.kommert;
         document.getElementById('kedvencdel').innerHTML = torles.kedv;
+
+        document.getElementById("mod").innerHTML=valasz.mod
         ellenorzes(document.getElementById("koktel").getElementsByTagName("span"))
 
     });
