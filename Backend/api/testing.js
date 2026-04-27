@@ -1126,4 +1126,35 @@ router.get('/regisztracioTest', async (request, response) => {
     }
 });
 
+
+router.patch("/felhModositas", async (request, response) => {
+    let modosultFelhasznalo=false
+    try {
+        let melyiko
+        await lekeres("INSERT INTO Felhasználó (Felhasználónév,Email,Jelszó,JelszóHossza) VALUES (?,?,?,?)",["tesztFelhasználó","teszt@Email.cim",await argon.hash("tesztJelsz0!", { type: argon.argon2id }),12])
+        let felhasználók=await lekeres("SELECT * FROM Felhasználó")
+        for (let i = 0; i < felhasználók.length; i++) {
+            if (felhasználók[i].Felhasználónév=="tesztFelhasználó"&&felhasználók[i].Email=="teszt@Email.cim") {
+                await lekeres("UPDATE Felhasználó SET Felhasználónév = ?, Email = ?, Jelszó = ?,JelszóHossza=? WHERE FelhID LIKE ?",["módosultFelhasználó","módosult@Email.cim",await argon.hash("másJelsz0!", { type: argon.argon2id }),10,felhasználók[i].FelhID])
+            }
+        }
+        felhasználók=await lekeres("SELECT * FROM Felhasználó")
+        for (let i = 0; i < felhasználók.length; i++) {
+            if (felhasználók[i].Felhasználónév=="módosultFelhasználó"&&felhasználók[i].Email=="módosult@Email.cim") {
+                modosultFelhasznalo=true
+            }
+        }
+        response.status(200).json({
+            eredmeny:modosultFelhasznalo
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        
+        response.status(200).json({
+            eredmeny:modosultFelhasznalo
+        })
+    }
+    
+});
 module.exports = router;

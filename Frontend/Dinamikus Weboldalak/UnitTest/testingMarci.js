@@ -8,6 +8,15 @@ const TestDeleteFetch=async(url,object)=>{
         return valasz.json()
     }
 }
+const AdatPatch=async(url)=>{
+    const valasz=await fetch(url,{
+        method:"PATCH",
+        headers:{"Content-Type":"application/json"}
+    })
+    if (valasz.ok) {
+        return valasz.json()
+    }
+}
 
 
 
@@ -45,6 +54,9 @@ document.addEventListener("DOMContentLoaded",async()=>{
         else{
             document.getElementById("koktel").setAttribute("hidden","")
         }
+    })
+    document.getElementById("felhasznaloTesztBtn").addEventListener("click",async()=>{
+        document.getElementById('FelhMod').innerHTML = (await AdatPatch("/test/felhModositas")).eredmeny;
     })
 })
 
