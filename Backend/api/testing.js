@@ -21,113 +21,117 @@ router.get('/koktelTest', async (request, response) => {
     let mukodikKommertErt = false;
     let mukodikErtekeles = false;
     let mukodikKedvenc = false;
-    let keszito=jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+    let keszito = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
     try {
-    const koktelfeltoltes = 'INSERT INTO koktél (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg) VALUES (?,?,?,?,?,?)';
-    const jelvenyfeltoltes = 'INSERT INTO koktélokjelvényei (KoktélID,JelvényID) VALUES (?,?)';
-    const osszetevofeltoltes = 'INSERT INTO koktelokosszetevoi (KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES (?,?,?,?)';
-    const ertekeles = 'INSERT INTO ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
-    const komment = 'INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)';
-    const ertekeleskomment = 'INSERT INTO kommentertekeles (FelhID,KommentID,Pozitiv,Negativ) VALUES (?,?,?,?)';
-    const kedvenc = 'INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)';
-    
-    await lekeres(koktelfeltoltes, [keszito, 1, 'Alkohol', 'Alkohol', 'Tölts bele alkoholt', 10]);
-    const koktel = 'SELECT * FROM koktél';
-    let eredmeny = await lekeres(koktel);
-    let koktelid;
-    for (let i = 0; i < eredmeny.length; i++) {
-        if (
-            eredmeny[i].Keszito == keszito &&
-            eredmeny[i].Alkoholos == 1 &&
-            eredmeny[i].KoktelCim == 'Alkohol' &&
-            eredmeny[i].Recept == 'Tölts bele alkoholt' &&
-            eredmeny[i].AlapMennyiseg == 10
-        ) 
-        {
-            mukodikKoktel = true;
-            koktelid = eredmeny[i].KoktélID;
-        }
-    }
-    if (mukodikKoktel) {
-        await lekeres(jelvenyfeltoltes, [koktelid,1]);
-        await lekeres(jelvenyfeltoltes, [koktelid,3]);
-        await lekeres(osszetevofeltoltes, [koktelid,"Gin",50,"ml"]);
-        await lekeres(osszetevofeltoltes, [koktelid,"Tonic",200,"ml"]);
-        let jelvenykoktelok=await lekeres("SELECT KoktélID FROM koktélokjelvényei WHERE JelvényID LIKE ? OR JelvényID LIKE ? GROUP BY KoktélID",[1,3])
-        for (let i = 0; i < jelvenykoktelok.length; i++) {
-            if (jelvenykoktelok[i].KoktélID==koktelid) {
-                mukodikKoktelJelveny=true
+        const koktelfeltoltes =
+            'INSERT INTO koktél (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg) VALUES (?,?,?,?,?,?)';
+        const jelvenyfeltoltes = 'INSERT INTO koktélokjelvényei (KoktélID,JelvényID) VALUES (?,?)';
+        const osszetevofeltoltes =
+            'INSERT INTO koktelokosszetevoi (KoktélID,Osszetevő,Mennyiség,Mertekegyseg) VALUES (?,?,?,?)';
+        const ertekeles = 'INSERT INTO ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
+        const komment = 'INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)';
+        const ertekeleskomment = 'INSERT INTO kommentertekeles (FelhID,KommentID,Pozitiv,Negativ) VALUES (?,?,?,?)';
+        const kedvenc = 'INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)';
+
+        await lekeres(koktelfeltoltes, [keszito, 1, 'Alkohol', 'Alkohol', 'Tölts bele alkoholt', 10]);
+        const koktel = 'SELECT * FROM koktél';
+        let eredmeny = await lekeres(koktel);
+        let koktelid;
+        for (let i = 0; i < eredmeny.length; i++) {
+            if (
+                eredmeny[i].Keszito == keszito &&
+                eredmeny[i].Alkoholos == 1 &&
+                eredmeny[i].KoktelCim == 'Alkohol' &&
+                eredmeny[i].Recept == 'Tölts bele alkoholt' &&
+                eredmeny[i].AlapMennyiseg == 10
+            ) {
+                mukodikKoktel = true;
+                koktelid = eredmeny[i].KoktélID;
             }
-            
         }
-        let osszetevokoktelok=await lekeres("SELECT KoktélID FROM koktelokosszetevoi WHERE Osszetevő LIKE ? OR Osszetevő LIKE ? GROUP BY KoktélID",["Gin","Tonic"])
-        for (let i = 0; i < osszetevokoktelok.length; i++) {
-            if (osszetevokoktelok[i].KoktélID==koktelid) {
-                mukodikKoktelOsszetevo=true
-            } 
-        }
-        
-        await lekeres(ertekeles, [keszito, koktelid, 'Koktél', 5]);
-        let ert = await lekeres('SELECT Keszito FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?', [
-            koktelid,
-            'Koktél'
-        ]);
-        if (ert != undefined) {
-            mukodikErtekeles = true;
-        }
-        
-        await lekeres(komment, [keszito, koktelid, 'Koktél', 'Teszt Komment']);
-        let komm = await lekeres(
-            'SELECT Keszito,KommentID FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?',
-            [koktelid, 'Koktél']
-        );
-        if (komm != undefined) {
-            await lekeres(ertekeleskomment, [keszito, komm[0].KommentID, 0, 1]);
-            mukodikKomment = true;
-            let kommert = await lekeres(
-                'SELECT FelhID,KommentID FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?',
-                [keszito, komm[0].KommentID]
+        if (mukodikKoktel) {
+            await lekeres(jelvenyfeltoltes, [koktelid, 1]);
+            await lekeres(jelvenyfeltoltes, [koktelid, 3]);
+            await lekeres(osszetevofeltoltes, [koktelid, 'Gin', 50, 'ml']);
+            await lekeres(osszetevofeltoltes, [koktelid, 'Tonic', 200, 'ml']);
+            let jelvenykoktelok = await lekeres(
+                'SELECT KoktélID FROM koktélokjelvényei WHERE JelvényID LIKE ? OR JelvényID LIKE ? GROUP BY KoktélID',
+                [1, 3]
             );
-            if (kommert != undefined) {
-                mukodikKommertErt = true;
+            for (let i = 0; i < jelvenykoktelok.length; i++) {
+                if (jelvenykoktelok[i].KoktélID == koktelid) {
+                    mukodikKoktelJelveny = true;
+                }
+            }
+            let osszetevokoktelok = await lekeres(
+                'SELECT KoktélID FROM koktelokosszetevoi WHERE Osszetevő LIKE ? OR Osszetevő LIKE ? GROUP BY KoktélID',
+                ['Gin', 'Tonic']
+            );
+            for (let i = 0; i < osszetevokoktelok.length; i++) {
+                if (osszetevokoktelok[i].KoktélID == koktelid) {
+                    mukodikKoktelOsszetevo = true;
+                }
+            }
+
+            await lekeres(ertekeles, [keszito, koktelid, 'Koktél', 5]);
+            let ert = await lekeres('SELECT Keszito FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?', [
+                koktelid,
+                'Koktél'
+            ]);
+            if (ert != undefined) {
+                mukodikErtekeles = true;
+            }
+
+            await lekeres(komment, [keszito, koktelid, 'Koktél', 'Teszt Komment']);
+            let komm = await lekeres(
+                'SELECT Keszito,KommentID FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?',
+                [koktelid, 'Koktél']
+            );
+            if (komm != undefined) {
+                await lekeres(ertekeleskomment, [keszito, komm[0].KommentID, 0, 1]);
+                mukodikKomment = true;
+                let kommert = await lekeres(
+                    'SELECT FelhID,KommentID FROM kommentertekeles WHERE FelhID LIKE ? AND KommentID LIKE ?',
+                    [keszito, komm[0].KommentID]
+                );
+                if (kommert != undefined) {
+                    mukodikKommertErt = true;
+                }
+            }
+
+            await lekeres(kedvenc, [keszito, koktelid]);
+            let kedv = await lekeres('SELECT * FROM kedvencek WHERE KiKedvelteID LIKE ?', [keszito]);
+            for (let i = 0; i < kedv.length; i++) {
+                if (kedv[i].MitkedveltID == koktelid) {
+                    mukodikKedvenc = true;
+                }
             }
         }
-        
-        await lekeres(kedvenc, [keszito, koktelid]);
-        let kedv = await lekeres('SELECT * FROM kedvencek WHERE KiKedvelteID LIKE ?', [keszito]);
-        for (let i = 0; i < kedv.length; i++) {
-            if (kedv[i].MitkedveltID == koktelid) {
-                mukodikKedvenc = true;
-            }
-        }
-    }
-    response.status(200).json({
-        koktel: mukodikKoktel,
-        jelveny:mukodikKoktelJelveny,
-        ossz:mukodikKoktelOsszetevo,
-        ert: mukodikErtekeles,
-        komm: mukodikKomment,
-        kommert: mukodikKommertErt,
-        kedv: mukodikKedvenc,
-        insertId:koktelid
-    });
-    } 
-    catch (error) {
+        response.status(200).json({
+            koktel: mukodikKoktel,
+            jelveny: mukodikKoktelJelveny,
+            ossz: mukodikKoktelOsszetevo,
+            ert: mukodikErtekeles,
+            komm: mukodikKomment,
+            kommert: mukodikKommertErt,
+            kedv: mukodikKedvenc,
+            insertId: koktelid
+        });
+    } catch (error) {
         console.log(error);
 
         response.status(200).json({
             koktel: mukodikKoktel,
-            jelveny:mukodikKoktelJelveny,
-            ossz:mukodikKoktelOsszetevo,
+            jelveny: mukodikKoktelJelveny,
+            ossz: mukodikKoktelOsszetevo,
             ert: mukodikErtekeles,
             komm: mukodikKomment,
             kommert: mukodikKommertErt,
             kedv: mukodikKedvenc
         });
     }
-
 });
-router.delete("/koktelTorles/:id",async(request,response)=>{
+router.delete('/koktelTorles/:id', async (request, response) => {
     let toroltKoktel = true;
     let toroltKoktelJelveny = true;
     let toroltKoktelOsszetevo = true;
@@ -135,93 +139,89 @@ router.delete("/koktelTorles/:id",async(request,response)=>{
     let toroltKommertErt = true;
     let toroltErtekeles = true;
     let toroltKedvenc = true;
-    let koktelId=request.params.id
+    let koktelId = request.params.id;
 
-    
-    try 
-    {
-        await lekeres("DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?",[koktelId])
-        await lekeres("DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?",[koktelId])
-        let kommentek=await lekeres("SELECT KommentID FROM komment WHERE HovaIrták LIKE ?",[koktelId])
+    try {
+        await lekeres('DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?', [koktelId]);
+        await lekeres('DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?', [koktelId]);
+        let kommentek = await lekeres('SELECT KommentID FROM komment WHERE HovaIrták LIKE ?', [koktelId]);
         for (let i = 0; i < kommentek.length; i++) {
-            await lekeres("DELETE FROM kommentertekeles WHERE KommentID LIKE ?",kommentek[i].KommentID)
+            await lekeres('DELETE FROM kommentertekeles WHERE KommentID LIKE ?', kommentek[i].KommentID);
         }
-        await lekeres("DELETE FROM komment WHERE HovaIrták LIKE ?",[koktelId])
-        await lekeres("DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?",[koktelId,"Koktél"])
-        await lekeres("DELETE FROM kedvencek WHERE MitkedveltID LIKE ?",[koktelId])
-        await lekeres("DELETE FROM koktél WHERE KoktélID LIKE ?",[koktelId])
+        await lekeres('DELETE FROM komment WHERE HovaIrták LIKE ?', [koktelId]);
+        await lekeres('DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?', [koktelId, 'Koktél']);
+        await lekeres('DELETE FROM kedvencek WHERE MitkedveltID LIKE ?', [koktelId]);
+        await lekeres('DELETE FROM koktél WHERE KoktélID LIKE ?', [koktelId]);
 
-        let koktelok=await lekeres('SELECT KoktélID FROM koktél') 
-        let ertekelesek=await lekeres('SELECT HovaIrták FROM ertekeles WHERE MilyenDologhoz LIKE ?',["Koktél"]) 
-        let komment=await lekeres('SELECT HovaIrták FROM komment') 
-        let kommentertekelesek=await lekeres("SELECT KommentID FROM kommentertekeles")
-        let kedvencek=await lekeres('SELECT MitkedveltID FROM kedvencek') 
-        let jelvenyek=await lekeres('SELECT KoktélID FROM koktélokjelvényei') 
-        let osszetevok=await lekeres('SELECT KoktélID FROM koktelokosszetevoi') 
+        let koktelok = await lekeres('SELECT KoktélID FROM koktél');
+        let ertekelesek = await lekeres('SELECT HovaIrták FROM ertekeles WHERE MilyenDologhoz LIKE ?', ['Koktél']);
+        let komment = await lekeres('SELECT HovaIrták FROM komment');
+        let kommentertekelesek = await lekeres('SELECT KommentID FROM kommentertekeles');
+        let kedvencek = await lekeres('SELECT MitkedveltID FROM kedvencek');
+        let jelvenyek = await lekeres('SELECT KoktélID FROM koktélokjelvényei');
+        let osszetevok = await lekeres('SELECT KoktélID FROM koktelokosszetevoi');
         console.log(koktelId);
-        
+
         for (let i = 0; i < koktelok.length; i++) {
-            if (koktelok[i].KoktélID==koktelId) {
+            if (koktelok[i].KoktélID == koktelId) {
                 console.log(koktelok[i].KoktélID);
-                
-                toroltKoktel=false
+
+                toroltKoktel = false;
             }
-        }        
+        }
         for (let i = 0; i < ertekelesek.length; i++) {
-            if (ertekelesek[i].HovaIrták==koktelId) {
-                toroltErtekeles=false
+            if (ertekelesek[i].HovaIrták == koktelId) {
+                toroltErtekeles = false;
             }
-        }        
+        }
         for (let i = 0; i < komment.length; i++) {
-            if (komment[i].HovaIrták==koktelId) {
-                toroltKomment=false
+            if (komment[i].HovaIrták == koktelId) {
+                toroltKomment = false;
                 for (let j = 0; j < kommentertekelesek.length; j++) {
-                    if (komment[i].HovaIrták==kommentertekelesek[j].KommentID) {
-                        toroltKommertErt=false
+                    if (komment[i].HovaIrták == kommentertekelesek[j].KommentID) {
+                        toroltKommertErt = false;
                     }
-                }        
+                }
             }
-        }        
+        }
         for (let i = 0; i < kedvencek.length; i++) {
-            if (kedvencek[i].MitkedveltID==koktelId) {
-                toroltKedvenc=false
+            if (kedvencek[i].MitkedveltID == koktelId) {
+                toroltKedvenc = false;
             }
-        }        
+        }
         for (let i = 0; i < jelvenyek.length; i++) {
-            if (jelvenyek[i].KoktélID==koktelId) {
-                toroltKoktelJelveny=false
+            if (jelvenyek[i].KoktélID == koktelId) {
+                toroltKoktelJelveny = false;
             }
-        }        
+        }
         for (let i = 0; i < osszetevok.length; i++) {
-            if (osszetevok[i].KoktélID==koktelId) {
-                toroltKoktelOsszetevo=false
+            if (osszetevok[i].KoktélID == koktelId) {
+                toroltKoktelOsszetevo = false;
             }
         }
         response.status(200).json({
             koktel: toroltKoktel,
-            jelveny:toroltKoktelJelveny,
-            ossz:toroltKoktelOsszetevo,
+            jelveny: toroltKoktelJelveny,
+            ossz: toroltKoktelOsszetevo,
             ert: toroltErtekeles,
             komm: toroltKomment,
             kommert: toroltKommertErt,
             kedv: toroltKedvenc
-        })
-    } 
-
-    catch (error) {
+        });
+    } catch (error) {
         console.log(error);
-        
+
         response.status(200).json({
             koktel: toroltKoktel,
-            jelveny:toroltKoktelJelveny,
-            ossz:toroltKoktelOsszetevo,
+            jelveny: toroltKoktelJelveny,
+            ossz: toroltKoktelOsszetevo,
             ert: toroltErtekeles,
             komm: toroltKomment,
             kommert: toroltKommertErt,
             kedv: toroltKedvenc
-        })
+        });
     }
-})
+});
 router.get('/termekFeltoltesTest', async (req, res) => {
     try {
         //Orszag nevet atalakitja ID-ra ami majd kesobb megy fel a termek tarolassal
@@ -249,6 +249,8 @@ router.get('/termekFeltoltesTest', async (req, res) => {
 
         if (eredemny.length > 0) {
             //tehat ha talalt ilyen testTermeket, azert ellenorzom tobbre, mert lehet hogy tobbszor is le lett futattva a teszt
+            const queryTorles = 'DELETE FROM webshoptermek WHERE TermekCim LIKE ?';
+            await DBconnetion.promise().query(queryTorles, ['testBor']);
             res.status(200).json({ szazalek: false, eredemny: true });
         } else {
             res.status(200).json({ szazalek: false, eredemny: false });
@@ -306,75 +308,73 @@ router.post('/TermekKosarTest', async (request, response) => {
         let insertId;
         let id = parseInt(request.body.id);
         const mennyiseg = request.body.mennyiseg;
-        const Tidk = "SELECT TermekID FROM webshoptermek"
-        const [Termekidk] = await DBconnetion.promise().query(Tidk)
-        let Tid = []
+        const Tidk = 'SELECT TermekID FROM webshoptermek';
+        const [Termekidk] = await DBconnetion.promise().query(Tidk);
+        let Tid = [];
         for (let i = 0; i < Termekidk.length; i++) {
-            Tid.push(Termekidk[i].TermekID)
+            Tid.push(Termekidk[i].TermekID);
         }
 
         if (isNaN(id) || id == 0 || !Tid.includes(id)) {
             idHiba = true;
-            
-        }
-        else{      
-        const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
-
-        const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
-        const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
-
-        const mennyisegLekeres = 'SELECT TermekKeszlet FROM webshoptermek WHERE TermekID = ?';
-        const [MennyisegLe] = await DBconnetion.promise().query(mennyisegLekeres, [id]);
-
-        const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? &&  KosarID = ?';
-        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
-
-        if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1) {
-            siker = false;
-            mennyiseghiba = true;
         } else {
-            if (vanEIlyen[0] == undefined) {
-                const kosarFeltoltQuery =
-                    'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
-                const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
-                    UserID,
-                    id,
-                    mennyiseg,
-                    ArLekeres[0][0].Ar
-                ]);
-                hozzaadott = true;
-                siker = true;
-                insertId = KosarFeltolt.insertId;
-                const felkerulteQuery = 'SELECT * FROM kosártermék WHERE KosarID = ? AND TermekID = ?';
-                const [felkerulte] = await DBconnetion.promise().query(felkerulteQuery, [UserID, id]);
-                if (felkerulte != '') {
-                    felkerultE = true;
-                }
-            } else {
-                //lekérem az éppen változtatott rekordot
-                const valtozoTermekQ = 'SELECT * FROM kosártermék WHERE KosarID = ? AND TermekID = ?';
-                const [valtozo] = await DBconnetion.promise().query(valtozoTermekQ, [UserID, id]);
-                const kosarUpdateQuery =
-                    'UPDATE kosártermék SET Darabszam = Darabszam+? WHERE TermekID = ? AND KosarID = ?';
-                const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [mennyiseg, id, UserID]);
-                bovitett = true;
-                siker = true;
-                insertId = KosarUpdate.insertId;
-                const osszkosar = 'SELECT * FROM kosártermék';
-                const [felkerulte] = await DBconnetion.promise().query(osszkosar);
+            const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
 
-                for (let i = 0; i < felkerulte.length; i++) {
-                    //a változtatás előtti rekordot összehasonlitom a valtoztatas utanival
-                    if (
-                        felkerulte[i].KosarID == valtozo[0].KosarID &&
-                        felkerulte[i].TermekID == valtozo[0].TermekID &&
-                        felkerulte[i].Darabszam == valtozo[0].Darabszam + parseInt(mennyiseg)
-                    ) {
+            const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
+            const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
+
+            const mennyisegLekeres = 'SELECT TermekKeszlet FROM webshoptermek WHERE TermekID = ?';
+            const [MennyisegLe] = await DBconnetion.promise().query(mennyisegLekeres, [id]);
+
+            const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? &&  KosarID = ?';
+            const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
+
+            if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1) {
+                siker = false;
+                mennyiseghiba = true;
+            } else {
+                if (vanEIlyen[0] == undefined) {
+                    const kosarFeltoltQuery =
+                        'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
+                    const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
+                        UserID,
+                        id,
+                        mennyiseg,
+                        ArLekeres[0][0].Ar
+                    ]);
+                    hozzaadott = true;
+                    siker = true;
+                    insertId = KosarFeltolt.insertId;
+                    const felkerulteQuery = 'SELECT * FROM kosártermék WHERE KosarID = ? AND TermekID = ?';
+                    const [felkerulte] = await DBconnetion.promise().query(felkerulteQuery, [UserID, id]);
+                    if (felkerulte != '') {
                         felkerultE = true;
+                    }
+                } else {
+                    //lekérem az éppen változtatott rekordot
+                    const valtozoTermekQ = 'SELECT * FROM kosártermék WHERE KosarID = ? AND TermekID = ?';
+                    const [valtozo] = await DBconnetion.promise().query(valtozoTermekQ, [UserID, id]);
+                    const kosarUpdateQuery =
+                        'UPDATE kosártermék SET Darabszam = Darabszam+? WHERE TermekID = ? AND KosarID = ?';
+                    const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [mennyiseg, id, UserID]);
+                    bovitett = true;
+                    siker = true;
+                    insertId = KosarUpdate.insertId;
+                    const osszkosar = 'SELECT * FROM kosártermék';
+                    const [felkerulte] = await DBconnetion.promise().query(osszkosar);
+
+                    for (let i = 0; i < felkerulte.length; i++) {
+                        //a változtatás előtti rekordot összehasonlitom a valtoztatas utanival
+                        if (
+                            felkerulte[i].KosarID == valtozo[0].KosarID &&
+                            felkerulte[i].TermekID == valtozo[0].TermekID &&
+                            felkerulte[i].Darabszam == valtozo[0].Darabszam + parseInt(mennyiseg)
+                        ) {
+                            felkerultE = true;
+                        }
                     }
                 }
             }
-        }
         }
         response.status(200).json({
             siker: siker,
@@ -400,29 +400,26 @@ router.post('/TermekNevTeszt', async (request, response) => {
         if (nev == '') {
             NevHiba = true;
             siker = false;
-        }
-        else{
-
-        
-        const query = "SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE TermekCim like ?"
-        const [orszagok] = await DBconnetion.promise().query(query,[`%${nev}%`])
-        if (orszagok.length == 0) 
-        {
-            NincsIlyenTermek = true;
-            siker = true;
         } else {
-            siker = true;
-            let mennyi = 0;
-            for (let i = 0; i < orszagok.length; i++) {
-                if (orszagok[i].TermekCim.includes(nev)) {
-                    mennyi++;
+            const query =
+                'SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE TermekCim like ?';
+            const [orszagok] = await DBconnetion.promise().query(query, [`%${nev}%`]);
+            if (orszagok.length == 0) {
+                NincsIlyenTermek = true;
+                siker = true;
+            } else {
+                siker = true;
+                let mennyi = 0;
+                for (let i = 0; i < orszagok.length; i++) {
+                    if (orszagok[i].TermekCim.includes(nev)) {
+                        mennyi++;
+                    }
+                }
+                if (mennyi == orszagok.length) {
+                    JoNevek = true;
                 }
             }
-            if (mennyi == orszagok.length) {
-                JoNevek = true;
-            }
         }
-    }   
         response.status(200).json({
             siker: siker,
             JoNevek: JoNevek,
@@ -435,64 +432,57 @@ router.post('/TermekNevTeszt', async (request, response) => {
             hiba: error
         });
     }
-})
-router.get("/kosartermekek",async(request,response)=>{
-    
+});
+router.get('/kosartermekek', async (request, response) => {
     try {
         const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
-        const query = "SELECT * FROM KosárTermék INNER JOIN webshoptermek ON KosárTermék.TermekID = webshoptermek.TermekID WHERE KosarID LIKE ?"
-        const [termekek] = await DBconnetion.promise().query(query,[UserID])
+        const query =
+            'SELECT * FROM KosárTermék INNER JOIN webshoptermek ON KosárTermék.TermekID = webshoptermek.TermekID WHERE KosarID LIKE ?';
+        const [termekek] = await DBconnetion.promise().query(query, [UserID]);
         response.status(200).json({
             termekek: termekek
-        })
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         response.status(500).json({
-            hiba:error
-        })
+            hiba: error
+        });
     }
-})
+});
 router.patch('/TermekFrissitesTeszt', async (request, response) => {
-   
     try {
-         let mit = request.body.id;
+        let mit = request.body.id;
         let mennyit = request.body.mennyiseg;
         const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
         let siker = true;
         let JoSzam = false;
         let negativszam = false;
-    if (mennyit < 1) 
-    {
-        negativszam = true;
-        siker = false;
-        JoSzam = false;
-    }
-    else{
-    let TermékTöltés = 'UPDATE KosárTermék SET Darabszam = ? WHERE KosarID LIKE ? AND TermekID LIKE ?';
-       const [frissit] = await DBconnetion.promise().query(TermékTöltés, [
-            mennyit,
-            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
-            mit
-        ]);
-        if (frissit.affectedRows == 0) {
+        if (mennyit < 1) {
+            negativszam = true;
             siker = false;
-        }
-        else
-        {
-                const Testquery = "SELECT * FROM KosárTermék WHERE KosarID LIKE ? AND TermekID = ?"
-                const [termekek] = await DBconnetion.promise().query(Testquery,[UserID,mit])
-                if (termekek[0].Darabszam == mennyit) 
-                {
-                    JoSzam = true;    
+            JoSzam = false;
+        } else {
+            let TermékTöltés = 'UPDATE KosárTermék SET Darabszam = ? WHERE KosarID LIKE ? AND TermekID LIKE ?';
+            const [frissit] = await DBconnetion.promise().query(TermékTöltés, [
+                mennyit,
+                jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
+                mit
+            ]);
+            if (frissit.affectedRows == 0) {
+                siker = false;
+            } else {
+                const Testquery = 'SELECT * FROM KosárTermék WHERE KosarID LIKE ? AND TermekID = ?';
+                const [termekek] = await DBconnetion.promise().query(Testquery, [UserID, mit]);
+                if (termekek[0].Darabszam == mennyit) {
+                    JoSzam = true;
                 }
-                
+            }
         }
-    }
-                response.status(200).json({
-                    siker:siker,
-                    JoSzam: JoSzam,
-                    negativszam : negativszam
-                });
+        response.status(200).json({
+            siker: siker,
+            JoSzam: JoSzam,
+            negativszam: negativszam
+        });
     } catch (error) {
         console.log(error);
 
@@ -504,46 +494,40 @@ router.patch('/TermekFrissitesTeszt', async (request, response) => {
 });
 router.delete('/TermekUritesTest', async (request, response) => {
     try {
-    let honnan = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
-    let ures = false;
-    let siker = true;
-    let alapures = false;
-    const KosarElsoLeker = "SELECT * FROM KosárTermék WHERE KosarID LIKE ?"
-    const [kosarElso] = await DBconnetion.promise().query(KosarElsoLeker, [honnan]);
-    if (kosarElso.length == 0) 
-        {
+        let honnan = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
+        let ures = false;
+        let siker = true;
+        let alapures = false;
+        const KosarElsoLeker = 'SELECT * FROM KosárTermék WHERE KosarID LIKE ?';
+        const [kosarElso] = await DBconnetion.promise().query(KosarElsoLeker, [honnan]);
+        if (kosarElso.length == 0) {
+            siker = false;
+            ures = false;
+            alapures = true;
+            console.log('asd');
+        } else {
+            let TermékTörlés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
+            const [torol] = await DBconnetion.promise().query(TermékTörlés, [honnan]);
+            if (torol.affectedRows == 0) {
                 siker = false;
-                ures = false;
-                alapures = true;    
-                 console.log("asd")
-        }
-    else{
-       
-    let TermékTörlés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ?';
-       const [torol] = await DBconnetion.promise().query(TermékTörlés, [honnan]);
-       if (torol.affectedRows == 0) {
-        siker=false;
-        }
-        else{
-            const KosarLeker = "SELECT * FROM KosárTermék WHERE KosarID LIKE ?"
-            const [kosar] = await DBconnetion.promise().query(KosarLeker, [honnan]);
-            if (kosar.length > 0) 
-            {
-                siker = false;
-                ures = false;    
+            } else {
+                const KosarLeker = 'SELECT * FROM KosárTermék WHERE KosarID LIKE ?';
+                const [kosar] = await DBconnetion.promise().query(KosarLeker, [honnan]);
+                if (kosar.length > 0) {
+                    siker = false;
+                    ures = false;
+                } else if (kosar.length == 0) {
+                    ures = true;
+                }
             }
-            else if(kosar.length == 0){
-                ures = true;
-            }
-        }  
-    }
-     response.status(200).json({
+        }
+        response.status(200).json({
             siker: siker,
-            ures:ures,
+            ures: ures,
             alapures: alapures
         });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         response.status(500).json({
             message: 'Hiba Történt!',
             hiba: error
@@ -561,8 +545,7 @@ async function lekeres(query, param) {
 }
 router.delete('/FioktorlesTeszt', async (request, response) => {
     try {
-        const id = parseInt(request.body.id)
-      
+        const id = parseInt(request.body.id);
 
         let FelhTorolve = false;
         let ErtekelesTorles = false;
@@ -592,293 +575,253 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
         let KedvencTorleseHiba = false;
         let JelentoJelentesHiba = false;
 
-
-        const idEllenorzesQ = "SELECT FelhID FROM felhasználó WHERE FelhID = ?"
-        const [idEllenorzes] = await DBconnetion.promise().query(idEllenorzesQ,[id])
-         console.log(idEllenorzes.length)
-        if(idEllenorzes.length == 0)
-        {
-             console.log("asd")
+        const idEllenorzesQ = 'SELECT FelhID FROM felhasználó WHERE FelhID = ?';
+        const [idEllenorzes] = await DBconnetion.promise().query(idEllenorzesQ, [id]);
+        console.log(idEllenorzes.length);
+        if (idEllenorzes.length == 0) {
+            console.log('asd');
             idHiba = true;
-        }
-        else{
-        const FelhasznaloTorles = 'DELETE FROM felhasználó WHERE FelhID LIKE ?';
-        const FelhasznaloTorlesEllQ = "SELECT * FROM felhasználó WHERE FelhID LIKE ?"
-        idHiba = false;
+        } else {
+            const FelhasznaloTorles = 'DELETE FROM felhasználó WHERE FelhID LIKE ?';
+            const FelhasznaloTorlesEllQ = 'SELECT * FROM felhasználó WHERE FelhID LIKE ?';
+            idHiba = false;
 
-        const ErtekTorles = 'DELETE FROM ertekeles WHERE Keszito LIKE ?';
-        const ErtekTorlesEllQ = "SELECT * FROM ertekeles WHERE Keszito = ?"
+            const ErtekTorles = 'DELETE FROM ertekeles WHERE Keszito LIKE ?';
+            const ErtekTorlesEllQ = 'SELECT * FROM ertekeles WHERE Keszito = ?';
 
-        const ErtekTorlesKoktel = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
-        const ErtekTorlesKoktelEllQ = "SELECT  *  FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+            const ErtekTorlesKoktel = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+            const ErtekTorlesKoktelEllQ = 'SELECT  *  FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
 
-        const KoktelTorles = 'DELETE FROM koktél WHERE Keszito LIKE ?';
-        const KoktelTorlesEllQ = "SELECT  *  FROM koktél WHERE Keszito LIKE ?"
+            const KoktelTorles = 'DELETE FROM koktél WHERE Keszito LIKE ?';
+            const KoktelTorlesEllQ = 'SELECT  *  FROM koktél WHERE Keszito LIKE ?';
 
-        const KoktelLekeres = 'SELECT KoktélID FROM koktél WHERE Keszito LIKE ?';
+            const KoktelLekeres = 'SELECT KoktélID FROM koktél WHERE Keszito LIKE ?';
 
-        const JelvenyTorles = 'DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?';
-        const JelvenyTorlesEllQ = "SELECT  *  FROM koktélokjelvényei WHERE KoktélID LIKE ?"
+            const JelvenyTorles = 'DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?';
+            const JelvenyTorlesEllQ = 'SELECT  *  FROM koktélokjelvényei WHERE KoktélID LIKE ?';
 
-        const KommentTorlesKoktel = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
-        const KommentTorlesKoktelEllQ = "SELECT  *  FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
+            const KommentTorlesKoktel = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+            const KommentTorlesKoktelEllQ = 'SELECT  *  FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
 
-        const KommentErtekelesLekeres = 'SELECT KommentID,Pozitiv,Negativ FROM kommentertekeles WHERE FelhID LIKE ?';
+            const KommentErtekelesLekeres =
+                'SELECT KommentID,Pozitiv,Negativ FROM kommentertekeles WHERE FelhID LIKE ?';
 
-        const KommentErtekelesTorles = 'DELETE FROM kommentertekeles WHERE FelhID LIKE ?';
-        const KommentErtekelesTorlesEllQ = "SELECT  *  FROM kommentertekeles WHERE FelhID LIKE ?"
+            const KommentErtekelesTorles = 'DELETE FROM kommentertekeles WHERE FelhID LIKE ?';
+            const KommentErtekelesTorlesEllQ = 'SELECT  *  FROM kommentertekeles WHERE FelhID LIKE ?';
 
-        const KommentTorles = 'DELETE FROM komment WHERE Keszito LIKE ?';
-        const KommentTorlesEllQ = "SELECT  *  FROM komment WHERE Keszito LIKE ?"
+            const KommentTorles = 'DELETE FROM komment WHERE Keszito LIKE ?';
+            const KommentTorlesEllQ = 'SELECT  *  FROM komment WHERE Keszito LIKE ?';
 
-        const JelentesTorles = 'DELETE FROM jelentesek WHERE JelentettID LIKE ?';
-        const JelentesTorlesEllQ = "SELECT  *  FROM jelentesek WHERE JelentettID LIKE ?"
+            const JelentesTorles = 'DELETE FROM jelentesek WHERE JelentettID LIKE ?';
+            const JelentesTorlesEllQ = 'SELECT  *  FROM jelentesek WHERE JelentettID LIKE ?';
 
-        const JelentesLekeres = 'SELECT JelentesID FROM jelentesek WHERE JelentettID LIKE ?';
+            const JelentesLekeres = 'SELECT JelentesID FROM jelentesek WHERE JelentettID LIKE ?';
 
-        const KosarTermekTorles = 'DELETE FROM kosártermék WHERE KosarID LIKE ?';
-        const KosarTermekTorlesEllQ = "SELECT  *  FROM Kosártermék WHERE KosarID LIKE ?"
+            const KosarTermekTorles = 'DELETE FROM kosártermék WHERE KosarID LIKE ?';
+            const KosarTermekTorlesEllQ = 'SELECT  *  FROM Kosártermék WHERE KosarID LIKE ?';
 
-        const KedvencTorlesQ = 'DELETE FROM kedvencek WHERE KikedvelteID LIKE ?';
-        const KedvencTorlesEllQ = "SELECT  *  FROM kedvencek WHERE KikedvelteID LIKE ?"
+            const KedvencTorlesQ = 'DELETE FROM kedvencek WHERE KikedvelteID LIKE ?';
+            const KedvencTorlesEllQ = 'SELECT  *  FROM kedvencek WHERE KikedvelteID LIKE ?';
 
-        const OssztevTorles = 'DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
-        const OssztevTorlesEllQ = "SELECT  *  FROM koktelokosszetevoi WHERE KoktélID LIKE ?"
+            const OssztevTorles = 'DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
+            const OssztevTorlesEllQ = 'SELECT  *  FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
 
-        const KedvencTorlesKoktel = 'DELETE FROM kedvencek WHERE MitkedveltID LIKE ?';
-        const KedvencTorlesKoktelEllQ = "SELECT  *  FROM kedvencek WHERE MitkedveltID LIKE ?"
+            const KedvencTorlesKoktel = 'DELETE FROM kedvencek WHERE MitkedveltID LIKE ?';
+            const KedvencTorlesKoktelEllQ = 'SELECT  *  FROM kedvencek WHERE MitkedveltID LIKE ?';
 
-        const JelentoTorles = 'DELETE FROM jelentők WHERE JelentőID LIKE ?';
-        const JelentoTorlesEllQ = "SELECT  *  FROM jelentők WHERE JelentőID LIKE ?"
+            const JelentoTorles = 'DELETE FROM jelentők WHERE JelentőID LIKE ?';
+            const JelentoTorlesEllQ = 'SELECT  *  FROM jelentők WHERE JelentőID LIKE ?';
 
-        const JelentoJelentesTorles = 'DELETE FROM jelentők WHERE JelentésID LIKE ?';
-        const JelentoJelentesTorlesEllQ = "SELECT  *  FROM jelentők WHERE JelentésID LIKE ?"
+            const JelentoJelentesTorles = 'DELETE FROM jelentők WHERE JelentésID LIKE ?';
+            const JelentoJelentesTorlesEllQ = 'SELECT  *  FROM jelentők WHERE JelentésID LIKE ?';
 
-        const ertTorles = await lekeres(ErtekTorles, id);
-        const [ErtekTorlesEll] = await DBconnetion.promise().query(ErtekTorlesEllQ,[id])
-        if (ErtekTorlesEll.length == 0) 
-        {
-            ErtekelesTorles = true;
-        }
+            const ertTorles = await lekeres(ErtekTorles, id);
+            const [ErtekTorlesEll] = await DBconnetion.promise().query(ErtekTorlesEllQ, [id]);
+            if (ErtekTorlesEll.length == 0) {
+                ErtekelesTorles = true;
+            }
 
-        const kommentTorles = await lekeres(KommentTorles, id);
-        const [KommentTorlesEll] = await DBconnetion.promise().query(KommentTorlesEllQ,[id])
-        if (KommentTorlesEll.length == 0) 
-        {
-            KommentTorlese = true;
-        }
+            const kommentTorles = await lekeres(KommentTorles, id);
+            const [KommentTorlesEll] = await DBconnetion.promise().query(KommentTorlesEllQ, [id]);
+            if (KommentTorlesEll.length == 0) {
+                KommentTorlese = true;
+            }
 
-        const jelentoTorles = await lekeres(JelentoTorles, id);
-        const [JelentoTorlesEll] = await DBconnetion.promise().query(JelentoTorlesEllQ,[id])
-        if (JelentoTorlesEll.length == 0) 
-        {
-            jelentoTorlese = true;
-        }
-    
-        const KedvencTorles = await lekeres(KedvencTorlesQ, id);
-        const [KedvencTorlesEll] = await DBconnetion.promise().query(KedvencTorlesEllQ,[id])
-        if (KedvencTorlesEll.length == 0) 
-        {
-            KedvencTorlese = true;
-        }
+            const jelentoTorles = await lekeres(JelentoTorles, id);
+            const [JelentoTorlesEll] = await DBconnetion.promise().query(JelentoTorlesEllQ, [id]);
+            if (JelentoTorlesEll.length == 0) {
+                jelentoTorlese = true;
+            }
 
-        const KosarTorles = await lekeres(KosarTermekTorles, id);
-        const [KosarTermekTorlesEll] = await DBconnetion.promise().query(KosarTermekTorlesEllQ,[id])
-        if (KosarTermekTorlesEll.length == 0) 
-        {
-            KosarTorlese = true;
-        }
+            const KedvencTorles = await lekeres(KedvencTorlesQ, id);
+            const [KedvencTorlesEll] = await DBconnetion.promise().query(KedvencTorlesEllQ, [id]);
+            if (KedvencTorlesEll.length == 0) {
+                KedvencTorlese = true;
+            }
 
-        let ertekelesek = await lekeres(
-            KommentErtekelesLekeres,
-            id
-        );
-        for (let i = 0; i < ertekelesek.length; i++) {
-            console.log(ertekelesek[i].Negativ);
-            console.log(ertekelesek[i].Pozitiv);
-            if (ertekelesek[i].Pozitiv == 1) {
-                await lekeres('UPDATE komment SET Pozitiv=Pozitiv-1 WHERE KommentID LIKE ?', ertekelesek[i].KommentID);
-                const PozErtEllQ = "SELECT Pozitiv FROM komment WHERE KommentID LIKE ?"
-                const [PozErtEll] = await DBconnetion.promise().query(PozErtEllQ,[ertekelesek[i].KommentID])
-                if (PozErtEll[i].Pozitiv == ertekelesek[i].Pozitiv - 1) 
-                {
-                    pozitivKommentUpdate = true;
+            const KosarTorles = await lekeres(KosarTermekTorles, id);
+            const [KosarTermekTorlesEll] = await DBconnetion.promise().query(KosarTermekTorlesEllQ, [id]);
+            if (KosarTermekTorlesEll.length == 0) {
+                KosarTorlese = true;
+            }
+
+            let ertekelesek = await lekeres(KommentErtekelesLekeres, id);
+            for (let i = 0; i < ertekelesek.length; i++) {
+                console.log(ertekelesek[i].Negativ);
+                console.log(ertekelesek[i].Pozitiv);
+                if (ertekelesek[i].Pozitiv == 1) {
+                    await lekeres(
+                        'UPDATE komment SET Pozitiv=Pozitiv-1 WHERE KommentID LIKE ?',
+                        ertekelesek[i].KommentID
+                    );
+                    const PozErtEllQ = 'SELECT Pozitiv FROM komment WHERE KommentID LIKE ?';
+                    const [PozErtEll] = await DBconnetion.promise().query(PozErtEllQ, [ertekelesek[i].KommentID]);
+                    if (PozErtEll[i].Pozitiv == ertekelesek[i].Pozitiv - 1) {
+                        pozitivKommentUpdate = true;
+                    } else {
+                        pozitivKommentUpdateHiba = true;
+                    }
                 }
-                else
-                {
-                    pozitivKommentUpdateHiba = true;
+                if (ertekelesek[i].Negativ == 1) {
+                    await lekeres(
+                        'UPDATE komment SET Negativ=Negativ-1 WHERE KommentID LIKE ?',
+                        ertekelesek[i].KommentID
+                    );
+                    const NegErtEllQ = 'SELECT Negaativ FROM komment WHERE KommentID LIKE ?';
+                    const [NegErtEll] = await DBconnetion.promise().query(NegErtEllQ, [ertekelesek[i].KommentID]);
+                    if (NegErtEll[i].Negativ == ertekelesek[i].Negativ - 1) {
+                        NegativKommentUpdate = true;
+                    } else {
+                        NegativKommentUpdateHiba = true;
+                    }
                 }
             }
-            if (ertekelesek[i].Negativ == 1) {
-                await lekeres('UPDATE komment SET Negativ=Negativ-1 WHERE KommentID LIKE ?', ertekelesek[i].KommentID);
-                const NegErtEllQ = "SELECT Negaativ FROM komment WHERE KommentID LIKE ?"
-                const [NegErtEll] =  await DBconnetion.promise().query(NegErtEllQ,[ertekelesek[i].KommentID])
-                if (NegErtEll[i].Negativ == ertekelesek[i].Negativ - 1) 
-                {
-                    NegativKommentUpdate = true;
-                }
-                else
-                {
-                    NegativKommentUpdateHiba = true;
-                }
+
+            if (NegativKommentUpdateHiba == true) {
+                NegativKommentUpdate = false;
             }
-        }
+            if (pozitivKommentUpdateHiba == true) {
+                pozitivKommentUpdate = false;
+            }
 
-        if(NegativKommentUpdateHiba == true )
-        {
-            NegativKommentUpdate = false;    
-        }
-        if(pozitivKommentUpdateHiba == true)
-        {
-            pozitivKommentUpdate = false;
-        }
-
-        await lekeres(
-            KommentErtekelesTorles,
-            id
-        );
-        const [KommentErtekelesTorlesEll] = await DBconnetion.promise().query(KommentErtekelesTorlesEllQ,[id])
-        if (KommentErtekelesTorlesEll.length == 0) 
-        {
-            KommentekErtekeleseiTorolve = true;
-        }
-        let koktel = await lekeres(
-            KoktelLekeres,
-            id
-        );
-        for (let i = 0; i < koktel.length; i++) {
-            await lekeres(ErtekTorlesKoktel, [koktel[i].KoktélID, 'Koktél']);
-            const [ErtekTorlesKoktelEll] = await DBconnetion.promise().query(ErtekTorlesKoktelEllQ,[koktel[i].KoktélID, 'Koktél'])
-                console.log(ErtekTorlesKoktelEll)
-            if (ErtekTorlesKoktelEll.length == 0) 
-                {
+            await lekeres(KommentErtekelesTorles, id);
+            const [KommentErtekelesTorlesEll] = await DBconnetion.promise().query(KommentErtekelesTorlesEllQ, [id]);
+            if (KommentErtekelesTorlesEll.length == 0) {
+                KommentekErtekeleseiTorolve = true;
+            }
+            let koktel = await lekeres(KoktelLekeres, id);
+            for (let i = 0; i < koktel.length; i++) {
+                await lekeres(ErtekTorlesKoktel, [koktel[i].KoktélID, 'Koktél']);
+                const [ErtekTorlesKoktelEll] = await DBconnetion.promise().query(ErtekTorlesKoktelEllQ, [
+                    koktel[i].KoktélID,
+                    'Koktél'
+                ]);
+                console.log(ErtekTorlesKoktelEll);
+                if (ErtekTorlesKoktelEll.length == 0) {
                     KoktelErtekelesekTorolve = true;
-                }
-                else
-                {
+                } else {
                     KoktelErtekelesTorlesHiba = true;
                 }
 
-            await lekeres(KommentTorlesKoktel, [koktel[i].KoktélID, 'Koktél']);
-            const [KommentTorlesKoktelEll] = await DBconnetion.promise().query(KommentTorlesKoktelEllQ,[koktel[i].KoktélID, 'Koktél'])
-                if (KommentTorlesKoktelEll.length == 0) 
-                {
+                await lekeres(KommentTorlesKoktel, [koktel[i].KoktélID, 'Koktél']);
+                const [KommentTorlesKoktelEll] = await DBconnetion.promise().query(KommentTorlesKoktelEllQ, [
+                    koktel[i].KoktélID,
+                    'Koktél'
+                ]);
+                if (KommentTorlesKoktelEll.length == 0) {
                     KoktelokKommentjeiTorolve = true;
-                }
-                else
-                {
+                } else {
                     KommentTorlesKoktelHiba = true;
                 }
 
-            await lekeres(OssztevTorles, koktel[i].KoktélID);
-            const [OssztevTorlesEll] = await DBconnetion.promise().query(OssztevTorlesEllQ,[ koktel[i].KoktélID])
-                if (OssztevTorlesEll.length == 0) 
-                {
+                await lekeres(OssztevTorles, koktel[i].KoktélID);
+                const [OssztevTorlesEll] = await DBconnetion.promise().query(OssztevTorlesEllQ, [koktel[i].KoktélID]);
+                if (OssztevTorlesEll.length == 0) {
                     KoktelokOsszetevoiTorles = true;
-                }
-                else
-                {
+                } else {
                     OsszetevoTorlesHiba = true;
                 }
 
-            await lekeres(JelvenyTorles, koktel[i].KoktélID);
-            const [JelvenyTorlesEll] = await DBconnetion.promise().query(JelvenyTorlesEllQ,[ koktel[i].KoktélID])
-                if (JelvenyTorlesEll.length == 0) 
-                {
+                await lekeres(JelvenyTorles, koktel[i].KoktélID);
+                const [JelvenyTorlesEll] = await DBconnetion.promise().query(JelvenyTorlesEllQ, [koktel[i].KoktélID]);
+                if (JelvenyTorlesEll.length == 0) {
                     KoktelokJelvenyeiTorolve = true;
-                }
-                else
-                {
+                } else {
                     JelvenyTorlesHiba = true;
                 }
-            await lekeres(KedvencTorlesKoktel, koktel[i].KoktélID);
-            const [KedvencTorlesKoktelEll] = await DBconnetion.promise().query(KedvencTorlesKoktelEllQ,[ koktel[i].KoktélID])
-                if (KedvencTorlesKoktelEll.length == 0) 
-                {
+                await lekeres(KedvencTorlesKoktel, koktel[i].KoktélID);
+                const [KedvencTorlesKoktelEll] = await DBconnetion.promise().query(KedvencTorlesKoktelEllQ, [
+                    koktel[i].KoktélID
+                ]);
+                if (KedvencTorlesKoktelEll.length == 0) {
                     KoktelKedvenceTorles = true;
-                }
-                else
-                {
+                } else {
                     KedvencTorleseHiba = true;
                 }
-        }
-        if (KoktelErtekelesTorlesHiba == true) 
-        {
-             KoktelErtekelesekTorolve = false;
-        }
-        if (KommentTorlesKoktelHiba == true) 
-        {
-             KoktelokKommentjeiTorolve = false;
-        }
-        if (OsszetevoTorlesHiba == true) 
-        {
-             KoktelokOsszetevoiTorles = false;
-        }
-        if (JelvenyTorlesHiba == true) 
-        {
-             KoktelokJelvenyeiTorolve = false;
-        }
-        if (KedvencTorleseHiba == true) 
-        {
-             KoktelKedvenceTorles = false;
-        }
+            }
+            if (KoktelErtekelesTorlesHiba == true) {
+                KoktelErtekelesekTorolve = false;
+            }
+            if (KommentTorlesKoktelHiba == true) {
+                KoktelokKommentjeiTorolve = false;
+            }
+            if (OsszetevoTorlesHiba == true) {
+                KoktelokOsszetevoiTorles = false;
+            }
+            if (JelvenyTorlesHiba == true) {
+                KoktelokJelvenyeiTorolve = false;
+            }
+            if (KedvencTorleseHiba == true) {
+                KoktelKedvenceTorles = false;
+            }
 
-
-        await lekeres(KoktelTorles, id);
-        let jelentes = await lekeres(
-            JelentesLekeres,
-            id
-        );
-        const [KoktelTorlesEll] = await DBconnetion.promise().query(KoktelTorlesEllQ,[id])
-        if (KoktelTorlesEll.length == 0) 
-        {
-            KoktelTorlese = true;
-        }
-        for (let i = 0; i < jelentes.length; i++) {
-            await lekeres(JelentoJelentesTorles, jelentes[i].JelentesID);
-            const [JelentoJelentesTorlesEll] = await DBconnetion.promise().query(JelentoJelentesTorlesEllQ,[jelentes[i].JelentesID])
-                if (JelentoJelentesTorlesEll.length == 0) 
-                {
+            await lekeres(KoktelTorles, id);
+            let jelentes = await lekeres(JelentesLekeres, id);
+            const [KoktelTorlesEll] = await DBconnetion.promise().query(KoktelTorlesEllQ, [id]);
+            if (KoktelTorlesEll.length == 0) {
+                KoktelTorlese = true;
+            }
+            for (let i = 0; i < jelentes.length; i++) {
+                await lekeres(JelentoJelentesTorles, jelentes[i].JelentesID);
+                const [JelentoJelentesTorlesEll] = await DBconnetion.promise().query(JelentoJelentesTorlesEllQ, [
+                    jelentes[i].JelentesID
+                ]);
+                if (JelentoJelentesTorlesEll.length == 0) {
                     JelentoJelentesTorlese = true;
-                }
-                else
-                {
+                } else {
                     JelentoJelentesHiba = true;
                 }
+            }
+            if (JelentoJelentesHiba == true) {
+                JelentoJelentesTorlese = false;
+            }
+            await lekeres(JelentesTorles, id);
+            const [JelentesTorlesEll] = await DBconnetion.promise().query(JelentesTorlesEllQ, [id]);
+            if (JelentesTorlesEll.length == 0) {
+                JelentesekTorlese = true;
+            }
+            await lekeres(FelhasznaloTorles, id);
+            const [FelhasznaloTorlesEll] = await DBconnetion.promise().query(FelhasznaloTorlesEllQ, [id]);
+            if (FelhasznaloTorlesEll.length == 0) {
+                FelhTorolve = true;
+            }
         }
-        if (JelentoJelentesHiba == true) 
-        {
-             JelentoJelentesTorlese = false;
-        }
-        await lekeres(JelentesTorles, id);
-        const [JelentesTorlesEll] = await DBconnetion.promise().query(JelentesTorlesEllQ,[id])
-        if (JelentesTorlesEll.length == 0) 
-        {
-            JelentesekTorlese = true;
-        }
-        await lekeres(FelhasznaloTorles, id);
-         const [FelhasznaloTorlesEll] = await DBconnetion.promise().query(FelhasznaloTorlesEllQ,[id])
-        if (FelhasznaloTorlesEll.length == 0) 
-        {
-            FelhTorolve = true;
-        }
-    }
         response.status(200).json({
-          KoktelTorlese:KoktelTorlese,
-          KoktelokJelvenyeiTorolve:KoktelokJelvenyeiTorolve,
-          KoktelokKommentjeiTorolve:KoktelokKommentjeiTorolve,
-          KommentekErtekeleseiTorolve:KommentekErtekeleseiTorolve,
-          KommentTorlese:KommentTorlese,
-          JelentesekTorlese:JelentesekTorlese,
-          KosarTorlese:KosarTorlese,
-          KedvencTorlese:KedvencTorlese,
-          KoktelokOsszetevoiTorles:KoktelokOsszetevoiTorles,
-          KoktelKedvenceTorles:KoktelKedvenceTorles,
-          jelentoTorlese:jelentoTorlese,
-          JelentoJelentesTorlese:JelentoJelentesTorlese,
-          IdHiba:IdHiba,
-          pozitivKommentUpdate:pozitivKommentUpdate,
-          NegativKommentUpdate:NegativKommentUpdate
+            KoktelTorlese: KoktelTorlese,
+            KoktelokJelvenyeiTorolve: KoktelokJelvenyeiTorolve,
+            KoktelokKommentjeiTorolve: KoktelokKommentjeiTorolve,
+            KommentekErtekeleseiTorolve: KommentekErtekeleseiTorolve,
+            KommentTorlese: KommentTorlese,
+            JelentesekTorlese: JelentesekTorlese,
+            KosarTorlese: KosarTorlese,
+            KedvencTorlese: KedvencTorlese,
+            KoktelokOsszetevoiTorles: KoktelokOsszetevoiTorles,
+            KoktelKedvenceTorles: KoktelKedvenceTorles,
+            jelentoTorlese: jelentoTorlese,
+            JelentoJelentesTorlese: JelentoJelentesTorlese,
+            IdHiba: IdHiba,
+            pozitivKommentUpdate: pozitivKommentUpdate,
+            NegativKommentUpdate: NegativKommentUpdate
         });
     } catch (error) {
         console.log(error);
