@@ -69,4 +69,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('sikerErdemenyJelentesElu').innerText = eredemny.siker;
         document.getElementById('egyebEredmenyJelentesElu').innerText = eredemny.egyebHiba;
     });
+    document.getElementById('koktelNevKereseTeszt').addEventListener('click', async () => {
+        const eredemny = await AdatLekeres('/test/Koktelok/lekeres');
+        document.getElementById('sikerKoktelNevEremeny').innerText = eredemny.siker;
+        document.getElementById('sikertelenKoktelNevEremeny').innerText = eredemny.sikertelen;
+        document.getElementById('voltEtalalatKoktelNevEredmeny').innerText = eredemny.vanEgyezes;
+        document.getElementById('egyebHibaKoktelNevEredmeny').innerText = eredemny.egyebHiba;
+    });
 });

@@ -366,6 +366,79 @@ router.get('/jelentesek/elutasitas', async (req, res) => {
         });
     }
 });
+router.get('/Koktelok/lekeres', async (req, res) => {
+    try {
+        const queryJelentettTartalmak =
+            'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE 2';
+
+        let [jelentettTartalomID] = await DBconnetion.promise().query(queryJelentettTartalmak, ['Koktél']);
+        //console.log(jelentettTartalomID);
+
+        jelentettTartalomID = jelentettTartalomID.map((a) => {
+            return a.JelentettTartalomID;
+        });
+        //console.log(jelentettTartalomID);
+
+        let koktelNev = 'a';
+        //console.log(koktelNev);
+        koktelNev.toLowerCase();
+        koktelNev = '%' + koktelNev + '%';
+
+        let queryKoktelok = 'SELECT * FROM koktél WHERE LOWER(KoktelCim) LIKE ?';
+
+        if (jelentettTartalomID.length > 0) {
+            queryKoktelok += ' AND KoktélID NOT IN (?)';
+        }
+
+        const queryKoktelOsszetevok = 'SELECT Osszetevő, Mennyiség FROM koktelokosszetevoi WHERE KoktélID = ?';
+        //Majd ide kell tennem a szuroket, de viszont elotte viszont at kell alakitani a kapott szueresi felteteleket id-kra
+        const queryKoktelJelvenyek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID = ?';
+        const queryJelvenyek = 'SELECT JelvényNeve, JelvenyKategoria FROM jelvények WHERE JelvényID IN (?)';
+        const queryErtekelesek =
+            'SELECT AVG(Ertekeles) as Osszert FROM ertekeles WHERE MilyenDologhoz = "Koktél" AND HovaIrták = ?';
+        //promise().igeret amit esku hogy megcsinalok - MIERT NEM MUKODOTT ALAPBOL: mert a query callback alapu igy egy CALLBACK HELL-t csinaltam es azt nem lehet await-elni
+        //promise() egy igeretet tesz es csak ezt lehet await-ni callbacket nem, ezert kellett promise() igy az atalakitja callbackbol promise-ba
+        const [koktelok] = await DBconnetion.promise().query(queryKoktelok, [koktelNev, jelentettTartalomID]);
+        //Promise.all: akkor adja vissza ha az erteke ha az osszes belso promise beteljesul
+        const eredmeny = await Promise.all(
+            koktelok.map(async (koktel) => {
+                //promiseolja a query-t: megvarjuk az igeretet ami a query? a [] az azert kell mert ha nem tesszuk oda akkor mast is vissaz ad (a visszadott tartalom nevet es adattipusat SQL)
+                //a [] egy destruktor, barmi is legyen az, nem feltetlenul tudom hogy de igy annak a segitesgevel a helyes adat kerul bele a valtozoba
+                const [osszetevok] = await DBconnetion.promise().query(queryKoktelOsszetevok, [koktel.KoktélID]);
+                koktel.osszetevok = osszetevok;
+
+                // Jelvények - itt a koktel jelvenyeit lekeri, de ugye csak ID-kat ad, ezert kell a kovetkezo lekeres
+                const [jelvenyIds] = await DBconnetion.promise().query(queryKoktelJelvenyek, [koktel.KoktélID]);
+
+                if (jelvenyIds.length > 0) {
+                    //itt kiszedi az ID-kat es egy tombbe teszi, hogy a lekeresben mukodjon
+                    const ids = jelvenyIds.map((j) => j.JelvényID);
+                    const [jelvenyek] = await DBconnetion.promise().query(queryJelvenyek, [ids]);
+                    koktel.jelvenyek = jelvenyek;
+                } else {
+                    koktel.jelvenyek = [];
+                }
+
+                // Értékelés
+                const [ertekeles] = await DBconnetion.promise().query(queryErtekelesek, [koktel.KoktélID]);
+
+                koktel.ertekeles =
+                    ertekeles.length === 0 ? 'Még nincs értékelve' : Math.round(ertekeles[0].Osszert * 10) / 10;
+                //itt a visszaadja a map tartalmait, melyek egy tombbe lesznak fuzve a ugye a map() miatt
+                return koktel;
+            })
+        );
+
+        if (eredmeny.length > 0) {
+            res.status(200).json({ siker: true, sikertelen: false, vanEgyezes: true, egyebHiba: false });
+        } else {
+            //ha nincs nevbeli egyezes -- sikeres teszt, csak szimplan nem talalt ilyen nevre koktelt
+            res.status(200).json({ siker: true, sikertelen: false, vanEgyezes: false, egyebHiba: false });
+        }
+    } catch (err) {
+        res.status(200).json({ siker: false, sikertelen: true, vanEgyezes: false, egyebHiba: true });
+    }
+});
 
 router.post('/TermekKosarTest', async (request, response) => {
     try {
