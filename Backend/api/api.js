@@ -1,17 +1,24 @@
+//szerver
 const express = require('express');
+//adatbazis
 const DBconnetion = require('../database.js');
+//jelszo titkositas
 const argon = require('argon2');
+//routing
 const router = express.Router();
-const JWT = require('jsonwebtoken');
+//felhasznalo ellenorzes + jogosultsag ell
 const authenticationMiddleware = require('./authenticationMiddleware.js');
 const authorizationMiddelware = require('./authorizationMiddelware.js');
 const jwt = require('jsonwebtoken');
+//email kuldes
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+//titkos kulcsok tarolasa
+require('dotenv').config();
+//fajlkezeles
 const multer = require('multer');
 const path = require('path');
 const fajlkezelo = require('fs/promises');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-require('dotenv').config();
 const datum = new Date();
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -27,22 +34,8 @@ const storage = multer.diskStorage({
         );
     }
 });
-const Formupload = multer()
+const Formupload = multer();
 let fileStorage = multer({ storage: storage });
-
-router.get('/test', (req, res) => {
-    DBconnetion.query('SELECT * FROM felhasználó', (err, rows) => {
-        if (err) {
-            res.status(500).json({
-                message: 'Hiba tortent lekeres kozben!'
-            });
-        } else {
-            res.status(200).json({
-                message: rows
-            });
-        }
-    });
-});
 
 async function kepculling() {
     const felhkep =
@@ -62,7 +55,7 @@ async function kepculling() {
     }
 }
 
-//Koktelok vegpontok
+//Koktelok vegpontok -- navabr ellenorzes
 router.post('/sutiJelenlete', (req, res) => {
     if (!req.cookies.auth_token) {
         res.status(200).json({ message: false });
@@ -91,7 +84,7 @@ router.post('/jogosultsagEll', async (req, res) => {
         res.sendStatus(500);
     }
 });
-
+//2 van belole lehet torlesere kerul
 router.get('/Koktelok/Jelvenyek', async (req, res) => {
     try {
         let jelvenyObj = {};
@@ -563,7 +556,7 @@ router.post('/belepes', (request, response) => {
                         if (jelszoEll) {
                             //Ez a rovid eletu webtoken, amelyet ujra generalunk lejarat eseten
                             //ez a suti amit hasznalunk a weboldalon
-                            const WebTokenRefresh = JWT.sign(
+                            const WebTokenRefresh = jwt.sign(
                                 {
                                     userID: felhasznaloDB.FelhID,
                                     adminStatus: felhasznaloDB.Admin
@@ -574,7 +567,7 @@ router.post('/belepes', (request, response) => {
                                 }
                             );
                             //Ez a hosszu eletu token, melyet nem generalunk ujra, csakis itt, bejelentkezes eseten generaljuk
-                            const WebTokenAccess = JWT.sign(
+                            const WebTokenAccess = jwt.sign(
                                 {
                                     userID: felhasznaloDB.FelhID
                                 },
@@ -2058,7 +2051,9 @@ router.post('/Koktel/SendErtekeles', authenticationMiddleware, async (request, r
         'Koktél',
         request.body.Tartalom
     ]);
-    await lekeres("UPDATE koktél SET KoktelNepszeruseg=KoktelNepszeruseg+1 WHERE KoktélID LIKE ?",[request.body.Koktél])
+    await lekeres('UPDATE koktél SET KoktelNepszeruseg=KoktelNepszeruseg+1 WHERE KoktélID LIKE ?', [
+        request.body.Koktél
+    ]);
 
     response.status(200).json({
         message: 'Sikeres Küldés'
@@ -2072,7 +2067,9 @@ router.post('/Koktel/SendKomment', authenticationMiddleware, async (request, res
         'Koktél',
         request.body.Tartalom
     ]);
-    await lekeres("UPDATE koktél SET KoktelNepszeruseg=KoktelNepszeruseg+1 WHERE KoktélID LIKE ?",[request.body.Koktél])
+    await lekeres('UPDATE koktél SET KoktelNepszeruseg=KoktelNepszeruseg+1 WHERE KoktélID LIKE ?', [
+        request.body.Koktél
+    ]);
     response.status(200).json({
         message: 'Sikeres Küldés'
     });
@@ -2605,7 +2602,8 @@ router.get('/termek/lekeres/:id', async (request, response) => {
     try {
         const id = request.params.id;
 
-        const query = 'SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE termekID = ?';
+        const query =
+            'SELECT * FROM webshoptermek INNER JOIN webshoporszag ON TermekSzarmazas = OrszagID WHERE termekID = ?';
         const ErtekeltE = 'SELECT * FROM ertekeles WHERE MilyenDologhoz = ? AND HovaIrták = ? AND Keszito = ?';
         const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
         let ertekeltE;
@@ -2709,13 +2707,13 @@ router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, res
                     mennyiseg,
                     ArLekeres[0][0].Ar
                 ]);
-                console.log(KosarFeltolt)
-                response.status(200).json({ Siker: KosarFeltolt.affectedRows});
+                console.log(KosarFeltolt);
+                response.status(200).json({ Siker: KosarFeltolt.affectedRows });
             } else {
                 const kosarUpdateQuery =
                     'UPDATE kosártermék SET Darabszam = Darabszam+? WHERE TermekID = ? AND KosarID = ?';
                 const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [mennyiseg, id, UserID]);
-                response.status(200).json({ Siker: KosarUpdate.affectedRows, id : KosarUpdate.insertId });
+                response.status(200).json({ Siker: KosarUpdate.affectedRows, id: KosarUpdate.insertId });
             }
         }
     } catch (error) {
@@ -3143,7 +3141,7 @@ router.get('/Fooldal/BevaneJelentkezve', authenticationMiddleware, async (reques
 //uzenetkuldes
 //
 //
-router.post('/UzenetKuldes',Formupload.single('file'), (request, response) => {
+router.post('/UzenetKuldes', Formupload.single('file'), (request, response) => {
     try {
         const obj = request.body;
         const file = request.file;
@@ -3170,17 +3168,16 @@ router.post('/UzenetKuldes',Formupload.single('file'), (request, response) => {
             <br> 
             <h3>${obj.szoveg}</h3>
             <br>
-            <a href="mailto:${request.body.email}"> Válasz írása</a>`,
-            };
-            if(file != undefined){
-                mailOptions.attachments = 
-                [
-                    {
-                        filename: file.originalname,
-                        content:  file.buffer,
-                    }
-                ]   
-            }
+            <a href="mailto:${request.body.email}"> Válasz írása</a>`
+        };
+        if (file != undefined) {
+            mailOptions.attachments = [
+                {
+                    filename: file.originalname,
+                    content: file.buffer
+                }
+            ];
+        }
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log(error);
