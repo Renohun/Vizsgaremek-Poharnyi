@@ -146,9 +146,24 @@ document.addEventListener("DOMContentLoaded",async()=>{
         const obj = {id:id}
         const eredmeny = await TestDelFetch('/test/FioktorlesTeszt',obj);
         console.log(eredmeny)
-        //document.getElementById('TorolSiker').innerHTML = eredmeny.siker;
-       // document.getElementById('Ures').innerHTML = eredmeny.ures;
-       // document.getElementById('AUres').innerHTML = eredmeny.alapures;
+        document.getElementById('FIdHiba').innerHTML = eredmeny.IdHiba;
+        document.getElementById('nincskoktel').innerHTML = eredmeny.nincskoktel;
+        document.getElementById('nincsKommentErtekeles').innerHTML = eredmeny.nincsKommentErtekeles;
+        document.getElementById('KoktelTorlese').innerHTML = eredmeny.KoktelTorlese;
+        document.getElementById('nincsjelentes').innerHTML = eredmeny.nincsjelentes;
+        document.getElementById('KoktelokJelvenyeiTorolve').innerHTML = eredmeny.KoktelokJelvenyeiTorolve;
+        document.getElementById('KoktelokKommentjeiTorolve').innerHTML = eredmeny.KoktelokKommentjeiTorolve;
+        document.getElementById('KommentekErtekeleseiTorolve').innerHTML = eredmeny.KommentekErtekeleseiTorolve;
+        document.getElementById('KommentTorlese').innerHTML = eredmeny.KommentTorlese;
+        document.getElementById('KedvencTorlese').innerHTML = eredmeny.KedvencTorlese;
+        document.getElementById('KoktelokOsszetevoiTorles').innerHTML = eredmeny.KoktelokOsszetevoiTorles;
+        document.getElementById('KoktelKedvenceTorles').innerHTML = eredmeny.KoktelKedvenceTorles;
+        document.getElementById('jelentoTorlese').innerHTML = eredmeny.jelentoTorlese;
+        document.getElementById('JelentoJelentesTorlese').innerHTML = eredmeny.JelentoJelentesTorlese;
+        document.getElementById('pozitivKommentUpdate').innerHTML = eredmeny.pozitivKommentUpdate;
+        document.getElementById('NegativKommentUpdate').innerHTML = eredmeny.NegativKommentUpdate;
+        document.getElementById('JelentesekTorlese').innerHTML = eredmeny.JelentesekTorlese;
+        document.getElementById('KosarTorlese').innerHTML = eredmeny.KosarTorlese;
         
         let ok = document.getElementsByTagName('span');
         for (let i = 0; i < ok.length; i++) {

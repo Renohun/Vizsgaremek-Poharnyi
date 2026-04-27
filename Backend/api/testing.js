@@ -719,9 +719,12 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
         let KoktelKedvenceTorles = false;
         let jelentoTorlese = false;
         let JelentoJelentesTorlese = false;
-        let IdHiba = true;
+        let IdHiba = false;
         let pozitivKommentUpdate = false;
         let NegativKommentUpdate = false;
+        let nincskoktel = false;
+        let nincsjelentes = false;
+        let nincsKommentErtekeles = false;
         //hibavisszajelzesek
         let pozitivKommentUpdateHiba = false;
         let NegativKommentUpdateHiba = false;
@@ -737,12 +740,12 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
         console.log(idEllenorzes.length);
         if (idEllenorzes.length == 0) {
             console.log('asd');
-            idHiba = true;
+            IdHiba = true;
         } else {
+             IdHiba = false;
             const FelhasznaloTorles = 'DELETE FROM felhasználó WHERE FelhID LIKE ?';
             const FelhasznaloTorlesEllQ = 'SELECT * FROM felhasználó WHERE FelhID LIKE ?';
-            idHiba = false;
-
+           
             const ErtekTorles = 'DELETE FROM ertekeles WHERE Keszito LIKE ?';
             const ErtekTorlesEllQ = 'SELECT * FROM ertekeles WHERE Keszito = ?';
 
@@ -823,9 +826,12 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
             }
 
             let ertekelesek = await lekeres(KommentErtekelesLekeres, id);
+            if (ertekelesek.length == 0) {
+                nincsKommentErtekeles = true;
+                pozitivKommentUpdate = true;
+                NegativKommentUpdate = true;
+            }
             for (let i = 0; i < ertekelesek.length; i++) {
-                console.log(ertekelesek[i].Negativ);
-                console.log(ertekelesek[i].Pozitiv);
                 if (ertekelesek[i].Pozitiv == 1) {
                     await lekeres(
                         'UPDATE komment SET Pozitiv=Pozitiv-1 WHERE KommentID LIKE ?',
@@ -833,7 +839,9 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
                     );
                     const PozErtEllQ = 'SELECT Pozitiv FROM komment WHERE KommentID LIKE ?';
                     const [PozErtEll] = await DBconnetion.promise().query(PozErtEllQ, [ertekelesek[i].KommentID]);
-                    if (PozErtEll[i].Pozitiv == ertekelesek[i].Pozitiv - 1) {
+                    console.log(PozErtEll + "asd")
+                    if (PozErtEll[i].Pozitiv == ertekelesek[i].Pozitiv - 1) 
+                    {
                         pozitivKommentUpdate = true;
                     } else {
                         pozitivKommentUpdateHiba = true;
@@ -844,11 +852,14 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
                         'UPDATE komment SET Negativ=Negativ-1 WHERE KommentID LIKE ?',
                         ertekelesek[i].KommentID
                     );
-                    const NegErtEllQ = 'SELECT Negaativ FROM komment WHERE KommentID LIKE ?';
+                    const NegErtEllQ = 'SELECT Negativ FROM komment WHERE KommentID LIKE ?';
                     const [NegErtEll] = await DBconnetion.promise().query(NegErtEllQ, [ertekelesek[i].KommentID]);
-                    if (NegErtEll[i].Negativ == ertekelesek[i].Negativ - 1) {
+                    if (NegErtEll[i].Negativ == ertekelesek[i].Negativ - 1) 
+                    {
                         NegativKommentUpdate = true;
-                    } else {
+                    } 
+                    else
+                    {
                         NegativKommentUpdateHiba = true;
                     }
                 }
@@ -867,6 +878,14 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
                 KommentekErtekeleseiTorolve = true;
             }
             let koktel = await lekeres(KoktelLekeres, id);
+            if (koktel.length == 0) {
+                nincskoktel = true;
+                KoktelErtekelesekTorolve = true;
+                KoktelokKommentjeiTorolve = true;
+                KoktelokOsszetevoiTorles = true;
+                KoktelokJelvenyeiTorolve = true;
+                KoktelKedvenceTorles = true;
+            }
             for (let i = 0; i < koktel.length; i++) {
                 await lekeres(ErtekTorlesKoktel, [koktel[i].KoktélID, 'Koktél']);
                 const [ErtekTorlesKoktelEll] = await DBconnetion.promise().query(ErtekTorlesKoktelEllQ, [
@@ -938,6 +957,10 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
             if (KoktelTorlesEll.length == 0) {
                 KoktelTorlese = true;
             }
+            if(jelentes.length == 0){
+                nincsjelentes = true;
+                JelentoJelentesTorlese = true;
+            }
             for (let i = 0; i < jelentes.length; i++) {
                 await lekeres(JelentoJelentesTorles, jelentes[i].JelentesID);
                 const [JelentoJelentesTorlesEll] = await DBconnetion.promise().query(JelentoJelentesTorlesEllQ, [
@@ -978,7 +1001,10 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
             JelentoJelentesTorlese: JelentoJelentesTorlese,
             IdHiba: IdHiba,
             pozitivKommentUpdate: pozitivKommentUpdate,
-            NegativKommentUpdate: NegativKommentUpdate
+            NegativKommentUpdate: NegativKommentUpdate,
+            nincskoktel:nincskoktel,
+            nincsKommentErtekeles:nincsKommentErtekeles,
+            nincsjelentes:nincsjelentes
         });
     } catch (error) {
         console.log(error);
