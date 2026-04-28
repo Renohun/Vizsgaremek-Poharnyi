@@ -99,6 +99,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         let elsoOsztv = document.getElementById('elsoOsszetevo');
         osszetevodiv.removeChild(elsoOsztv);
     });
+    //elso osszetevo és össz mennyisegenek ellenorzese
+    let elsoMennyiseg = document.getElementById("Emennyiseg")
+     elsoMennyiseg.addEventListener("change",()=>{
+        if (elsoMennyiseg.value < 1)
+        {
+            elsoMennyiseg.value = 1;
+        }
+    })
+     let OsszMennyiseg = document.getElementById("mennyiseg")
+     OsszMennyiseg.addEventListener("change",()=>{
+        if (OsszMennyiseg.value < 1)
+        {
+            OsszMennyiseg.value = 1;
+        }
+    })
     //adott pixelszám alatti classok addolasa
     if (window.innerWidth < 992) {
         document.getElementById('drop-area').classList.add('mx-auto');
@@ -163,13 +178,20 @@ function osszetevohozzaadas() {
     mertekegyseg.appendChild(opcioDb);
     mertekegyseg.appendChild(opcioGr);
     mertekegyseg.appendChild(opcioCL);
+        //mennyiseg negativ szam ellenörzés
+    mennyiseg.addEventListener("change",()=>{
+        if (mennyiseg.value < 1)
+        {
+            mennyiseg.value = 1;
+        }
+    })
+
     //parent-child viszonyok meghatározása
    
     col.appendChild(input);
     col.appendChild(mennyiseg);
     col.appendChild(mertekegyseg);
     col.appendChild(torlesgomb);
-
     osszetevodiv.appendChild(col);
     OsztvDisable()
     
