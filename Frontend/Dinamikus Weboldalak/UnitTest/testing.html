@@ -76,10 +76,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -134,10 +136,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -171,9 +175,9 @@
                     <p>Komment Törlés: <span id="kommdel"></span></p>
                     <p>Komment Értékelés Törlés: <span id="kommertdel"></span></p>
                     <p>Kedvelés Törlés: <span id="kedvencdel"></span></p>
-                    <hr/>
+                    <hr />
                     <p>Koktél Módosítás: <span id="mod"></span></p>
-                    <hr>
+                    <hr />
                     <input type="button" class="btn btn-success mb-3 w-100" value="Indítás" id="ktest" />
                 </div>
             </div>
@@ -203,9 +207,9 @@
                 <p>Egyeb hiba: <span id="egyebEredmeny"></span></p>
                 <p>Sikertelenseg: <span id="sikertelensegEredmeny"></span></p>
                 <p>Sikeresseg: <span id="sikerErdemeny"></span></p>
-                <hr>
+                <hr />
                 <p>Felhasználó módosítás: <span id="FelhMod"></span></p>
-                <hr>
+                <hr />
                 <p>Felhasználó statisztiák: <span id="FelhStat"></span></p>
             </div>
             <div class="card mt-2">
@@ -295,7 +299,10 @@
                 <p>Koktélok összetevőinek törlése: <span id="KoktelokOsszetevoiTorles"></span></p>
                 <p>Kedvenc koktél törlése más felhasználóktól: <span id="KoktelKedvenceTorles"></span></p>
                 <p>Felhasználó tőrlése a jelentők táblából: <span id="jelentoTorlese"></span></p>
-                <p>Felhasználó törlése a jelentések táblából, ahol jelentőként volt jelen: <span id="JelentoJelentesTorlese"></span></p>
+                <p>
+                    Felhasználó törlése a jelentések táblából, ahol jelentőként volt jelen:
+                    <span id="JelentoJelentesTorlese"></span>
+                </p>
                 <p>Komment pozitív értékelés átírása: <span id="pozitivKommentUpdate"></span></p>
                 <p>Komment negatív értékelés átírása: <span id="NegativKommentUpdate"></span></p>
                 <p>Jelentések törlése: <span id="JelentesekTorlese"></span></p>
@@ -306,7 +313,7 @@
                 <p>sikeres kosár ürítés: <span id="FTorolSiker"></span></p>
                 <p>Raktárkészlet módosítása: <span id="RaktarKeszletModositas"></span></p>
                 <p>Termék vétel számának növelése: <span id="hanyanvettekmegmodosit"></span></p>
-                 <p>Alapból üres-e a kosár: <span id="uresKosar"></span></p>
+                <p>Alapból üres-e a kosár: <span id="uresKosar"></span></p>
                 <p>Nem sikerült levonni a raktárkészletből: <span id="raktarhiba"></span></p>
                 <p>Nem sikerült növelni a vételi számot: <span id="vetelhiba"></span></p>
             </div>
