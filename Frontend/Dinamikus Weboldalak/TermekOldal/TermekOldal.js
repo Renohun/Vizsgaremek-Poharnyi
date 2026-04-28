@@ -23,6 +23,7 @@ const PostFetch=async(url,object)=>{
       if (valasz.redirected) 
         {
             console.log("asd")
+             window.location.href = valasz.url;
         }
     if (valasz.ok) {
         return valasz.json()
@@ -419,11 +420,8 @@ const KosarbaRak = async()=>
     let postObj = {id:Termekid,mennyiseg:mennyiseg}
     let hiba = false;
     const KosarData = await PostFetch("/api/Termek/KosarKuldes",postObj)
-    if(KosarData.hiba == "bejel")
-    {
-        alert("A termék kosárba helyezéséhez kérem jelentkezzen be!")
-    }
-    else if(KosarData.hiba == "raktar"){
+
+    if(KosarData.hiba == "raktar"){
       hiba = true
     }
     if (hiba == true) {
