@@ -191,7 +191,7 @@ async function statikusadatok(adatok)
                 document.getElementById("ReportGomb").innerHTML=""
                 document.getElementById("ReportGomb").appendChild(jelentesGomb)
                 jelentesGomb.addEventListener("click",()=>{
-                    jelentes(koktélAdat[i].FelhID,"Felhasználó",koktélAdat[i].FelhID)
+                    jelentes(koktélAdat.FelhID,"Felhasználó",koktélAdat.FelhID)
                     JelIv.hide()
                 })
         }
