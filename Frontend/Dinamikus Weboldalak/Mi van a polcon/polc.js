@@ -137,12 +137,16 @@ document.addEventListener("DOMContentLoaded",async()=>{
 hozzaadasGomb.addEventListener("click",()=>{
     //Ha nem üres a mező
     if (osszetevoInput.value!="") {
-        //Eltároljuk jelvényként
-        badge(osszetevoInput.value)
-        //Majd kiűrítünk minden mást és elrejtjük az összetevőket
-        osszetevoInput.value=""
-        opciokLista.innerHTML=""
-        opciokLista.setAttribute("hidden","")
+        for (let i = 0; i < osszetevoLista.length; i++) {
+            if (osszetevoLista[i]==osszetevoInput.value.toLowerCase()) {
+                //Eltároljuk jelvényként
+                badge(osszetevoInput.value)
+                //Majd kiűrítünk minden mást és elrejtjük az összetevőket
+                osszetevoInput.value=""
+                opciokLista.innerHTML=""
+                opciokLista.setAttribute("hidden","")
+            }
+        }
     }
     //Majd kikapcsoljuk a gombot
     hozzaadasGomb.setAttribute("disabled","")

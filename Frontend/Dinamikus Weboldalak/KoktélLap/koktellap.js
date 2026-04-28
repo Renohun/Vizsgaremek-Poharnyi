@@ -211,6 +211,9 @@ async function mennyisegValtozas() {
     const osszetevoAdat=(await AdatLekeres(`/api/Koktel/${koktel}`)).osszetevok
     const koktélAdat=(await AdatLekeres(`/api/Koktel/${koktel}`)).adat
     OssztevHely.innerHTML=""
+    if (MennyisegHely.value<1) {
+        MennyisegHely.value=1
+    }
     for (let i = 0; i < osszetevoAdat.length; i++) {
         let Ossztevo=document.createElement("li")
         if (document.getElementById("adag").checked) 

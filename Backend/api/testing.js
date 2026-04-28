@@ -1312,7 +1312,7 @@ router.post('/FizetesTest', async (request, response) => {
         });
     }
 });
-router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, response) => {
+router.post('/Koktel/SendJelentes', async (request, response) => {
     try {
         const Jelentesek = 'SELECT * FROM jelentesek';
         const Jelentők = 'SELECT * FROM jelentők';
