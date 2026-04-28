@@ -2536,7 +2536,7 @@ router.post('/PolcKoktel/HelyesKoktelLekeres', async (request, response) => {
 //
 router.get('/termek/OsszIdLekeres', async (request, response) => {
     try {
-        const query = 'SELECT TermekID FROM webshoptermek';
+        const query = 'SELECT TermekID FROM webshoptermek ORDER BY TermekID ASC';
         const [idList] = await DBconnetion.promise().query(query);
         response.status(200).json({
             idLista: idList
