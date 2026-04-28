@@ -15,10 +15,10 @@ async function POSTfetch(url, obj) {
     }
 }
 
-async function POSTKepLekeres(url) {
+async function GETKepLekeres(url) {
     try {
         const ertek = await fetch(url, {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'image/jpeg' }
         });
         if (ertek.ok) {
@@ -371,8 +371,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             //console.log(rows.koktelok[i][0].KoktélID);
                             let imgTag = document.createElement('img');
                             (async () => {
-                                const koktelKep = await POSTKepLekeres(
-                                    `/api/AdminPanel/KepLekeres/${rows.koktelok[i][0].KoktélID}`
+                                const koktelKep = await GETKepLekeres(
+                                    `/api/AdatlapLekeres/KepLekeres/${rows.koktelok[i][0].BoritoKepUtvonal}`
                                 );
                                 imgTag.setAttribute('src', URL.createObjectURL(koktelKep));
                             })();

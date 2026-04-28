@@ -14,7 +14,7 @@ async function POSTreq(url) {
     }
 }
 
-async function POSTKepLekeres(url) {
+async function GETKepLekeres(url) {
     try {
         const ertek = await fetch(url, {
             method: 'GET',
@@ -33,8 +33,6 @@ async function POSTKepLekeres(url) {
 document.addEventListener('DOMContentLoaded', async () => {
     const value = await POSTreq('/api/sutiJelenlete');
     const response = await POSTreq('/api/jogosultsagEll');
-    console.log(document.getElementsByClassName('adminPanelHref')[0]);
-    console.log(document.getElementsByClassName('adminPanelHref')[0]);
 
     if (response.message == false) {
         document.getElementsByClassName('adminPanelHref')[0].setAttribute('hidden', '');
@@ -53,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('dropdownMenuMini').children[0].removeAttribute('hidden');
         document.getElementById('dropdownMenuBig').children[0].removeAttribute('hidden');
 
-        const koktelKep = await POSTKepLekeres(`/api/Koktelok/KepLekeres`);
+        const koktelKep = await GETKepLekeres(`/api/NavBar/KepLekeres`);
         document.getElementsByClassName('profil')[0].setAttribute('src', URL.createObjectURL(koktelKep));
     } else {
         document.getElementById('regisztracio').removeAttribute('hidden');

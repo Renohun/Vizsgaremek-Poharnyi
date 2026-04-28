@@ -1669,28 +1669,15 @@ router.get('/AdatlapLekeres/KepLekeres/:kep', async (request, response) => {
     }
 });
 
-router.post('/AdminPanel/KepLekeres/:id', async (request, response) => {
+router.get('/NavBar/KepLekeres', async (request, response) => {
     try {
-        //console.log(request.body);
-        let { id } = request.params;
-        let kepkereses = 'SELECT BoritoKepUtvonal FROM koktél WHERE KoktélID LIKE ?';
-        let kinek = await lekeres(kepkereses, id);
-        response.sendFile(path.join(__dirname, '..', 'images', kinek[0].BoritoKepUtvonal));
-    } catch (error) {
-        console.log(error);
-    }
-});
-
-router.get('/Koktelok/KepLekeres', async (request, response) => {
-    try {
-        let profil = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
-        let kepkereses = 'SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?';
-        let kinek = await lekeres(kepkereses, profil);
+        let kinek = await lekeres("SELECT ProfilkepUtvonal FROM felhasználó WHERE FelhID LIKE ?", jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
         response.sendFile(path.join(__dirname, '..', 'images', kinek[0].ProfilkepUtvonal));
     } catch (error) {
         console.log(error);
     }
 });
+
 router.put('/AdatlapLekeres/Adatmodositas/', authenticationMiddleware, async (request, response) => {
     try {
         let hiba = false;
