@@ -301,7 +301,7 @@
                 <p>Jelentések törlése: <span id="JelentesekTorlese"></span></p>
                 <p>Kosar törlése: <span id="KosarTorlese"></span></p>
             </div>
-             <div class="card mt-2">
+            <div class="card mt-2">
                 <input type="button" value="Fizetés" id="FizetesTesztBtn" class="btn btn-success" />
                 <p>sikeres kosár ürítés: <span id="FTorolSiker"></span></p>
                 <p>Raktárkészlet módosítása: <span id="RaktarKeszletModositas"></span></p>
@@ -309,6 +309,18 @@
                  <p>Alapból üres-e a kosár: <span id="uresKosar"></span></p>
                 <p>Nem sikerült levonni a raktárkészletből: <span id="raktarhiba"></span></p>
                 <p>Nem sikerült növelni a vételi számot: <span id="vetelhiba"></span></p>
+            </div>
+            <div class="card mt-2">
+                <select name="" id="JelentesTipus">
+                    <option value="nullSel" selected="true">Válaszd ki a jelentés típusát</option>
+                    <option value="FelhJel" selected="true">Felhasználó</option>
+                    <option value="KoktelSel" selected="true">Koktél</option>
+                    <option value="KommentSel" selected="true">Komment</option>
+                </select>
+                <select name="" id="JelentesId">
+                    <option value="NullID"></option>
+                </select>
+                <input type="button" value="Jelentés" id="JeletesKezeles" class="btn btn-success" />
             </div>
         </div>
 
