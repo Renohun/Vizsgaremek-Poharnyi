@@ -1392,4 +1392,64 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
         });
     }
 });
+router.post('/TermekErtekelesTest', async (request, response) => {
+    try {
+        let ertekeltMar = false;
+        let siker = false;
+        let MegjelentAzErtekeles = false;
+        let NemLetezoTermek = false;
+        let NemErvenyesErtekeles = false
+
+        const TermekEllQ = "SELECT *FROM webshoptermek WHERE TermekID = ?"
+      
+        const userID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
+        const TermekId = request.body.TermekId;
+        const Ertek = request.body.Ertek;
+    
+        const [TermekEll] = await DBconnetion.promise().query(TermekEllQ,[TermekId])
+        if(TermekEll.length == 0){
+            NemLetezoTermek = true;
+        }
+        else{
+            if (Ertek > 5 || Ertek < 1 || isNaN(Ertek)) 
+            {
+                NemErvenyesErtekeles = true;
+            }
+            else{
+            const query = 'INSERT INTO ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
+            const ErtekeltE = 'SELECT * FROM ertekeles WHERE MilyenDologhoz = ? AND HovaIrták = ? AND Keszito = ?';
+             const [ertekeltE] = await DBconnetion.promise().query(ErtekeltE, ['Termék', TermekId, userID]);
+            if (ertekeltE.length != 0) 
+            {
+                    ertekeltMar = true;
+            }
+            else
+            {
+                 const [ElkuldottErtekeles] = await DBconnetion.promise().query(query, [userID, TermekId, 'Termék', Ertek]);
+                 if (ElkuldottErtekeles.affectedRows != 0) 
+                 {
+                    siker = true;    
+                 }
+                 const [ErtekEll] = await DBconnetion.promise().query(ErtekeltE, ['Termék', TermekId, userID]);
+                 if(ErtekEll.length == 1){
+                    MegjelentAzErtekeles = true
+                 }
+            }
+            }
+        }
+        
+        response.status(200).json({
+            NemLetezoTermek:NemLetezoTermek,
+            siker:siker,
+            ertekeltMar:ertekeltMar,
+            MegjelentAzErtekeles:MegjelentAzErtekeles,
+            NemErvenyesErtekeles:NemErvenyesErtekeles
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            hiba: error
+        });
+    }
+});
 module.exports = router;

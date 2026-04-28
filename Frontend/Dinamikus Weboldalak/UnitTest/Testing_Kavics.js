@@ -194,4 +194,23 @@ document.addEventListener("DOMContentLoaded",async()=>{
             }
         }
     });
+    document.getElementById('ErtekelesTest').addEventListener('click', async () => {
+      
+        const eredmeny = await testPostFetch('/test/TermekErtekelesTest',{TermekId: document.getElementById("ErttermekId").value,Ertek:document.getElementById("Ertekeles").value});
+
+        document.getElementById('Ertsiker').innerHTML = eredmeny.siker;
+        document.getElementById('ertekeltMar').innerHTML = eredmeny.ertekeltMar;
+        document.getElementById('MegjelentAzErtekeles').innerHTML = eredmeny.MegjelentAzErtekeles;
+         document.getElementById('NemLetezoTermek').innerHTML = eredmeny.NemLetezoTermek;
+        document.getElementById('NemErvenyesErtekeles').innerHTML = eredmeny.NemErvenyesErtekeles;
+        
+        let ok = document.getElementsByTagName('span');
+        for (let i = 0; i < ok.length; i++) {
+            if (ok[i].innerHTML == 'true') {
+                ok[i].classList.add('text-success');
+            } else {
+                ok[i].classList.add('text-danger');
+            }
+        }
+    });
 })

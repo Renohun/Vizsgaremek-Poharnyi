@@ -329,6 +329,16 @@
                 </select>
                 <input type="button" value="Jelentés" id="JeletesKezeles" class="btn btn-success" />
             </div>
+            <div class="card mt-2">
+                <input type="number" name="" value="1" id="ErttermekId">
+                <input type="number" name=""value="1" id="Ertekeles" min="1" max="5">
+                <input type="button" value="Értékelés" id="ErtekelesTest" class="btn btn-success" />
+                <p>Lefutott: <span id="Ertsiker"></span></p>
+                <p>Nem létezik ez a termék <span id="NemLetezoTermek"></span></p>
+                <p>Ezt a terméket értékelte már: <span id="ertekeltMar"></span></p>
+                <p>Felkerült az értékelés: <span id="MegjelentAzErtekeles"></span></p>
+                <p>Nem érvényes az értékelés száma: <span id="NemErvenyesErtekeles"></span></p>
+            </div>
         </div>
 
         <script src="../kellékek/footer.js"></script>
