@@ -56,14 +56,14 @@ async function kepculling() {
 }
 
 //Koktelok vegpontok -- navabr ellenorzes
-router.post('/sutiJelenlete', (req, res) => {
+router.get('/sutiJelenlete', (req, res) => {
     if (!req.cookies.auth_token) {
         res.status(200).json({ message: false });
     } else {
         res.status(200).json({ message: true });
     }
 });
-router.post('/jogosultsagEll', async (req, res) => {
+router.get('/jogosultsagEll', async (req, res) => {
     try {
         if (req.cookies.auth_token != null) {
             const payload = jwt.verify(req.cookies.auth_token_access, process.env.JWT_SECRET);
@@ -260,6 +260,8 @@ router.get('/Koktelok/lekeres/:koktelNev', async (req, res) => {
 
         res.status(200).json({ koktelokAdat: eredmeny });
     } catch (err) {
+        console.log(err);
+
         res.status(500).json({ message: 'Hibas koktel lekeres', error: err });
     }
 });
@@ -418,7 +420,6 @@ router.post('/Koktelok/lekeres/parameteres', async (req, res) => {
         res.status(200).json({ koktelokAdat: eredmeny });
     } catch (err) {
         console.log(err);
-
         res.status(400).json({ message: 'Hibas koktel lekeres', error: err });
     }
 });
@@ -656,11 +657,7 @@ router.get('/emailKuldes', async (req, res) => {
             }
             return result;
         }
-
         emailKod = generateCode();
-        //console.log(process.env.GUSER);
-        //console.log(process.env.GPASS);
-
         const transporter = nodemailer.createTransport({
             //domain ez lehetne a outlook stb.. a szolgaltato
             host: 'smtp.gmail.com',
@@ -769,7 +766,7 @@ router.patch('/jelszoValtoztatas', async (req, res) => {
 //
 //
 //
-router.post('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
+router.get('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
         let query =
             'SELECT JelentesID, JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesAllapota LIKE 0 AND JelentesMennyisege > 0 ORDER BY JelentesMennyisege DESC';
@@ -1038,7 +1035,6 @@ router.post(
 router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
         const payload = jwt.decode(req.cookies.auth_token);
-        console.log(req.body);
 
         const { nev } = req.body;
         const { alapMennyiseg } = req.body;
@@ -1048,8 +1044,6 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
         const { osszetevok } = req.body;
         const { recept } = req.body;
         const { fajlNeve } = req.body;
-
-        //console.log('vegpont: ' + nev);
 
         const query =
             'INSERT INTO koktél(Keszito,Alkoholos,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?)';
@@ -1085,10 +1079,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
                         }
                     );
                 }
-
-                //console.log(feltoltottKoktelID);
                 let jelvenyID = [];
-                //console.log(jelvenyReq);
                 //aszinkronos pokol
                 DBconnetion.query(queryJelvenyek, [jelveny], (err, rows) => {
                     if (err) {
@@ -1107,8 +1098,6 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
                             }
                         });
                     }
-
-                    //console.log(jelvenyID);
                 });
             });
         });
@@ -1116,6 +1105,7 @@ router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizati
         await kepculling();
     } catch (err) {
         console.log(err);
+        res.status(500).json({ message: 'Sikertelen adat feltoltes' });
     }
 });
 

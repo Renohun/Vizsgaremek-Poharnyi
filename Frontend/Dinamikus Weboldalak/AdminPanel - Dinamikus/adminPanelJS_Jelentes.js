@@ -14,6 +14,18 @@ async function POSTfetch(url, obj) {
         throw new Error('Hiba tortent: ' + err);
     }
 }
+async function GETfetch(url) {
+    try {
+        const data = await fetch(url);
+        if (data.ok) {
+            return await data.json();
+        } else {
+            throw new Error('Hiba tortent a POST-nal');
+        }
+    } catch (err) {
+        throw new Error(err);
+    }
+}
 
 async function GETKepLekeres(url) {
     try {
@@ -94,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         jelentesekSor.innerHTML = '';
         (async () => {
             try {
-                const rows = await POSTfetch('/api/AdminPanel/jelentesek');
+                const rows = await GETfetch('/api/AdminPanel/jelentesek');
 
                 if (rows.felhasznalok.length == 0) {
                     let uzenetElement = document.createElement('p');
@@ -335,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
         jelentesekSor.innerHTML = '';
         (async () => {
             try {
-                const rows = await POSTfetch('/api/AdminPanel/jelentesek');
+                const rows = await GETfetch('/api/AdminPanel/jelentesek');
 
                 if (rows.koktelok.length == 0) {
                     let uzenetElement = document.createElement('p');
@@ -614,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
         jelentesekSor.innerHTML = '';
         (async () => {
             try {
-                const rows = await POSTfetch('/api/AdminPanel/jelentesek');
+                const rows = await GETfetch('/api/AdminPanel/jelentesek');
 
                 if (rows.kommentek.length == 0) {
                     let uzenetElement = document.createElement('p');

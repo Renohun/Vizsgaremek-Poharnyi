@@ -1,7 +1,7 @@
-async function POSTreq(url) {
+async function GETreq(url) {
     try {
         const data = await fetch(url, {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
         if (data.ok) {
