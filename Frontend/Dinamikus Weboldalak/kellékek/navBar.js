@@ -33,13 +33,15 @@ async function POSTKepLekeres(url) {
 document.addEventListener('DOMContentLoaded', async () => {
     const value = await POSTreq('/api/sutiJelenlete');
     const response = await POSTreq('/api/jogosultsagEll');
-    console.log(document.getElementById('adminPanelHref'));
-    console.log(response);
+    console.log(document.getElementsByClassName('adminPanelHref')[0]);
+    console.log(document.getElementsByClassName('adminPanelHref')[0]);
 
     if (response.message == false) {
-        document.getElementById('adminPanelHref').setAttribute('hidden', '');
+        document.getElementsByClassName('adminPanelHref')[0].setAttribute('hidden', '');
+        document.getElementsByClassName('adminPanelHref')[1].setAttribute('hidden', '');
     } else {
-        document.getElementById('adminPanelHref').removeAttribute('hidden');
+        document.getElementsByClassName('adminPanelHref')[0].removeAttribute('hidden');
+        document.getElementsByClassName('adminPanelHref')[1].removeAttribute('hidden');
     }
 
     //console.log(value.message);

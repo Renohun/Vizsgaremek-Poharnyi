@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
         <link rel="stylesheet" href="../LandingPage/LandingPage.css" />
-        <link rel="icon" type="image/x-icon" href="../kellékek/favicon.png">
+        <link rel="icon" type="image/x-icon" href="../kellékek/favicon.png" />
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
         <link
             rel="stylesheet"
@@ -81,10 +81,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -139,10 +141,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -160,95 +164,94 @@
                 <div id="alcim">Az online koktélbár</div>
             </div>
         </header>
-            <div id="Body">
-                <div id="BodyCimDiv">
-                    <div id="BodyCim">Bemutatkozás</div>
+        <div id="Body">
+            <div id="BodyCimDiv">
+                <div id="BodyCim">Bemutatkozás</div>
+            </div>
+
+            <div id="Bemutat">
+                <div id="BemutatBal">
+                    <h3 id="BemutatCim">Üdvözöljük a Pohárnyi™ Weboldalon!</h3>
+                    <p id="BemutatSzoveg1" class="bemutatSzoveg">
+                        Magyarország egyetlen koktélrecept megosztó oldalán! A történetünk Hosszas sikertelen keresés
+                        után kezdődött, amikor mi, a <span id="PhTeam">PohárnyiTeam</span> úgy döntöttünk, hogy
+                        létrehozunk egy ilyen hiánypótló weboldalt. Sok-sok munka után végre itt vagyunk, és alig
+                        várjuk, hogy végre mások is élvezhessék a szolgáltatásainkat!
+                    </p>
+
+                    <p id="BemutatSzoveg2" class="bemutatSzoveg">
+                        Célunk egy olyan közösség kiépítése amelyben bátran és szeretettel osztják meg egymás között a
+                        receptjeiket a felhasználóink. Várjuk a kreatívnál kreatívabb recepteket, persze csak kultúrált
+                        körülmények között!
+                    </p>
+                    <p id="BemutatSzoveg3" class="bemutatSzoveg">
+                        Ugyanakkor tisztában vagyunk azzal, hogy milyen nehéz is itthon elérhető áron jó minőségű
+                        bartender eszközöket, és italokat találni. Erre az igényre próbáltunk válaszolni a Pohárnyi™
+                        Webshop-al! Jó böngészést, vásárlást és Italozást kívánunk!
+                    </p>
+                </div>
+            </div>
+            <div id="Szolgaltatasok">
+                <div id="Koktelok" class="szolgaltatasokDiv">
+                    <div id="KoktelokCim" class="SzolgCim">Koktél receptek</div>
+                    <p id="KoktelokSzoveg" class="SzolgSzoveg">
+                        Böngésszen a számtalan általunk feltöltött, hivatalos és a még több, felhasználók által
+                        létrehozott koktél receptje között. Csak óvatosan, nehogy elveszítse az időérzékét!
+                    </p>
+                    <button class="SzolgGomb" id="KoktelGomb" type="button">Tovább a koktélokra!</button>
                 </div>
 
-                <div id="Bemutat">
-                    <div id="BemutatBal">
-                        <h3 id="BemutatCim">Üdvözöljük a Pohárnyi™ Weboldalon!</h3>
-                        <p id="BemutatSzoveg1" class="bemutatSzoveg">
-                            Magyarország egyetlen koktélrecept megosztó oldalán! A történetünk Hosszas sikertelen
-                            keresés után kezdődött, amikor mi, a <span id="PhTeam">PohárnyiTeam</span> úgy döntöttünk,
-                            hogy létrehozunk egy ilyen hiánypótló weboldalt. Sok-sok munka után végre itt vagyunk, és
-                            alig várjuk, hogy végre mások is élvezhessék a szolgáltatásainkat!
-                        </p>
-
-                        <p id="BemutatSzoveg2" class="bemutatSzoveg">
-                            Célunk egy olyan közösség kiépítése amelyben bátran és szeretettel osztják meg egymás között
-                            a receptjeiket a felhasználóink. Várjuk a kreatívnál kreatívabb recepteket, persze csak
-                            kultúrált körülmények között!
-                        </p>
-                        <p id="BemutatSzoveg3" class="bemutatSzoveg">
-                            Ugyanakkor tisztában vagyunk azzal, hogy milyen nehéz is itthon elérhető áron jó minőségű
-                            bartender eszközöket, és italokat találni. Erre az igényre próbáltunk válaszolni a Pohárnyi™
-                            Webshop-al! Jó böngészést, vásárlást és Italozást kívánunk!
-                        </p>
-                    </div>
+                <div id="koktelKeszites" class="szolgaltatasokDiv">
+                    <div id="KeszitesCim" class="SzolgCim">Saját recept</div>
+                    <p id="KoktelokSzoveg" class="SzolgSzoveg">
+                        Van egy jó receptje? Itt a tökéletes lehetőség megosztani azt a nagyvilággal. a Pohárnyi™ új
+                        generációs receptgenerátorával játszi könnyedséggel hozhatja létre a jobbnál jobb koktélokat.
+                    </p>
+                    <button class="SzolgGomb" id="KeszitGomb" type="button">Alkotásra fel!</button>
                 </div>
-                <div id="Szolgaltatasok">
-                    <div id="Koktelok" class="szolgaltatasokDiv">
-                        <div id="KoktelokCim" class="SzolgCim">Koktél receptek</div>
-                        <p id="KoktelokSzoveg" class="SzolgSzoveg">
-                            Böngésszen a számtalan általunk feltöltött, hivatalos és a még több, felhasználók által
-                            létrehozott koktél receptje között. Csak óvatosan, nehogy elveszítse az időérzékét!
-                        </p>
-                        <button class="SzolgGomb" id="KoktelGomb" type="button">Tovább a koktélokra!</button>
-                    </div>
-
-                    <div id="koktelKeszites" class="szolgaltatasokDiv">
-                        <div id="KeszitesCim" class="SzolgCim">Saját recept</div>
-                        <p id="KoktelokSzoveg" class="SzolgSzoveg">
-                            Van egy jó receptje? Itt a tökéletes lehetőség megosztani azt a nagyvilággal. a Pohárnyi™ új
-                            generációs receptgenerátorával játszi könnyedséggel hozhatja létre a jobbnál jobb
-                            koktélokat.
-                        </p>
-                        <button class="SzolgGomb" id="KeszitGomb" type="button">Alkotásra fel!</button>
-                    </div>
-                    <div id="WebShop" class="szolgaltatasokDiv">
-                        <div id="WebshopCim" class="SzolgCim">Webshop</div>
-                        <p id="KoktelokSzoveg" class="SzolgSzoveg">
-                            Hatalmas kínálat, szuper árak, és pontos szakértelem. Kell ennél több? Vesse bele magát a
-                            folyamatosan bővülő, és kedvezményekkel tarkított webáruházunkba!
-                        </p>
-                        <button class="SzolgGomb" id="WebshopGomb" type="button">Irány a webshop!</button>
-                    </div>
+                <div id="WebShop" class="szolgaltatasokDiv">
+                    <div id="WebshopCim" class="SzolgCim">Webshop</div>
+                    <p id="KoktelokSzoveg" class="SzolgSzoveg">
+                        Hatalmas kínálat, szuper árak, és pontos szakértelem. Kell ennél több? Vesse bele magát a
+                        folyamatosan bővülő, és kedvezményekkel tarkított webáruházunkba!
+                    </p>
+                    <button class="SzolgGomb" id="WebshopGomb" type="button">Irány a webshop!</button>
                 </div>
-                <div id="NepszeruKoktelok">
-                    <div id="NepszeruCim">Legnépszerűbb koktéljaink</div>
-                    <div id="NepszeruKoktelDiv"></div>
-                </div>
-                <div id="MiVanaPolcon">
-                    <div id="PolcCim">Mi van a Polcon?</div>
-                    <div id="PolcDiv">
-                        <div id="szoveg">
-                            <span class="attention">Szeretne gyorsan, egy jó koktélt készíteni?</span> <br />
-                            Azonban nincs konkrét ötlete, esetleg nincs kedve elmenni bevásárolni? A legjobb helyen
-                            jár! Ugyanis nálunk arra is van lehetősége, hogy az otthon lévő alapanyagai alapján
-                            keressen egy önnek megfelelő koktélt! Csak adja hozzá az alapanyagot a listához, és mi máris
-                            megjelenítjük a lehetőségeit!
-                        </div>
-                        <div id="kattint">
-                            <div id="kiprobalom">Kipróbálom!</div>
-                        </div>
+            </div>
+            <div id="NepszeruKoktelok">
+                <div id="NepszeruCim">Legnépszerűbb koktéljaink</div>
+                <div id="NepszeruKoktelDiv"></div>
+            </div>
+            <div id="MiVanaPolcon">
+                <div id="PolcCim">Mi van a Polcon?</div>
+                <div id="PolcDiv">
+                    <div id="szoveg">
+                        <span class="attention">Szeretne gyorsan, egy jó koktélt készíteni?</span> <br />
+                        Azonban nincs konkrét ötlete, esetleg nincs kedve elmenni bevásárolni? A legjobb helyen jár!
+                        Ugyanis nálunk arra is van lehetősége, hogy az otthon lévő alapanyagai alapján keressen egy
+                        önnek megfelelő koktélt! Csak adja hozzá az alapanyagot a listához, és mi máris megjelenítjük a
+                        lehetőségeit!
                     </div>
-                </div>
-                <div id="Kapcsolat">
-                    <div id="KapcsCim">Kapcsolat</div>
-                    <div id="KapcsDiv">
-                        <div id="KapcsKep">
-                            <div id="kiprobalomKapcs">Kapcsolat.</div>
-                        </div>
-                        <div id="KapcsSzoveg">
-                            <span class="attention">Talált egy hibát?</span><br />
-                            Esetleg javaslata van, hogy hogyan tegyük jobbá az oldalt? Netán lenne egy jó termékötlete?
-                            A kapcsolat felvevő adatlapot kitöltve eljuttathatja hozzánk, és mi minden egyes javaslatot
-                            átgondolunk!
-                        </div>
+                    <div id="kattint">
+                        <div id="kiprobalom">Kipróbálom!</div>
                     </div>
                 </div>
             </div>
+            <div id="Kapcsolat">
+                <div id="KapcsCim">Kapcsolat</div>
+                <div id="KapcsDiv">
+                    <div id="KapcsKep">
+                        <div id="kiprobalomKapcs">Kapcsolat.</div>
+                    </div>
+                    <div id="KapcsSzoveg">
+                        <span class="attention">Talált egy hibát?</span><br />
+                        Esetleg javaslata van, hogy hogyan tegyük jobbá az oldalt? Netán lenne egy jó termékötlete? A
+                        kapcsolat felvevő adatlapot kitöltve eljuttathatja hozzánk, és mi minden egyes javaslatot
+                        átgondolunk!
+                    </div>
+                </div>
+            </div>
+        </div>
         <script src="../kellékek/footer.js"></script>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
         <script src="../kellékek/themeSwitcher.js"></script>
