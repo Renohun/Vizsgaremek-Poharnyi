@@ -37,7 +37,6 @@ const KosarPost = async (url,object) => {
             body:JSON.stringify(object)
         });
         if (valasz.redirected) {
-            //console.log(valasz.url);
             window.location.href = valasz.url;
         }
         if (valasz.ok) {
@@ -72,7 +71,6 @@ const termek_lekeres = async () => {
     let id = url[4];
   
     const data = await GETfetch(`/api/termek/lekeres/${id}`);
-      console.log(data);
      return data;
    
 };
@@ -81,7 +79,6 @@ const KepLekeres = async () =>
 {
     let url = window.location.href.split('/');
     let id = url[4];
-    console.log(id);
     const data = await TermekKepLekeres(`/api/termek/KepLekeres/${id}`)
     return data;
 }
@@ -105,11 +102,10 @@ const oldalGenerálás =  async () =>{
     //KépBetöltés
     let url = window.location.href.split('/');
     let id = url[4];
-    console.log(id);
+  
     const data = await TermekKepLekeres(`/api/Webshop/Keplekeres/${id}`)//termek/keplekeres nem mukodik
     let KepHely = document.getElementById("TermekImg")
     KepHely.setAttribute("src",URL.createObjectURL(data))
-    console.log(KepHely)
 
     //tovabbi adatok betöltése
     let TermekLeirasHely = document.getElementById("TermekSzoveg")
@@ -266,7 +262,6 @@ const oldalGenerálás =  async () =>{
                 max = LekertTermekek.termek[0].TermekKeszlet
             }
         mennyisegHely.addEventListener("change",()=>{
-            console.log(max) 
             if (mennyisegHely.value > max) /*why??*/ 
             {
                 mennyisegHely.value = max;  
@@ -286,7 +281,6 @@ const oldalGenerálás =  async () =>{
         mennyisegHely.disabled = "true"
         PolcLabelHely.innerHTML = "Elfogyott!"
         PolcLabelHely.classList.add("NincsPolcon")
-        console.log(PolcLabelHely)
     }
     //Ertekeles
     //Ellenorizzuk, hogy a felhasznalo ertekelt e mar
@@ -312,7 +306,6 @@ const oldalGenerálás =  async () =>{
         
         if (idszam == idLista.idLista[i].TermekID)
         {
-            console.log(idLista.idLista[i])
             jelenlegiIndex = i;
         }
     
@@ -340,7 +333,6 @@ const oldalGenerálás =  async () =>{
 
 const ertekeles = (ErtekeltE,ertek) =>
 {
-    console.log(ErtekeltE)
     let Csillagok = document.getElementsByClassName("csillag")
     if(ErtekeltE == "nincsBejel"){
         const ertekelesHely = document.getElementById("Ertekeles")
