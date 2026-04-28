@@ -2101,12 +2101,13 @@ router.post('/Koktel/SendKedvenc', authenticationMiddleware, async (request, res
 });
 router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request, response) => {
     const KommentTorles = 'DELETE FROM komment WHERE KommentID LIKE ?';
-    const JelentesLekeres =
-        'SELECT JelentesID from jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?';
+    const KommentErtekelesTorles="DELETE FROM kommentertekeles WHERE KommentID LIKE ?"
+    const JelentesLekeres ='SELECT JelentesID from jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?';
     const JelentesTorles = 'DELETE FROM jelentesek WHERE JelentesID LIKE ?';
     const JelentőTorles = 'DELETE FROM jelentők WHERE JelentésID LIKE ?';
 
     let id = request.body.id;
+    await lekeres(KommentErtekelesTorles, [id]);
     await lekeres(KommentTorles, [id]);
     let jelentesek = await lekeres(JelentesLekeres, [id, 'Komment']);
 
@@ -2119,10 +2120,11 @@ router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request,
     });
 });
 router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, response) => {
+    const KommentErtekelesTorles="DELETE FROM kommentertekeles WHERE KommentID LIKE ?"
+    const KommentLekeres="SELECT KommentID FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
     const KommentTorles = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const ErtekelesTorles = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
-    const JelentesLekeres =
-        'SELECT JelentesID from jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?';
+    const JelentesLekeres = 'SELECT JelentesID from jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?';
     const JelentesTorles = 'DELETE FROM jelentesek WHERE JelentesID like ?';
     const JelentőTorles = 'DELETE FROM jelentők WHERE JelentésID LIKE ?';
     const KedvencTorles = 'DELETE FROM kedvencek WHERE MitkedveltID LIKE ?';
@@ -2130,6 +2132,10 @@ router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, 
     const OsszetevoTorles = 'DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
     const KoktelTorles = 'DELETE FROM koktél WHERE KoktélID LIKE ?';
     let id = request.body.id;
+    let kommentek=await lekeres(KommentLekeres,[id,"Koktél"])
+    for (let i = 0; i < kommentek.length; i++) {
+        await lekeres(KommentErtekelesTorles,kommentek[i].KommentID)
+    }
     await lekeres(KommentTorles, [id, 'Koktél']);
     await lekeres(ErtekelesTorles, [id, 'Koktél']);
     await lekeres(OsszetevoTorles, [id]);
