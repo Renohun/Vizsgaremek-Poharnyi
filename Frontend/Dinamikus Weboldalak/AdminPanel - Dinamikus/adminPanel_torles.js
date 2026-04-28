@@ -10,11 +10,12 @@ async function GETfetch(url) {
         throw new Error(err);
     }
 }
-async function POSTfetch(url, obj) {
+async function DELETEfetch(url, obj) {
     try {
         const data = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(obj)
         });
         if (data.ok) {
             return data.json();
@@ -34,14 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const optElement = document.createElement('option');
             //console.log(nev.KoktelCim);
             optElement.innerText = nev.KoktelCim;
+            optElement.setAttribute('value', nev.KoktélID);
             selectElement.appendChild(optElement);
         });
     })();
 
     document.getElementById('torlesGomb').addEventListener('click', async () => {
         const valasztottErtek = document.getElementById('koktelSelect').value;
-        if (valasztottErtek.length > 0) {
-            const data = await POSTfetch(`/api/koktelTorles/${valasztottErtek}`);
+        if (valasztottErtek != '0') {
+            await DELETEfetch(`/api/Koktel/DeleteKoktel`, {
+                id: valasztottErtek
+            });
             var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
             modalElement.show();
 
@@ -55,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
             modalElement.show();
 
-            document.getElementById('modalText').innerText = 'Eloszor valasszon ki egy koktelt!';
+            document.getElementById('modalText').innerText = 'Először válasszon ki egy koktélt!';
 
             document.getElementById('modalBtn').addEventListener('click', () => {
                 modalElement.hide();
