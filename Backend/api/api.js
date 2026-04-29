@@ -2651,22 +2651,6 @@ router.get('/Termek/HasonloTermekek/:kateg/:id', async (request, response) => {
         console.log(error);
     }
 });
-
-router.get('/Termek/HasonloTermekErtekeles/:id', async (request, response) => {
-    try {
-        const id = request.params.id;
-        const query =
-            "SELECT AVG(Ertekeles) AS 'atlag' FROM ertekeles WHERE HovaIrták = ? AND MilyenDologhoz = 'Termék'";
-        const [Ertekeles] = await DBconnetion.promise().query(query, [id]);
-
-        let atlag = Math.round(Ertekeles[0].atlag);
-
-        response.status(200).json({ ert: atlag });
-    } catch (error) {
-        console.log(error);
-        response.status(500).json({ hiba: error });
-    }
-});
 //
 //
 //
@@ -2941,9 +2925,10 @@ router.post('/Webshop/szures', async (request, response) => {
         });
     }
 });
-router.get('/WebShop/TermekErtekeles/:id', async (request, response) => {
+router.get('/TermekErtekeles/:id', async (request, response) => {
     try {
         const id = request.params.id;
+        const honnan = request.params.honnan
         const query =
             "SELECT AVG(Ertekeles) AS 'atlag' FROM ertekeles WHERE HovaIrták = ? AND MilyenDologhoz = 'Termék'";
         const [Ertekeles] = await DBconnetion.promise().query(query, [id]);
