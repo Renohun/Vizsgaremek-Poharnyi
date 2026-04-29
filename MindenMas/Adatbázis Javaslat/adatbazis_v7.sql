@@ -40,7 +40,6 @@ CREATE TABLE Komment(
 	KommentID INT AUTO_INCREMENT PRIMARY KEY,
 	Keszito INT NOT NULL,
 	HovaIrták INT NOT NULL,
-	MilyenDologhoz TEXT NOT NULL,
 	Tartalom TEXT NOT NULL,
 	Pozitiv INT DEFAULT 0,
 	Negativ INT DEFAULT 0,

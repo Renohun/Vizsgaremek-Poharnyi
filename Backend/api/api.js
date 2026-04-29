@@ -774,7 +774,7 @@ router.get('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMidd
         let jelentesIndokaQuery = 'SELECT JelentesIndoka FROM jelentők WHERE JelentésID LIKE ?';
 
         let kommentjel =
-            'SELECT felhasználó.Felhasználónév, Tartalom FROM komment INNER JOIN felhasználó ON felhasználó.FelhID = komment.Keszito WHERE KommentID LIKE ? AND MilyenDologhoz LIKE "Koktél"';
+            'SELECT felhasználó.Felhasználónév, Tartalom FROM komment INNER JOIN felhasználó ON felhasználó.FelhID = komment.Keszito WHERE KommentID LIKE ?';
         let felhjel = 'SELECT FelhID, Felhasználónév, Email, RegisztracioDatuma FROM felhasználó WHERE FelhID LIKE ?';
         let kokteljel =
             'SELECT koktél.KoktélID, koktél.Keszito, BoritoKepUtvonal, koktél.KeszitesDatuma, koktél.KoktelCim, koktél.Alap, koktél.Recept, felhasználó.FelhasználóNév FROM koktél INNER JOIN felhasználó ON felhasználó.FelhID = koktél.Keszito WHERE koktél.KoktélID LIKE ?';
@@ -1445,7 +1445,7 @@ async function getKoktel(id) {
     let koktélbadgek = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
     let badgek = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?';
     let kommentLekeres =
-        'SELECT Count(HovaIrták) as KommNum from komment WHERE HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
+        'SELECT Count(HovaIrták) as KommNum from komment WHERE HovaIrták like ?';
 
     //Lekérdezés
     let adat = (await lekeres(koktelokLekeres, id))[0];
@@ -1725,7 +1725,7 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         const KoktelTorles = 'DELETE FROM koktél WHERE Keszito LIKE ?';
         const KoktelLekeres = 'SELECT KoktélID FROM koktél WHERE Keszito LIKE ?';
         const JelvenyTorles = 'DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?';
-        const KommentTorlesKoktel = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+        const KommentTorlesKoktel = 'DELETE FROM komment WHERE HovaIrták LIKE ?';
         const KommentErtekelesLekeres = 'SELECT KommentID,Pozitiv,Negativ FROM kommentertekeles WHERE FelhID LIKE ?';
         const KommentErtekelesTorles = 'DELETE FROM kommentertekeles WHERE FelhID LIKE ?';
         const KommentTorles = 'DELETE FROM komment WHERE Keszito LIKE ?';
@@ -1767,7 +1767,7 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         );
         for (let i = 0; i < koktel.length; i++) {
             await lekeres(ErtekTorlesKoktel, [koktel[i].KoktélID, 'Koktél']);
-            await lekeres(KommentTorlesKoktel, [koktel[i].KoktélID, 'Koktél']);
+            await lekeres(KommentTorlesKoktel, [koktel[i].KoktélID]);
             await lekeres(OssztevTorles, koktel[i].KoktélID);
             await lekeres(JelvenyTorles, koktel[i].KoktélID);
             await lekeres(KedvencTorlesKoktel, koktel[i].KoktélID);
@@ -1835,7 +1835,7 @@ router.get('/Koktel/:id', async (request, response) => {
     const TiltottKomment =
         'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?';
     const KommentLekeres =
-        'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal,Pozitiv,Negativ FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+        'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal,Pozitiv,Negativ FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ?';
     const JelvenyLekeres = 'SELECT JelvényID FROM koktélokjelvényei WHERE KoktélID LIKE ?';
     const OsszetevőLekeres = 'SELECT Osszetevő,Mennyiség,Mertekegyseg FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
     const MelyikJelvenyLekeres = 'SELECT JelvényNeve,JelvenyKategoria FROM jelvények WHERE JelvényID LIKE ?';
@@ -1856,7 +1856,7 @@ router.get('/Koktel/:id', async (request, response) => {
         let koktel = await lekeres(KoktelLekeres, request.params.id);
 
         let gonoszkomment = await lekeres(TiltottKomment, ['Komment', 2]);
-        let komment = await lekeres(KommentLekeres, [request.params.id, 'Koktél']);
+        let komment = await lekeres(KommentLekeres, [request.params.id]);
         let jokomment = [];
         for (let i = 0; i < komment.length; i++) {
             let rossz = false;
@@ -1992,11 +1992,10 @@ router.post('/Koktel/SendErtekeles', authenticationMiddleware, async (request, r
     });
 });
 router.post('/Koktel/SendKomment', authenticationMiddleware, async (request, response) => {
-    const KommentKuldes = 'INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)';
+    const KommentKuldes = 'INSERT INTO komment (Keszito,HovaIrták,Tartalom) VALUES (?,?,?)';
     await lekeres(KommentKuldes, [
         jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
         request.body.Koktél,
-        'Koktél',
         request.body.Tartalom
     ]);
     await lekeres('UPDATE koktél SET KoktelNepszeruseg=KoktelNepszeruseg+1 WHERE KoktélID LIKE ?', [
@@ -2053,8 +2052,8 @@ router.delete('/Koktel/DeleteKomment', authenticationMiddleware, async (request,
 });
 router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, response) => {
     const KommentErtekelesTorles="DELETE FROM kommentertekeles WHERE KommentID LIKE ?"
-    const KommentLekeres="SELECT KommentID FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?"
-    const KommentTorles = 'DELETE FROM komment WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
+    const KommentLekeres="SELECT KommentID FROM komment WHERE HovaIrták LIKE ?"
+    const KommentTorles = 'DELETE FROM komment WHERE HovaIrták LIKE ?';
     const ErtekelesTorles = 'DELETE FROM ertekeles WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ?';
     const JelentesLekeres = 'SELECT JelentesID from jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?';
     const JelentesTorles = 'DELETE FROM jelentesek WHERE JelentesID like ?';
@@ -2064,11 +2063,11 @@ router.delete('/Koktel/DeleteKoktel', authenticationMiddleware, async (request, 
     const OsszetevoTorles = 'DELETE FROM koktelokosszetevoi WHERE KoktélID LIKE ?';
     const KoktelTorles = 'DELETE FROM koktél WHERE KoktélID LIKE ?';
     let id = request.body.id;
-    let kommentek=await lekeres(KommentLekeres,[id,"Koktél"])
+    let kommentek=await lekeres(KommentLekeres,[id])
     for (let i = 0; i < kommentek.length; i++) {
         await lekeres(KommentErtekelesTorles,kommentek[i].KommentID)
     }
-    await lekeres(KommentTorles, [id, 'Koktél']);
+    await lekeres(KommentTorles, [id]);
     await lekeres(ErtekelesTorles, [id, 'Koktél']);
     await lekeres(OsszetevoTorles, [id]);
     await lekeres(KedvencTorles, [id]);
@@ -2307,11 +2306,11 @@ router.get('/Koktel/FelhasznaloAdat/:id', async (request, response) => {
 router.get('/Koktel/KommentRendezes/:id', async (request, response) => {
     try {
         const FelhAdatok =
-            'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal,Pozitiv,Negativ FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? AND MilyenDologhoz LIKE ? ORDER BY Pozitiv';
+            'SELECT KommentID,Felhasználónév,Keszito,Tartalom,RegisztracioDatuma,ProfilkepUtvonal,Pozitiv,Negativ FROM komment INNER JOIN felhasználó ON komment.Keszito=felhasználó.FelhID WHERE HovaIrták LIKE ? ORDER BY Pozitiv';
         const TiltottKomment =
             'SELECT JelentettTartalomID FROM jelentesek WHERE JelentesTipusa LIKE ? AND JelentesAllapota LIKE ?';
 
-        let adatok = await lekeres(FelhAdatok, [request.params.id, 'Koktél']);
+        let adatok = await lekeres(FelhAdatok, [request.params.id]);
         let tiltott = await lekeres(TiltottKomment, ['Komment', 2]);
         let benne = false;
         let hol = 0;
