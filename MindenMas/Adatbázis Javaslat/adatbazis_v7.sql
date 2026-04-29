@@ -40,7 +40,6 @@ CREATE TABLE Komment(
 	KommentID INT AUTO_INCREMENT PRIMARY KEY,
 	Keszito INT NOT NULL,
 	HovaIrták INT NOT NULL,
-	MilyenDologhoz TEXT NOT NULL,
 	Tartalom TEXT NOT NULL,
 	Pozitiv INT DEFAULT 0,
 	Negativ INT DEFAULT 0,
@@ -113,12 +112,13 @@ CREATE TABLE KoktelokOsszetevoi(
 
 
 CREATE TABLE KosárTermék(
-	KosarID INT NOT NULL PRIMARY KEY,
+	KosarID INT NOT NULL,
 	TermekID INT NOT NULL,
 	Darabszam INT DEFAULT 1,
 	EgysegAr INT NOT NULL,
 	FOREIGN KEY(KosarID) REFERENCES Felhasználó(FelhID),
-	FOREIGN KEY(TermekID,EgysegAr) REFERENCES WebshopTermek(TermekID,Ar)
+	FOREIGN KEY(TermekID,EgysegAr) REFERENCES WebshopTermek(TermekID,Ar),
+	PRIMARY KEY Kosár(KosarID,TermekID)
 );
 
 CREATE TABLE Jelentesek(

@@ -31,8 +31,8 @@ async function GETKepLekeres(url) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const value = await POSTreq('/api/sutiJelenlete');
-    const response = await POSTreq('/api/jogosultsagEll');
+    const value = await GETreq('/api/sutiJelenlete');
+    const response = await GETreq('/api/jogosultsagEll');
 
     if (response.message == false) {
         document.getElementsByClassName('adminPanelHref')[0].setAttribute('hidden', '');
