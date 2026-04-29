@@ -369,24 +369,32 @@ const kartyaGen = async (data, hova) => {
 
         let kosarba = document.createElement('button');
         kosarba.classList.add('btn', 'kartyaGomb');
+        kartyaMain.appendChild(kosarba);
+        if (data.data[i].TermekKeszlet == 0) 
+        {
+            kosarba.innerHTML = "Nincs Raktáron"
+            kosarba.style.backgroundColor = "red"
+            kosarba.style.color = "white"
+            kosarba.disabled = true;    
+        }
+        else{
         kosarba.innerHTML = 'Kosárba';
         kosarba.setAttribute("data-bs-toggle","modal" )
         kosarba.setAttribute( "data-bs-target","#staticBackdrop")
-        kartyaMain.appendChild(kosarba);
 
-        kosarba.addEventListener('click', async () => {
+         kosarba.addEventListener('click', async () => {
             const valasz = await KosarPost(`/api/KosarKuldes`,{id : data.data[i].TermekID, mennyiseg : "egy"});
            
             if (valasz.Siker == undefined) 
             {
                 modalHiba(true)
-               
             }
             else
             {
                 modalJo()
             }
         });
+        }
     }
 };
 
