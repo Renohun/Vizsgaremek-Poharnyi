@@ -2617,11 +2617,15 @@ router.post('/termek/ErtekelesKuldes/', async (request, response) => {
     }
 });
 
-router.post('/Termek/KosarKuldes', authenticationMiddleware, async (request, response) => {
+router.post('/KosarKuldes', authenticationMiddleware, async (request, response) => {
     try {
         const id = request.body.id;
 
-        const mennyiseg = request.body.mennyiseg;
+        let mennyiseg = request.body.mennyiseg;
+        if (mennyiseg == "egy") 
+        {
+            mennyiseg = 1;
+        }
         const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID; //"sessionId" lekérése
 
         const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';

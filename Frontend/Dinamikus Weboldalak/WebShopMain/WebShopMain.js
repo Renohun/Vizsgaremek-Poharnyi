@@ -1,4 +1,5 @@
 
+
 //FETCK-ek
 const TermekLekeres = async (url) => {
     try {
@@ -11,11 +12,12 @@ const TermekLekeres = async (url) => {
     }
 };
 
-const KosarPost = async (url) => {
+const KosarPost = async (url,object) => {
     try {
         const valasz = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(object)
         });
         if (valasz.redirected) {
             window.location.href = valasz.url;
@@ -373,7 +375,7 @@ const kartyaGen = async (data, hova) => {
         kartyaMain.appendChild(kosarba);
 
         kosarba.addEventListener('click', async () => {
-            const valasz = await KosarPost(`/api/WebShop/KosarKuldes/${data.data[i].TermekID}`);
+            const valasz = await KosarPost(`/api/KosarKuldes`,{id : data.data[i].TermekID, mennyiseg : "egy"});
            
             if (valasz.Siker == undefined) 
             {

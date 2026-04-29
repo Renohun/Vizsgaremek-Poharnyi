@@ -93,7 +93,6 @@ const oldalGenerálás =  async () =>{
         window.location.href = "/HianyzoTermek"
     }
     //url
-    window.location.href += `#${LekertTermekek.termek[0].TermekCim}`
     //Cim
     let oldalcim = document.getElementById("oldalCim")
     oldalcim.innerHTML = `Pohárnyi | ${LekertTermekek.termek[0].TermekCim}`
@@ -412,7 +411,7 @@ const KosarbaRak = async()=>
 
     let postObj = {id:Termekid,mennyiseg:mennyiseg}
     let hiba = false;
-    const KosarData = await PostFetch("/api/Termek/KosarKuldes",postObj)
+    const KosarData = await PostFetch("/api/KosarKuldes",postObj)
 
     if(KosarData.hiba == "raktar"){
       hiba = true
