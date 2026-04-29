@@ -2989,40 +2989,6 @@ router.post('/Webshop/szures', async (request, response) => {
         });
     }
 });
-
-router.post('/Webshop/KosarKuldes/:id', authenticationMiddleware, async (request, response) => {
-    try {
-        const id = request.params.id;
-        const mennyiseg = 1;
-        const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID; //"sessionId" lekérése
-
-        const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
-        const ArLekeres = await DBconnetion.promise().query(ArLekeresQuery, [id]);
-
-        const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? AND KosarID = ?';
-        const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
-
-        //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
-        if (vanEIlyen[0] == undefined) {
-            const kosarFeltoltQuery = 'INSERT INTO kosártermék (KosarID,TermekID,Darabszam,EgysegAr) VALUES (?,?,?,?)';
-            const [KosarFeltolt] = await DBconnetion.promise().query(kosarFeltoltQuery, [
-                UserID,
-                id,
-                mennyiseg,
-                ArLekeres[0][0].Ar
-            ]);
-            response.status(200).json({ Siker: KosarFeltolt.affectedRows });
-        } else {
-            const kosarUpdateQuery =
-                'UPDATE kosártermék SET Darabszam = Darabszam+1 WHERE TermekID = ? AND KosarID = ?';
-            const [KosarUpdate] = await DBconnetion.promise().query(kosarUpdateQuery, [id, UserID]);
-            response.status(200).json({ Siker: KosarUpdate.affectedRows });
-        }
-    } catch (error) {
-        console.log(error);
-        response.status(500).json({ hiba: error });
-    }
-});
 router.get('/WebShop/TermekErtekeles/:id', async (request, response) => {
     try {
         const id = request.params.id;

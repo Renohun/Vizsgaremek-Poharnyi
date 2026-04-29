@@ -421,7 +421,6 @@ const KosarbaRak = async()=>
     }else{
         modalJo()
     }
-   
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
