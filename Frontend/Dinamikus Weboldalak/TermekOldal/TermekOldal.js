@@ -186,7 +186,7 @@ const oldalGenerálás =  async () =>{
             csillagok.push(csillag)
             ErtekelesDiv.appendChild(csillag)
         }
-        const meddig = await GETfetch(`/api/Termek/HasonloTermekErtekeles/${HasonlokData.hasonlok[i].TermekID}`)
+        const meddig = await GETfetch(`/api/TermekErtekeles/${HasonlokData.hasonlok[i].TermekID}`)
         if (meddig != 0) {
             
         }
