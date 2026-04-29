@@ -262,7 +262,7 @@ const kartyaGen = async (data, hova) => {
         oszlop.appendChild(kartyaMain);
 
         let img = document.createElement('img');
-        const kartyaKep = await TermekKepLekeres(`/api/WebShop/Keplekeres/${data.data[i].TermekID}`);
+        const kartyaKep = await TermekKepLekeres(`/api/AdatlapLekeres/Keplekeres/${data.data[i].TermekKepUtvonal}`);
 
         img.addEventListener('click', () => {
             window.location.href = `/Termek/${data.data[i].TermekID}`;

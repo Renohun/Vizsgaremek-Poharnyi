@@ -2736,19 +2736,6 @@ router.get('/WebShop/TermeklekeresByNev/:nev', async (request, response) => {
     }
 });
 
-router.get('/Webshop/Keplekeres/:id', async (request, response) => {
-    try {
-        const { id } = request.params;
-        const query = 'SELECT  TermekKepUtvonal FROM webshoptermek WHERE TermekID = ?';
-        const [termekek] = await DBconnetion.promise().query(query, [id]);
-        response.sendFile(path.join(__dirname, '..', 'images', termekek[0].TermekKepUtvonal));
-    } catch (error) {
-        console.log(error);
-        response.status(500).json({
-            message: 'hiba'
-        });
-    }
-});
 
 router.post('/Webshop/szures', async (request, response) => {
     try {
