@@ -389,7 +389,7 @@ const ertekeles = (ErtekeltE,ertek) =>
                 ertszov.innerHTML = "üres értékelést nem tud küldeni!"
             }
             else
-            {await PostFetch("/api/Termek/ErtekelesKuldes",{Tid:Termekid,ertek:ertekszam})
+            {await PostFetch("/api/Koktel/SendErtekeles",{Tid:Termekid,ertek:ertekszam})
                 oldalGenerálás()
             }
         })

@@ -1976,20 +1976,33 @@ router.patch('/Koktel/KoktelModositas/:id', async (request, response) => {
 });
 router.post('/Koktel/SendErtekeles', authenticationMiddleware, async (request, response) => {
     const ErtekelesKuldes = 'INSERT INTO Ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
+    if ((request.cookies.currentURL.split("/"))=="Koktel") {
+        
+        await lekeres(ErtekelesKuldes, [
+            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
+            request.body.Koktél,
+            'Koktél',
+            request.body.Tartalom
+        ]);
+        await lekeres('UPDATE koktél SET KoktelNepszeruseg=KoktelNepszeruseg+1 WHERE KoktélID LIKE ?', [
+            request.body.Koktél
+        ]);
+        response.status(200).json({
+            message: 'Sikeres Küldés'
+        });
+    }
+    else{
+        const userID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
+        const TermekId = request.body.Tid;
+        const Ertek = request.body.ertek;
+        const query = 'INSERT INTO ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
+        const [ElkuldottErtekeles] = await DBconnetion.promise().query(query, [userID, TermekId, 'Termék', Ertek]);
+        response.status(200).json({
+            ErtekelesId: ElkuldottErtekeles.insertId
+        });
+    }
 
-    await lekeres(ErtekelesKuldes, [
-        jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
-        request.body.Koktél,
-        'Koktél',
-        request.body.Tartalom
-    ]);
-    await lekeres('UPDATE koktél SET KoktelNepszeruseg=KoktelNepszeruseg+1 WHERE KoktélID LIKE ?', [
-        request.body.Koktél
-    ]);
 
-    response.status(200).json({
-        message: 'Sikeres Küldés'
-    });
 });
 router.post('/Koktel/SendKomment', authenticationMiddleware, async (request, response) => {
     const KommentKuldes = 'INSERT INTO komment (Keszito,HovaIrták,Tartalom) VALUES (?,?,?)';
@@ -2550,23 +2563,6 @@ router.get('/termek/lekeres/:id', async (request, response) => {
     }
 });
 
-router.post('/termek/ErtekelesKuldes/', async (request, response) => {
-    try {
-        const userID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
-        const TermekId = request.body.Tid;
-        const Ertek = request.body.ertek;
-        const query = 'INSERT INTO ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
-        const [ElkuldottErtekeles] = await DBconnetion.promise().query(query, [userID, TermekId, 'Termék', Ertek]);
-        response.status(200).json({
-            ErtekelesId: ElkuldottErtekeles.insertId
-        });
-    } catch (error) {
-        console.log(error);
-        response.status(500).json({
-            hiba: error
-        });
-    }
-});
 
 router.post('/KosarKuldes', authenticationMiddleware, async (request, response) => {
     try {
