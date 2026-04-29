@@ -76,13 +76,6 @@ const termek_lekeres = async () => {
    
 };
 
-const KepLekeres = async () => 
-{
-    let url = window.location.href.split('/');
-    let id = url[4];
-    const data = await TermekKepLekeres(`/api/termek/KepLekeres/${id}`)
-    return data;
-}
 
 const oldalGenerálás =  async () =>{
     
@@ -103,7 +96,7 @@ const oldalGenerálás =  async () =>{
     let url = window.location.href.split('/');
     let id = url[4];
   
-    const data = await TermekKepLekeres(`/api/Webshop/Keplekeres/${id}`)//termek/keplekeres nem mukodik
+    const data = await TermekKepLekeres(`/api/AdatlapLekeres/KepLekeres/${LekertTermekek.termek[0].TermekKepUtvonal}`)//termek/keplekeres nem mukodik
     let KepHely = document.getElementById("TermekImg")
     KepHely.setAttribute("src",URL.createObjectURL(data))
 
@@ -146,7 +139,7 @@ const oldalGenerálás =  async () =>{
    
     for (let i = 0; i < HasonlokData.hasonlok.length; i++)
     {
-        const KepData = await TermekKepLekeres(`/api/Webshop/KepLekeres/${HasonlokData.hasonlok[i].TermekID}`)
+        const KepData = await TermekKepLekeres(`/api/AdatlapLekeres/KepLekeres/${HasonlokData.hasonlok[i].TermekKepUtvonal}`)
         let KepUrl = URL.createObjectURL(KepData)
         let kartya = document.createElement("div")
         kartya.classList.add("Termek")

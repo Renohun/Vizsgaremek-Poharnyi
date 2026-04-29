@@ -52,7 +52,7 @@ const NepszeruKoktelok = async()=>{
     console.log(data)
     let hova = document.getElementById("NepszeruKoktelDiv")
     for (let i = 0; i < data.data.length; i++) {
-        const kep = await KepFetch(`/api/Fooldal/KepLekeres/${data.data[i].KoktélID}`)
+        const kep = await KepFetch(`/api/AdatlapLekeres/KepLekeres/${data.data[i].BoritoKepUtvonal}`)
         let kartya = document.createElement("div")
         kartya.classList.add("NepszeruKartya")
         

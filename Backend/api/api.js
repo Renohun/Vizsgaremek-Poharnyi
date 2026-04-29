@@ -2387,17 +2387,6 @@ router.get('/Keszites/JelvenyLekeres', async (req, res) => {
         });
     }
 });
-router.post('/Keszites/KepFeltoltes', fileStorage.array('koktélKép'), async (request, response) => {
-    try {
-        response.status(200).json({
-            message: request.files[0].filename
-        });
-    } catch (error) {
-        response.status(500).json({
-            message: error
-        });
-    }
-});
 router.post('/Keszites/Feltoltes', async (req, res) => {
     try {
         const felhaszanalo = jwt.decode(req.cookies.auth_token).userID;
@@ -2555,43 +2544,6 @@ router.get('/termek/lekeres/:id', async (request, response) => {
             termek: lekertTermek,
             ertekelt: ertekeltE
         });
-    } catch (error) {
-        console.log(error);
-        response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
-    }
-});
-
-router.get('/termek/KepLekeres/:id', async (request, response) => {
-    try {
-        const id = request.params.id;
-
-        const query = 'SELECT * FROM webshoptermek WHERE termekID = ?';
-        const ErtekeltE = 'SELECT * FROM ertekeles WHERE MilyenDologhoz = ? AND HovaIrták = ? AND Keszito = ?';
-        const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
-        let ertekeltE;
-        if (request.cookies.auth_token != null) //be van e jelentkezve a felhasználó
-        {
-            const userID = jwt.decode(request.cookies.auth_token).userID;
-            [ertekeltE] = await DBconnetion.promise().query(ErtekeltE, ['Termék', id, userID]);
-        } else {
-            ertekeltE = 'nincsBejel';
-        }
-        response.status(200).json({
-            termek: lekertTermek,
-            ertekelt: ertekeltE
-        });
-    } catch (error) {
-        console.log(error);
-        response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
-    }
-});
-
-router.get('/termek/KepLekeres/:id', async (request, response) => {
-    try {
-        const id = request.params.id;
-        const query = 'SELECT TermekKepUtvonal FROM webshoptermek WHERE termekID = ?';
-        const [lekertTermek] = await DBconnetion.promise().query(query, [id]);
-        response.sendFile(path.join(__dirname, '..', 'images', lekertTermek[0].TermekKepUtvonal));
     } catch (error) {
         console.log(error);
         response.status(500).json({ message: 'Sikertelen lekérés', hiba: error });
