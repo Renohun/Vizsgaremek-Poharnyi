@@ -318,16 +318,13 @@
                 <p>Nem sikerült növelni a vételi számot: <span id="vetelhiba"></span></p>
             </div>
             <div class="card mt-2">
-                <select name="" id="JelentesTipus">
-                    <option value="nullSel" selected="true">Válaszd ki a jelentés típusát</option>
-                    <option value="FelhJel" selected="true">Felhasználó</option>
-                    <option value="KoktelSel" selected="true">Koktél</option>
-                    <option value="KommentSel" selected="true">Komment</option>
-                </select>
-                <select name="" id="JelentesId">
-                    <option value="NullID"></option>
-                </select>
                 <input type="button" value="Jelentés" id="JeletesKezeles" class="btn btn-success" />
+                <p>Sikeres: <span id="SikJel"></span></p>
+                <p>Van-e már ilyen jelentése a felhasználónak: <span id="JelentetteMar"></span></p>
+                <p>Létezik-e erre az id-ra jelentés: <span id="VanEMarIlyen"></span></p>
+                <p>Felkerült-e a jelentés: <span id="jelentesFelkerultE"></span></p>
+                <p>Felkerül-e az adat a jelentő táblába: <span id="JelentoFelkerultE"></span></p>
+                <p>Sikeres Módosítás: <span id="SikeresModositas"></span></p>
             </div>
             <div class="card mt-2">
                 <input type="number" name="" value="1" id="ErttermekId">

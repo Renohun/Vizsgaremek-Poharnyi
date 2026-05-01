@@ -213,4 +213,24 @@ document.addEventListener("DOMContentLoaded",async()=>{
             }
         }
     });
+    document.getElementById('JeletesKezeles').addEventListener('click', async () => {
+      
+        const eredmeny = await testPostFetch('/test/SendJelentesTest');
+
+        document.getElementById('SikJel').innerHTML = eredmeny.sikeres;
+        document.getElementById('JelentetteMar').innerHTML = eredmeny.JelentetteMar;
+        document.getElementById('VanEMarIlyen').innerHTML = eredmeny.VanEMarIlyen;
+         document.getElementById('jelentesFelkerultE').innerHTML = eredmeny.jelentesFelkerultE;
+        document.getElementById('JelentoFelkerultE').innerHTML = eredmeny.JelentoFelkerultE;
+        document.getElementById('SikeresModositas').innerHTML = eredmeny.SikeresModositas;
+        
+        let ok = document.getElementsByTagName('span');
+        for (let i = 0; i < ok.length; i++) {
+            if (ok[i].innerHTML == 'true') {
+                ok[i].classList.add('text-success');
+            } else {
+                ok[i].classList.add('text-danger');
+            }
+        }
+    });
 })

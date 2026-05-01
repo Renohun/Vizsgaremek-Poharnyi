@@ -1312,7 +1312,7 @@ router.post('/FizetesTest', async (request, response) => {
         });
     }
 });
-router.post('/Koktel/SendJelentes', async (request, response) => {
+router.post('/SendJelentesTest', async (request, response) => {
     try {
         const Jelentesek = 'SELECT * FROM jelentesek';
         const Jelentők = 'SELECT * FROM jelentők';
@@ -1321,13 +1321,18 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
         let VanEMarIlyen = false;
         let JelentetteMar = false;
         let MelyikAz;
-        let sikeres = true;
+        let sikeres = false;
+        let jelentesFelkerultE = false;
+        let JelentoFelkerultE = false;
+        let SikeresModositas = false;
+        let JelId = 2;
+        let TartId = 5;
 
         for (let i = 0; i < JelentesekLista.length; i++) {
             //Ha a feljelentett felhasználü, feljelentett tartalom és jelentés típusa is egyezik
             if (
-                2 == JelentesekLista[i].JelentettID &&
-                4 == JelentesekLista[i].JelentettTartalomID &&
+                JelId == JelentesekLista[i].JelentettID &&
+                TartId == JelentesekLista[i].JelentettTartalomID &&
                 "koktél" == JelentesekLista[i].JelentesTipusa
             ) {
                 //Akkor megjelöljük, hogy nem kell létrehozni új jelentést
@@ -1342,48 +1347,83 @@ router.post('/Koktel/SendJelentes', async (request, response) => {
                             JelentőkLista[j].JelentőID
                     ) {
                         JelentetteMar = true;
+                        console.log("ASD")
                     }
                 }
             }
         }
-
+        const JelentoKuldesEllQ = "SELECT * FROM jelentők WHERE JelentőID = ? AND JelentésID = ? AND JelentesIndoka = ?"
         //Ha nem jelentette
         if (JelentetteMar != true) {
             const JelentoKuldes = 'INSERT INTO jelentők (JelentőID,JelentésID,JelentesIndoka) VALUES (?,?,?)';
+            
             //és nem létezik
             if (VanEMarIlyen == false) {
                 //Akkor létrehozunk egy ilyen jelentést
                 const JelentesKuldes =
                     'INSERT INTO jelentesek (JelentettID,JelentettTartalomID,JelentesTipusa) VALUES (?,?,?)';
                 await lekeres(JelentesKuldes, [
-                    1,
-                    5,
+                    JelId,
+                    TartId,
                     'koktél'
                 ]);
-                //és a jelentő felhasználó nevében teszünk egy jelentést az utolsó (most létrejött) jelentésre
+
+                const JelentesKuldesEllQ = "SELECT * FROM jelentesek WHERE JelentettID = ? AND JelentettTartalomID = ? AND JelentesTipusa LIKE ?"
+                const [JelentesKuldesEll] = await DBconnetion.promise().query(JelentesKuldesEllQ,[JelId,TartId,"koktél"])
+                console.log(JelentesKuldesEll)
+                if (JelentesKuldesEll.length != 0) 
+                {
+                    jelentesFelkerultE = true
+                    sikeres = true;
+                }
+                 //és a jelentő felhasználó nevében teszünk egy jelentést az utolsó (most létrejött) jelentésre
                 let utolso = await lekeres('SELECT COUNT(*) as Darab FROM jelentesek');
                 await lekeres(JelentoKuldes, [
                     jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
                     utolso[0].Darab,
                     'teszt indok'
                 ]);
+                const [JelentoKuldesEll] = await DBconnetion.promise().query(JelentoKuldesEllQ,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,utolso[0].Darab,"teszt indok"])
+                if (JelentoKuldesEll.length != 0) 
+                {
+                    JelentoFelkerultE = true;
+                    sikeres = true;
+                }
             }
             //és létezik
             else {
                 //Akkor a nevében teszünk egy jelentést a már létező jelentésre
                 const JelentesModositas =
                     'UPDATE jelentesek SET JelentesMennyisege =JelentesMennyisege+1 WHERE JelentesID LIKE ?';
+                    const JelModositEllQ = "SELECT * FROM jelentesek WHERE JelentesID LIKE ?"
                 await lekeres(JelentesModositas, MelyikAz);
                 await lekeres(JelentoKuldes, [
                     jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
                     MelyikAz,
                     'teszt indok'
                 ]);
+                const [JelModositEll] = await DBconnetion.promise().query(JelModositEllQ,[MelyikAz])
+                if (JelModositEll.length != 0) 
+                {
+                    SikeresModositas = true;
+                    sikeres = true;
+                }
+                const [JelentoKuldesEll2] = await DBconnetion.promise().query(JelentoKuldesEllQ,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,MelyikAz,"teszt indok"])
+                if (JelentoKuldesEll2.length != 0) 
+                {
+                    JelentoFelkerultE = true;
+                    sikeres = true;
+                }
             }
         }
         //Visszaadjuk hogy jelentette e már ezt a felhasználó
         response.status(200).json({
-            message: JelentetteMar
+            JelentetteMar: JelentetteMar,
+            sikeres:sikeres,
+            VanEMarIlyen:VanEMarIlyen,
+            jelentesFelkerultE: JelentoFelkerultE,
+            JelentoFelkerultE: JelentoFelkerultE,
+            SikeresModositas:SikeresModositas
         });
     } catch (error) {
         console.log(error);
