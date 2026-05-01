@@ -255,7 +255,7 @@ const oldalGenerálás =  async () =>{
                 max = LekertTermekek.termek[0].TermekKeszlet
             }
         mennyisegHely.addEventListener("change",()=>{
-            if (mennyisegHely.value > max) /*why??*/ 
+            if (mennyisegHely.value > max)
             {
                 mennyisegHely.value = max;  
             }
