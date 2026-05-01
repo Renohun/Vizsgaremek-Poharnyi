@@ -218,7 +218,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     await (async () => {
         //Jelvenyek avagy rendezesek lekerese
         const jelvenyek = await GETfetch('/api/Keszites/JelvenyLekeres');
-        console.log(jelvenyek);
 
         //console.log(jelvenyek.data);
 

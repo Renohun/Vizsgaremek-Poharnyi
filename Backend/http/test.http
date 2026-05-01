@@ -16,7 +16,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://127.0.0.1:3000/api/AdminPanel/jelentesek
+GET http://127.0.0.1:3000/api/AdminPanel/jelentesek
 Content-Type: application/json
 
 ###
@@ -28,3 +28,4 @@ Content-Type: application/json
 {
     "id":"2"
 }
+

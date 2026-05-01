@@ -731,7 +731,7 @@ router.patch('/jelszoValtoztatas', async (req, res) => {
 //
 //
 //
-router.get('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
+router.get('/AdminPanel/jelentesek', async (req, res) => {
     try {
         let query =
             'SELECT JelentesID, JelentettTartalomID,JelentesTipusa,JelentesIdopontja,JelentesAllapota FROM jelentesek WHERE JelentesAllapota LIKE 0 AND JelentesMennyisege > 0 ORDER BY JelentesMennyisege DESC';
@@ -739,7 +739,7 @@ router.get('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMidd
         let jelentesIndokaQuery = 'SELECT JelentesIndoka FROM jelentők WHERE JelentésID LIKE ?';
 
         let kommentjel =
-            'SELECT felhasználó.Felhasználónév, Tartalom FROM komment INNER JOIN felhasználó ON felhasználó.FelhID = komment.Keszito WHERE KommentID LIKE ?';
+            'SELECT felhasználó.Felhasználónév, Tartalom, KommentID FROM komment INNER JOIN felhasználó ON felhasználó.FelhID = komment.Keszito WHERE KommentID LIKE ?';
         let felhjel = 'SELECT FelhID, Felhasználónév, Email, RegisztracioDatuma FROM felhasználó WHERE FelhID LIKE ?';
         let kokteljel =
             'SELECT koktél.KoktélID, koktél.Keszito, BoritoKepUtvonal, koktél.KeszitesDatuma, koktél.KoktelCim, koktél.Alap, koktél.Recept, felhasználó.FelhasználóNév FROM koktél INNER JOIN felhasználó ON felhasználó.FelhID = koktél.Keszito WHERE koktél.KoktélID LIKE ?';
@@ -748,103 +748,53 @@ router.get('/AdminPanel/jelentesek', authenticationMiddleware, authorizationMidd
         let ErtekelesQuery =
             'SELECT AVG(Ertekeles) as Osszert from ertekeles where HovaIrták like ? AND MilyenDologhoz LIKE "Koktél"';
         //Adattárolók
-        let jelentesek = [];
-        let komment = [];
-        let koktel = [];
-        let ember = [];
+        let felhasznalokTomb = [];
+        let koktelokTomb = [];
+        let kommentekTomb = [];
 
-        await DBconnetion.promise()
-            .query(query)
-            .then(([rows]) => {
-                jelentesek.push(rows);
-            });
+        //osszes jelentes lekeres -> szortirozas
+        const [jelentesek] = await DBconnetion.promise().query(query);
 
-        //Tombon beluli tombrol van szo
-        //console.log(jelentesek[0]);
+        for (let i = 0; i < jelentesek.length; i++) {
+            if (jelentesek[i].JelentesTipusa == 'Felhasználó') {
+                const [jelentesIndokai] = await DBconnetion.promise().query(jelentesIndokaQuery, [
+                    jelentesek[i].JelentesID
+                ]);
+                const [felhasznalo] = await DBconnetion.promise().query(felhjel, [jelentesek[i].JelentettTartalomID]);
+                felhasznalo[0]['jelentesID'] = jelentesek[i].JelentesID;
+                felhasznalo[0]['indok'] = jelentesIndokai;
 
-        for (let i = 0; i < jelentesek[0].length; i++) {
-            if (jelentesek[0][i].JelentesTipusa == 'Koktél') {
-                let koktelOsszevtokTomb = [];
-                let jelentesIndokaTomb = [];
-                let eretekelTomb = [];
+                felhasznalokTomb.push(felhasznalo);
+            } else if (jelentesek[i].JelentesTipusa == 'Komment') {
+                const [jelentesIndokai] = await DBconnetion.promise().query(jelentesIndokaQuery, [
+                    jelentesek[i].JelentesID
+                ]);
+                const [kommentek] = await DBconnetion.promise().query(kommentjel, [jelentesek[i].JelentettTartalomID]);
 
-                //console.log(jelentesek[0][i].JelentesID);
+                kommentek[0]['jelentesID'] = jelentesek[i].JelentesID;
+                kommentek[0]['indok'] = jelentesIndokai;
+                kommentekTomb.push(kommentek);
+            } else if (jelentesek[i].JelentesTipusa == 'Koktél') {
+                const [jelentesIndokai] = await DBconnetion.promise().query(jelentesIndokaQuery, [
+                    jelentesek[i].JelentesID
+                ]);
 
-                await DBconnetion.promise()
-                    .query(ErtekelesQuery, jelentesek[0][i].JelentettTartalomID)
-                    .then(([rows]) => {
-                        //jelentesek[0][i].push(rows);
-                        eretekelTomb.push(rows);
-                    });
+                const [koktelok] = await DBconnetion.promise().query(kokteljel, [jelentesek[i].JelentettTartalomID]);
+                const [osszetevok] = await DBconnetion.promise().query(koktelOsszeetevokQuery, [koktelok[0].KoktélID]);
+                const [ertekelek] = await DBconnetion.promise().query(ErtekelesQuery, [koktelok[0].KoktélID]);
 
-                await DBconnetion.promise()
-                    .query(jelentesIndokaQuery, jelentesek[0][i].JelentesID)
-                    .then(([rows]) => {
-                        //console.log(rows);
-                        jelentesIndokaTomb.push(rows);
-                    });
+                koktelok[0]['jelentesID'] = jelentesek[i].JelentesID;
+                koktelok[0]['osszetevok'] = osszetevok;
+                koktelok[0]['ertekelesek'] = ertekelek;
+                koktelok[0]['indok'] = jelentesIndokai;
 
-                await DBconnetion.promise()
-                    .query(koktelOsszeetevokQuery, jelentesek[0][i].JelentettTartalomID)
-                    .then(([rows]) => {
-                        //console.log(rowsOsszetecok);
-                        koktelOsszevtokTomb.push(rows);
-                    });
-
-                await DBconnetion.promise()
-                    .query(kokteljel, jelentesek[0][i].JelentettTartalomID)
-                    .then(([rows]) => {
-                        //console.log(rows[0]);
-                        koktel.push(jelentesek[0][i].JelentesID);
-                        //console.log(koktelOsszevtokTomb);
-                        rows[0].ertekeles = eretekelTomb;
-                        rows[0].jelentesIndokok = jelentesIndokaTomb;
-                        rows[0].osszetevok = koktelOsszevtokTomb;
-                        koktel.push(rows);
-                    });
-            } else if (jelentesek[0][i].JelentesTipusa == 'Felhasználó') {
-                let jelentesIndokaTomb = [];
-
-                await DBconnetion.promise()
-                    .query(jelentesIndokaQuery, jelentesek[0][i].JelentesID)
-                    .then(([rows]) => {
-                        //console.log(rows);
-                        jelentesIndokaTomb.push(rows);
-                    });
-
-                await DBconnetion.promise()
-                    .query(felhjel, jelentesek[0][i].JelentettTartalomID)
-                    .then(([rows]) => {
-                        ember.push(jelentesek[0][i].JelentesID);
-                        rows[0].jelentesIndokok = jelentesIndokaTomb;
-                        ember.push(rows);
-                    });
-            } else {
-                let jelentesIndokaTomb = [];
-
-                await DBconnetion.promise()
-                    .query(jelentesIndokaQuery, jelentesek[0][i].JelentesID)
-                    .then(([rows]) => {
-                        //console.log(rows);
-                        jelentesIndokaTomb.push(rows);
-                    });
-
-                await DBconnetion.promise()
-                    .query(kommentjel, jelentesek[0][i].JelentettTartalomID)
-                    .then(([rows]) => {
-                        komment.push(jelentesek[0][i].JelentesID);
-                        rows[0].jelentesIndokok = jelentesIndokaTomb;
-                        komment.push(rows);
-                    });
+                koktelokTomb.push(koktelok);
             }
         }
 
-        res.status(200).json({
-            kommentek: komment,
-            koktelok: koktel,
-            felhasznalok: ember
-        });
+        res.status(200).json({ felhasznalok: felhasznalokTomb, koktelok: koktelokTomb, kommentek: kommentekTomb });
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             message: 'Hibas vegpont eleres',
             error: err
@@ -890,11 +840,14 @@ router.post(
                                 subject: 'Pohárnyi weboldal - Fiok torlese',
                                 html: `<p>Az On fiokjat toroltek, hiszen sok jelentese erkezett, ezutan megvizsgaltuk es arrajutottunk bazd m,eg</p>`
                             });
-
-                            res.status(200).json({ message: 'sikeres email kuldes!' });
                         } catch (err) {
                             throw new Error('sikertelen email kuldes');
                         }
+                        res.status(200).json({
+                            message: 'Adat megvaltoztatva sikeresen',
+                            tipus: rowsTipus,
+                            bool: true
+                        });
                     } else {
                         const query = 'UPDATE Jelentesek SET JelentesAllapota = 2 WHERE JelentesID LIKE ?';
                         DBconnetion.query(query, [jelentesID], (err) => {
@@ -1600,25 +1553,21 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         const KedvencTorlesKoktel = 'DELETE FROM kedvencek WHERE MitkedveltID LIKE ?';
         const JelentoTorles = 'DELETE FROM jelentők WHERE JelentőID LIKE ?';
         const JelentoJelentesTorles = 'DELETE FROM jelentők WHERE JelentésID LIKE ?';
-        let id
-        if (request.cookies.currentURL.split("/").includes("Adatlap")) {
-            id=jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+        let id;
+        if (request.cookies.currentURL.split('/').includes('Adatlap')) {
+            id = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
             response.clearCookie('auth_token');
             response.clearCookie('auth_token_access');
+        } else {
+            id = request.body.id;
         }
-        else{
-            id=request.body.id
-        }
-        await lekeres(ErtekTorles,id);
-        await lekeres(KommentTorles,id);
-        await lekeres(JelentoTorles,id);
-        await lekeres(KedvencTorles,id);
-        await lekeres(KosarTermekTorles,id);
+        await lekeres(ErtekTorles, id);
+        await lekeres(KommentTorles, id);
+        await lekeres(JelentoTorles, id);
+        await lekeres(KedvencTorles, id);
+        await lekeres(KosarTermekTorles, id);
 
-        let ertekelesek = await lekeres(
-            KommentErtekelesLekeres,
-            id
-        );
+        let ertekelesek = await lekeres(KommentErtekelesLekeres, id);
         for (let i = 0; i < ertekelesek.length; i++) {
             console.log(ertekelesek[i].Negativ);
             console.log(ertekelesek[i].Pozitiv);
@@ -1629,14 +1578,8 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
                 await lekeres('UPDATE komment SET Negativ=Negativ-1 WHERE KommentID LIKE ?', ertekelesek[i].KommentID);
             }
         }
-        await lekeres(
-            KommentErtekelesTorles,
-            id
-        );
-        let koktel = await lekeres(
-            KoktelLekeres,
-            id
-        );
+        await lekeres(KommentErtekelesTorles, id);
+        let koktel = await lekeres(KoktelLekeres, id);
         for (let i = 0; i < koktel.length; i++) {
             await lekeres(ErtekTorlesKoktel, [koktel[i].KoktélID, 'Koktél']);
             await lekeres(KommentTorlesKoktel, [koktel[i].KoktélID]);
@@ -1645,10 +1588,7 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
             await lekeres(KedvencTorlesKoktel, koktel[i].KoktélID);
         }
         await lekeres(KoktelTorles, id);
-        let jelentes = await lekeres(
-            JelentesLekeres,
-            id
-        );
+        let jelentes = await lekeres(JelentesLekeres, id);
         for (let i = 0; i < jelentes.length; i++) {
             await lekeres(JelentoJelentesTorles, jelentes[i].JelentesID);
         }
