@@ -860,27 +860,58 @@ router.post(
         try {
             const { jelentesID } = req.params;
 
-            const tipusQuery = 'SELECT JelentesTipusa FROM jelentesek WHERE JelentesID LIKE ?';
+            const tipusQuery = 'SELECT JelentesTipusa, JelentettTartalomID FROM jelentesek WHERE JelentesID LIKE ?';
 
-            DBconnetion.query(tipusQuery, [jelentesID], (err, rowsTipus) => {
+            DBconnetion.query(tipusQuery, [jelentesID], async (err, rowsTipus) => {
                 if (err) {
                     res.status(500).json({ message: 'Nincs ilyen felhasznalo', error: err });
                 } else {
-                    const query = 'UPDATE Jelentesek SET JelentesAllapota = 2 WHERE JelentesID LIKE ?';
-                    DBconnetion.query(query, [jelentesID], (err) => {
-                        if (err) {
-                            res.status(500).json({
-                                error: err,
-                                message: 'Adatbazissal kapcsolatos hiba tortent!'
+                    if (rowsTipus[0].JelentesTipusa == 'Felhasználó') {
+                        const queryFelhasznAdat = 'SELECT Email FROM felhasználó WHERE FelhID LIKE ?';
+                        const [email] = await DBconnetion.promise().query(queryFelhasznAdat, [
+                            rowsTipus[0].JelentettTartalomID
+                        ]);
+                        //felhasznalo torlese es email kuldese
+                        const transporter = nodemailer.createTransport({
+                            //domain ez lehetne a outlook stb.. a szolgaltato
+                            host: 'smtp.gmail.com',
+                            port: 587,
+                            secure: false,
+                            auth: {
+                                user: process.env.GUSER,
+                                pass: process.env.GPASS
+                            }
+                        });
+
+                        try {
+                            await transporter.sendMail({
+                                from: process.env.GUSER,
+                                to: email[0].Email,
+                                subject: 'Pohárnyi weboldal - Fiok torlese',
+                                html: `<p>Az On fiokjat toroltek, hiszen sok jelentese erkezett, ezutan megvizsgaltuk es arrajutottunk bazd m,eg</p>`
                             });
-                        } else {
-                            res.status(200).json({
-                                message: 'Adat megvaltoztatva sikeresen',
-                                tipus: rowsTipus,
-                                bool: true
-                            });
+
+                            res.status(200).json({ message: 'sikeres email kuldes!' });
+                        } catch (err) {
+                            throw new Error('sikertelen email kuldes');
                         }
-                    });
+                    } else {
+                        const query = 'UPDATE Jelentesek SET JelentesAllapota = 2 WHERE JelentesID LIKE ?';
+                        DBconnetion.query(query, [jelentesID], (err) => {
+                            if (err) {
+                                res.status(500).json({
+                                    error: err,
+                                    message: 'Adatbazissal kapcsolatos hiba tortent!'
+                                });
+                            } else {
+                                res.status(200).json({
+                                    message: 'Adat megvaltoztatva sikeresen',
+                                    tipus: rowsTipus,
+                                    bool: true
+                                });
+                            }
+                        });
+                    }
                 }
             });
         } catch (err) {
