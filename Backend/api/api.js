@@ -939,109 +939,6 @@ router.post(
 //
 //
 //
-
-router.post(
-    '/AdminPanel/KoktelFeltoltes/NevEllenorzes',
-    authenticationMiddleware,
-    authorizationMiddelware,
-    async (req, res) => {
-        try {
-            //console.log(req);
-            const { nev } = req.body;
-            console.log(nev);
-
-            const nevQuery = 'SELECT KoktelCim FROM koktél WHERE KoktelCim LIKE ?';
-
-            const [nevTomb] = await DBconnetion.promise().query(nevQuery, [nev]);
-
-            if (nevTomb.length > 0) {
-                res.status(200).json({ duplikacio: true });
-            } else {
-                res.status(200).json({ duplikacio: false });
-            }
-        } catch (err) {
-            res.status(500).json({ message: 'Unexpected error', error: err });
-        }
-    }
-);
-
-router.post('/AdminPanel/KoktelFeltoltes', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
-    try {
-        const payload = jwt.decode(req.cookies.auth_token);
-
-        const { nev } = req.body;
-        const { alapMennyiseg } = req.body;
-        const { alap } = req.body;
-        const { jelveny } = req.body;
-        const { alkoholos } = req.body;
-        const { osszetevok } = req.body;
-        const { recept } = req.body;
-        const { fajlNeve } = req.body;
-
-        const query =
-            'INSERT INTO koktél(Keszito,Alkoholos,KoktelCim,BoritoKepUtvonal,Alap,Recept,AlapMennyiseg) VALUES(?,?,?,?,?,?,?)';
-        const queryKoktel = 'SELECT KoktélID FROM koktél ORDER BY KoktélID DESC LIMIT 1';
-        const queryJelvenyek = 'SELECT JelvényID FROM `jelvények` WHERE JelvényNeve IN (?)';
-        const queryKoktelOsszetevok =
-            'INSERT INTO koktelokosszetevoi(KoktélID,Osszetevő,Mennyiség, Mertekegyseg) VALUES(?,?,?,?)';
-        const queryKoktelJelvenyInsert = 'INSERT INTO koktélokjelvényei(KoktélID, JelvényID) VALUES(?,?)';
-
-        DBconnetion.query(query, [payload.userID, alkoholos, nev, fajlNeve, alap, recept, alapMennyiseg], (err) => {
-            if (err) {
-                res.status(500).json({ message: 'Sikertelen adat feltoltes' });
-            }
-            DBconnetion.query(queryKoktel, (err, rows) => {
-                if (err) {
-                    res.status(500).json({ message: 'Sikertelen adat feltoltes' });
-                }
-                let feltoltottKoktelID = rows[0].KoktélID;
-
-                for (let i = 0; i < osszetevok.length; i++) {
-                    DBconnetion.query(
-                        queryKoktelOsszetevok,
-                        [
-                            feltoltottKoktelID,
-                            osszetevok[i].osszetevo,
-                            osszetevok[i].mennyiseg,
-                            osszetevok[i].mertekegyseg
-                        ],
-                        (err) => {
-                            if (err) {
-                                res.status(500).json({ message: 'Sikertelen adat feltoltes' });
-                            }
-                        }
-                    );
-                }
-                let jelvenyID = [];
-                //aszinkronos pokol
-                DBconnetion.query(queryJelvenyek, [jelveny], (err, rows) => {
-                    if (err) {
-                        res.status(500).json({ message: 'gatya van' });
-                    }
-                    //console.log(feltoltottKoktelID);
-
-                    for (let i = 0; i < rows.length; i++) {
-                        jelvenyID.push(rows[i].JelvényID);
-                    }
-
-                    for (let i = 0; i < jelvenyID.length; i++) {
-                        DBconnetion.query(queryKoktelJelvenyInsert, [feltoltottKoktelID, jelvenyID[i]], (err) => {
-                            if (err) {
-                                res.status(500).json({ message: 'Sikertelen adata feltoltes' });
-                            }
-                        });
-                    }
-                });
-            });
-        });
-        res.status(200).json({ message: 'Sikeres koktel feltoltes' });
-        await kepculling();
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: 'Sikertelen adat feltoltes' });
-    }
-});
-
 //
 //
 //AdminPanel - koktelTorles
@@ -2372,7 +2269,7 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
             const feltoltottId = feltolt.insertId;
 
             for (let i = 0; i < osszetevok.length; i++) {
-                const [OsszetevoFel] = await DBconnetion.promise().query(UjKoktelOsszetevokFeltoltes, [
+                await DBconnetion.promise().query(UjKoktelOsszetevokFeltoltes, [
                     feltoltottId,
                     osszetevok[i][0],
                     osszetevok[i][1],
@@ -2400,10 +2297,7 @@ router.post('/Keszites/Feltoltes', async (req, res) => {
             }
 
             for (let id = 0; id < JelvenyIdLista.length; id++) {
-                const [JelvenyFeltolt] = await DBconnetion.promise().query(UjKoktelJelvenyIdFeltoltes, [
-                    feltoltottId,
-                    JelvenyIdLista[id]
-                ]);
+                await DBconnetion.promise().query(UjKoktelJelvenyIdFeltoltes, [feltoltottId, JelvenyIdLista[id]]);
             }
             res.status(200).json({
                 feltoltottid: feltoltottId
