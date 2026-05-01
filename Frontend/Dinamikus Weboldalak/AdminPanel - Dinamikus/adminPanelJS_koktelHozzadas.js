@@ -73,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
             this.classList.remove('sotetites');
             this.classList.add('btn-success');
         }
-        console.log(jelvenyTombObj);
     }
 
     let osszetevoNum = 1;
@@ -210,7 +209,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 hibasFrom = true;
             }
 
-            let jelvenyTomb;
+            let izTomb = [];
+            let erostomb = [];
+            let allergenTomb = [];
 
             if (jelvenyTombObj.length < 0) {
                 hibasFrom = true;
@@ -220,19 +221,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 for (let i = 0; i < jelvenyTombObj.length; i++) {
                     if (jelvenyTombObj[i].kategoria == 'erosseg') {
+                        erostomb.push(jelvenyTombObj[i].jelveny);
                         erosseg++;
                     } else if (jelvenyTombObj[i].kategoria == 'iz') {
+                        izTomb.push(jelvenyTombObj[i].jelveny);
                         iz++;
+                    } else if (jelvenyTombObj[i].kategoria == 'allergen') {
+                        allergenTomb.push(jelvenyTombObj[i].jelveny);
                     }
                 }
 
                 if (iz < 1 || erosseg != 1) {
                     hibasFrom = true;
                 }
-
-                jelvenyTomb = jelvenyTombObj.map((obj) => {
-                    return obj.jelveny;
-                });
             }
 
             let osszetevokTomb = [];
@@ -242,13 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 1; i < koktelOsszetevoDiv.length; i += 2) {
                 let osszetevoElemei = koktelOsszetevoDiv[i].children;
 
-                let osszetevoObj = {
-                    osszetevo: osszetevoElemei[0].value,
-                    mennyiseg: osszetevoElemei[1].value,
-                    mertekegyseg: osszetevoElemei[2].value
-                };
+                let osszetevoTomb = [osszetevoElemei[0].value, osszetevoElemei[1].value, osszetevoElemei[2].value];
 
-                osszetevokTomb.push(osszetevoObj);
+                osszetevokTomb.push(osszetevoTomb);
             }
 
             //console.log(osszetevokTomb);
@@ -308,16 +305,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         //alert('teszt');
                         const POSTobj = {
                             nev: koktelNev.value,
-                            alapMennyiseg: alapMennyiseg.value,
+                            mennyiseg: alapMennyiseg.value,
                             alap: koktelAlap.value,
-                            jelveny: jelvenyTomb,
-                            alkoholos: alkoholosEBool ? '1' : '0',
+                            erosseg: erostomb,
+                            iz: izTomb,
+                            allergen: allergenTomb,
+                            alkoholose: alkoholosEBool ? true : false,
                             osszetevok: osszetevokTomb,
-                            recept: koktelRecept.value,
-                            fajlNeve: kapottFajlNev1.message
+                            leiras: koktelRecept.value,
+                            kepUtvonala: kapottFajlNev1.message
                         };
 
-                        await POSTfetch('/api/AdminPanel/KoktelFeltoltes', POSTobj);
+                        await POSTfetch('/api/Keszites/Feltoltes', POSTobj);
                         //alert(JSON.stringify(data));
                         var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
                         modalElement.show();
