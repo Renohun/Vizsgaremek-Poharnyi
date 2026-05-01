@@ -14,6 +14,21 @@ async function POSTfetch(url, obj) {
         throw new Error('Hiba tortent: ' + err);
     }
 }
+
+async function GETfetch(url) {
+    try {
+        const req = await fetch(url, {
+            method: 'GET'
+        });
+        if (req.ok) {
+            return await req.json();
+        } else {
+            throw new Error('Hiba tortent: ' + req.status);
+        }
+    } catch (err) {
+        throw new Error('Hiba tortent: ' + err);
+    }
+}
 async function POSTkepFeltoltes(url, obj) {
     try {
         const req = await fetch(url, {
@@ -133,37 +148,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     (async () => {
-        const data = await POSTfetch('/api/AdminPanel/JelvenyekLetoltese');
+        const data = await GETfetch('/api/Keszites/JelvenyLekeres');
 
         const koktelErossegeSelect = document.getElementById('koktelErossegek');
         const koktelIzeSelect = document.getElementById('koktelIz');
         const koktelAllergenekSelect = document.getElementById('koktelAllergen');
-        for (let i = 0; i < data.allergenek.length; i++) {
+        for (let i = 0; i < data.allergen.length; i++) {
             //data.allergenek[i].JelvényNeve;
             let gomb = document.createElement('input');
             gomb.setAttribute('type', 'button');
-            gomb.setAttribute('value', data.allergenek[i].JelvényNeve);
+            gomb.setAttribute('value', data.allergen[i].JelvényNeve);
             gomb.dataset.kategoria = 'allergen';
             gomb.classList.add('btn', 'btn-success', 'shadow-sm', 'w-100');
             //once, hogy megveletlenul se keruljon fel tobb EventListener egy Elementre, hiszen akkor tobbszor futna le az fv.
             gomb.addEventListener('click', osszetevoGombListener);
             koktelAllergenekSelect.appendChild(gomb);
         }
-        for (let i = 0; i < data.erossegek.length; i++) {
+        for (let i = 0; i < data.erosseg.length; i++) {
             //data.erossegek[i].JelvényNeve
             let gomb = document.createElement('input');
             gomb.setAttribute('type', 'button');
-            gomb.setAttribute('value', data.erossegek[i].JelvényNeve);
+            gomb.setAttribute('value', data.erosseg[i].JelvényNeve);
             gomb.dataset.kategoria = 'erosseg';
             gomb.classList.add('btn', 'btn-success', 'shadow-sm', 'w-100');
             gomb.addEventListener('click', osszetevoGombListener);
             koktelErossegeSelect.appendChild(gomb);
         }
-        for (let i = 0; i < data.izek.length; i++) {
+        for (let i = 0; i < data.iz.length; i++) {
             //data.izek[i].JelvényNeve
             let gomb = document.createElement('input');
             gomb.setAttribute('type', 'button');
-            gomb.setAttribute('value', data.izek[i].JelvényNeve);
+            gomb.setAttribute('value', data.iz[i].JelvényNeve);
             gomb.dataset.kategoria = 'iz';
             gomb.classList.add('btn', 'btn-success', 'shadow-sm', 'w-100');
             gomb.addEventListener('click', osszetevoGombListener);

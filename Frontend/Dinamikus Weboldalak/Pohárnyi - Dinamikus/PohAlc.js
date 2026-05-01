@@ -217,7 +217,9 @@ function koktelRendereles(koktelok) {
 document.addEventListener('DOMContentLoaded', async () => {
     await (async () => {
         //Jelvenyek avagy rendezesek lekerese
-        const jelvenyek = await GETfetch('/api/Koktelok/Jelvenyek');
+        const jelvenyek = await GETfetch('/api/Keszites/JelvenyLekeres');
+        console.log(jelvenyek);
+
         //console.log(jelvenyek.data);
 
         document.getElementById('feelingLuckyBtn').addEventListener('click', async () => {
@@ -228,23 +230,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         const erossegSelect = document.getElementById('Erősség');
-        for (let i = 0; i < jelvenyek.data.erosseg.length; i++) {
+        for (let i = 0; i < jelvenyek.erosseg.length; i++) {
             let optionTag = document.createElement('option');
-            optionTag.innerText = jelvenyek.data.erosseg[i].JelvényNeve;
+            optionTag.innerText = jelvenyek.erosseg[i].JelvényNeve;
             erossegSelect.appendChild(optionTag);
         }
 
         const koktelIzek = document.getElementById('ízek');
-        for (let i = 0; i < jelvenyek.data.izek.length; i++) {
+        for (let i = 0; i < jelvenyek.iz.length; i++) {
             let optionTag = document.createElement('option');
-            optionTag.innerText = jelvenyek.data.izek[i].JelvényNeve;
+            optionTag.innerText = jelvenyek.iz[i].JelvényNeve;
             koktelIzek.appendChild(optionTag);
         }
 
         const allergenSelect = document.getElementById('Allergének');
-        for (let i = 0; i < jelvenyek.data.allergenek.length; i++) {
+        for (let i = 0; i < jelvenyek.allergen.length; i++) {
             let optionTag = document.createElement('option');
-            optionTag.innerText = jelvenyek.data.allergenek[i].JelvényNeve;
+            optionTag.innerText = jelvenyek.allergen[i].JelvényNeve;
             allergenSelect.appendChild(optionTag);
         }
 
