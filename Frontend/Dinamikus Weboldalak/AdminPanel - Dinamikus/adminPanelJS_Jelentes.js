@@ -43,6 +43,23 @@ async function GETKepLekeres(url) {
     }
 }
 
+async function DELETEfetch(url,obj) {
+    try {
+        const req = await fetch(url, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(obj)
+        });
+        if (req.ok) {
+            return await req.json();
+        } else {
+            throw new Error('Hiba tortent: ' + req.status);
+        }
+    } catch (err) {
+        throw new Error('Hiba tortent: ' + err);
+    }
+}
+
 async function elutasitasGombFv() {
     const result = await POSTfetch('/api/AdminPanel/jelentesek/elutasitas/' + this.dataset.jelentesID);
     //console.log(result);
@@ -315,7 +332,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             elfogadasGomb.setAttribute('value', 'Elfogadás');
                             elfogadasGomb.dataset.jelentesID = rows.felhasznalok[i - 1];
                             gombDiv.appendChild(elfogadasGomb);
-                            elfogadasGomb.addEventListener('click', elfogadasGombFv);
+                            elfogadasGomb.addEventListener("click",elfogadasGombFv)
+                            elfogadasGomb.addEventListener('click',async()=>{
+                                await DELETEfetch("/api/AdatlapLekeres/Fioktorles",{id:rows.felhasznalok[i][0].FelhID})
+                            } );
                         }
                     }
                     let sorokHossza = rows.felhasznalok.length / 2;

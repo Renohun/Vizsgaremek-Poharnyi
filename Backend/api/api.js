@@ -1600,15 +1600,24 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         const KedvencTorlesKoktel = 'DELETE FROM kedvencek WHERE MitkedveltID LIKE ?';
         const JelentoTorles = 'DELETE FROM jelentők WHERE JelentőID LIKE ?';
         const JelentoJelentesTorles = 'DELETE FROM jelentők WHERE JelentésID LIKE ?';
-        await lekeres(ErtekTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
-        await lekeres(KommentTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
-        await lekeres(JelentoTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
-        await lekeres(KedvencTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
-        await lekeres(KosarTermekTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
+        let id
+        if (request.cookies.currentURL.split("/").includes("Adatlap")) {
+            id=jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+            response.clearCookie('auth_token');
+            response.clearCookie('auth_token_access');
+        }
+        else{
+            id=request.body.id
+        }
+        await lekeres(ErtekTorles,id);
+        await lekeres(KommentTorles,id);
+        await lekeres(JelentoTorles,id);
+        await lekeres(KedvencTorles,id);
+        await lekeres(KosarTermekTorles,id);
 
         let ertekelesek = await lekeres(
             KommentErtekelesLekeres,
-            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+            id
         );
         for (let i = 0; i < ertekelesek.length; i++) {
             console.log(ertekelesek[i].Negativ);
@@ -1622,11 +1631,11 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         }
         await lekeres(
             KommentErtekelesTorles,
-            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+            id
         );
         let koktel = await lekeres(
             KoktelLekeres,
-            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+            id
         );
         for (let i = 0; i < koktel.length; i++) {
             await lekeres(ErtekTorlesKoktel, [koktel[i].KoktélID, 'Koktél']);
@@ -1635,18 +1644,17 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
             await lekeres(JelvenyTorles, koktel[i].KoktélID);
             await lekeres(KedvencTorlesKoktel, koktel[i].KoktélID);
         }
-        await lekeres(KoktelTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
+        await lekeres(KoktelTorles, id);
         let jelentes = await lekeres(
             JelentesLekeres,
-            jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+            id
         );
         for (let i = 0; i < jelentes.length; i++) {
             await lekeres(JelentoJelentesTorles, jelentes[i].JelentesID);
         }
-        await lekeres(JelentesTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
-        await lekeres(FelhasznaloTorles, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
-        response.clearCookie('auth_token');
-        response.clearCookie('auth_token_access');
+        await lekeres(JelentesTorles, id);
+        await lekeres(FelhasznaloTorles, id);
+
         response.status(200).json({
             message: 'Siker!'
         });
@@ -1839,7 +1847,7 @@ router.patch('/Koktel/KoktelModositas/:id', async (request, response) => {
 });
 router.post('/Koktel/SendErtekeles', authenticationMiddleware, async (request, response) => {
     const ErtekelesKuldes = 'INSERT INTO Ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
-    if (request.cookies.currentURL.split('/') == 'Koktel') {
+    if (request.cookies.currentURL.split('/').includes('Koktel')) {
         await lekeres(ErtekelesKuldes, [
             jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
             request.body.Koktél,
