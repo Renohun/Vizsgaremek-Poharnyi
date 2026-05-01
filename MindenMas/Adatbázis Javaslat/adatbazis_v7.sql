@@ -43,7 +43,8 @@ CREATE TABLE Komment(
 	Tartalom TEXT NOT NULL,
 	Pozitiv INT DEFAULT 0,
 	Negativ INT DEFAULT 0,
-    FOREIGN KEY(Keszito) REFERENCES Felhasználó(FelhID)
+    FOREIGN KEY(Keszito) REFERENCES Felhasználó(FelhID),
+    FOREIGN KEY(HovaIrták) REFERENCES Koktél(KoktélID)
 );
 
 CREATE TABLE kommentErtekeles(
@@ -94,8 +95,8 @@ CREATE TABLE WebshopTermek (
 	TermekKora INT NOT NULL,
 	TermekDiscount DOUBLE,
 	Ar INT  NOT NULL,
-	PRIMARY KEY Termek (TermekID,Ar),
-	FOREIGN KEY (TermekSzarmazas) REFERENCES WebshopOrszag(OrszagID)
+	FOREIGN KEY (TermekSzarmazas) REFERENCES WebshopOrszag(OrszagID),
+    PRIMARY KEY Termek (TermekID,Ar)
 );
 
 
