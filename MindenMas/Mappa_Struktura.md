@@ -1,0 +1,182 @@
+```
+└── 📁vizsga
+    └── 📁.github
+        └── 📁workflows
+            ├── deploy.yml
+    └── 📁.vscode
+    └── 📁Backend
+        └── 📁api
+            ├── api.js
+            ├── authenticationMiddleware.js
+            ├── authorizationMiddelware.js
+            ├── saveLastURLMiddleware.js
+            ├── testing.js
+        └── 📁http
+            ├── test.http
+        └── 📁images
+            ├── 2026.4.28-cup-3.webp
+            ├── cup.webp
+            ├── what.webp
+            ├── whatever.png
+        ├── .env
+        ├── database.js
+        ├── nodemon.json
+        ├── package-lock.json
+        ├── package.json
+        ├── server.js
+    └── 📁Frontend
+        └── 📁Dinamikus Weboldalak
+            └── 📁Adatlap
+                ├── Adatlap - Felhasználói Dokumentáció.docx
+                ├── Adatlap-Fejlesztői dokumentáció.txt
+                ├── Adatlap.css
+                ├── Adatlap.html
+                ├── Adatlap.js
+                ├── hurricane.jpg
+            └── 📁AdminPanel - Dinamikus
+                ├── adminPanel_termekHozzadas.js
+                ├── adminPanel_termekTorles.js
+                ├── adminPanel_torles.js
+                ├── adminPanel.css
+                ├── adminPanelJS_Jelentes.js
+                ├── adminPanelJS_koktelHozzadas.js
+                ├── index.html
+                ├── style.css
+            └── 📁ASZF_Adatkezeles
+                └── 📁adatkezeles
+                    ├── AdKez.css
+                    ├── AdKez.html
+                └── 📁ASZF
+                    ├── ASZF.css
+                    ├── ASZF.html
+                    ├── ASZF.js
+            └── 📁belepes
+                ├── belepes.html
+                ├── belepes.js
+                ├── emailKodMegadas.html
+                ├── emailKodMegadas.js
+                ├── felhasnzaloEll.html
+                ├── felhasznaloEll.js
+                ├── jelszomutatas.js
+                ├── jelszoValt.html
+                ├── jelszoValt.js
+                ├── jelszoValtjelszoMutatas.js
+            └── 📁ContactForm
+                ├── contactform.css
+                ├── contactform.html
+                ├── contactform.js
+            └── 📁hibaOldalak
+                ├── jogosultsag.html
+            └── 📁kellékek
+                └── 📁bootstrap-5.2.3-dist
+                    └── 📁css
+                        ├── bootstrap.min.css
+                    └── 📁js
+                        ├── bootstrap.bundle.min.js
+                ├── 831682.png
+                ├── darkTheme.css
+                ├── favicon.png
+                ├── footer.js
+                ├── free-moon-icon-2304-thumb.png
+                ├── lightTheme.css
+                ├── NavBar.css
+                ├── navBar.js
+                ├── Roboto-Medium.ttf
+                ├── themeSwitcher.js
+                ├── universalCSS.css
+            └── 📁KoktélLap
+                ├── koktellap.css
+                ├── koktellap.html
+                ├── koktellap.js
+                ├── nincsilyen.html
+                ├── what.webp
+            └── 📁LandingPage
+                └── 📁img
+                    ├── bartender-2000x.jpg
+                    ├── bartender.jpg
+                    ├── cocktail4.avif
+                    ├── kapcsolat.webp
+                    ├── koktel.jpg
+                    ├── koktel2.webp
+                    ├── Koktel3.jfif
+                    ├── mivanapolcon.webp
+                    ├── rajz.jpg
+                    ├── webshop.webp
+                ├── LandingPage.css
+                ├── LandingPage.html
+                ├── LandingPage.js
+            └── 📁Mi van a polcon
+                ├── mivanapolcon.html
+                ├── polc.css
+                ├── polc.js
+            └── 📁NewCocktail
+                └── 📁img
+                    ├── bartender_koktelkesz.avif
+                    ├── icon.png
+                    ├── test2.jpg
+                    ├── test3 copy.gif
+                    ├── test3.gif
+                    ├── testkep.jfif
+                ├── NewCocktail.css
+                ├── NewCocktail.html
+                ├── NewCocktail.js
+            └── 📁Pohárnyi - Dinamikus
+                ├── PohAlc.css
+                ├── PohAlc.html
+                ├── PohAlc.js
+            └── 📁Regisztráció
+                ├── Regisztracio.html
+                ├── Regisztracio.js
+            └── 📁TermekOldal
+                └── 📁img
+                    ├── Szabadsag3__1_of_1_-removebg-preview.png
+                ├── NincsIlyenTermek.html
+                ├── TermekOldal.css
+                ├── TermekOldal.html
+                ├── TermekOldal.js
+                ├── test.http
+            └── 📁UnitTest
+                ├── Testing_Kavics.js
+                ├── testing.html
+                ├── testing.js
+                ├── testingMarci.js
+            └── 📁WebShopMain
+                └── 📁img
+                    ├── Szabadsag3__1_of_1_-removebg-preview.png
+                ├── test.http
+                ├── WebShopMain.css
+                ├── WebShopMain.html
+                ├── WebShopMain.js
+        └── 📁templateHTML
+            └── 📁Kosár
+        ├── Korábbi Dolgok - DO NOT DELETE.rar
+    └── 📁MindenMas
+        └── 📁Adatbázis Javaslat
+            ├── adatbazis_v7.sql
+            ├── testadatok_v5.sql
+        └── 📁Dokumentáció
+            ├── Adatlap - Felhasználói Dokumentáció.docx
+            ├── Főoldal_fejlesztoi_dokumentacio.docx
+            ├── Főoldal-felhasznaloi_dokumentacio.docx
+            ├── Kapcsolat_fejlesztői_dokumentáció.docx
+            ├── Kapcsolatfelvétel_felhasználói_dokumentáció.docx
+            ├── KoktelFeltoltes_felhasznaloi_doksi.docx
+            ├── Koktéllap - Felhasználói dokumentáció.docx
+            ├── Mi Van A Polcon - Felhasználói Dokumentáció.docx
+            ├── Termékoldal_fejlesztői_dokumentáció.docx
+            ├── Termékoldal_felhasználoi_dokumentacio.docx
+            ├── Webshop_felhasznaloi_dokumentacio.docx
+        ├── ConctactForm adatok.txt
+        ├── Feature List.docx
+        ├── stylekovetelmeny.txt
+        ├── webshopTestAdatok.txt
+    └── 📁template
+        └── 📁templateHTML
+            └── 📁Közösségi alkoholos
+    ├── .gitattributes
+    ├── .gitignore
+    ├── .prettierrc
+    ├── februar1max28
+    ├── LICENSE
+    └── README.md
+```
