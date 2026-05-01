@@ -1981,10 +1981,10 @@ router.post('/Koktel/SendJelentes', authenticationMiddleware, async (request, re
                     request.body.JelentesTipusa
                 ]);
                 //és a jelentő felhasználó nevében teszünk egy jelentést az utolsó (most létrejött) jelentésre
-                let utolso = await lekeres('SELECT COUNT(*) as Darab FROM jelentesek');
+                let utolso = await lekeres('SELECT JelentesID FROM jelentesek ORDER BY JelentesID DESC LIMIT 1');
                 await lekeres(JelentoKuldes, [
                     jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
-                    utolso[0].Darab,
+                    utolso[0].JelentesID,
                     request.body.Indok
                 ]);
             }
