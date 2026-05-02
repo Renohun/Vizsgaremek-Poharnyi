@@ -650,6 +650,8 @@ router.get('/emailKuldes', async (req, res) => {
 router.post('/kodEllenorzes', (req, res) => {
     try {
         const kuldottKod = req.body.kod;
+        const urlArr = req.get('referer').split('/');
+        const emailCoded = urlArr[urlArr.length - 1];
         //console.log('kuldott: ' + kuldottKod);
         //console.log('email: ' + emailKod);
 
@@ -658,6 +660,7 @@ router.post('/kodEllenorzes', (req, res) => {
                 res.status(200).json({
                     helyes: true,
                     redirect: '/jelszoValtoztatas',
+                    kod: emailCoded,
                     ures: false,
                     hibas: false
                 });
@@ -678,6 +681,7 @@ router.patch('/jelszoValtoztatas', async (req, res) => {
         const jelszo1 = req.body.jelszo1;
         const jelszo2 = req.body.jelszo2;
 
+        const kuldottKod = req.body.kod;
         const urlArr = req.get('referer').split('/');
         const emailCoded = urlArr[urlArr.length - 1];
         const emailDeCoded = Buffer.from(emailCoded, 'base64').toString('utf-8');
@@ -2170,7 +2174,7 @@ router.get('/Keszites/JelvenyLekeres', async (req, res) => {
         let ero = [];
         let allergen = [];
 
-         DBconnetion.query(Jelvenylekeres, (err, rows) => {
+        DBconnetion.query(Jelvenylekeres, (err, rows) => {
             if (err) {
                 throw new Error(err);
             }
