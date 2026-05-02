@@ -452,15 +452,6 @@ router.post('/regisztracio', async (request, response) => {
                                     duplikacio: false,
                                     sikeres: true
                                 });
-                                /*
-                    console.log(
-                        'Adatok melyek felettek toltve: ' +
-                            felhasznaloObjReg.felhasznaloNev +
-                            ' ' +
-                            felhasznaloObjReg.email +
-                            ' ' +
-                            felhasznaloObjReg.jelszo
-                    );*/
                             }
                         }
                     );
@@ -837,8 +828,9 @@ router.post(
                             await transporter.sendMail({
                                 from: process.env.GUSER,
                                 to: email[0].Email,
-                                subject: 'Pohárnyi weboldal - Fiok torlese',
-                                html: `<p>Az On fiokjat toroltek, hiszen sok jelentese erkezett, ezutan megvizsgaltuk es arrajutottunk bazd m,eg</p>`
+                                subject: 'Pohárnyi weboldal - Fiók törlése',
+                                html: `<p>Az Ön fiókja törlésre kerül, mert megsértette a weblap szabályait. Amennyiben nem ért egyet a döntésünkkel, akkor kérjük Önt, hogy vegye fel velünk a kapcsolatot a „kapcsolat" fül alatt.</p>
+                                <p style="color: red; text-align: center">Ez egy automatizált email. Kérjük ne válaszoljon erre az email-re!</p>`
                             });
                         } catch (err) {
                             throw new Error('sikertelen email kuldes');
@@ -906,7 +898,6 @@ router.post(
                     });
                 }
             });
-            //Imadom amikor elirok 1 darab betut, amit nem veszek eszre egy jo 30percig es megy a hajtovadaszat
         } catch (err) {
             res.status(500).json({
                 error: err
