@@ -18,10 +18,7 @@ async function GETfetch(url) {
     try {
         const data = await fetch(url);
         if (data.ok) {
-            const a = data.json();
-            console.log(a);
-
-            return await a;
+            return await data.json();
         } else {
             throw new Error('Hiba tortent a GET-nal');
         }
@@ -65,7 +62,6 @@ async function DELETEfetch(url, obj) {
 
 async function elutasitasGombFv() {
     const result = await POSTfetch('/api/AdminPanel/jelentesek/elutasitas/' + this.dataset.jelentesID);
-    //console.log(result);
     if (result.bool == true) {
         console.log(result.tipus[0].JelentesTipusa);
         if (result.tipus[0].JelentesTipusa == 'Koktél') {
@@ -81,7 +77,6 @@ async function elutasitasGombFv() {
 }
 async function elfogadasGombFv() {
     const result = await POSTfetch('/api/AdminPanel/jelentesek/elfogadas/' + this.dataset.jelentesID);
-    //console.log(result);
     if (result.bool == true) {
         console.log(result.tipus[0].JelentesTipusa);
         if (result.tipus[0].JelentesTipusa == 'Koktél') {
@@ -201,8 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         let felhasznalo = rows.felhasznalok[i][0];
 
                         if (felhasznalo.indok.length < 3) {
-                            console.log('beleptem ide');
-
                             for (let j = 0; j < felhasznalo.indok.length; j++) {
                                 if (felhasznalo.indok[j].JelentesIndoka.length > 0) {
                                     let indokArr = felhasznalo.indok[j].JelentesIndoka.split(' ');
@@ -271,15 +264,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else if (rows.felhasznalok[i][0].indok.length >= 3) {
                             for (let j = 0; j < 3; j++) {
                                 let indokArr = rows.felhasznalok[i][0].indok[j].JelentesIndoka.split(' ');
-                                console.log(indokArr.length);
 
                                 if (indokArr.length < 8) {
                                     let jelentesekIndokok = document.createElement('li');
                                     jelentesekIndokok.innerText = rows.felhasznalok[i][0].indok[j].JelentesIndoka;
                                     jelentesekLista.appendChild(jelentesekIndokok);
                                 } else if (indokArr.length >= 8) {
-                                    //console.log('beleptem ide');
-
                                     let indokString = '';
                                     for (let k = 0; k < 8; k++) {
                                         indokString += ' ' + indokArr[k];
@@ -553,7 +543,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             } else if (rows.koktelok[i][0].indok.length >= 3) {
                                 for (let j = 0; j < 3; j++) {
                                     let indokArr = rows.koktelok[i][0].indok[j].JelentesIndoka.split(' ');
-                                    console.log(indokArr.length);
 
                                     if (indokArr.length < 8) {
                                         let jelentesekIndokok = document.createElement('li');
@@ -708,7 +697,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             for (let j = 0; j < rows.kommentek[i][0].indok.length; j++) {
                                 if (rows.kommentek[i][0].indok[j].JelentesIndoka.length > 0) {
                                     let indokArr = rows.kommentek[i][0].indok[j].JelentesIndoka.split(' ');
-                                    console.log(indokArr.length);
 
                                     let indokArrKarakterSzam = 0;
 
@@ -740,8 +728,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                             jelentesekLista.appendChild(jelentesekIndokok);
                                         }
                                     } else if (indokArr.length >= 8) {
-                                        //console.log('beleptem ide');
-
                                         if (indokArrKarakterSzam >= 50) {
                                             let indokString = '';
                                             let karakterSzamlalo = 0;
@@ -773,7 +759,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else if (rows.kommentek[i][0].indok.length >= 3) {
                             for (let j = 0; j < 3; j++) {
                                 let indokArr = rows.kommentek[i][0].indok[j].JelentesIndoka.split(' ');
-                                console.log(indokArr.length);
 
                                 if (indokArr.length < 8) {
                                     let jelentesekIndokok = document.createElement('li');

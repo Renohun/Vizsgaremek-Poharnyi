@@ -270,14 +270,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 hibasFrom = true;
             }
             let kepTarolas = new FormData();
-            if (
-                document.getElementById('koktelKepFeltoltes').files[0].length != 0 &&
-                (document.getElementById('koktelKepFeltoltes').files[0].type == 'image/jpeg' ||
-                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/png' ||
-                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/webp' ||
-                    document.getElementById('koktelKepFeltoltes').files[0].type == 'image/bmp')
-            ) {
-                kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
+            if (document.getElementById('koktelKepFeltoltes').files[0] != undefined) {
+                if (
+                    document.getElementById('koktelKepFeltoltes').files[0].length != 0 &&
+                    (document.getElementById('koktelKepFeltoltes').files[0].type == 'image/jpeg' ||
+                        document.getElementById('koktelKepFeltoltes').files[0].type == 'image/png' ||
+                        document.getElementById('koktelKepFeltoltes').files[0].type == 'image/webp' ||
+                        document.getElementById('koktelKepFeltoltes').files[0].type == 'image/bmp')
+                ) {
+                    kepTarolas.append('profilkep', document.getElementById('koktelKepFeltoltes').files[0]);
+                }
             } else {
                 hibasFrom = true;
             }
@@ -293,45 +295,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 //console.log(kepTarolas);
 
                 (async () => {
-                    const nevObj = { nev: koktelNev.value };
+                    const kapottFajlNev1 = await POSTkepFeltoltes('/api/AdatlapLekeres/KepFeltoltes', kepTarolas);
+                    //alert(kapottFajlNev.message);
+                    //alert('teszt');
+                    const POSTobj = {
+                        nev: koktelNev.value,
+                        mennyiseg: alapMennyiseg.value,
+                        alap: koktelAlap.value,
+                        erosseg: erostomb,
+                        iz: izTomb,
+                        allergen: allergenTomb,
+                        alkoholose: alkoholosEBool ? true : false,
+                        osszetevok: osszetevokTomb,
+                        leiras: koktelRecept.value,
+                        kepUtvonala: kapottFajlNev1.message
+                    };
 
-                    const ellenorzes = await POSTfetch('/api/AdminPanel/KoktelFeltoltes/NevEllenorzes', nevObj);
-                    //alert(ellenorzes.duplikacio);
-                    //alert(alapMennyiseg.value);
+                    const response = await POSTfetch('/api/Keszites/Feltoltes', POSTobj);
+                    //alert(JSON.stringify(data));
 
-                    if (ellenorzes.duplikacio == false) {
-                        const kapottFajlNev1 = await POSTkepFeltoltes('/api/AdatlapLekeres/KepFeltoltes', kepTarolas);
-                        //alert(kapottFajlNev.message);
-                        //alert('teszt');
-                        const POSTobj = {
-                            nev: koktelNev.value,
-                            mennyiseg: alapMennyiseg.value,
-                            alap: koktelAlap.value,
-                            erosseg: erostomb,
-                            iz: izTomb,
-                            allergen: allergenTomb,
-                            alkoholose: alkoholosEBool ? true : false,
-                            osszetevok: osszetevokTomb,
-                            leiras: koktelRecept.value,
-                            kepUtvonala: kapottFajlNev1.message
-                        };
-
-                        await POSTfetch('/api/Keszites/Feltoltes', POSTobj);
-                        //alert(JSON.stringify(data));
+                    if (response.feltoltottid != null || undefined) {
                         var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
                         modalElement.show();
 
-                        document.getElementById('modalText').innerText = 'Sikeres koktél feltöltés';
+                        document.getElementById('modalText').innerText = 'Sikeres koktél feltöltés!';
 
                         document.getElementById('modalBtn').addEventListener('click', () => {
                             modalElement.hide();
                             window.location.reload();
                         });
-                    } else {
+                    }
+
+                    if (response.hiba == 'duplicate') {
                         var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
                         modalElement.show();
 
-                        document.getElementById('modalText').innerText = 'Már létezik ilyen koktél';
+                        document.getElementById('modalText').innerText = 'Már létezik ilyen koktél!';
 
                         document.getElementById('modalBtn').addEventListener('click', () => {
                             modalElement.hide();
@@ -342,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 var modalElement = new bootstrap.Modal(document.getElementById('infoModal'), {});
                 modalElement.show();
 
-                document.getElementById('modalText').innerText = 'Adatok hiányoznak vag hibásan vannak megadva';
+                document.getElementById('modalText').innerText = 'Adatok hiányoznak vag hibásan vannak megadva!';
 
                 document.getElementById('modalBtn').addEventListener('click', () => {
                     modalElement.hide();
