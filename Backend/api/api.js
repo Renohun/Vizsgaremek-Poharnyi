@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
         const fajlformatum = file.originalname.split('.');
         callback(
             null,
-            `${datum.getFullYear()}.${datum.getMonth() + 1}.${datum.getDate()}-${fajlformatum[0]}-${mappa.length}.${fajlformatum[fajlformatum.length - 1]}`
+            `${datum.getFullYear()}.${datum.getMonth() + 1}.${datum.getDate()}.${datum.getTime()}-${fajlformatum[0]}-${mappa.length}.${fajlformatum[fajlformatum.length - 1]}`
         );
     }
 });
@@ -1532,9 +1532,12 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         const KoktelTorles = 'DELETE FROM koktél WHERE Keszito LIKE ?';
         const KoktelLekeres = 'SELECT KoktélID FROM koktél WHERE Keszito LIKE ?';
         const JelvenyTorles = 'DELETE FROM koktélokjelvényei WHERE KoktélID LIKE ?';
+        const KommentLekeresKoktel = 'SELECT KommentID FROM komment WHERE HovaIrták LIKE ?';
         const KommentTorlesKoktel = 'DELETE FROM komment WHERE HovaIrták LIKE ?';
         const KommentErtekelesLekeres = 'SELECT KommentID,Pozitiv,Negativ FROM kommentertekeles WHERE FelhID LIKE ?';
         const KommentErtekelesTorles = 'DELETE FROM kommentertekeles WHERE FelhID LIKE ?';
+        const KommentErtekelesTorlesID = 'DELETE FROM kommentertekeles WHERE KommentID LIKE ?';
+        const KommentLekeres="SELECT KommentID FROM komment WHERE Keszito LIKE ?"
         const KommentTorles = 'DELETE FROM komment WHERE Keszito LIKE ?';
         const JelentesTorles = 'DELETE FROM jelentesek WHERE JelentettID LIKE ?';
         const JelentesLekeres = 'SELECT JelentesID FROM jelentesek WHERE JelentettID LIKE ?';
@@ -1544,24 +1547,31 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         const KedvencTorlesKoktel = 'DELETE FROM kedvencek WHERE MitkedveltID LIKE ?';
         const JelentoTorles = 'DELETE FROM jelentők WHERE JelentőID LIKE ?';
         const JelentoJelentesTorles = 'DELETE FROM jelentők WHERE JelentésID LIKE ?';
-        let id;
-        if (request.cookies.currentURL.split('/').includes('Adatlap')) {
-            id = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
-            response.clearCookie('auth_token');
-            response.clearCookie('auth_token_access');
-        } else {
-            id = request.body.id;
-        }
-        await lekeres(ErtekTorles, id);
-        await lekeres(KommentTorles, id);
-        await lekeres(JelentoTorles, id);
-        await lekeres(KedvencTorles, id);
-        await lekeres(KosarTermekTorles, id);
+        const JelentesLekeresKoktel="SELECT JelentesID FROM jelentesek WHERE JelentettTartalomID LIKE ? AND JelentesTipusa LIKE ?"
+        const JelentesTorlesKoktel = 'DELETE FROM jelentesek WHERE JelentésID LIKE ?';
 
-        let ertekelesek = await lekeres(KommentErtekelesLekeres, id);
+        let id
+        if (request.cookies.currentURL.split("/").includes("Adatlap")) {
+            id=jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+        }
+        else{
+            id=request.body.id
+        }
+        await lekeres(ErtekTorles,id);
+        await lekeres(KommentTorles,id);
+        await lekeres(JelentoTorles,id);
+        await lekeres(KedvencTorles,id);
+        await lekeres(KosarTermekTorles,id);
+        let kommentek=await lekeres(KommentLekeres,id);
+        for (let i = 0; i < kommentek.length; i++) {
+            await lekeres(KommentErtekelesTorlesID,kommentek[i].KommentID)
+            
+        }
+        let ertekelesek = await lekeres(
+            KommentErtekelesLekeres,
+            id
+        );
         for (let i = 0; i < ertekelesek.length; i++) {
-            console.log(ertekelesek[i].Negativ);
-            console.log(ertekelesek[i].Pozitiv);
             if (ertekelesek[i].Pozitiv == 1) {
                 await lekeres('UPDATE komment SET Pozitiv=Pozitiv-1 WHERE KommentID LIKE ?', ertekelesek[i].KommentID);
             }
@@ -1573,6 +1583,10 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         let koktel = await lekeres(KoktelLekeres, id);
         for (let i = 0; i < koktel.length; i++) {
             await lekeres(ErtekTorlesKoktel, [koktel[i].KoktélID, 'Koktél']);
+            let koktelkomment=await lekeres(KommentLekeresKoktel, [koktel[i].KoktélID]);
+            for (let j = 0; j < koktelkomment.length; j++) {
+                await lekeres(KommentErtekelesTorlesID,koktelkomment[j].KommentID)
+            }
             await lekeres(KommentTorlesKoktel, [koktel[i].KoktélID]);
             await lekeres(OssztevTorles, koktel[i].KoktélID);
             await lekeres(JelvenyTorles, koktel[i].KoktélID);
@@ -1585,7 +1599,10 @@ router.delete('/AdatlapLekeres/Fioktorles', authenticationMiddleware, async (req
         }
         await lekeres(JelentesTorles, id);
         await lekeres(FelhasznaloTorles, id);
-
+        if (request.cookies.currentURL.split("/").includes("Adatlap")) {
+            response.clearCookie('auth_token');
+            response.clearCookie('auth_token_access');
+        }
         response.status(200).json({
             message: 'Siker!'
         });
@@ -1736,7 +1753,7 @@ router.get('/Koktel/:id', async (request, response) => {
         });
     }
 });
-router.patch('/Koktel/KoktelModositas/:id', async (request, response) => {
+router.patch('/Koktel/KoktelModositas/:id',authenticationMiddleware ,async (request, response) => {
     try {
         const koktelChange = 'UPDATE koktél SET KoktelCim=?,Recept=?,AlapMennyiseg=? WHERE KoktélID LIKE ?';
         const koktelChangeKep =
@@ -2574,10 +2591,7 @@ router.post('/Webshop/szures', async (request, response) => {
             }
 
             if (
-                item[0] != 'rendezes' &&
-                item[0] != 'akcio' &&
-                item[0] != 'Nev'
-            ) //amennyiben a postobjectben lévő adat nem az akcio, vagy a rendezes szuresehez kell, akkor belerakjuk az értéklistába
+                item[0] != 'rendezes' &&item[0] != 'akcio' &&item[0] != 'Nev') //amennyiben a postobjectben lévő adat nem az akcio, vagy a rendezes szuresehez kell, akkor belerakjuk az értéklistába
             {
                 ertekLista.push(item[1]);
             }

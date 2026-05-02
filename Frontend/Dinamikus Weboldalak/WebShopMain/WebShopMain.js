@@ -496,7 +496,7 @@ const paginationHely = document.getElementById('pagination');
 
 const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdatok, NevSzerinti) => {
     jelenlegiOldal = jelenOldal;
-
+    console.log(jelenOldal)
     let KartyaHova = document.getElementById('kartyaSor');
     KartyaHova.innerHTML = '';
 
@@ -509,8 +509,8 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
         KartyaHova.classList.remove("kozep")
         await kartyaGen(data, KartyaHova);
         PaginationGombok(false, hossz);
-    } else if (szurtE == true && !NevSzerinti) 
- 
+    } 
+    else if (szurtE == true && !NevSzerinti) 
     {
         const szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`, szuresiAdatok);
         if (szurtdata.hossz == 0) 
@@ -527,9 +527,8 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
         }
         await kartyaGen(szurtdata, KartyaHova);
         PaginationGombok(true, hossz, szuresiAdatok);
-        
-        
-    } else if (NevSzerinti == true && !szurtE) {
+    } 
+        else if (NevSzerinti == true && !szurtE) {
         const keresendoSzo = document.getElementById('NevKereses').value;
         const data = await TermekLekeres(
             `/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${limit}&offset=${offset}`
@@ -576,9 +575,8 @@ const PaginationGombok = async (SzurtE, hossz, szuresiAdatok, NevSzerinti) => {
     //első oldal a gombok között
     if (elsogomb > 1) {
         gombHozzaAdas(paginationHely, 1, SzurtE, szuresiAdatok, hossz, NevSzerinti);
-        if (elsogomb > 1) {
-            paginationHely.append('...');
-        }
+         paginationHely.append('...');
+        
     }
     //köztes oldalak
     for (let i = elsogomb; i <= utolsoGomb; i++) {

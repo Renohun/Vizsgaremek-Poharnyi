@@ -86,12 +86,6 @@ document.addEventListener("DOMContentLoaded",async()=>{
         //Megjeleníjük a választható összetevőket
         opciokLista.removeAttribute("hidden")
     })
-    //Ha
-    osszetevoInput.addEventListener("",()=>{
-        //Elrejtük a választható összetevőket
-        opciokLista.setAttribute("hidden","")
-    })
-
     //Amikor gépelünk
     osszetevoInput.addEventListener("input",()=>{
         //Eltüntetjük és kiürítjük az összetevők listáját

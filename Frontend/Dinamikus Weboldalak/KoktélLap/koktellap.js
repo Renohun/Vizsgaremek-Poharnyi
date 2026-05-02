@@ -20,7 +20,9 @@ document.addEventListener("DOMContentLoaded",async()=>{
             await szerkesztes()
         }
         else{
-            document.getElementById("KoktJel").addEventListener("click",()=>{jelentes(eredmeny.adat.KoktélID,"Koktél",eredmeny.adat.FelhID)})
+            document.getElementById("KoktJel").addEventListener("click",()=>{
+                jelentes(eredmeny.adat.KoktélID,"Koktél",eredmeny.adat.FelhID)
+            })
             await kedveles()
         }
     }
@@ -746,8 +748,13 @@ async function szerkesztes() {
                 //és megmutatása
                 ResIv.show()
             }
+            else if(osszetevok.length<2){
+                document.getElementById("cim").innerHTML="Hiba!"
+                document.getElementById("response").innerHTML="Kérem adjon meg legalább 2 összetevőt"
+                //és megmutatása
+                ResIv.show()
+            }
             else{
-                //TODO:ENDPOINT
                 if (kepvalt) {
                     let adat=new FormData()
                     adat.append("profilkep",kepFeltolt.files[0]);
