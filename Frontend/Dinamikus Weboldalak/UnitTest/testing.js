@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('egyebEredmenyJelentes').innerText = eredemny.egyebHiba;
     });
     document.getElementById('jelentesElutasitassBtn').addEventListener('click', async () => {
-        const eredemny = await AdatLekeres('/test/jelentesek/elfogadas');
+        const eredemny = await AdatLekeres('/test/jelentesek/elutasitas');
         document.getElementById('sikertelenErdemenyJelentesElu').innerText = eredemny.sikertelen;
         document.getElementById('sikerErdemenyJelentesElu').innerText = eredemny.siker;
         document.getElementById('egyebEredmenyJelentesElu').innerText = eredemny.egyebHiba;

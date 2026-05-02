@@ -21,7 +21,7 @@ router.get('/koktelTest', async (request, response) => {
     let mukodikKommertErt = false;
     let mukodikErtekeles = false;
     let mukodikKedvenc = false;
-    let mukodikModosit=false;
+    let mukodikModosit = false;
     let keszito = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
     try {
         const koktelfeltoltes =
@@ -33,7 +33,7 @@ router.get('/koktelTest', async (request, response) => {
         const komment = 'INSERT INTO komment (Keszito,HovaIrták,MilyenDologhoz,Tartalom) VALUES (?,?,?,?)';
         const ertekeleskomment = 'INSERT INTO kommentertekeles (FelhID,KommentID,Pozitiv,Negativ) VALUES (?,?,?,?)';
         const kedvenc = 'INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)';
-        const modosit = "UPDATE koktél SET KoktelCim=? WHERE KoktélID LIKE ?"
+        const modosit = 'UPDATE koktél SET KoktelCim=? WHERE KoktélID LIKE ?';
 
         await lekeres(koktelfeltoltes, [keszito, 1, 'Alkohol', 'Alkohol', 'Tölts bele alkoholt', 10]);
         const koktel = 'SELECT * FROM koktél';
@@ -109,15 +109,13 @@ router.get('/koktelTest', async (request, response) => {
                 }
             }
 
-            await lekeres(modosit,["Más Alkohol",koktelid])
+            await lekeres(modosit, ['Más Alkohol', koktelid]);
             let eredmeny = await lekeres(koktel);
             for (let i = 0; i < eredmeny.length; i++) {
-                if (eredmeny[i].KoktelCim=="Más Alkohol"&& eredmeny[i].KoktélID==koktelid) {
-                    mukodikModosit=true
+                if (eredmeny[i].KoktelCim == 'Más Alkohol' && eredmeny[i].KoktélID == koktelid) {
+                    mukodikModosit = true;
                 }
-                
             }
-
         }
         response.status(200).json({
             koktel: mukodikKoktel,
@@ -128,7 +126,7 @@ router.get('/koktelTest', async (request, response) => {
             kommert: mukodikKommertErt,
             kedv: mukodikKedvenc,
             insertId: koktelid,
-            mod:mukodikModosit
+            mod: mukodikModosit
         });
     } catch (error) {
         console.log(error);
@@ -141,7 +139,7 @@ router.get('/koktelTest', async (request, response) => {
             komm: mukodikKomment,
             kommert: mukodikKommertErt,
             kedv: mukodikKedvenc,
-            mod:mukodikModosit
+            mod: mukodikModosit
         });
     }
 });
@@ -315,7 +313,7 @@ router.get('/TermekLearazas', async (req, res) => {
 });
 router.get('/jelentesek/elfogadas', async (req, res) => {
     try {
-        const jelentesID = 1;
+        const jelentesID = 2;
 
         const queryJelenlegi = 'SELECT JelentesAllapota FROM Jelentesek WHERE JelentesID LIKE ?';
         //itt van a teszt elotti erteke
@@ -332,8 +330,16 @@ router.get('/jelentesek/elfogadas', async (req, res) => {
             } else {
                 //sikeres teszt utan visszaallitja a jelentes allapotot
                 const query = 'UPDATE Jelentesek SET JelentesAllapota = ? WHERE JelentesID LIKE ?';
+                try {
+                    await DBconnetion.promise().query(query, [eredemny[0].JelentesAllapota, jelentesID]);
+                } catch (error) {
+                    res.status(200).json({
+                        sikertelen: true,
+                        siker: false,
+                        egyebHiba: true
+                    });
+                }
 
-                await DBconnetion.promise().query(query, [eredemny[0].JelentesAllapota, jelentesID]);
                 res.status(200).json({ sikertelen: false, siker: true, egyebHiba: false });
             }
         });
@@ -349,7 +355,7 @@ router.get('/jelentesek/elfogadas', async (req, res) => {
 
 router.get('/jelentesek/elutasitas', async (req, res) => {
     try {
-        const jelentesID = 1;
+        const jelentesID = 67;
 
         const queryJelenlegi = 'SELECT JelentesAllapota FROM Jelentesek WHERE JelentesID LIKE ?';
         //itt van a teszt elotti erteke
@@ -366,9 +372,15 @@ router.get('/jelentesek/elutasitas', async (req, res) => {
             } else {
                 //sikeres teszt utan visszaallitja a jelentes allapotot
                 const query = 'UPDATE Jelentesek SET JelentesAllapota = ? WHERE JelentesID LIKE ?';
-
-                await DBconnetion.promise().query(query, [eredemny[0].JelentesAllapota, jelentesID]);
-                res.status(200).json({ sikertelen: false, siker: true, egyebHiba: false });
+                try {
+                    await DBconnetion.promise().query(query, [eredemny[0].JelentesAllapota, jelentesID]);
+                } catch (error) {
+                    res.status(200).json({
+                        sikertelen: true,
+                        siker: false,
+                        egyebHiba: true
+                    });
+                }
             }
         });
     } catch (err) {
@@ -742,10 +754,10 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
             console.log('asd');
             IdHiba = true;
         } else {
-             IdHiba = false;
+            IdHiba = false;
             const FelhasznaloTorles = 'DELETE FROM felhasználó WHERE FelhID LIKE ?';
             const FelhasznaloTorlesEllQ = 'SELECT * FROM felhasználó WHERE FelhID LIKE ?';
-           
+
             const ErtekTorles = 'DELETE FROM ertekeles WHERE Keszito LIKE ?';
             const ErtekTorlesEllQ = 'SELECT * FROM ertekeles WHERE Keszito = ?';
 
@@ -839,9 +851,8 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
                     );
                     const PozErtEllQ = 'SELECT Pozitiv FROM komment WHERE KommentID LIKE ?';
                     const [PozErtEll] = await DBconnetion.promise().query(PozErtEllQ, [ertekelesek[i].KommentID]);
-                    console.log(PozErtEll + "asd")
-                    if (PozErtEll[i].Pozitiv == ertekelesek[i].Pozitiv - 1) 
-                    {
+                    console.log(PozErtEll + 'asd');
+                    if (PozErtEll[i].Pozitiv == ertekelesek[i].Pozitiv - 1) {
                         pozitivKommentUpdate = true;
                     } else {
                         pozitivKommentUpdateHiba = true;
@@ -854,12 +865,9 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
                     );
                     const NegErtEllQ = 'SELECT Negativ FROM komment WHERE KommentID LIKE ?';
                     const [NegErtEll] = await DBconnetion.promise().query(NegErtEllQ, [ertekelesek[i].KommentID]);
-                    if (NegErtEll[i].Negativ == ertekelesek[i].Negativ - 1) 
-                    {
+                    if (NegErtEll[i].Negativ == ertekelesek[i].Negativ - 1) {
                         NegativKommentUpdate = true;
-                    } 
-                    else
-                    {
+                    } else {
                         NegativKommentUpdateHiba = true;
                     }
                 }
@@ -957,7 +965,7 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
             if (KoktelTorlesEll.length == 0) {
                 KoktelTorlese = true;
             }
-            if(jelentes.length == 0){
+            if (jelentes.length == 0) {
                 nincsjelentes = true;
                 JelentoJelentesTorlese = true;
             }
@@ -1002,9 +1010,9 @@ router.delete('/FioktorlesTeszt', async (request, response) => {
             IdHiba: IdHiba,
             pozitivKommentUpdate: pozitivKommentUpdate,
             NegativKommentUpdate: NegativKommentUpdate,
-            nincskoktel:nincskoktel,
-            nincsKommentErtekeles:nincsKommentErtekeles,
-            nincsjelentes:nincsjelentes
+            nincskoktel: nincskoktel,
+            nincsKommentErtekeles: nincsKommentErtekeles,
+            nincsjelentes: nincsjelentes
         });
     } catch (error) {
         console.log(error);
@@ -1152,82 +1160,104 @@ router.get('/regisztracioTest', async (request, response) => {
     }
 });
 
-
-router.patch("/felhModositas", async (request, response) => {
-    let modosultFelhasznalo=false
+router.patch('/felhModositas', async (request, response) => {
+    let modosultFelhasznalo = false;
     try {
-        let melyiko
-        await lekeres("INSERT INTO Felhasználó (Felhasználónév,Email,Jelszó,JelszóHossza) VALUES (?,?,?,?)",["tesztFelhasználó","teszt@Email.cim",await argon.hash("tesztJelsz0!", { type: argon.argon2id }),12])
-        let felhasználók=await lekeres("SELECT * FROM Felhasználó")
+        let melyiko;
+        await lekeres('INSERT INTO Felhasználó (Felhasználónév,Email,Jelszó,JelszóHossza) VALUES (?,?,?,?)', [
+            'tesztFelhasználó',
+            'teszt@Email.cim',
+            await argon.hash('tesztJelsz0!', { type: argon.argon2id }),
+            12
+        ]);
+        let felhasználók = await lekeres('SELECT * FROM Felhasználó');
         for (let i = 0; i < felhasználók.length; i++) {
-            if (felhasználók[i].Felhasználónév=="tesztFelhasználó"&&felhasználók[i].Email=="teszt@Email.cim") {
-                melyiko=felhasználók[i].FelhID
-                await lekeres("UPDATE Felhasználó SET Felhasználónév = ?, Email = ?, Jelszó = ?,JelszóHossza=? WHERE FelhID LIKE ?",["módosultFelhasználó","módosult@Email.cim",await argon.hash("másJelsz0!", { type: argon.argon2id }),10,felhasználók[i].FelhID])
+            if (felhasználók[i].Felhasználónév == 'tesztFelhasználó' && felhasználók[i].Email == 'teszt@Email.cim') {
+                melyiko = felhasználók[i].FelhID;
+                await lekeres(
+                    'UPDATE Felhasználó SET Felhasználónév = ?, Email = ?, Jelszó = ?,JelszóHossza=? WHERE FelhID LIKE ?',
+                    [
+                        'módosultFelhasználó',
+                        'módosult@Email.cim',
+                        await argon.hash('másJelsz0!', { type: argon.argon2id }),
+                        10,
+                        felhasználók[i].FelhID
+                    ]
+                );
             }
         }
-        felhasználók=await lekeres("SELECT * FROM Felhasználó")
+        felhasználók = await lekeres('SELECT * FROM Felhasználó');
         for (let i = 0; i < felhasználók.length; i++) {
-            if (felhasználók[i].Felhasználónév=="módosultFelhasználó"&&felhasználók[i].Email=="módosult@Email.cim") {
-                modosultFelhasznalo=true
+            if (
+                felhasználók[i].Felhasználónév == 'módosultFelhasználó' &&
+                felhasználók[i].Email == 'módosult@Email.cim'
+            ) {
+                modosultFelhasznalo = true;
             }
         }
 
         //Túl veszélyes ahhoz hogy élhessen
-        await lekeres("DELETE FROM felhasználó WHERE FelhID LIKE ?",melyiko)
+        await lekeres('DELETE FROM felhasználó WHERE FelhID LIKE ?', melyiko);
         response.status(200).json({
-            eredmeny:modosultFelhasznalo
-        })
-    } 
-    catch (error) {
+            eredmeny: modosultFelhasznalo
+        });
+    } catch (error) {
         console.log(error);
-        
+
         response.status(200).json({
-            eredmeny:modosultFelhasznalo
-        })
+            eredmeny: modosultFelhasznalo
+        });
     }
-    
 });
-router.get("/felhStatisztika", async (request, response) => {
-    let felhasznaloStatisztika=false
+router.get('/felhStatisztika', async (request, response) => {
+    let felhasznaloStatisztika = false;
     try {
-        let melyiko
-        await lekeres("INSERT INTO Felhasználó (Felhasználónév,Email,Jelszó,JelszóHossza) VALUES (?,?,?,?)",["tesztFelhasználó","teszt@Email.cim",await argon.hash("tesztJelsz0!", { type: argon.argon2id }),12])
-        let felhasználók=await lekeres("SELECT * FROM Felhasználó")
+        let melyiko;
+        await lekeres('INSERT INTO Felhasználó (Felhasználónév,Email,Jelszó,JelszóHossza) VALUES (?,?,?,?)', [
+            'tesztFelhasználó',
+            'teszt@Email.cim',
+            await argon.hash('tesztJelsz0!', { type: argon.argon2id }),
+            12
+        ]);
+        let felhasználók = await lekeres('SELECT * FROM Felhasználó');
         for (let i = 0; i < felhasználók.length; i++) {
-            if (felhasználók[i].Felhasználónév=="tesztFelhasználó"&&felhasználók[i].Email=="teszt@Email.cim") {
-                melyiko=felhasználók[i].FelhID
+            if (felhasználók[i].Felhasználónév == 'tesztFelhasználó' && felhasználók[i].Email == 'teszt@Email.cim') {
+                melyiko = felhasználók[i].FelhID;
                 //2 Kedvenc és 1 Saját
-                await lekeres("INSERT INTO koktél (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg) VALUES (?,?,?,?,?,?)",[melyiko,0,"TesztKotkél","Példa","Minta",200])
-                await lekeres("INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)",[melyiko,1])
-                await lekeres("INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)",[melyiko,2])
+                await lekeres(
+                    'INSERT INTO koktél (Keszito,Alkoholos,KoktelCim,Alap,Recept,AlapMennyiseg) VALUES (?,?,?,?,?,?)',
+                    [melyiko, 0, 'TesztKotkél', 'Példa', 'Minta', 200]
+                );
+                await lekeres('INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)', [melyiko, 1]);
+                await lekeres('INSERT INTO kedvencek (KikedvelteID,MitkedveltID) VALUES (?,?)', [melyiko, 2]);
             }
         }
-        let sajat=(await lekeres("SELECT COUNT (Keszito) AS own FROM koktél WHERE Keszito LIKE ?",melyiko))[0]//1
-        let kedvenc=(await lekeres("SELECT COUNT (KikedvelteID) AS kedv FROM kedvencek WHERE KikedvelteID LIKE ?",melyiko))[0]//2
-        let komment=(await lekeres("SELECT COUNT (Keszito) AS ert FROM ertekeles WHERE Keszito LIKE ?",melyiko))[0]//0
-        let ertekeles=(await lekeres("SELECT COUNT (Keszito) AS kom FROM komment WHERE Keszito LIKE ?",melyiko))[0]//0
-   
-        if (sajat.own==1&&kedvenc.kedv==2&&komment.kom==undefined&&ertekeles.ert==undefined) {
-            felhasznaloStatisztika=true
+        let sajat = (await lekeres('SELECT COUNT (Keszito) AS own FROM koktél WHERE Keszito LIKE ?', melyiko))[0]; //1
+        let kedvenc = (
+            await lekeres('SELECT COUNT (KikedvelteID) AS kedv FROM kedvencek WHERE KikedvelteID LIKE ?', melyiko)
+        )[0]; //2
+        let komment = (await lekeres('SELECT COUNT (Keszito) AS ert FROM ertekeles WHERE Keszito LIKE ?', melyiko))[0]; //0
+        let ertekeles = (await lekeres('SELECT COUNT (Keszito) AS kom FROM komment WHERE Keszito LIKE ?', melyiko))[0]; //0
+
+        if (sajat.own == 1 && kedvenc.kedv == 2 && komment.kom == undefined && ertekeles.ert == undefined) {
+            felhasznaloStatisztika = true;
         }
 
         //Túl veszélyes ahhoz hogy élhessen
-        await lekeres("DELETE FROM kedvencek WHERE KikedvelteID LIKE ?",melyiko)
-        await lekeres("DELETE FROM koktél WHERE Keszito LIKE ?",melyiko)
-        await lekeres("DELETE FROM felhasználó WHERE FelhID LIKE ?",melyiko)
+        await lekeres('DELETE FROM kedvencek WHERE KikedvelteID LIKE ?', melyiko);
+        await lekeres('DELETE FROM koktél WHERE Keszito LIKE ?', melyiko);
+        await lekeres('DELETE FROM felhasználó WHERE FelhID LIKE ?', melyiko);
 
         response.status(200).json({
-            eredmeny:felhasznaloStatisztika
-        })
-    } 
-    catch (error) {
+            eredmeny: felhasznaloStatisztika
+        });
+    } catch (error) {
         console.log(error);
-        
+
         response.status(200).json({
-            eredmeny:felhasznaloStatisztika
-        })
+            eredmeny: felhasznaloStatisztika
+        });
     }
-    
 });
 router.post('/FizetesTest', async (request, response) => {
     try {
@@ -1247,62 +1277,62 @@ router.post('/FizetesTest', async (request, response) => {
             KosarTermekLekeres,
             jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
         );
-        if (kosartermek.length == 0) 
-            {
-                uresKosar = true;
-                vetelhiba = true;
-                raktarhiba = true;
+        if (kosartermek.length == 0) {
+            uresKosar = true;
+            vetelhiba = true;
+            raktarhiba = true;
+        } else {
+            for (let i = 0; i < kosartermek.length; i++) {
+                const TermekFrissitesEllQ1 =
+                    'SELECT Termekkeszlet,TermekHanyanVettekMeg FROM webshoptermek WHERE TermekID LIKE ?';
+                const [TermekFrissitesEll1] = await DBconnetion.promise().query(TermekFrissitesEllQ1, [
+                    kosartermek[i].TermekID
+                ]);
+
+                await lekeres(TermekFrissites, [kosartermek[i].Darabszam, kosartermek[i].TermekID]);
+
+                const TermekFrissitesEllQ2 =
+                    'SELECT Termekkeszlet,TermekHanyanVettekMeg FROM webshoptermek WHERE TermekID LIKE ?';
+                const [TermekFrissitesEll2] = await DBconnetion.promise().query(TermekFrissitesEllQ2, [
+                    kosartermek[i].TermekID
+                ]);
+                if (TermekFrissitesEll2[i].TermekHanyanVettekMeg == TermekFrissitesEll1[i].TermekHanyanVettekMeg + 1) {
+                    hanyanvettekmegmodosit = true;
+                } else {
+                    vetelhiba = true;
+                }
+                if (
+                    TermekFrissitesEll2[i].Termekkeszlet ==
+                    TermekFrissitesEll1[i].Termekkeszlet - kosartermek[i].Darabszam
+                ) {
+                    RaktarKeszletModositas = true;
+                } else {
+                    raktarhiba = true;
+                }
             }
-        else
-            {
-
-                for (let i = 0; i < kosartermek.length; i++) {
-                        const TermekFrissitesEllQ1 = 'SELECT Termekkeszlet,TermekHanyanVettekMeg FROM webshoptermek WHERE TermekID LIKE ?';
-                        const [TermekFrissitesEll1] = await DBconnetion.promise().query(TermekFrissitesEllQ1,[kosartermek[i].TermekID])
-
-                    await lekeres(TermekFrissites, [kosartermek[i].Darabszam, kosartermek[i].TermekID]);
-
-                        const TermekFrissitesEllQ2 = 'SELECT Termekkeszlet,TermekHanyanVettekMeg FROM webshoptermek WHERE TermekID LIKE ?';
-                        const [TermekFrissitesEll2] = await DBconnetion.promise().query(TermekFrissitesEllQ2,[kosartermek[i].TermekID])
-                    if (TermekFrissitesEll2[i].TermekHanyanVettekMeg == TermekFrissitesEll1[i].TermekHanyanVettekMeg+1) 
-                    {
-                        hanyanvettekmegmodosit = true;
-                    }
-                    else
-                    {
-                        vetelhiba = true
-                    }
-                    if (TermekFrissitesEll2[i].Termekkeszlet == TermekFrissitesEll1[i].Termekkeszlet - kosartermek[i].Darabszam)
-                    {
-                        RaktarKeszletModositas = true;
-                    }
-                    else
-                    {
-                        raktarhiba = true
-                    }
-                }
-                if (vetelhiba == true) 
-                {
-                    hanyanvettekmegmodosit = false;    
-                }
-                if(raktarhiba == true){
-                    RaktarKeszletModositas = false;
-                }
-
-                await lekeres(KosárÜrítés, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
-                 const [KosarEll] = await DBconnetion.promise().query(KosárÜrítésEllQ,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID])
-                 console.log(KosarEll.length)
-                 if(KosarEll.length == 0){
-                    sikeresTorles=true;
-                 }
+            if (vetelhiba == true) {
+                hanyanvettekmegmodosit = false;
             }
+            if (raktarhiba == true) {
+                RaktarKeszletModositas = false;
+            }
+
+            await lekeres(KosárÜrítés, jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID);
+            const [KosarEll] = await DBconnetion.promise().query(KosárÜrítésEllQ, [
+                jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID
+            ]);
+            console.log(KosarEll.length);
+            if (KosarEll.length == 0) {
+                sikeresTorles = true;
+            }
+        }
         response.status(200).json({
-            sikeresTorles:sikeresTorles,
-            RaktarKeszletModositas:RaktarKeszletModositas,
-            hanyanvettekmegmodosit:hanyanvettekmegmodosit,
-            uresKosar:uresKosar,
-            raktarhiba:raktarhiba,
-            vetelhiba:vetelhiba
+            sikeresTorles: sikeresTorles,
+            RaktarKeszletModositas: RaktarKeszletModositas,
+            hanyanvettekmegmodosit: hanyanvettekmegmodosit,
+            uresKosar: uresKosar,
+            raktarhiba: raktarhiba,
+            vetelhiba: vetelhiba
         });
     } catch (error) {
         console.log(error);
@@ -1333,7 +1363,7 @@ router.post('/SendJelentesTest', async (request, response) => {
             if (
                 JelId == JelentesekLista[i].JelentettID &&
                 TartId == JelentesekLista[i].JelentettTartalomID &&
-                "koktél" == JelentesekLista[i].JelentesTipusa
+                'koktél' == JelentesekLista[i].JelentesTipusa
             ) {
                 //Akkor megjelöljük, hogy nem kell létrehozni új jelentést
                 VanEMarIlyen = true;
@@ -1347,45 +1377,49 @@ router.post('/SendJelentesTest', async (request, response) => {
                             JelentőkLista[j].JelentőID
                     ) {
                         JelentetteMar = true;
-                        console.log("ASD")
+                        console.log('ASD');
                     }
                 }
             }
         }
-        const JelentoKuldesEllQ = "SELECT * FROM jelentők WHERE JelentőID = ? AND JelentésID = ? AND JelentesIndoka = ?"
+        const JelentoKuldesEllQ =
+            'SELECT * FROM jelentők WHERE JelentőID = ? AND JelentésID = ? AND JelentesIndoka = ?';
         //Ha nem jelentette
         if (JelentetteMar != true) {
             const JelentoKuldes = 'INSERT INTO jelentők (JelentőID,JelentésID,JelentesIndoka) VALUES (?,?,?)';
-            
+
             //és nem létezik
             if (VanEMarIlyen == false) {
                 //Akkor létrehozunk egy ilyen jelentést
                 const JelentesKuldes =
                     'INSERT INTO jelentesek (JelentettID,JelentettTartalomID,JelentesTipusa) VALUES (?,?,?)';
-                await lekeres(JelentesKuldes, [
+                await lekeres(JelentesKuldes, [JelId, TartId, 'koktél']);
+
+                const JelentesKuldesEllQ =
+                    'SELECT * FROM jelentesek WHERE JelentettID = ? AND JelentettTartalomID = ? AND JelentesTipusa LIKE ?';
+                const [JelentesKuldesEll] = await DBconnetion.promise().query(JelentesKuldesEllQ, [
                     JelId,
                     TartId,
                     'koktél'
                 ]);
-
-                const JelentesKuldesEllQ = "SELECT * FROM jelentesek WHERE JelentettID = ? AND JelentettTartalomID = ? AND JelentesTipusa LIKE ?"
-                const [JelentesKuldesEll] = await DBconnetion.promise().query(JelentesKuldesEllQ,[JelId,TartId,"koktél"])
-                console.log(JelentesKuldesEll)
-                if (JelentesKuldesEll.length != 0) 
-                {
-                    jelentesFelkerultE = true
+                console.log(JelentesKuldesEll);
+                if (JelentesKuldesEll.length != 0) {
+                    jelentesFelkerultE = true;
                     sikeres = true;
                 }
-                 //és a jelentő felhasználó nevében teszünk egy jelentést az utolsó (most létrejött) jelentésre
+                //és a jelentő felhasználó nevében teszünk egy jelentést az utolsó (most létrejött) jelentésre
                 let utolso = await lekeres('SELECT COUNT(*) as Darab FROM jelentesek');
                 await lekeres(JelentoKuldes, [
                     jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
                     utolso[0].Darab,
                     'teszt indok'
                 ]);
-                const [JelentoKuldesEll] = await DBconnetion.promise().query(JelentoKuldesEllQ,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,utolso[0].Darab,"teszt indok"])
-                if (JelentoKuldesEll.length != 0) 
-                {
+                const [JelentoKuldesEll] = await DBconnetion.promise().query(JelentoKuldesEllQ, [
+                    jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
+                    utolso[0].Darab,
+                    'teszt indok'
+                ]);
+                if (JelentoKuldesEll.length != 0) {
                     JelentoFelkerultE = true;
                     sikeres = true;
                 }
@@ -1395,22 +1429,24 @@ router.post('/SendJelentesTest', async (request, response) => {
                 //Akkor a nevében teszünk egy jelentést a már létező jelentésre
                 const JelentesModositas =
                     'UPDATE jelentesek SET JelentesMennyisege =JelentesMennyisege+1 WHERE JelentesID LIKE ?';
-                    const JelModositEllQ = "SELECT * FROM jelentesek WHERE JelentesID LIKE ?"
+                const JelModositEllQ = 'SELECT * FROM jelentesek WHERE JelentesID LIKE ?';
                 await lekeres(JelentesModositas, MelyikAz);
                 await lekeres(JelentoKuldes, [
                     jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
                     MelyikAz,
                     'teszt indok'
                 ]);
-                const [JelModositEll] = await DBconnetion.promise().query(JelModositEllQ,[MelyikAz])
-                if (JelModositEll.length != 0) 
-                {
+                const [JelModositEll] = await DBconnetion.promise().query(JelModositEllQ, [MelyikAz]);
+                if (JelModositEll.length != 0) {
                     SikeresModositas = true;
                     sikeres = true;
                 }
-                const [JelentoKuldesEll2] = await DBconnetion.promise().query(JelentoKuldesEllQ,[jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,MelyikAz,"teszt indok"])
-                if (JelentoKuldesEll2.length != 0) 
-                {
+                const [JelentoKuldesEll2] = await DBconnetion.promise().query(JelentoKuldesEllQ, [
+                    jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID,
+                    MelyikAz,
+                    'teszt indok'
+                ]);
+                if (JelentoKuldesEll2.length != 0) {
                     JelentoFelkerultE = true;
                     sikeres = true;
                 }
@@ -1419,11 +1455,11 @@ router.post('/SendJelentesTest', async (request, response) => {
         //Visszaadjuk hogy jelentette e már ezt a felhasználó
         response.status(200).json({
             JelentetteMar: JelentetteMar,
-            sikeres:sikeres,
-            VanEMarIlyen:VanEMarIlyen,
+            sikeres: sikeres,
+            VanEMarIlyen: VanEMarIlyen,
             jelentesFelkerultE: JelentoFelkerultE,
             JelentoFelkerultE: JelentoFelkerultE,
-            SikeresModositas:SikeresModositas
+            SikeresModositas: SikeresModositas
         });
     } catch (error) {
         console.log(error);
@@ -1438,52 +1474,50 @@ router.post('/TermekErtekelesTest', async (request, response) => {
         let siker = false;
         let MegjelentAzErtekeles = false;
         let NemLetezoTermek = false;
-        let NemErvenyesErtekeles = false
+        let NemErvenyesErtekeles = false;
 
-        const TermekEllQ = "SELECT *FROM webshoptermek WHERE TermekID = ?"
-      
+        const TermekEllQ = 'SELECT *FROM webshoptermek WHERE TermekID = ?';
+
         const userID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
         const TermekId = request.body.TermekId;
         const Ertek = request.body.Ertek;
-    
-        const [TermekEll] = await DBconnetion.promise().query(TermekEllQ,[TermekId])
-        if(TermekEll.length == 0){
+
+        const [TermekEll] = await DBconnetion.promise().query(TermekEllQ, [TermekId]);
+        if (TermekEll.length == 0) {
             NemLetezoTermek = true;
-        }
-        else{
-            if (Ertek > 5 || Ertek < 1 || isNaN(Ertek)) 
-            {
+        } else {
+            if (Ertek > 5 || Ertek < 1 || isNaN(Ertek)) {
                 NemErvenyesErtekeles = true;
-            }
-            else{
-            const query = 'INSERT INTO ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
-            const ErtekeltE = 'SELECT * FROM ertekeles WHERE MilyenDologhoz = ? AND HovaIrták = ? AND Keszito = ?';
-             const [ertekeltE] = await DBconnetion.promise().query(ErtekeltE, ['Termék', TermekId, userID]);
-            if (ertekeltE.length != 0) 
-            {
+            } else {
+                const query = 'INSERT INTO ertekeles (Keszito,HovaIrták,MilyenDologhoz,Ertekeles) VALUES (?,?,?,?)';
+                const ErtekeltE = 'SELECT * FROM ertekeles WHERE MilyenDologhoz = ? AND HovaIrták = ? AND Keszito = ?';
+                const [ertekeltE] = await DBconnetion.promise().query(ErtekeltE, ['Termék', TermekId, userID]);
+                if (ertekeltE.length != 0) {
                     ertekeltMar = true;
-            }
-            else
-            {
-                 const [ElkuldottErtekeles] = await DBconnetion.promise().query(query, [userID, TermekId, 'Termék', Ertek]);
-                 if (ElkuldottErtekeles.affectedRows != 0) 
-                 {
-                    siker = true;    
-                 }
-                 const [ErtekEll] = await DBconnetion.promise().query(ErtekeltE, ['Termék', TermekId, userID]);
-                 if(ErtekEll.length == 1){
-                    MegjelentAzErtekeles = true
-                 }
-            }
+                } else {
+                    const [ElkuldottErtekeles] = await DBconnetion.promise().query(query, [
+                        userID,
+                        TermekId,
+                        'Termék',
+                        Ertek
+                    ]);
+                    if (ElkuldottErtekeles.affectedRows != 0) {
+                        siker = true;
+                    }
+                    const [ErtekEll] = await DBconnetion.promise().query(ErtekeltE, ['Termék', TermekId, userID]);
+                    if (ErtekEll.length == 1) {
+                        MegjelentAzErtekeles = true;
+                    }
+                }
             }
         }
-        
+
         response.status(200).json({
-            NemLetezoTermek:NemLetezoTermek,
-            siker:siker,
-            ertekeltMar:ertekeltMar,
-            MegjelentAzErtekeles:MegjelentAzErtekeles,
-            NemErvenyesErtekeles:NemErvenyesErtekeles
+            NemLetezoTermek: NemLetezoTermek,
+            siker: siker,
+            ertekeltMar: ertekeltMar,
+            MegjelentAzErtekeles: MegjelentAzErtekeles,
+            NemErvenyesErtekeles: NemErvenyesErtekeles
         });
     } catch (error) {
         console.log(error);
