@@ -2183,7 +2183,7 @@ router.get('/Keszites/JelvenyLekeres', async (req, res) => {
         let ero = [];
         let allergen = [];
 
-        DBconnetion.query(Jelvenylekeres, (err, rows) => {
+         DBconnetion.query(Jelvenylekeres, (err, rows) => {
             if (err) {
                 throw new Error(err);
             }
