@@ -2591,10 +2591,7 @@ router.post('/Webshop/szures', async (request, response) => {
             }
 
             if (
-                item[0] != 'rendezes' &&
-                item[0] != 'akcio' &&
-                item[0] != 'Nev'
-            ) //amennyiben a postobjectben lévő adat nem az akcio, vagy a rendezes szuresehez kell, akkor belerakjuk az értéklistába
+                item[0] != 'rendezes' &&item[0] != 'akcio' &&item[0] != 'Nev') //amennyiben a postobjectben lévő adat nem az akcio, vagy a rendezes szuresehez kell, akkor belerakjuk az értéklistába
             {
                 ertekLista.push(item[1]);
             }
