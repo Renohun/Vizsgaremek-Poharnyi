@@ -191,7 +191,7 @@ async function AdatlapLekeres(){
         AdatlapFelh.removeAttribute("disabled","true")
         AdatlapEmail.removeAttribute("disabled","true")
         titkos.removeAttribute("disabled","true")
-        modosit.setAttribute("hidden","true")
+        adatModosit.setAttribute("hidden","true")
 
         //Előhozzuk a lehetőségét a jelszóváltoztatásnak
         document.getElementById("pwChangeDiv").removeAttribute("hidden","true")
@@ -324,6 +324,8 @@ async function AdatlapLekeres(){
                         }
                         //Ha nem
                         else{
+                            console.log("?");
+                            
                             //Értesítjük a felhasználót hogy hiba van
                             modal("Hiba","Váratlan Hiba Történt!")
                         }
@@ -331,6 +333,8 @@ async function AdatlapLekeres(){
                     
             } 
             catch (error) {
+                console.log(error);
+                
                 modal("Hiba","Váratlan Hiba Történt!")
             }
 
@@ -352,7 +356,7 @@ async function AdatlapLekeres(){
         }
         AdatlapFelh.setAttribute("disabled","true")
         AdatlapEmail.setAttribute("disabled","true")
-        modosit.removeAttribute("hidden","true")
+        adatModosit.removeAttribute("hidden","true")
         titkos.setAttribute("disabled","true")
         AdatlapJelszo.setAttribute("disabled","true")
         AdatlapJelszo2.setAttribute("disabled","true")        
