@@ -379,9 +379,6 @@ const kartyaGen = async (data, hova) => {
         }
         else{
         kosarba.innerHTML = 'Kosárba';
-        kosarba.setAttribute("data-bs-toggle","modal" )
-        kosarba.setAttribute( "data-bs-target","#staticBackdrop")
-
          kosarba.addEventListener('click', async () => {
             const valasz = await KosarPost(`/api/KosarKuldes`,{id : data.data[i].TermekID, mennyiseg : "egy"});
            
@@ -465,7 +462,7 @@ async function szures() {
 const kereses = async () => {
     const keresendoSzo = document.getElementById('NevKereses').value;
     if (keresendoSzo == '') {
-        alert('Töltse Ki a keresőmezőt!');
+        modalHiba("",true)
     } else {
         let KartyaHova = document.getElementById('kartyaSor');
         KartyaHova.textContent = '';
@@ -473,12 +470,8 @@ const kereses = async () => {
         const dataHossz = await TermekLekeres(
             `/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${1000}&offset=${0}`
         );
-
-        if (dataHossz.data.length == 0) {
-            alert('nincs ilyen Termék');
-        } else {
-            TermekBetoltes(1, dataHossz.data.length, false, '', true);
-        }
+        TermekBetoltes(1, dataHossz.data.length, false, '', true);
+        
     }
 };
 
@@ -533,6 +526,18 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
         const data = await TermekLekeres(
             `/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${limit}&offset=${offset}`
         );
+        if (data.data.length == 0) 
+        {
+            let h1 = document.createElement("h1")
+            h1.innerHTML ="Nincs a keresésnek megfelelő termék!"
+            h1.classList.add("UresTermek")
+            KartyaHova.appendChild(h1)
+            let img = document.createElement("img")
+            img.src = "../WebShopMain/img/Szabadsag3__1_of_1_-removebg-preview.png"
+            img.classList.add("img-fluid","mx-auto","uresKep")
+            KartyaHova.appendChild(img)
+            KartyaHova.classList.add("kozep")    
+        }
         await kartyaGen(data, KartyaHova);
         PaginationGombok(false, hossz, '', true);
     }
@@ -654,21 +659,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = `/Adatlap#Kosar`
     })
 });
-const modalHiba = (hiba)=>{
+const modalHiba = (hiba, keres)=>{
 //hibás kitöltés kezelése
-        
-        document.getElementById('vissza').style.display = 'block';
-        document.getElementById('Sokhiba').style.display = 'block';
-        document.getElementById('siker').setAttribute('hidden', true);
-         document.getElementById('tovabb').setAttribute('hidden', true);
+        if (keres == true)
+        {
+            document.getElementById('vissza').style.display = 'block';
+            document.getElementById('Kereshiba').style.display = 'block';
+            document.getElementById('siker').setAttribute('hidden', true);
+            document.getElementById('tovabb').setAttribute('hidden', true);
+        }
+        else
+        {
+            document.getElementById('vissza').style.display = 'block';
+            document.getElementById('Sokhiba').style.display = 'block';
+            document.getElementById('siker').setAttribute('hidden', true);
+            document.getElementById('tovabb').setAttribute('hidden', true);
+        }
          hiba = false;
-        
+         let modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+         modal.show();
 }
 const modalJo = ()=>{
 //hibás kitöltés kezelése
         
-        document.getElementById('Sokhiba').style.display = 'none';
+    document.getElementById('Sokhiba').style.display = 'none';
     document.getElementById('vissza').style.display = 'none';
+    document.getElementById('Kereshiba').style.display = 'none';
     document.getElementById('siker').removeAttribute('hidden',false);
     document.getElementById('tovabb').removeAttribute('hidden', true);
+     let modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+     modal.show();
 }
