@@ -28,6 +28,7 @@ const TestDelFetch=async(url,object)=>{
     const valasz=await fetch(url,{
         method:"DELETE",
         headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(object)
     })
     if (valasz.ok) {
         return valasz.json()
@@ -130,6 +131,98 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById('TorolSiker').innerHTML = eredmeny.siker;
         document.getElementById('Ures').innerHTML = eredmeny.ures;
         document.getElementById('AUres').innerHTML = eredmeny.alapures;
+        
+        let ok = document.getElementsByTagName('span');
+        for (let i = 0; i < ok.length; i++) {
+            if (ok[i].innerHTML == 'true') {
+                ok[i].classList.add('text-success');
+            } else {
+                ok[i].classList.add('text-danger');
+            }
+        }
+    });
+      document.getElementById('Felhasznalo_Torlese').addEventListener('click', async () => {
+        const id = document.getElementById("TorlesId").value
+        const obj = {id:id}
+        const eredmeny = await TestDelFetch('/test/FioktorlesTeszt',obj);
+        console.log(eredmeny)
+        document.getElementById('FIdHiba').innerHTML = eredmeny.IdHiba;
+        document.getElementById('nincskoktel').innerHTML = eredmeny.nincskoktel;
+        document.getElementById('nincsKommentErtekeles').innerHTML = eredmeny.nincsKommentErtekeles;
+        document.getElementById('KoktelTorlese').innerHTML = eredmeny.KoktelTorlese;
+        document.getElementById('nincsjelentes').innerHTML = eredmeny.nincsjelentes;
+        document.getElementById('KoktelokJelvenyeiTorolve').innerHTML = eredmeny.KoktelokJelvenyeiTorolve;
+        document.getElementById('KoktelokKommentjeiTorolve').innerHTML = eredmeny.KoktelokKommentjeiTorolve;
+        document.getElementById('KommentekErtekeleseiTorolve').innerHTML = eredmeny.KommentekErtekeleseiTorolve;
+        document.getElementById('KommentTorlese').innerHTML = eredmeny.KommentTorlese;
+        document.getElementById('KedvencTorlese').innerHTML = eredmeny.KedvencTorlese;
+        document.getElementById('KoktelokOsszetevoiTorles').innerHTML = eredmeny.KoktelokOsszetevoiTorles;
+        document.getElementById('KoktelKedvenceTorles').innerHTML = eredmeny.KoktelKedvenceTorles;
+        document.getElementById('jelentoTorlese').innerHTML = eredmeny.jelentoTorlese;
+        document.getElementById('JelentoJelentesTorlese').innerHTML = eredmeny.JelentoJelentesTorlese;
+        document.getElementById('pozitivKommentUpdate').innerHTML = eredmeny.pozitivKommentUpdate;
+        document.getElementById('NegativKommentUpdate').innerHTML = eredmeny.NegativKommentUpdate;
+        document.getElementById('JelentesekTorlese').innerHTML = eredmeny.JelentesekTorlese;
+        document.getElementById('KosarTorlese').innerHTML = eredmeny.KosarTorlese;
+        
+        let ok = document.getElementsByTagName('span');
+        for (let i = 0; i < ok.length; i++) {
+            if (ok[i].innerHTML == 'true') {
+                ok[i].classList.add('text-success');
+            } else {
+                ok[i].classList.add('text-danger');
+            }
+        }
+    });
+      document.getElementById('FizetesTesztBtn').addEventListener('click', async () => {
+      
+        const eredmeny = await testPostFetch('/test/FizetesTest');
+
+        document.getElementById('FTorolSiker').innerHTML = eredmeny.sikeresTorles;
+        document.getElementById('RaktarKeszletModositas').innerHTML = eredmeny.RaktarKeszletModositas;
+        document.getElementById('hanyanvettekmegmodosit').innerHTML = eredmeny.hanyanvettekmegmodosit;
+         document.getElementById('uresKosar').innerHTML = eredmeny.uresKosar;
+        document.getElementById('raktarhiba').innerHTML = eredmeny.raktarhiba;
+        document.getElementById('vetelhiba').innerHTML = eredmeny.vetelhiba;
+        
+        let ok = document.getElementsByTagName('span');
+        for (let i = 0; i < ok.length; i++) {
+            if (ok[i].innerHTML == 'true') {
+                ok[i].classList.add('text-success');
+            } else {
+                ok[i].classList.add('text-danger');
+            }
+        }
+    });
+    document.getElementById('ErtekelesTest').addEventListener('click', async () => {
+      
+        const eredmeny = await testPostFetch('/test/TermekErtekelesTest',{TermekId: document.getElementById("ErttermekId").value,Ertek:document.getElementById("Ertekeles").value});
+
+        document.getElementById('Ertsiker').innerHTML = eredmeny.siker;
+        document.getElementById('ertekeltMar').innerHTML = eredmeny.ertekeltMar;
+        document.getElementById('MegjelentAzErtekeles').innerHTML = eredmeny.MegjelentAzErtekeles;
+         document.getElementById('NemLetezoTermek').innerHTML = eredmeny.NemLetezoTermek;
+        document.getElementById('NemErvenyesErtekeles').innerHTML = eredmeny.NemErvenyesErtekeles;
+        
+        let ok = document.getElementsByTagName('span');
+        for (let i = 0; i < ok.length; i++) {
+            if (ok[i].innerHTML == 'true') {
+                ok[i].classList.add('text-success');
+            } else {
+                ok[i].classList.add('text-danger');
+            }
+        }
+    });
+    document.getElementById('JeletesKezeles').addEventListener('click', async () => {
+      
+        const eredmeny = await testPostFetch('/test/SendJelentesTest');
+
+        document.getElementById('SikJel').innerHTML = eredmeny.sikeres;
+        document.getElementById('JelentetteMar').innerHTML = eredmeny.JelentetteMar;
+        document.getElementById('VanEMarIlyen').innerHTML = eredmeny.VanEMarIlyen;
+         document.getElementById('jelentesFelkerultE').innerHTML = eredmeny.jelentesFelkerultE;
+        document.getElementById('JelentoFelkerultE').innerHTML = eredmeny.JelentoFelkerultE;
+        document.getElementById('SikeresModositas').innerHTML = eredmeny.SikeresModositas;
         
         let ok = document.getElementsByTagName('span');
         for (let i = 0; i < ok.length; i++) {

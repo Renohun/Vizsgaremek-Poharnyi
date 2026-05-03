@@ -8,6 +8,15 @@ const TestDeleteFetch=async(url,object)=>{
         return valasz.json()
     }
 }
+const AdatPatch=async(url)=>{
+    const valasz=await fetch(url,{
+        method:"PATCH",
+        headers:{"Content-Type":"application/json"}
+    })
+    if (valasz.ok) {
+        return valasz.json()
+    }
+}
 
 
 
@@ -33,6 +42,8 @@ document.addEventListener("DOMContentLoaded",async()=>{
         document.getElementById('kommdel').innerHTML = torles.komm;
         document.getElementById('kommertdel').innerHTML = torles.kommert;
         document.getElementById('kedvencdel').innerHTML = torles.kedv;
+
+        document.getElementById("mod").innerHTML=valasz.mod
         ellenorzes(document.getElementById("koktel").getElementsByTagName("span"))
 
     });
@@ -43,6 +54,10 @@ document.addEventListener("DOMContentLoaded",async()=>{
         else{
             document.getElementById("koktel").setAttribute("hidden","")
         }
+    })
+    document.getElementById("felhasznaloTesztBtn").addEventListener("click",async()=>{
+        document.getElementById('FelhMod').innerHTML = (await AdatPatch("/test/felhModositas")).eredmeny;
+        document.getElementById('FelhStat').innerHTML = (await AdatLekeres("/test/felhStatisztika")).eredmeny;
     })
 })
 

@@ -23,6 +23,7 @@ const PostFetch=async(url,object)=>{
       if (valasz.redirected) 
         {
             console.log("asd")
+             window.location.href = valasz.url;
         }
     if (valasz.ok) {
         return valasz.json()
@@ -35,8 +36,8 @@ const KosarPost = async (url,object) => {
             headers: { 'Content-Type': 'application/json' },
             body:JSON.stringify(object)
         });
-        if (valasz.redirected) {
-            //console.log(valasz.url);
+        if (valasz.redirected)
+        {
             window.location.href = valasz.url;
         }
         if (valasz.ok) {
@@ -71,19 +72,10 @@ const termek_lekeres = async () => {
     let id = url[4];
   
     const data = await GETfetch(`/api/termek/lekeres/${id}`);
-      console.log(data);
      return data;
    
 };
 
-const KepLekeres = async () => 
-{
-    let url = window.location.href.split('/');
-    let id = url[4];
-    console.log(id);
-    const data = await TermekKepLekeres(`/api/termek/KepLekeres/${id}`)
-    return data;
-}
 
 const oldalGenerálás =  async () =>{
     
@@ -94,7 +86,6 @@ const oldalGenerálás =  async () =>{
         window.location.href = "/HianyzoTermek"
     }
     //url
-    window.location.href += `#${LekertTermekek.termek[0].TermekCim}`
     //Cim
     let oldalcim = document.getElementById("oldalCim")
     oldalcim.innerHTML = `Pohárnyi | ${LekertTermekek.termek[0].TermekCim}`
@@ -104,11 +95,10 @@ const oldalGenerálás =  async () =>{
     //KépBetöltés
     let url = window.location.href.split('/');
     let id = url[4];
-    console.log(id);
-    const data = await TermekKepLekeres(`/api/Webshop/Keplekeres/${id}`)//termek/keplekeres nem mukodik
+  
+    const data = await TermekKepLekeres(`/api/AdatlapLekeres/KepLekeres/${LekertTermekek.termek[0].TermekKepUtvonal}`)//termek/keplekeres nem mukodik
     let KepHely = document.getElementById("TermekImg")
     KepHely.setAttribute("src",URL.createObjectURL(data))
-    console.log(KepHely)
 
     //tovabbi adatok betöltése
     let TermekLeirasHely = document.getElementById("TermekSzoveg")
@@ -149,7 +139,7 @@ const oldalGenerálás =  async () =>{
    
     for (let i = 0; i < HasonlokData.hasonlok.length; i++)
     {
-        const KepData = await TermekKepLekeres(`/api/Webshop/KepLekeres/${HasonlokData.hasonlok[i].TermekID}`)
+        const KepData = await TermekKepLekeres(`/api/AdatlapLekeres/KepLekeres/${HasonlokData.hasonlok[i].TermekKepUtvonal}`)
         let KepUrl = URL.createObjectURL(KepData)
         let kartya = document.createElement("div")
         kartya.classList.add("Termek")
@@ -189,7 +179,7 @@ const oldalGenerálás =  async () =>{
             csillagok.push(csillag)
             ErtekelesDiv.appendChild(csillag)
         }
-        const meddig = await GETfetch(`/api/Termek/HasonloTermekErtekeles/${HasonlokData.hasonlok[i].TermekID}`)
+        const meddig = await GETfetch(`/api/TermekErtekeles/${HasonlokData.hasonlok[i].TermekID}`)
         if (meddig != 0) {
             
         }
@@ -265,8 +255,7 @@ const oldalGenerálás =  async () =>{
                 max = LekertTermekek.termek[0].TermekKeszlet
             }
         mennyisegHely.addEventListener("change",()=>{
-            console.log(max) 
-            if (mennyisegHely.value > max) /*why??*/ 
+            if (mennyisegHely.value > max)
             {
                 mennyisegHely.value = max;  
             }
@@ -285,7 +274,6 @@ const oldalGenerálás =  async () =>{
         mennyisegHely.disabled = "true"
         PolcLabelHely.innerHTML = "Elfogyott!"
         PolcLabelHely.classList.add("NincsPolcon")
-        console.log(PolcLabelHely)
     }
     //Ertekeles
     //Ellenorizzuk, hogy a felhasznalo ertekelt e mar
@@ -311,7 +299,6 @@ const oldalGenerálás =  async () =>{
         
         if (idszam == idLista.idLista[i].TermekID)
         {
-            console.log(idLista.idLista[i])
             jelenlegiIndex = i;
         }
     
@@ -339,7 +326,6 @@ const oldalGenerálás =  async () =>{
 
 const ertekeles = (ErtekeltE,ertek) =>
 {
-    console.log(ErtekeltE)
     let Csillagok = document.getElementsByClassName("csillag")
     if(ErtekeltE == "nincsBejel"){
         const ertekelesHely = document.getElementById("Ertekeles")
@@ -361,7 +347,7 @@ const ertekeles = (ErtekeltE,ertek) =>
         }
            
         document.getElementById("ErtekelesKuldes").style.display = "none"
-        document.getElementById("ErtekelPar").innerHTML="Ön már értékelte a koktélt"
+        document.getElementById("ErtekelPar").innerHTML="Ön már értékelte a terméket!"
     }
     else if (ErtekeltE[0] == undefined)
     {
@@ -403,7 +389,7 @@ const ertekeles = (ErtekeltE,ertek) =>
                 ertszov.innerHTML = "üres értékelést nem tud küldeni!"
             }
             else
-            {await PostFetch("/api/Termek/ErtekelesKuldes",{Tid:Termekid,ertek:ertekszam})
+            {await PostFetch("/api/Koktel/SendErtekeles",{Tid:Termekid,ertek:ertekszam})
                 oldalGenerálás()
             }
         })
@@ -418,12 +404,9 @@ const KosarbaRak = async()=>
 
     let postObj = {id:Termekid,mennyiseg:mennyiseg}
     let hiba = false;
-    const KosarData = await PostFetch("/api/Termek/KosarKuldes",postObj)
-    if(KosarData.hiba == "bejel")
-    {
-        alert("A termék kosárba helyezéséhez kérem jelentkezzen be!")
-    }
-    else if(KosarData.hiba == "raktar"){
+    const KosarData = await PostFetch("/api/KosarKuldes",postObj)
+
+    if(KosarData.hiba == "raktar"){
       hiba = true
     }
     if (hiba == true) {
@@ -431,7 +414,6 @@ const KosarbaRak = async()=>
     }else{
         modalJo()
     }
-   
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

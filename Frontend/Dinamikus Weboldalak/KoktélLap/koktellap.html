@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
+        <link rel="icon" type="image/x-icon" href="../kellékek/favicon.png" />
         <link rel="stylesheet" href="../koktellap.css" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
     </head>
@@ -76,10 +77,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -134,10 +137,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -157,10 +162,15 @@
                 <div id="badgek" class="justify-content-center"></div>
                 <div class="row">
                     <div class="col-4 p-0">
-                        <a href="" id="elozo" class="float-start ">&#x2190; Előző</a>
+                        <a href="" id="elozo" class="float-start">&#x2190; Előző</a>
                     </div>
                     <div id="ChangeSor" class="col-4 p-0">
-                        <input type="button" id="KoktJel" class="btn text-danger border-0 p-0" value="Koktél Jelentése" />
+                        <input
+                            type="button"
+                            id="KoktJel"
+                            class="btn text-danger border-0 p-0"
+                            value="Koktél Jelentése"
+                        />
                     </div>
                     <div class="col-4 p-0">
                         <a href="" id="kovetkezo" class="float-end">Következő &#8594;</a>
@@ -174,16 +184,16 @@
                 </p>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6 row">
                     <label id="kepModosit" class="col-12 col-sm-6 col-md-6 col-lg-6">
-                        <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid rounded"/>
+                        <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid rounded" />
                     </label>
                     <div class="ps-4 flex-column col-12 col-sm-6 col-md-6 col-lg-6" id="Osszetevok">
                         <div id="adagok">
                             <label for="ml">Mennyiség</label>
-                            <input type="radio" name="tipus" id="ml" class="me-2" checked>
+                            <input type="radio" name="tipus" id="ml" class="me-2" checked />
                             <label for="adag">Adag</label>
-                            <input type="radio" name="tipus" id="adag">
+                            <input type="radio" name="tipus" id="adag" />
                         </div>
-                        
+
                         <label for="mennyiseg">Hány ml-nyit szeretne készíteni</label>
                         <input type="number" id="mennyiseg" step="50" class="form-control" min="0" />
                         <span class="fs-4">Összetevők</span>
@@ -287,7 +297,7 @@
                     </div>
                     <div class="modal-body col-12 row">
                         <div class="col-12 col-sm-4">
-                            <img src="" alt="" class="profilkep-mid" id="profkep">
+                            <img src="" alt="" class="profilkep-mid" id="profkep" />
                         </div>
                         <div class="col-12 col-sm-8">
                             <p id="Nev"></p>
@@ -296,9 +306,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div id="ReportGomb" class="w-100">
-                        </div>
-                        <input type="button" value="Bezárás" class="btn btn-secondary w-100" data-bs-dismiss="modal"/>
+                        <div id="ReportGomb" class="w-100"></div>
+                        <input type="button" value="Bezárás" class="btn btn-secondary w-100" data-bs-dismiss="modal" />
                     </div>
                 </div>
             </div>
@@ -308,6 +317,5 @@
         <script src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/navBar.js"></script>
         <script src="../kellékek/footer.js"></script>
-        
     </body>
 </html>

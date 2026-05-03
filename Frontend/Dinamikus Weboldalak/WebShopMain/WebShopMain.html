@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
+        <link rel="icon" type="image/x-icon" href="../kellékek/favicon.png">
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
         <link rel="stylesheet" href="../WebShopMain/WebShopMain.css" />
         <link
@@ -80,10 +81,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -138,10 +141,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -153,27 +158,27 @@
                 </div>
             </div>
         </nav>
-        <div id="main" class="flex-grow-1">
+        <div id="main" class="container flex-grow-1  ">
             <div id="szuresek">
-                <div id="kereses">
-                    <input type="text" placeholder="Keresés" id="NevKereses" />
-                    <button type="button" class="formBtn" id="keresesBtn"><i class="fa fa-search"></i></button>
-                    <button
-                        type="button"
-                        class="formBtn"
-                        id="szuresGomb"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseExample"
-                        aria-expanded="false"
-                        aria-controls="collapseExample"
-                    >
-                        szűrés
-                    </button>
+                <div id="kereses" class="d-flex">
+                        <input type="text" placeholder="Keresés" id="NevKereses" class="col-7 col-sm-9 h-100" />
+                        <button type="button" class="formBtn col-2 col-sm-1 h-100" id="keresesBtn"><i class="fa fa-search"></i></button>
+                        <button
+                            type="button"
+                            class="col-3 col-sm-2 formBtn"
+                            id="szuresGomb"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseExample"
+                            aria-expanded="false"
+                            aria-controls="collapseExample"
+                        >
+                            szűrés
+                        </button>
                 </div>
             </div>
-            <div id="szures">
+            <div id="szures" class="mt-2">
                 <div class="collapse" id="collapseExample">
-                    <div id="szuresek" class="card card-body">
+                    <div id="szuresek" class="card card-body w-100">
                         
                         <div id="ar">
                             <div class="slidecontainer">
@@ -210,7 +215,7 @@
                         <div id="szarmazasiHely" class="selekt">
                             <div id="SzarmazasSelectDiv" class="selektdiv">
                                 <label for="SzOrszag">Származási Ország</label>
-                                <select name="SzOrszag" id="OrszagSelect">
+                                <select name="SzOrszag" id="OrszagSelect" class="form-select">
                                      
                                 </select>
                             </div>
@@ -218,7 +223,7 @@
                          <div id="Marka" class="selekt">
                             <div id="MarkaSelectDiv"  class="selektdiv">
                                 <label for="MarkaSel">Márka</label>
-                                <select name="MarkaSel" id="MarkaSelect">
+                                <select name="MarkaSel" id="MarkaSelect" class="form-select">
                                     
                                 </select>
                             </div>
@@ -226,7 +231,7 @@
                          <div id="Kategoria" class="selekt">
                             <div id="KategoriaSelectDiv"  class="selektdiv">
                                 <label for="KategSel">Kategória</label>
-                                <select name="KategSel" id="KategoriaSelect">
+                                <select name="KategSel" id="KategoriaSelect" class="form-select">
                                     
                                 </select>
                             </div>
@@ -234,7 +239,7 @@
                          <div id="Urtartalom" class="selekt eltunt">
                             <div id="UrtartalomSelectDiv"  class="selektdiv">
                                 <label for="KategSel">Űrtartalom</label>
-                                <select name="UrtartalomSel" id="UrtartalomSelect">
+                                <select name="UrtartalomSel" id="UrtartalomSelect" class="form-select">
                                     
                                 </select>
                             </div>
@@ -242,7 +247,7 @@
                          <div id="Kiszereles" class="selekt">
                             <div id="KiszerelesSelectDiv"  class="selektdiv">
                                 <label for="KiszerelesSel">Kiszerelés</label>
-                                <select name="KiszerelesSel" id="KiszerelesSelect">
+                                <select name="KiszerelesSel" id="KiszerelesSelect" class="form-select">
                                     
                                 </select>
                             </div>
@@ -250,7 +255,7 @@
                          <div id="Rendezes" class="selekt">
                             <div id="RendezesSelectDiv"  class="selektdiv">
                                 <label for="RendezesSelect">Rendezés</label>
-                                <select name="RendezSel" id="RendezesSelect">
+                                <select name="RendezSel" id="RendezesSelect" class="form-select">
                                     <option value="-">-</option>
                                     <option value="TermekCim">abc sorrend</option>
                                     <option value="novekvo">Ár szerint növekvő</option>
@@ -266,7 +271,7 @@
                          </div>
                          <div id="kuldes">
                             <div id="kuldesgombDiv">
-                               <input type="button" class="btn btn-success" name="kuldes" id="kuldesGomb" value="Szűrés">
+                               <input type="button" class="btn btn-success w-100" name="kuldes" id="kuldesGomb" value="Szűrés">
                             </div>
                          </div>
                     </div>
@@ -296,6 +301,7 @@
                     <div class="modal-body">
                         <h5 id="siker">A Terméket sikeresen kosárba rakta!</h5>
                         <h5 id="Sokhiba" style="display: none">A terméket nem sikerült kosárba rakni</h5>
+                        <h5 id="Kereshiba" style="display: none">Töltse Ki a keresőmezőt!</h5>
                     </div>
                     <div class="modal-footer">
                         <button

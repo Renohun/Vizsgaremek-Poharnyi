@@ -52,7 +52,7 @@ const NepszeruKoktelok = async()=>{
     console.log(data)
     let hova = document.getElementById("NepszeruKoktelDiv")
     for (let i = 0; i < data.data.length; i++) {
-        const kep = await KepFetch(`/api/Fooldal/KepLekeres/${data.data[i].KoktélID}`)
+        const kep = await KepFetch(`/api/AdatlapLekeres/KepLekeres/${data.data[i].BoritoKepUtvonal}`)
         let kartya = document.createElement("div")
         kartya.classList.add("NepszeruKartya")
         
@@ -61,10 +61,10 @@ const NepszeruKoktelok = async()=>{
         })
 
         let kepdiv = document.createElement("div")
-        kepdiv.classList.add("NepszeruKepDiv")
+        kepdiv.classList.add("NepszeruKepDiv","w-100")
 
         let img = document.createElement("img")
-        img.classList.add("nepszeruKep","img-fluid")
+        img.classList.add("nepszeruKep","img-fluid","w-100")
         img.src = URL.createObjectURL(kep)
         kepdiv.appendChild(img)
         kartya.appendChild(kepdiv)

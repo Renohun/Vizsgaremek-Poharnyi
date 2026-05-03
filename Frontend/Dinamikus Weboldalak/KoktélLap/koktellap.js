@@ -20,7 +20,9 @@ document.addEventListener("DOMContentLoaded",async()=>{
             await szerkesztes()
         }
         else{
-            document.getElementById("KoktJel").addEventListener("click",()=>{jelentes(eredmeny.adat.KoktélID,"Koktél",eredmeny.adat.FelhID)})
+            document.getElementById("KoktJel").addEventListener("click",()=>{
+                jelentes(eredmeny.adat.KoktélID,"Koktél",eredmeny.adat.FelhID)
+            })
             await kedveles()
         }
     }
@@ -191,7 +193,7 @@ async function statikusadatok(adatok)
                 document.getElementById("ReportGomb").innerHTML=""
                 document.getElementById("ReportGomb").appendChild(jelentesGomb)
                 jelentesGomb.addEventListener("click",()=>{
-                    jelentes(koktélAdat[i].FelhID,"Felhasználó",koktélAdat[i].FelhID)
+                    jelentes(koktélAdat.FelhID,"Felhasználó",koktélAdat.FelhID)
                     JelIv.hide()
                 })
         }
@@ -211,6 +213,9 @@ async function mennyisegValtozas() {
     const osszetevoAdat=(await AdatLekeres(`/api/Koktel/${koktel}`)).osszetevok
     const koktélAdat=(await AdatLekeres(`/api/Koktel/${koktel}`)).adat
     OssztevHely.innerHTML=""
+    if (MennyisegHely.value<1) {
+        MennyisegHely.value=1
+    }
     for (let i = 0; i < osszetevoAdat.length; i++) {
         let Ossztevo=document.createElement("li")
         if (document.getElementById("adag").checked) 
@@ -743,8 +748,13 @@ async function szerkesztes() {
                 //és megmutatása
                 ResIv.show()
             }
+            else if(osszetevok.length<2){
+                document.getElementById("cim").innerHTML="Hiba!"
+                document.getElementById("response").innerHTML="Kérem adjon meg legalább 2 összetevőt"
+                //és megmutatása
+                ResIv.show()
+            }
             else{
-                //TODO:ENDPOINT
                 if (kepvalt) {
                     let adat=new FormData()
                     adat.append("profilkep",kepFeltolt.files[0]);

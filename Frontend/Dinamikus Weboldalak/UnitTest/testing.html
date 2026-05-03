@@ -3,10 +3,11 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Pohárnyi | Teszt Felület</title>
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
+        <link rel="icon" type="image/x-icon" href="../kellékek/favicon.png" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
     </head>
     <body class="d-flex flex-column min-vh-100">
@@ -75,10 +76,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -133,10 +136,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -151,8 +156,8 @@
         <div class="container flex-grow-1">
             <div class="card mt-2 p-3">
                 <div class="row col-12">
-                    <h2 class="text-center col-11">Kotkél Teszt </h2>
-                    <input type="button" class="col-1 p-0 btn border-0 float-end" value="^" id="becsuk">
+                    <h2 class="text-center col-11">Kotkél Teszt</h2>
+                    <input type="button" class="col-1 p-0 btn border-0 float-end" value="^" id="becsuk" />
                 </div>
                 <div id="koktel">
                     <p>Készítés: <span id="make"></span></p>
@@ -162,7 +167,7 @@
                     <p>Kommentelés: <span id="komm"></span></p>
                     <p>Komment Értékelés: <span id="kommert"></span></p>
                     <p>Kedvelés: <span id="kedvenc"></span></p>
-                    <hr>
+                    <hr />
                     <p>Koktél Törlés: <span id="makedel"></span></p>
                     <p>Jelvény Törlés: <span id="jelvdel"></span></p>
                     <p>Összetevő Törlés: <span id="osszdel"></span></p>
@@ -170,7 +175,9 @@
                     <p>Komment Törlés: <span id="kommdel"></span></p>
                     <p>Komment Értékelés Törlés: <span id="kommertdel"></span></p>
                     <p>Kedvelés Törlés: <span id="kedvencdel"></span></p>
-                    <hr>
+                    <hr />
+                    <p>Koktél Módosítás: <span id="mod"></span></p>
+                    <hr />
                     <input type="button" class="btn btn-success mb-3 w-100" value="Indítás" id="ktest" />
                 </div>
             </div>
@@ -192,6 +199,53 @@
                 <p>learazas: <span id="termekLearazasSpan"></span></p>
                 <p>Szazalek Hiba (1 - 100 kivulre esik): <span id="termekLearazasSzazalekSpan"></span></p>
             </div>
+            <div class="card mt-2 p-3">
+                <input type="button" id="felhasznaloTesztBtn" value="Felhasznalo teszt" class="btn btn-success" />
+                <p>Egyezes: <span id="egyezesEredemeny"></span></p>
+                <p>Kriterium hiba: <span id="kriteriumEredemeny"></span></p>
+                <p>Duplikacio: <span id="duplikacioEredmeny"></span></p>
+                <p>Egyeb hiba: <span id="egyebEredmeny"></span></p>
+                <p>Sikertelenseg: <span id="sikertelensegEredmeny"></span></p>
+                <p>Sikeresseg: <span id="sikerErdemeny"></span></p>
+                <hr />
+                <p>Felhasználó módosítás: <span id="FelhMod"></span></p>
+                <hr />
+                <p>Felhasználó statisztiák: <span id="FelhStat"></span></p>
+            </div>
+            <div class="card mt-2">
+                <input
+                    type="button"
+                    value="Jelentes elfogadas teszt"
+                    class="btn btn-success"
+                    id="jelentesElfogadasBtn"
+                />
+                <p>Sikertelenseg: <span id="sikertelenErdemenyJelentes"></span></p>
+                <p>Sikeresseg: <span id="sikerErdemenyJelentes"></span></p>
+                <p>Egyeb hiba: <span id="egyebEredmenyJelentes"></span></p>
+            </div>
+            <div class="card mt-2">
+                <input
+                    type="button"
+                    value="Jelentes elutasitas teszt"
+                    class="btn btn-success"
+                    id="jelentesElutasitassBtn"
+                />
+                <p>Sikertelenseg: <span id="sikertelenErdemenyJelentesElu"></span></p>
+                <p>Sikeresseg: <span id="sikerErdemenyJelentesElu"></span></p>
+                <p>Egyeb hiba: <span id="egyebEredmenyJelentesElu"></span></p>
+            </div>
+            <div class="card mt-2">
+                <input
+                    type="button"
+                    value="koktel nev keresi teszt"
+                    id="koktelNevKereseTeszt"
+                    class="btn btn-success"
+                />
+                <p>Siker: <span id="sikerKoktelNevEremeny"></span></p>
+                <p>Sikertelen: <span id="sikertelenKoktelNevEremeny"></span></p>
+                <p>Volt e talalat <span id="voltEtalalatKoktelNevEredmeny"></span></p>
+                <p>Egyeb hiba: <span id="egyebHibaKoktelNevEredmeny"></span></p>
+            </div>
             <div class="card mt-2">
                 <input class="form-control" type="text" id="termekId" placeholder="TermékId" />
                 <input class="form-control" type="number" id="mennyiseg" placeholder="mennyiség" />
@@ -204,30 +258,83 @@
                 <p>IdHiba: <span id="IdErr"></span></p>
             </div>
 
-             <div class="card mt-2">
+            <div class="card mt-2">
                 <input type="button" value="Termék név teszt" id="termekNevTesztBtn" class="btn btn-success" />
-                <input class="form-control" type="text" id="TermekNev" placeholder="Termék Neve">
+                <input class="form-control" type="text" id="TermekNev" placeholder="Termék Neve" />
                 <p>siker: <span id="NevSiker"></span></p>
                 <p>Helyes termékek: <span id="TermekekHelyesekE"></span></p>
                 <p>Név hiba: <span id="NevHiba"></span></p>
                 <p>Nincs Ilyen Termék: <span id="NincsTermek"></span></p>
             </div>
 
-             <div class="card mt-2">
+            <div class="card mt-2">
                 <input type="button" value="Kosár módosítása" id="KosarModositTesztBtn" class="btn btn-success" />
                 <select name="" id="TermekSel">
                     <option value="ures">válassz terméket</option>
                 </select>
-                <input class="form-control" type="number" id="KMennyiseg" placeholder="Mennyiség">
+                <input class="form-control" type="number" id="KMennyiseg" placeholder="Mennyiség" />
                 <p>siker: <span id="modositSiker"></span></p>
                 <p>Módosított szám: <span id="HelyesSzam"></span></p>
                 <p>Negatív szám: <span id="NegSzam"></span></p>
             </div>
-             <div class="card mt-2">
+            <div class="card mt-2">
                 <input type="button" value="Kosár kiürítése" id="KosarTorolTesztBtn" class="btn btn-success" />
                 <p>siker: <span id="TorolSiker"></span></p>
                 <p>Ures e kosár: <span id="Ures"></span></p>
                 <p>AlapbolUres: <span id="AUres"></span></p>
+            </div>
+            <div class="card mt-2">
+                <input class="form-control" type="text" id="TorlesId" placeholder="Felhasznalo Id-ja" />
+                <input type="button" value="Felhasználó törlése" id="Felhasznalo_Torlese" class="btn btn-success" />
+                <p>Id hiba: <span id="FIdHiba"></span></p>
+                <p>Nincs Koktélja a felhasználónak: <span id="nincskoktel"></span></p>
+                <p>Nincs Értékelt kommentje a felhasználónak: <span id="nincsKommentErtekeles"></span></p>
+                <p>Nincs jelentése a felhasználónak: <span id="nincsjelentes"></span></p>
+                <p>Koktél Törölve: <span id="KoktelTorlese"></span></p>
+                <p>Koktélok jelvényei törölve: <span id="KoktelokJelvenyeiTorolve"></span></p>
+                <p>Koktelok kommentjei törölve: <span id="KoktelokKommentjeiTorolve"></span></p>
+                <p>Kommentek értékelései törölve: <span id="KommentekErtekeleseiTorolve"></span></p>
+                <p>Kommentek törlése: <span id="KommentTorlese"></span></p>
+                <p>Kedvencek törlése: <span id="KedvencTorlese"></span></p>
+                <p>Koktélok összetevőinek törlése: <span id="KoktelokOsszetevoiTorles"></span></p>
+                <p>Kedvenc koktél törlése más felhasználóktól: <span id="KoktelKedvenceTorles"></span></p>
+                <p>Felhasználó tőrlése a jelentők táblából: <span id="jelentoTorlese"></span></p>
+                <p>
+                    Felhasználó törlése a jelentések táblából, ahol jelentőként volt jelen:
+                    <span id="JelentoJelentesTorlese"></span>
+                </p>
+                <p>Komment pozitív értékelés átírása: <span id="pozitivKommentUpdate"></span></p>
+                <p>Komment negatív értékelés átírása: <span id="NegativKommentUpdate"></span></p>
+                <p>Jelentések törlése: <span id="JelentesekTorlese"></span></p>
+                <p>Kosar törlése: <span id="KosarTorlese"></span></p>
+            </div>
+            <div class="card mt-2">
+                <input type="button" value="Fizetés" id="FizetesTesztBtn" class="btn btn-success" />
+                <p>sikeres kosár ürítés: <span id="FTorolSiker"></span></p>
+                <p>Raktárkészlet módosítása: <span id="RaktarKeszletModositas"></span></p>
+                <p>Termék vétel számának növelése: <span id="hanyanvettekmegmodosit"></span></p>
+                <p>Alapból üres-e a kosár: <span id="uresKosar"></span></p>
+                <p>Nem sikerült levonni a raktárkészletből: <span id="raktarhiba"></span></p>
+                <p>Nem sikerült növelni a vételi számot: <span id="vetelhiba"></span></p>
+            </div>
+            <div class="card mt-2">
+                <input type="button" value="Jelentés" id="JeletesKezeles" class="btn btn-success" />
+                <p>Sikeres: <span id="SikJel"></span></p>
+                <p>Van-e már ilyen jelentése a felhasználónak: <span id="JelentetteMar"></span></p>
+                <p>Létezik-e erre az id-ra jelentés: <span id="VanEMarIlyen"></span></p>
+                <p>Felkerült-e a jelentés: <span id="jelentesFelkerultE"></span></p>
+                <p>Felkerül-e az adat a jelentő táblába: <span id="JelentoFelkerultE"></span></p>
+                <p>Sikeres Módosítás: <span id="SikeresModositas"></span></p>
+            </div>
+            <div class="card mt-2">
+                <input type="number" name="" value="1" id="ErttermekId">
+                <input type="number" name=""value="1" id="Ertekeles" min="1" max="5">
+                <input type="button" value="Értékelés" id="ErtekelesTest" class="btn btn-success" />
+                <p>Lefutott: <span id="Ertsiker"></span></p>
+                <p>Nem létezik ez a termék <span id="NemLetezoTermek"></span></p>
+                <p>Ezt a terméket értékelte már: <span id="ertekeltMar"></span></p>
+                <p>Felkerült az értékelés: <span id="MegjelentAzErtekeles"></span></p>
+                <p>Nem érvényes az értékelés száma: <span id="NemErvenyesErtekeles"></span></p>
             </div>
         </div>
 

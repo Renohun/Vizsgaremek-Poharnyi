@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
+        <link rel="icon" type="image/x-icon" href="../kellékek/favicon.png" />
     </head>
     <body class="d-flex flex-column min-vh-100">
         <nav class="navbar navbar-expand-lg bg-body-tertiary hatter shadow">
@@ -76,10 +77,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -134,10 +137,12 @@
                                             <li class="dropdown-item">
                                                 <a href="/Adatlap">Adatlap</a>
                                             </li>
-                                            <hr class="dropdown-divider" />
-                                            <li class="dropdown-item" id="adminPanelHref">
-                                                <a href="/AdminPanel">Admin Panel</a>
-                                            </li>
+                                            <div class="adminPanelHref">
+                                                <hr class="dropdown-divider" />
+                                                <li class="dropdown-item">
+                                                    <a href="/AdminPanel">Admin Panel</a>
+                                                </li>
+                                            </div>
                                             <hr class="dropdown-divider" />
                                             <li class="dropdown-item"><a href="/Kijelentkezes">Kijelentkezés</a></li>
                                         </ul>
@@ -150,7 +155,15 @@
             </div>
         </nav>
         <div class="container mt-2 flex-grow-1">
-            <div class="text-center fs-1">Mi van a polcon?</div>
+            <div class="text-center">
+                <p class="fs-1">
+                    Mi van a polcon?
+                </p>
+                <p class="fs-4">
+                    Nem tutod milyen koktélt fogyassz? Nem akarsz elmenni vásárolni alapanyagokért? Add meg mi van otthon, és mi megmutatjuk neked, mit tudsz készíteni a weblapunk koktéljaiból!
+                </p>
+            </div>
+            
             <div class="container">
                 <label for="osszetevo" class="form-label">Add meg mi van nálad otthon</label>
                 <div class="d-flex">

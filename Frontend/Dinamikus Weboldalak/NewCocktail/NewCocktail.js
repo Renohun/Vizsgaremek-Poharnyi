@@ -2,6 +2,7 @@
 let gombnyomasszam = 1;
 let KivalasztottAllergenek = [];
 let KivalasztottIzek = [];
+let KivalasztottErosseg;
 //
 //Lekérések
 //
@@ -99,6 +100,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         let elsoOsztv = document.getElementById('elsoOsszetevo');
         osszetevodiv.removeChild(elsoOsztv);
     });
+    //elso osszetevo és össz mennyisegenek ellenorzese
+    let elsoMennyiseg = document.getElementById("Emennyiseg")
+     elsoMennyiseg.addEventListener("change",()=>{
+        if (elsoMennyiseg.value < 1)
+        {
+            elsoMennyiseg.value = 1;
+        }
+    })
+     let OsszMennyiseg = document.getElementById("mennyiseg")
+     OsszMennyiseg.addEventListener("change",()=>{
+        if (OsszMennyiseg.value < 1)
+        {
+            OsszMennyiseg.value = 1;
+        }
+    })
     //adott pixelszám alatti classok addolasa
     if (window.innerWidth < 992) {
         document.getElementById('drop-area').classList.add('mx-auto');
@@ -163,13 +179,20 @@ function osszetevohozzaadas() {
     mertekegyseg.appendChild(opcioDb);
     mertekegyseg.appendChild(opcioGr);
     mertekegyseg.appendChild(opcioCL);
+        //mennyiseg negativ szam ellenörzés
+    mennyiseg.addEventListener("change",()=>{
+        if (mennyiseg.value < 1)
+        {
+            mennyiseg.value = 1;
+        }
+    })
+
     //parent-child viszonyok meghatározása
    
     col.appendChild(input);
     col.appendChild(mennyiseg);
     col.appendChild(mertekegyseg);
     col.appendChild(torlesgomb);
-
     osszetevodiv.appendChild(col);
     OsztvDisable()
     
@@ -270,7 +293,6 @@ let Izlekeres = async () => {
 
     //Badge kiválasztás:
     const erossegBadgek = [];
-    let KivalasztottErosseg;
     //
     //Erősség
     //
@@ -293,7 +315,7 @@ let Izlekeres = async () => {
             KivalasztottEro.classList.add('text-bg-dark');
             KivalasztottEro.classList.add('kivalasztott', 'ero');
         };
-
+        
         Erobadge.addEventListener('click', Eroclick);
     }
 
@@ -327,7 +349,6 @@ let Izlekeres = async () => {
                 KivalasztottIzek.push(Izbadge.innerHTML);
             }
         };
-
         Izbadge.addEventListener('click', Izclick);
     }
 
@@ -448,8 +469,6 @@ const AdatStorage = async () => {
                 Ujmennyiseg += (parseInt(osszetevoLista[i][1]))*10
             }
         }
-
-        console.log(Ujmennyiseg)
     if (Ujmennyiseg != document.getElementById('mennyiseg').value) 
     {
         egyezoMl = false
@@ -461,28 +480,17 @@ const AdatStorage = async () => {
     }
 
     //badgek kiszedése
-    let kinyertEro;
 
-    let kinyertbadgeList = document.getElementsByClassName('kivalasztott');
-    let kinyertErobadgeList = document.getElementsByClassName('ero');
-   
-
-    for (let i = 0; i < kinyertbadgeList.length; i++) {
-        if (kinyertbadgeList[i].classList.contains('ero')) {
-            kinyertEro = kinyertbadgeList[i].innerHTML;
-        }
-    }
-
-    if (kinyertErobadgeList.length < 1) {
-        //ellenörzi, hogy a felhasználó választott e erősséget
-        hiba = false;
+    if (KivalasztottErosseg == undefined)//ellenörzi, hogy a felhasználó választott e erősséget
+    {
+         hiba = false;
     }
     if (KivalasztottIzek.length < 1) {
         //ellenörzi, hogy a felhasználó választott e ízt
         hiba = false;
     }
     let KoktelAdatok;
-    let elkuldottEro = [kinyertEro];
+    let elkuldottEro = [KivalasztottErosseg];
     KoktelAdatok = {
         //alapvető postobjekt, nem tartalmazza az allergent
         nev: document.getElementById('nev').value,

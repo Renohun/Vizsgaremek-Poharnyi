@@ -36,15 +36,15 @@ VALUES
 (5,"Sárrét","15ml Csokilikőrhöz adjunk hozzá 15ml Fahéjjas Jack Danielst és öntsük fel Fehér Monsterrel",true,"Csokilikőr",130)
 ;
 
-INSERT INTO Komment(Keszito,HovaIrták,Tartalom,MilyenDologhoz)
+INSERT INTO Komment(Keszito,HovaIrták,Tartalom)
 VALUES
-(3,3,"Ez Nem is egy Koktél","Koktél"),
-(1,3,"Köszi, Finom lett!","Koktél"),
-(3,2,"Vodkára is ki lehet cserélni az alapot?","Koktél"),
-(2,1,"Nem is tudtam hogy vagy ilyen alkohol","Koktél"),
-(1,5,"Jó mocktail lett!","Koktél"),
-(2,13,"Ti vagytok a kedvenc bandám!","Koktél"),
-(8,2,"Nem elég halas","Koktél")
+(3,3,"Ez Nem is egy Koktél"),
+(1,3,"Köszi, Finom lett!"),
+(3,2,"Vodkára is ki lehet cserélni az alapot?"),
+(2,1,"Nem is tudtam hogy vagy ilyen alkohol"),
+(1,5,"Jó mocktail lett!"),
+(2,13,"Ti vagytok a kedvenc bandám!"),
+(8,2,"Nem elég halas")
 ;
 
 INSERT INTO Ertekeles(Keszito,HovaIrták,Ertekeles,MilyenDologhoz)

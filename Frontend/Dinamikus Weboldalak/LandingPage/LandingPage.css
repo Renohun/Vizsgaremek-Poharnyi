@@ -183,15 +183,13 @@ background-color: rgb(65, 65, 65);
     border: 1px black solid;
     cursor: pointer;
 }
-#NepszeruKepDiv{
-  border-radius: 15px;
+.NepszeruKepDiv{
   width: 100%;
 }
-#nepszeruKep{
+.nepszeruKep{
     margin: auto;
     width: 100%;
     height: auto;
-    border-radius: 15px;
 }
 #MiVanaPolcon{
     height: auto;

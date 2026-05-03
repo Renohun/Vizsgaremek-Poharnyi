@@ -1,7 +1,7 @@
-async function POSTreq(url) {
+async function GETreq(url) {
     try {
         const data = await fetch(url, {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
         if (data.ok) {
@@ -14,7 +14,7 @@ async function POSTreq(url) {
     }
 }
 
-async function POSTKepLekeres(url) {
+async function GETKepLekeres(url) {
     try {
         const ertek = await fetch(url, {
             method: 'GET',
@@ -31,15 +31,15 @@ async function POSTKepLekeres(url) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const value = await POSTreq('/api/sutiJelenlete');
-    const response = await POSTreq('/api/jogosultsagEll');
-    console.log(document.getElementById('adminPanelHref'));
-    console.log(response);
+    const value = await GETreq('/api/sutiJelenlete');
+    const response = await GETreq('/api/jogosultsagEll');
 
     if (response.message == false) {
-        document.getElementById('adminPanelHref').setAttribute('hidden', '');
+        document.getElementsByClassName('adminPanelHref')[0].setAttribute('hidden', '');
+        document.getElementsByClassName('adminPanelHref')[1].setAttribute('hidden', '');
     } else {
-        document.getElementById('adminPanelHref').removeAttribute('hidden');
+        document.getElementsByClassName('adminPanelHref')[0].removeAttribute('hidden');
+        document.getElementsByClassName('adminPanelHref')[1].removeAttribute('hidden');
     }
 
     //console.log(value.message);
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('dropdownMenuMini').children[0].removeAttribute('hidden');
         document.getElementById('dropdownMenuBig').children[0].removeAttribute('hidden');
 
-        const koktelKep = await POSTKepLekeres(`/api/Koktelok/KepLekeres`);
+        const koktelKep = await GETKepLekeres(`/api/NavBar/KepLekeres`);
         document.getElementsByClassName('profil')[0].setAttribute('src', URL.createObjectURL(koktelKep));
     } else {
         document.getElementById('regisztracio').removeAttribute('hidden');

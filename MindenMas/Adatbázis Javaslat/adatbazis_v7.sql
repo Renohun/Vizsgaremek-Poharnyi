@@ -40,11 +40,11 @@ CREATE TABLE Komment(
 	KommentID INT AUTO_INCREMENT PRIMARY KEY,
 	Keszito INT NOT NULL,
 	HovaIrták INT NOT NULL,
-	MilyenDologhoz TEXT NOT NULL,
 	Tartalom TEXT NOT NULL,
 	Pozitiv INT DEFAULT 0,
 	Negativ INT DEFAULT 0,
-    FOREIGN KEY(Keszito) REFERENCES Felhasználó(FelhID)
+    FOREIGN KEY(Keszito) REFERENCES Felhasználó(FelhID),
+    FOREIGN KEY(HovaIrták) REFERENCES Koktél(KoktélID)
 );
 
 CREATE TABLE kommentErtekeles(
@@ -95,8 +95,8 @@ CREATE TABLE WebshopTermek (
 	TermekKora INT NOT NULL,
 	TermekDiscount DOUBLE,
 	Ar INT  NOT NULL,
-	PRIMARY KEY Termek (TermekID,Ar),
-	FOREIGN KEY (TermekSzarmazas) REFERENCES WebshopOrszag(OrszagID)
+	FOREIGN KEY (TermekSzarmazas) REFERENCES WebshopOrszag(OrszagID),
+    PRIMARY KEY Termek (TermekID,Ar)
 );
 
 
@@ -113,12 +113,13 @@ CREATE TABLE KoktelokOsszetevoi(
 
 
 CREATE TABLE KosárTermék(
-	KosarID INT NOT NULL PRIMARY KEY,
+	KosarID INT NOT NULL,
 	TermekID INT NOT NULL,
 	Darabszam INT DEFAULT 1,
 	EgysegAr INT NOT NULL,
 	FOREIGN KEY(KosarID) REFERENCES Felhasználó(FelhID),
-	FOREIGN KEY(TermekID,EgysegAr) REFERENCES WebshopTermek(TermekID,Ar)
+	FOREIGN KEY(TermekID,EgysegAr) REFERENCES WebshopTermek(TermekID,Ar),
+	PRIMARY KEY Kosár(KosarID,TermekID)
 );
 
 CREATE TABLE Jelentesek(

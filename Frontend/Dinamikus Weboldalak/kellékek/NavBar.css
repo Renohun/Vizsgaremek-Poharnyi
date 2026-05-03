@@ -44,7 +44,7 @@
     border-top-right-radius: 0px;
     --bs-dropdown-link-hover-bg: #a7e727;
 }
-.hatter > li > a {
+.dropdown-item > a {
     text-decoration: none;
     /*color: rgb(28, 180, 28);*/
     color: black;

@@ -1,4 +1,5 @@
 
+
 //FETCK-ek
 const TermekLekeres = async (url) => {
     try {
@@ -11,11 +12,12 @@ const TermekLekeres = async (url) => {
     }
 };
 
-const KosarPost = async (url) => {
+const KosarPost = async (url,object) => {
     try {
         const valasz = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(object)
         });
         if (valasz.redirected) {
             window.location.href = valasz.url;
@@ -243,8 +245,8 @@ const kartyaGen = async (data, hova) => {
     for (let i = 0; i < data.data.length; i++) {
         const oszlop = document.createElement('div');
         oszlop.classList.add(
-            'col-8',
-            'col-sm-7',
+            'col-10',
+            'col-sm-10',
             'col-md-6',
             'col-lg-6',
             'col-xl-3',
@@ -260,7 +262,7 @@ const kartyaGen = async (data, hova) => {
         oszlop.appendChild(kartyaMain);
 
         let img = document.createElement('img');
-        const kartyaKep = await TermekKepLekeres(`/api/WebShop/Keplekeres/${data.data[i].TermekID}`);
+        const kartyaKep = await TermekKepLekeres(`/api/AdatlapLekeres/Keplekeres/${data.data[i].TermekKepUtvonal}`);
 
         img.addEventListener('click', () => {
             window.location.href = `/Termek/${data.data[i].TermekID}`;
@@ -303,7 +305,7 @@ const kartyaGen = async (data, hova) => {
             ErtP.classList.add('ErtP');
             ertDiv.appendChild(ErtP);
         }
-        const Ertek = await TermekLekeres(`/api/WebShop/TermekErtekeles/${data.data[i].TermekID}`);
+        const Ertek = await TermekLekeres(`/api/TermekErtekeles/${data.data[i].TermekID}`);
         for (let i = 0; i < Ertek.ert; i++) 
         {
             ertDiv.children[i].innerHTML = '★'; //a kiszámolt értékig átirjuk a csillagokat
@@ -367,24 +369,29 @@ const kartyaGen = async (data, hova) => {
 
         let kosarba = document.createElement('button');
         kosarba.classList.add('btn', 'kartyaGomb');
-        kosarba.innerHTML = 'Kosárba';
-        kosarba.setAttribute("data-bs-toggle","modal" )
-        kosarba.setAttribute( "data-bs-target","#staticBackdrop")
         kartyaMain.appendChild(kosarba);
-
-        kosarba.addEventListener('click', async () => {
-            const valasz = await KosarPost(`/api/WebShop/KosarKuldes/${data.data[i].TermekID}`);
+        if (data.data[i].TermekKeszlet == 0) 
+        {
+            kosarba.innerHTML = "Nincs Raktáron"
+            kosarba.style.backgroundColor = "red"
+            kosarba.style.color = "white"
+            kosarba.disabled = true;    
+        }
+        else{
+        kosarba.innerHTML = 'Kosárba';
+         kosarba.addEventListener('click', async () => {
+            const valasz = await KosarPost(`/api/KosarKuldes`,{id : data.data[i].TermekID, mennyiseg : "egy"});
            
             if (valasz.Siker == undefined) 
             {
                 modalHiba(true)
-               
             }
             else
             {
                 modalJo()
             }
         });
+        }
     }
 };
 
@@ -455,7 +462,7 @@ async function szures() {
 const kereses = async () => {
     const keresendoSzo = document.getElementById('NevKereses').value;
     if (keresendoSzo == '') {
-        alert('Töltse Ki a keresőmezőt!');
+        modalHiba("",true)
     } else {
         let KartyaHova = document.getElementById('kartyaSor');
         KartyaHova.textContent = '';
@@ -463,12 +470,8 @@ const kereses = async () => {
         const dataHossz = await TermekLekeres(
             `/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${1000}&offset=${0}`
         );
-
-        if (dataHossz.data.length == 0) {
-            alert('nincs ilyen Termék');
-        } else {
-            TermekBetoltes(1, dataHossz.data.length, false, '', true);
-        }
+        TermekBetoltes(1, dataHossz.data.length, false, '', true);
+        
     }
 };
 
@@ -486,7 +489,7 @@ const paginationHely = document.getElementById('pagination');
 
 const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdatok, NevSzerinti) => {
     jelenlegiOldal = jelenOldal;
-
+    console.log(jelenOldal)
     let KartyaHova = document.getElementById('kartyaSor');
     KartyaHova.innerHTML = '';
 
@@ -499,8 +502,8 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
         KartyaHova.classList.remove("kozep")
         await kartyaGen(data, KartyaHova);
         PaginationGombok(false, hossz);
-    } else if (szurtE == true && !NevSzerinti) 
- 
+    } 
+    else if (szurtE == true && !NevSzerinti) 
     {
         const szurtdata = await SzuresPost(`/api/Webshop/szures?limit=${limit}&offset=${offset}`, szuresiAdatok);
         if (szurtdata.hossz == 0) 
@@ -517,13 +520,24 @@ const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdat
         }
         await kartyaGen(szurtdata, KartyaHova);
         PaginationGombok(true, hossz, szuresiAdatok);
-        
-        
-    } else if (NevSzerinti == true && !szurtE) {
+    } 
+        else if (NevSzerinti == true && !szurtE) {
         const keresendoSzo = document.getElementById('NevKereses').value;
         const data = await TermekLekeres(
             `/api/WebShop/TermeklekeresByNev/${keresendoSzo}?limit=${limit}&offset=${offset}`
         );
+        if (data.data.length == 0) 
+        {
+            let h1 = document.createElement("h1")
+            h1.innerHTML ="Nincs a keresésnek megfelelő termék!"
+            h1.classList.add("UresTermek")
+            KartyaHova.appendChild(h1)
+            let img = document.createElement("img")
+            img.src = "../WebShopMain/img/Szabadsag3__1_of_1_-removebg-preview.png"
+            img.classList.add("img-fluid","mx-auto","uresKep")
+            KartyaHova.appendChild(img)
+            KartyaHova.classList.add("kozep")    
+        }
         await kartyaGen(data, KartyaHova);
         PaginationGombok(false, hossz, '', true);
     }
@@ -566,9 +580,8 @@ const PaginationGombok = async (SzurtE, hossz, szuresiAdatok, NevSzerinti) => {
     //első oldal a gombok között
     if (elsogomb > 1) {
         gombHozzaAdas(paginationHely, 1, SzurtE, szuresiAdatok, hossz, NevSzerinti);
-        if (elsogomb > 1) {
-            paginationHely.append('...');
-        }
+         paginationHely.append('...');
+        
     }
     //köztes oldalak
     for (let i = elsogomb; i <= utolsoGomb; i++) {
@@ -646,21 +659,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = `/Adatlap#Kosar`
     })
 });
-const modalHiba = (hiba)=>{
+const modalHiba = (hiba, keres)=>{
 //hibás kitöltés kezelése
-        
-        document.getElementById('vissza').style.display = 'block';
-        document.getElementById('Sokhiba').style.display = 'block';
-        document.getElementById('siker').setAttribute('hidden', true);
-         document.getElementById('tovabb').setAttribute('hidden', true);
+        if (keres == true)
+        {
+            document.getElementById('vissza').style.display = 'block';
+            document.getElementById('Kereshiba').style.display = 'block';
+            document.getElementById('siker').setAttribute('hidden', true);
+            document.getElementById('tovabb').setAttribute('hidden', true);
+        }
+        else
+        {
+            document.getElementById('vissza').style.display = 'block';
+            document.getElementById('Sokhiba').style.display = 'block';
+            document.getElementById('siker').setAttribute('hidden', true);
+            document.getElementById('tovabb').setAttribute('hidden', true);
+        }
          hiba = false;
-        
+         let modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+         modal.show();
 }
 const modalJo = ()=>{
 //hibás kitöltés kezelése
         
-        document.getElementById('Sokhiba').style.display = 'none';
+    document.getElementById('Sokhiba').style.display = 'none';
     document.getElementById('vissza').style.display = 'none';
+    document.getElementById('Kereshiba').style.display = 'none';
     document.getElementById('siker').removeAttribute('hidden',false);
     document.getElementById('tovabb').removeAttribute('hidden', true);
+     let modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+     modal.show();
 }
