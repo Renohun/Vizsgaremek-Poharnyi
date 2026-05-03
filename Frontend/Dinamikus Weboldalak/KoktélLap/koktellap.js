@@ -148,11 +148,13 @@ async function statikusadatok(adatok)
     document.getElementById("adag").addEventListener("click",async()=>{
         MennyisegHely.value=1
         MennyisegHely.setAttribute("step",1)
+        document.getElementById("tipus").innerHTML="adagnyit"
         await mennyisegValtozas()
     })
     document.getElementById("ml").addEventListener("click",async()=>{
         MennyisegHely.setAttribute("step",50)
         MennyisegHely.value=koktélAdat.AlapMennyiseg
+        document.getElementById("tipus").innerHTML="ml-nyit"
         await mennyisegValtozas()
     })
     MennyisegHely.addEventListener("change",async()=>{

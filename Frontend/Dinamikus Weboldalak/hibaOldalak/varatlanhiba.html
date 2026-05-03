@@ -3,12 +3,12 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title id="OldalCim">Document</title>
+        <title>Document</title>
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../KoktélLap/koktellap.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
         <link rel="icon" type="image/x-icon" href="../kellékek/favicon.png" />
-        <link rel="stylesheet" href="../koktellap.css" />
         <link rel="stylesheet" href="../kellékek/universalCSS.css" />
     </head>
     <body class="d-flex flex-column min-vh-100">
@@ -155,167 +155,21 @@
             </div>
         </nav>
         <div class="container flex-grow-1">
-            <div class="border-bottom border-2 border-dark text-center" id="header">
-                <h1><span id="Cimsor" class="ps-4"></span><span id="fav" class="float-end"></span></h1>
-                <div id="Gombok"></div>
-                <span id="kokteldate" class="ms-4"></span>
-                <div id="badgek" class="justify-content-center"></div>
-                <div class="row">
-                    <div class="col-4 p-0">
-                        <a href="" id="elozo" class="float-start">&#x2190; Előző</a>
-                    </div>
-                    <div id="ChangeSor" class="col-4 p-0">
-                        <input
-                            type="button"
-                            id="KoktJel"
-                            class="btn text-danger border-0 p-0"
-                            value="Koktél Jelentése"
-                        />
-                    </div>
-                    <div class="col-4 p-0">
-                        <a href="" id="kovetkezo" class="float-end">Következő &#8594;</a>
-                    </div>
-                </div>
+            <div class="row fs-1 text-center">
+                <p>Váratlan hiba történt</p>
             </div>
-            <div class="row border-bottom border-2 border-dark pb-3 justify-content-center">
-                <p class="fs-4" id="maker">
-                    Készítette: <img src="" id="keszKep" /> <span id="Madeby"></span>
-                    <span id="Tagsag" class="text-primary"></span>
-                </p>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6 row">
-                    <label id="kepModosit" class="col-12 col-sm-6 col-md-6 col-lg-6">
-                        <img src="" alt="KoktélKép" id="KoktélKép" class="img-fluid rounded" />
-                    </label>
-                    <div class="ps-4 flex-column col-12 col-sm-6 col-md-6 col-lg-6" id="Osszetevok">
-                        <div id="adagok">
-                            <label for="ml">Mennyiség</label>
-                            <input type="radio" name="tipus" id="ml" class="me-2" checked />
-                            <label for="adag">Adag</label>
-                            <input type="radio" name="tipus" id="adag" />
-                        </div>
-
-                        <label for="mennyiseg">Hány <span id="tipus">ml-nyit</span> szeretne készíteni</label>
-                        <input type="number" id="mennyiseg" step="50" class="form-control" min="0" />
-                        <span class="fs-4">Összetevők</span>
-                        <ul id="Ossztev"></ul>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-6">
-                    <div class="text-break" id="recept"></div>
-                </div>
-            </div>
-            <div class="col-md-12 d-flex flex-column mt-4 p-0 text-center fs-4" id="Velemeny">
-                <div id="ertekeles">
-                    <label for="rate" id="rateDisplay">Értékelje a Koktélt</label>
-                    <!-- ⯨ ★ ☆ -->
-                    <div class="row">
-                        <div id="csillagok">
-                            <input type="button" value="☆" class="btn fs-1 p-0 border-0" />
-                            <input type="button" value="☆" class="btn fs-1 p-0 border-0" />
-                            <input type="button" value="☆" class="btn fs-1 p-0 border-0" />
-                            <input type="button" value="☆" class="btn fs-1 p-0 border-0" />
-                            <input type="button" value="☆" class="btn fs-1 p-0 border-0" />
-                        </div>
-                    </div>
-                    <input type="button" value="Küldés" id="ErtSend" class="btn btn-success" />
-                </div>
-
-                <label for="komment">Írj Kommentet!</label>
-                <textarea
-                    class="w-100 border rounded form-control komment"
-                    style="resize: none; text-align: left; box-sizing: border-box"
-                    rows="3"
-                    id="komment"
-                    maxlength="300"
-                    placeholder="Írd ide a véleményed!"
-                ></textarea>
-                <div class="p-0">
-                    <input class="btn btn-success mt-1 float-end" type="button" value="Küldés" id="KommSend" />
-                    <span class="float-end p-2"> <span id="szam">0</span>/300</span>
-                </div>
-            </div>
-            <div>
-                <div class="row mt-2">
-                    <h1 class="border-bottom border-2 border-dark text-center">Kommentek</h1>
-                    <div class="col-4 pb-2">
-                        <select class="form-select" id="order">
-                            <option value="date">Készítés Szerint</option>
-                            <option value="rate">Népszerűség Szerint</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="Kommentek" class="shadow-lg p-2"></div>
+            <div class="row">
+                <input type="button" value="Vissza a Főoldalra" class="btn" id="vissza" />
             </div>
         </div>
-
-        <div class="modal" tabindex="-1" id="JelentesLap">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Jelentés Elküldése</h5>
-                    </div>
-                    <div class="modal-body">
-                        <p id="visszajelzes"></p>
-                        <label for="indok">Adja Meg Az Indokot:</label>
-                        <textarea name="indok" id="indok" class="form-control" rows="4"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="JelNvm">Mégse</button>
-                        <button type="button" class="btn btn-primary" id="JelSend">Küldés</button>
-                        <input
-                            type="button"
-                            value="Ok"
-                            class="btn btn-success"
-                            id="JelKonf"
-                            hidden
-                            data-bs-dismiss="modal"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal" tabindex="-1" id="ReplyModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="cim">Sikeres Módosítás</h5>
-                    </div>
-                    <div class="modal-body">
-                        <p id="response"></p>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" value="Ok" class="btn btn-success" data-bs-dismiss="modal" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal" tabindex="-1" id="ProfilAdat">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="ProfilCim"></h5>
-                    </div>
-                    <div class="modal-body col-12 row">
-                        <div class="col-12 col-sm-4">
-                            <img src="" alt="" class="profilkep-mid" id="profkep" />
-                        </div>
-                        <div class="col-12 col-sm-8">
-                            <p id="Nev"></p>
-                            <p id="RegDate"></p>
-                            <p id="KeszitNum"></p>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div id="ReportGomb" class="w-100"></div>
-                        <input type="button" value="Bezárás" class="btn btn-secondary w-100" data-bs-dismiss="modal" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script src="../koktellap.js"></script>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../kellékek/themeSwitcher.js"></script>
-        <script src="../kellékek/navBar.js"></script>
+        <script>
+            document.getElementById('vissza').addEventListener('click', () => {
+                window.location.href = '/';
+            });
+        </script>
+        <script type="module" src="../kellékek/navBar.js"></script>
+        <script type="module" src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/footer.js"></script>
     </body>
 </html>

@@ -553,9 +553,18 @@ async function KosarLekeres() {
             await kosarextrak(kosar,valasz.adat[i])
             let mennyiseg=(kosar.getElementsByClassName("mennyiseg"))[0]
             let osszar=(kosar.getElementsByClassName("osszar"))[0]
+
             //A mennyiséget és összárat hozzáadjuk
             mennyiseg.innerHTML=valasz.adat[i].kosarAdatok.Darabszam
-            osszar.innerHTML=mennyiseg.innerHTML*valasz.adat[i].kosarAdatok.EgysegAr
+            if (valasz.adat[i].termAdatok.TermekDiscount!=null) {
+                osszar.innerHTML=mennyiseg.innerHTML*(valasz.adat[i].kosarAdatok.EgysegAr*(100-valasz.adat[i].termAdatok.TermekDiscount)/100)
+            }
+            else{
+                osszar.innerHTML=mennyiseg.innerHTML*valasz.adat[i].kosarAdatok.EgysegAr
+            }       
+            
+
+            
             hova.appendChild(kosar)
             //Jelezzuk hogy elkeszult egy kartya
             valodi++
@@ -661,13 +670,19 @@ async function KosarLekeres() {
 
     }
     function osszeg(){
+        
         let osszeg=0
         for (let i = 0; i < valodi; i++) {
             let osszar=(hova.childNodes[i].getElementsByClassName("osszar"))[0]
             let mennyiseg=(hova.childNodes[i].getElementsByClassName("mennyiseg"))[0]
-        
-            osszar.innerHTML=parseInt(mennyiseg.innerHTML)*parseInt(valasz.adat[i].kosarAdatok.EgysegAr)
-            osszeg+=parseInt(mennyiseg.innerHTML)*parseInt(valasz.adat[i].kosarAdatok.EgysegAr)
+            if (valasz.adat[i].termAdatok.TermekDiscount!=null) {
+                osszar.innerHTML=mennyiseg.innerHTML*(valasz.adat[i].kosarAdatok.EgysegAr*(100-valasz.adat[i].termAdatok.TermekDiscount)/100)
+            }
+            else{
+                osszar.innerHTML=parseInt(mennyiseg.innerHTML)*parseInt(valasz.adat[i].kosarAdatok.EgysegAr)
+            }    
+            osszeg+=parseInt(osszar.innerHTML)
+            console.log(osszeg);
         }
         document.getElementById("KosárFizetésGomb").innerHTML="Összesen: "+osszeg+" Ft"
     }
@@ -760,11 +775,21 @@ async function fizetes(){
     //Összeg kiszámolása és a termékek árának kimutatása
     let total=0
     for (let i = 0; i < termekek.length; i++) {
-        let termekadatok=kosar.adat[i].kosarAdatok
+        let termekadatok=termekek[i].kosarAdatok
         let sor=document.createElement("div")
         sor.classList.add("border-top","border-dark")
-        sor.innerHTML=termekek[i].termAdatok.TermekCim+" - "+`${termekadatok.Darabszam}db `+(termekadatok.EgysegAr*termekadatok.Darabszam)+" Ft"
-        total+=termekadatok.EgysegAr*termekadatok.Darabszam
+        console.log(termekek);
+        console.log(termekadatok);
+        
+        if (termekek[i].termAdatok.TermekDiscount!=null) {
+                let ar=termekadatok.Darabszam*(termekadatok.EgysegAr*(100-termekek[i].termAdatok.TermekDiscount)/100)
+                sor.innerHTML=termekek[i].termAdatok.TermekCim+" - "+`${termekadatok.Darabszam}db `+(ar)+" Ft"
+                total+=ar
+        }
+        else{
+                sor.innerHTML=termekek[i].termAdatok.TermekCim+" - "+`${termekadatok.Darabszam}db `+(termekadatok.EgysegAr*termekadatok.Darabszam)+" Ft"
+                total+=termekadatok.EgysegAr*termekadatok.Darabszam
+        }   
         termékekList.appendChild(sor)
     }
 
