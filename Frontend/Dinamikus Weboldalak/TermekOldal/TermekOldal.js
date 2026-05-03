@@ -347,7 +347,7 @@ const ertekeles = (ErtekeltE,ertek) =>
         }
            
         document.getElementById("ErtekelesKuldes").style.display = "none"
-        document.getElementById("ErtekelPar").innerHTML="Ön már értékelte a koktélt"
+        document.getElementById("ErtekelPar").innerHTML="Ön már értékelte a terméket!"
     }
     else if (ErtekeltE[0] == undefined)
     {

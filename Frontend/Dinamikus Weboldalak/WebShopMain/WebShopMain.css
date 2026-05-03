@@ -10,13 +10,12 @@
 #szuresek {
     display: flex;
     justify-content: center;
-    width: 80%;
-    margin: auto;
 }
 #kereses {
     width: 100%;
     display: flex;
-    justify-content: center;
+    margin-left: 12px;
+    margin-right: 12px;
 }
 
 #NevKereses {
@@ -24,12 +23,10 @@
     font-size: 17px;
     border: 1px solid grey;
     float: left;
-    width: 80%;
     background: #f1f1f1;
 }
 .formBtn {
     float: left;
-    width: 10%;
     padding: 2px;
     background: #f5fbff;
     color: rgb(80, 80, 80);
@@ -38,12 +35,9 @@
     border-left: none;
     cursor: pointer;
 }
-#szuresGomb {
-    width: 60px;
-}
 #szures {
-    width: 80%;
-    margin: auto;
+    margin-left: 12px;
+    margin-right: 12px;
 }
 
 /*slider*/
@@ -116,16 +110,16 @@ display: flex;
 /*kártyák*/
 .kartya{
     height: 100%;
-    width: 100% !important;
 }
 #kartyaSor{
     height: 100%;
-    width:100%!important;
+    width: 100%;
+    margin: 0px;
 }
 #kartyak{
-    width: 77%;
-    margin: auto;
     display: flex;
+    margin: 0px;
+    width: 100%;
 }
 /*értékelés*/
 .ertDiv{

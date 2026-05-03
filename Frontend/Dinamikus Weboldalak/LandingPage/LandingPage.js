@@ -61,10 +61,10 @@ const NepszeruKoktelok = async()=>{
         })
 
         let kepdiv = document.createElement("div")
-        kepdiv.classList.add("NepszeruKepDiv")
+        kepdiv.classList.add("NepszeruKepDiv","w-100")
 
         let img = document.createElement("img")
-        img.classList.add("nepszeruKep","img-fluid")
+        img.classList.add("nepszeruKep","img-fluid","w-100")
         img.src = URL.createObjectURL(kep)
         kepdiv.appendChild(img)
         kartya.appendChild(kepdiv)

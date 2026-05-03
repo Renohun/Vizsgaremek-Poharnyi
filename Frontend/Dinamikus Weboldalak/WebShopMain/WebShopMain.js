@@ -245,8 +245,8 @@ const kartyaGen = async (data, hova) => {
     for (let i = 0; i < data.data.length; i++) {
         const oszlop = document.createElement('div');
         oszlop.classList.add(
-            'col-8',
-            'col-sm-7',
+            'col-10',
+            'col-sm-10',
             'col-md-6',
             'col-lg-6',
             'col-xl-3',
