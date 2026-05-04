@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         osszetevoMertekegysegSelect.appendChild(osszetevoMertekegysegOptGramm);
         osszetevoMertekegysegSelect.appendChild(osszetevoMertekegysegOptCl);
 
-        console.log(document.getElementById('koktelOsszetevok').children);
+        
     });
 
     document.getElementById('osszetevoDel').addEventListener('click', () => {
@@ -246,6 +246,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 let osszetevoTomb = [osszetevoElemei[0].value, osszetevoElemei[1].value, osszetevoElemei[2].value];
 
                 osszetevokTomb.push(osszetevoTomb);
+            }
+
+            function osszeteveNevDuplikacio (tomb, index)
+            {
+                const osszetevoNev = tomb[0]
+                for(let i = 0; i < osszetevokTomb.length; i++)
+                {
+                   if(osszetevokTomb[i][0] == osszetevoNev && index != i)
+                    {
+                        hibasFrom = true
+                    }
+                }
+            }
+
+            for(let i = 0; i < osszetevokTomb.length; i++)
+            {
+                osszeteveNevDuplikacio(osszetevokTomb[i], i)
             }
 
             //console.log(osszetevokTomb);
