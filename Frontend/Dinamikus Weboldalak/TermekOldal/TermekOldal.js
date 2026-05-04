@@ -22,7 +22,6 @@ const PostFetch=async(url,object)=>{
     })
       if (valasz.redirected) 
         {
-            console.log("asd")
              window.location.href = valasz.url;
         }
     if (valasz.ok) {
@@ -410,7 +409,6 @@ const KosarbaRak = async()=>
     if(KosarData.hiba == "mennyiseg"){
       hiba = true
       tipus = "mennyiseg"
-      console.log("hihi")
     }
     else if(KosarData.hiba == "raktar"){
         hiba = true

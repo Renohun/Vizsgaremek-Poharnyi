@@ -2566,7 +2566,6 @@ router.post('/Webshop/szures', async (request, response) => {
         let OrderBy;
         let OrderByErtek;
         let nevErtek;
-
         for (const item of Object.entries(feltetelek)) {
             if (item[0] == 'MaxAr') {
                 query += ' Ar <= ? AND';
