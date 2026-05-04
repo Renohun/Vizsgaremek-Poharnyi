@@ -392,16 +392,19 @@ Izlekeres();
 
 const AdatStorage = async () => {
     let data;
-    let hiba = true;
-    let egyezoMl = true;
+    let hiba = false;
+    let egyezoMl = false;
+    let tobbnev = false;
    
     document.getElementById('hiba').innerHTML = ""
     //alap adatok kitöltésének ellenörzése
-    if (document.getElementById('nev').value == '') {
-        hiba = false;
+    if (document.getElementById('nev').value == '')
+    {
+        hiba = true;
     }
-    if (document.getElementById('mennyiseg').value == '') {
-        hiba = false;
+    if (document.getElementById('mennyiseg').value == '') 
+    {
+        hiba = true;
     }
 
     //képfeltöltés
@@ -415,13 +418,13 @@ const AdatStorage = async () => {
             inputFile.files[0].type != 'image/bmp' &&
             inputFile.files[0].type != 'image/webp'
         ) {
-            hiba = false;
+            hiba = true;
         } else {
             kep.append('profilkep', inputFile.files[0]);
             kepUtvonal = await AdatPostKep('/api/AdatlapLekeres/KepFeltoltes', kep);
         }
     } else {
-        hiba = false;
+        hiba = true;
     }
 
     //alkoholose
@@ -436,13 +439,13 @@ const AdatStorage = async () => {
 
     if (alkoholose == true) {
         if (document.getElementById('alap').value == '') {
-            hiba = false;
+            hiba = true;
         }
     }
     //összetevők összeszedése
     let osszetevok = document.getElementById('osszetevoDiv').children;
     if (osszetevok.length == 0) {
-        hiba = false;
+        hiba = true;
     }
     let osszetevoLista = [];
     for (let i = 0; i < osszetevok.length; i++) {
@@ -471,23 +474,45 @@ const AdatStorage = async () => {
         }
     if (Ujmennyiseg != document.getElementById('mennyiseg').value) 
     {
-        egyezoMl = false
+        egyezoMl = true
+    }
+    //Összetevő duplikáció ellenőrzése
+    let duplikaltNevek = []
+    for (let i = 0; i < osszetevoLista.length; i++) 
+        {
+            for (let j = i+1; j < osszetevoLista.length; j++) {
+                if (osszetevoLista[i][0]  == osszetevoLista[j][0]) {
+                    if (!duplikaltNevek.includes(osszetevoLista[i][0]))
+                    {
+                        duplikaltNevek.push(osszetevoLista[i][0])    
+                    }
+                }
+            }  
+        }
+    if (duplikaltNevek.length != 0) 
+    {  
+        tobbnev = true;
+    }
+    //Mennyiség végső ellenőrzése
+    if (Ujmennyiseg != document.getElementById('mennyiseg').value) 
+    {
+        egyezoMl = true
     }
     //leiras kiszedese
     let leiras = document.getElementById('leiras').value;
     if (leiras == '') {
-        hiba = false;
+        hiba = true;
     }
 
     //badgek kiszedése
 
     if (KivalasztottErosseg == undefined)//ellenörzi, hogy a felhasználó választott e erősséget
     {
-         hiba = false;
+         hiba = true;
     }
     if (KivalasztottIzek.length < 1) {
         //ellenörzi, hogy a felhasználó választott e ízt
-        hiba = false;
+        hiba = true;
     }
     let KoktelAdatok;
     let elkuldottEro = [KivalasztottErosseg];
@@ -507,7 +532,7 @@ const AdatStorage = async () => {
     }
 
     //hibátlan kitöltés esetén elküldjük az értékeket
-    if (hiba == true && egyezoMl == true) {
+    if (hiba == false && egyezoMl == false && tobbnev == false) {
         KoktelAdatok.kepUtvonala = kepUtvonal.message;
         data = await AdatPost('/api/Keszites/Feltoltes', KoktelAdatok);
        
@@ -523,14 +548,18 @@ const AdatStorage = async () => {
             modalJo()
         }
     } 
-    else if (hiba == false) {
+    else if (hiba == true) {
         modalHiba(true,"sima")
         hiba = true
         egyezoMl = true
     }
-    else if (hiba == true && egyezoMl == false)
+    else if (hiba == false && egyezoMl == true)
     {
         modalHiba(false,"ml")
+    }
+     else if (hiba == false && tobbnev == true)
+    {
+        modalHiba(true,"tn")
     }
     //uj koktel gomb funkcioja
     document.getElementById('visszaGomb').addEventListener('click', () => {
@@ -556,6 +585,9 @@ const modalHiba = (Ml,milyen)=>{
         }
         if(milyen == "Nev"){
             document.getElementById('hiba').innerHTML = "a Koktél neve már foglalt! Kérem probálja újra más névvel!"
+        }
+        else if(milyen == "tn"){
+            document.getElementById('hiba').innerHTML = "Kérem ne töltse fel ugyan azt az összetevőt többször!"
         }
         document.getElementById('siker').setAttribute('hidden', true);
         document.getElementById('visszaGomb').setAttribute('hidden', true);
