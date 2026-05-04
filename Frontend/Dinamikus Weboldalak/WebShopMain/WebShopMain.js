@@ -422,7 +422,7 @@ async function szures() {
     {
         szuresiAdatok.Nev = "%"
     }
-    if (KategoriaSelect.value != "Eszköz" || KategoriaSelect.value != "merch" || KategoriaSelect.value != "Szirup") {
+    if (KategoriaSelect.value != "Eszkozok" || KategoriaSelect.value != "Merch" || KategoriaSelect.value != "Szirup") {
         szuresiAdatok.MaxAlk = alkoholSlider.value;
     }
     //selectek hozzáadása
@@ -628,13 +628,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             KategoriaSelect.value == 'Merch' ||
             KategoriaSelect.value == 'Pohar' ||
             KategoriaSelect.value == '-' ||
-            KategoriaSelect.value == 'Eszköz'
+            KategoriaSelect.value == 'Eszkozok'
         ) {
             alkoholcsuszka.classList.add('eltunt');
         } else {
             alkoholcsuszka.classList.remove('eltunt');
         }
-        if (KategoriaSelect.value == 'Eszköz' || KategoriaSelect.value == 'Merch' || KategoriaSelect.value == '-') {
+        if (KategoriaSelect.value == 'Eszkozok' || KategoriaSelect.value == 'Merch' || KategoriaSelect.value == '-') {
             urtalrtalom.classList.add('eltunt');
         } else {
             urtalrtalom.classList.remove('eltunt');
