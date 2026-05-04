@@ -12,8 +12,8 @@ const saveLastUrl = require('./api/saveLastURLMiddleware.js');
 const app = express();
 const router = express.Router();
 
-const ip = '0.0.0.0';
-const port = 3006;
+const ip = '127.0.0.1';
+const port = 3000;
 
 app.use(express.json()); //?Middleware JSON
 app.set('trust proxy', 1); //?Middleware Proxy
