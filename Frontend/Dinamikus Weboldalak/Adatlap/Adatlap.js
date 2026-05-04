@@ -682,7 +682,6 @@ async function KosarLekeres() {
                 osszar.innerHTML=parseInt(mennyiseg.innerHTML)*parseInt(valasz.adat[i].kosarAdatok.EgysegAr)
             }    
             osszeg+=parseInt(osszar.innerHTML)
-            console.log(osszeg);
         }
         document.getElementById("KosárFizetésGomb").innerHTML="Összesen: "+osszeg+" Ft"
     }
@@ -746,7 +745,7 @@ async function fizetes(){
     gombSáv.innerHTML=""
     document.getElementById("KosárGombok").innerHTML=""
     Fizetes.innerHTML=""
-    Fizetes.classList.add("mt-2","dark","row","justify-content-md-center","justify-content-sm-center","justify-content-lg-between")
+    Fizetes.classList.add("mt-2","dark","row","justify-content-center")
 
     //Újra a backendről kérem le az adatokat, manipulációt elkerülve
     let kosar=await AdatGet("/api/AdatlapLekeres/Kosar")
@@ -767,7 +766,7 @@ async function fizetes(){
     
     //Termék Adatok
     let termékekList=document.createElement("div")
-    termékekList.classList.add("col-12","col-lg-4","col-md-6","col-sm-12","bg-light","rounded","p-2","border","border-dark")
+    termékekList.classList.add("col-12","col-lg-6","col-md-6","col-sm-12","bg-light","rounded","p-2","border","border-dark")
 
     let szoveg=document.createElement("div")
     szoveg.innerHTML="Termék Adatok"
@@ -778,9 +777,6 @@ async function fizetes(){
         let termekadatok=termekek[i].kosarAdatok
         let sor=document.createElement("div")
         sor.classList.add("border-top","border-dark")
-        console.log(termekek);
-        console.log(termekadatok);
-        
         if (termekek[i].termAdatok.TermekDiscount!=null) {
                 let ar=termekadatok.Darabszam*(termekadatok.EgysegAr*(100-termekek[i].termAdatok.TermekDiscount)/100)
                 sor.innerHTML=termekek[i].termAdatok.TermekCim+" - "+`${termekadatok.Darabszam}db `+(ar)+" Ft"
@@ -802,7 +798,7 @@ async function fizetes(){
     //Számlázási Adatok Felülete
     //A form ami segít a validációban
     let PayList=document.createElement("form")
-    PayList.classList.add("col-12","col-lg-4","col-md-6","col-sm-12","border","border-dark","bg-light","rounded","p-2","needs-validation")
+    PayList.classList.add("col-12","col-lg-6","col-md-6","col-sm-12","border","border-dark","bg-light","rounded","p-2","needs-validation")
 
     let payszoveg=document.createElement("div")
     payszoveg.innerHTML="Számlázási Adatok"

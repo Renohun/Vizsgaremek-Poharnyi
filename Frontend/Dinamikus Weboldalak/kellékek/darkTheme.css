@@ -129,6 +129,12 @@ body {
 .ErtekelesDiv{
     color:yellow
 }
+.Termek{
+    background-color:rgb(196, 163, 121) ;
+}
+#Tablazat{
+    color: black;
+}
 
 /*Mi van a a polcon*/
 #hozzaad,#osszetevo{
@@ -137,4 +143,21 @@ body {
 
 .formElem{
     color: black !important;
+}
+
+
+/*Kapcsolat*/
+#FormDiv{
+    background-color: rgb(124, 124, 124);
+    color: black;
+    box-shadow: none;
+}
+
+
+/*ASZF ADKEZ*/
+#cimsor>a,#linkek>li,#linkek>li>a{
+    color: #9acd32 !important;
+}
+.cimsor,.aszfSzoveg,section,#szoveg>p,#szoveg>ol{
+    color: black;
 }

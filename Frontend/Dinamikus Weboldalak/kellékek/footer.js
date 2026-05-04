@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     let gomb1=document.createElement("a")
     gomb1.innerHTML="Kapcsolat"
     gomb1.setAttribute("href","/KuldjUzenetet")
-    gomb1.setAttribute("target","_blank")
     gombDiv1.appendChild(gomb1)
 
     let gombDiv2=document.createElement("div")
@@ -58,7 +57,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     let gomb4=document.createElement("a")
     gomb4.innerHTML="Adatkezelési Nyilatkozat"
     gomb4.setAttribute("href","/Adatkezelesi-Tajekoztato")
-    gomb4.setAttribute("target","_blank")
     gombDiv4.appendChild(gomb4)
 
     jobb.appendChild(gombDiv3)
