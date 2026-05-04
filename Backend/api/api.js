@@ -2381,10 +2381,11 @@ router.post('/KosarKuldes', authenticationMiddleware, async (request, response) 
     try {
         const id = request.body.id;
 
-        let mennyiseg = request.body.mennyiseg;
+        let mennyiseg = request.body.mennyiseg
         if (mennyiseg == 'egy') {
             mennyiseg = 1;
         }
+        console.log(mennyiseg)
         const UserID = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID; //"sessionId" lekérése
 
         const ArLekeresQuery = 'SELECT Ar FROM webshoptermek WHERE TermekID = ?';
@@ -2395,8 +2396,14 @@ router.post('/KosarKuldes', authenticationMiddleware, async (request, response) 
 
         const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? &&  KosarID = ?';
         const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
-        if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1) {
+        if (MennyisegLe[0].TermekKeszlet == 0) 
+        {
             response.status(200).json({ hiba: 'raktar' });
+        }
+        else{
+        if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1)
+        {
+            response.status(200).json({ hiba: 'mennyiseg' });
         } else {
             //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
             if (vanEIlyen[0] == undefined) {
@@ -2417,6 +2424,7 @@ router.post('/KosarKuldes', authenticationMiddleware, async (request, response) 
                 response.status(200).json({ Siker: KosarUpdate.affectedRows, id: KosarUpdate.insertId });
             }
         }
+    }
     } catch (error) {
         console.log(error);
         response.status(500).json({ hiba: error });

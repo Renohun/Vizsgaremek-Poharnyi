@@ -404,13 +404,20 @@ const KosarbaRak = async()=>
 
     let postObj = {id:Termekid,mennyiseg:mennyiseg}
     let hiba = false;
+    let tipus;
     const KosarData = await PostFetch("/api/KosarKuldes",postObj)
 
-    if(KosarData.hiba == "raktar"){
+    if(KosarData.hiba == "mennyiseg"){
       hiba = true
+      tipus = "mennyiseg"
+      console.log("hihi")
+    }
+    else if(KosarData.hiba == "raktar"){
+        hiba = true
+      tipus = "raktar"
     }
     if (hiba == true) {
-         modalHiba(hiba);
+         modalHiba(hiba,tipus);
     }else{
         modalJo()
     }
@@ -442,20 +449,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     
 });
-const modalHiba = (hiba)=>{
+const modalHiba = (hiba,tipus)=>{
 //hibás kitöltés kezelése
+        if (tipus == "mennyiseg") {
+            document.getElementById('vissza').style.display = 'block';
+            document.getElementById('MennyisegHiba').style.display = 'block';
+            document.getElementById('siker').setAttribute('hidden', true);
+            document.getElementById('tovabb').setAttribute('hidden', true);
+        }
+        else if( tipus == "raktar"){
+            document.getElementById('vissza').style.display = 'block';
+            document.getElementById('raktarhiba').style.display = 'block';
+            document.getElementById('siker').setAttribute('hidden', true);
+            document.getElementById('tovabb').setAttribute('hidden', true);
+        }
+        else{
+            document.getElementById('vissza').style.display = 'block';
+            document.getElementById('Sokhiba').style.display = 'block';
+            document.getElementById('siker').setAttribute('hidden', true);
+            document.getElementById('tovabb').setAttribute('hidden', true);
+        }
         
-        document.getElementById('vissza').style.display = 'block';
-        document.getElementById('Sokhiba').style.display = 'block';
-        document.getElementById('siker').setAttribute('hidden', true);
-         document.getElementById('tovabb').setAttribute('hidden', true);
          hiba = false;
         
 }
 const modalJo = ()=>{
 //hibás kitöltés kezelése
         
-        document.getElementById('Sokhiba').style.display = 'none';
+    document.getElementById('Sokhiba').style.display = 'none';
+    document.getElementById('raktarhiba').style.display = 'none';
+    document.getElementById('MennyisegHiba').style.display = 'none';
     document.getElementById('vissza').style.display = 'none';
     document.getElementById('siker').removeAttribute('hidden',false);
     document.getElementById('tovabb').removeAttribute('hidden', true);
