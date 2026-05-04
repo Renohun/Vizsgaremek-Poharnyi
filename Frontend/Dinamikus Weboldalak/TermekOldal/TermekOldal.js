@@ -201,7 +201,7 @@ const oldalGenerálás =  async () =>{
     //EgysegAr
     let EgysegArHely = document.getElementById("LiterAr")
      let ar1Szazalek;
-    if (LekertTermekek.termek[0].TermekKategoria == "Eszköz" || LekertTermekek.termek[0].TermekKategoria == "Pohar" || LekertTermekek.termek[0].TermekKategoria == "Merch") {
+    if (LekertTermekek.termek[0].TermekKategoria == "Eszkozok" || LekertTermekek.termek[0].TermekKategoria == "Pohar" || LekertTermekek.termek[0].TermekKategoria == "Merch") {
         
           EgysegArHely.innerHTML =""
         }
