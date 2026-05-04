@@ -66,12 +66,8 @@ router.get('/jelszoValtoztatas/:id', (req, res) => {
 
 //KoktelKeszites
 router.use(express.static(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/')));
-router.get('/Keszites', saveLastUrl, (req, res) => {
-    if (req.cookies.auth_token == null) {
-        res.redirect('/LepjBe');
-    } else {
-        res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/NewCocktail.html'));
-    }
+router.get('/Keszites', saveLastUrl,authenticationMiddleware, (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/NewCocktail/NewCocktail.html'));
 });
 //WebShop
 router.get('/WebShop', saveLastUrl, (req, res) => {
@@ -111,14 +107,14 @@ router.get('/Koktel/:koktelID', saveLastUrl, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/koktellap.html'));
 });
 router.get('/KoktelHiba', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/KoktélLap/nincsilyen.html'));
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/hibaOldalak/nincsilyen.html'));
 });
 // termekek
 router.get('/Termek/:termekID', saveLastUrl, (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/TermekOldal/TermekOldal.html'));
 });
 router.get('/HianyzoTermek', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/TermekOldal/NincsIlyenTermek.html'));
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/hibaOldalak/NincsIlyenTermek.html'));
 });
 
 router.get('/jogosultsag', saveLastUrl, (req, res) => {
@@ -144,6 +140,9 @@ router.get("/dev",authenticationMiddleware,authorizationMiddelware, (req, res) =
     res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/UnitTest/testing.html'));
 });
 
+router.get("/hiba",(req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/Dinamikus Weboldalak/hibaOldalak/varatlanhiba.html'));
+});
 //!API endpoints
 app.use('/', router);
 const testing=require("./api/testing.js")
@@ -154,7 +153,7 @@ app.use('/api', endpoints);
 //ÁLTALÁNOS SZŰRÉS
 //ha olyan endpointra hivatkozunk ami nincs, akkor száműzzük, jelenleg a koktélos hibaoldalra
 app.use((req, res) => {
-    res.redirect('/KoktelHiba');
+    res.redirect('/hiba');
 });
 //!Szerver futtatása
 app.listen(port, ip, () => {

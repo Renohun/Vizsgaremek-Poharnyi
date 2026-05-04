@@ -947,8 +947,6 @@ router.get('/AdminPanel/OrszagLista', authenticationMiddleware, authorizationMid
 
 router.post('/AdminPanel/TermekFeltoltes', authenticationMiddleware, authorizationMiddelware, async (req, res) => {
     try {
-        console.log(req.body);
-
         let {
             fajlNeve,
             termekNev,
@@ -1379,8 +1377,6 @@ router.delete('/AdatlapLekeres/Kosarurites', authenticationMiddleware, async (re
 
 router.delete('/AdatlapLekeres/TermekUrites', authenticationMiddleware, async (request, response) => {
     let mit = request.body.termék;
-    console.log(mit);
-
     let honnan = jwt.verify(request.cookies.auth_token_access, process.env.JWT_SECRET).userID;
     let TermékTörlés = 'DELETE FROM KosárTermék WHERE KosarID LIKE ? AND TermekID LIKE ?';
     try {
@@ -2001,8 +1997,6 @@ router.patch('/Koktel/SendKommentRating/:id', async (request, response) => {
         ]);
         if (request.body.ert == 'Pozitiv') {
             if (ertekelesek.length != 0) {
-                console.log(ertekelesek);
-
                 if (ertekelesek[0].Pozitiv != 1) {
                     if (ertekelesek[0].Negativ != 1) {
                         const RatingNoveles = 'UPDATE komment SET pozitiv=pozitiv+1 WHERE KommentID LIKE ?';
@@ -2036,8 +2030,6 @@ router.patch('/Koktel/SendKommentRating/:id', async (request, response) => {
                 ]);
             }
         } else if (request.body.ert == 'Negativ') {
-            console.log(ertekelesek);
-
             if (ertekelesek.length != 0) {
                 if (ertekelesek[0].Negativ != 1) {
                     if (ertekelesek[0].Pozitiv != 1) {
@@ -2381,7 +2373,7 @@ router.post('/KosarKuldes', authenticationMiddleware, async (request, response) 
     try {
         const id = request.body.id;
 
-        let mennyiseg = request.body.mennyiseg;
+        let mennyiseg = request.body.mennyiseg
         if (mennyiseg == 'egy') {
             mennyiseg = 1;
         }
@@ -2395,8 +2387,14 @@ router.post('/KosarKuldes', authenticationMiddleware, async (request, response) 
 
         const VanEIlyenQuery = 'SELECT * FROM kosártermék WHERE TermekID = ? &&  KosarID = ?';
         const [vanEIlyen] = await DBconnetion.promise().query(VanEIlyenQuery, [id, UserID]);
-        if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1) {
+        if (MennyisegLe[0].TermekKeszlet == 0) 
+        {
             response.status(200).json({ hiba: 'raktar' });
+        }
+        else{
+        if (MennyisegLe[0].TermekKeszlet < mennyiseg || mennyiseg > 99 || mennyiseg < 1)
+        {
+            response.status(200).json({ hiba: 'mennyiseg' });
         } else {
             //Ellenőrizzük, hogy létezik-e már ilyen rekord az adatbázisban, és ha igen akkor nem újat hozunk létre, hanem a meglévőnek a darabszámát növeljük
             if (vanEIlyen[0] == undefined) {
@@ -2408,7 +2406,6 @@ router.post('/KosarKuldes', authenticationMiddleware, async (request, response) 
                     mennyiseg,
                     ArLekeres[0][0].Ar
                 ]);
-                console.log(KosarFeltolt);
                 response.status(200).json({ Siker: KosarFeltolt.affectedRows });
             } else {
                 const kosarUpdateQuery =
@@ -2417,6 +2414,7 @@ router.post('/KosarKuldes', authenticationMiddleware, async (request, response) 
                 response.status(200).json({ Siker: KosarUpdate.affectedRows, id: KosarUpdate.insertId });
             }
         }
+    }
     } catch (error) {
         console.log(error);
         response.status(500).json({ hiba: error });
@@ -2558,7 +2556,6 @@ router.post('/Webshop/szures', async (request, response) => {
         let OrderBy;
         let OrderByErtek;
         let nevErtek;
-
         for (const item of Object.entries(feltetelek)) {
             if (item[0] == 'MaxAr') {
                 query += ' Ar <= ? AND';

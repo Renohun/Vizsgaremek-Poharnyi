@@ -13,12 +13,10 @@
     width: 20%;
     margin-left: 5%;
 }
-a{
+
+#linkek,#linkek>li>a{
+    font-size: x-large;
     color: black;
-    font-size: x-large;
-}
-#linkek{
-    font-size: x-large;
 }
 #szoveg{
     display: flex;
@@ -50,7 +48,7 @@ font-size: medium;
 #fogalmak{
     color: black !important;
 }
-ul{
+#szoveg>ul{
     color: gray;
     font-size: small;
 }

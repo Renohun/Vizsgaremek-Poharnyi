@@ -49,7 +49,6 @@ const KontaktTovabb = async()=>{
 //népszerű koktél
 const NepszeruKoktelok = async()=>{
     const data = await GetFetch("/api/Fooldal/NepszeruKoktelok")
-    console.log(data)
     let hova = document.getElementById("NepszeruKoktelDiv")
     for (let i = 0; i < data.data.length; i++) {
         const kep = await KepFetch(`/api/AdatlapLekeres/KepLekeres/${data.data[i].BoritoKepUtvonal}`)

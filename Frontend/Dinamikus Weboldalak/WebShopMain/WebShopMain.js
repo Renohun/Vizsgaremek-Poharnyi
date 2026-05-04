@@ -241,7 +241,6 @@ const SelectFeltolt = (data, Select1, Select2, Select3, Select4, Select5) => {
 //
 
 const kartyaGen = async (data, hova) => {
-    console.log(data)
     for (let i = 0; i < data.data.length; i++) {
         const oszlop = document.createElement('div');
         oszlop.classList.add(
@@ -423,7 +422,7 @@ async function szures() {
     {
         szuresiAdatok.Nev = "%"
     }
-    if (KategoriaSelect.value == 'alkohol') {
+    if (KategoriaSelect.value != "Eszköz" || KategoriaSelect.value != "merch" || KategoriaSelect.value != "Szirup") {
         szuresiAdatok.MaxAlk = alkoholSlider.value;
     }
     //selectek hozzáadása
@@ -489,7 +488,6 @@ const paginationHely = document.getElementById('pagination');
 
 const TermekBetoltes = async (jelenOldal = 1, hossz, szurtE = false, szuresiAdatok, NevSzerinti) => {
     jelenlegiOldal = jelenOldal;
-    console.log(jelenOldal)
     let KartyaHova = document.getElementById('kartyaSor');
     KartyaHova.innerHTML = '';
 
@@ -629,13 +627,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             KategoriaSelect.value == 'Szirup' ||
             KategoriaSelect.value == 'Merch' ||
             KategoriaSelect.value == 'Pohar' ||
-            KategoriaSelect.value == '-'
+            KategoriaSelect.value == '-' ||
+            KategoriaSelect.value == 'Eszköz'
         ) {
             alkoholcsuszka.classList.add('eltunt');
         } else {
             alkoholcsuszka.classList.remove('eltunt');
         }
-        if (KategoriaSelect.value == 'Eszkoz' || KategoriaSelect.value == 'Merch' || KategoriaSelect.value == '-') {
+        if (KategoriaSelect.value == 'Eszköz' || KategoriaSelect.value == 'Merch' || KategoriaSelect.value == '-') {
             urtalrtalom.classList.add('eltunt');
         } else {
             urtalrtalom.classList.remove('eltunt');

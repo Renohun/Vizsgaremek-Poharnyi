@@ -3,17 +3,13 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title id="oldalCim">Pohárnyi | Termékek</title>
+        <title>Document</title>
         <link rel="stylesheet" href="../kellékek/bootstrap-5.2.3-dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../KoktélLap/koktellap.css" />
         <link rel="stylesheet" href="../kellékek/NavBar.css" />
-        <link rel="stylesheet" href="../kellékek/universalCSS.css" />
-        <link rel="icon" type="image/x-icon" href="../kellékek/favicon.png" />
-        <link rel="stylesheet" href="../TermekOldal/TermekOldal.css" />
         <link rel="stylesheet" href="../kellékek/lightTheme.css" />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        />
+        <link rel="icon" type="image/x-icon" href="../kellékek/favicon.png" />
+        <link rel="stylesheet" href="../kellékek/universalCSS.css" />
     </head>
     <body class="d-flex flex-column min-vh-100">
         <nav class="navbar navbar-expand-lg bg-body-tertiary hatter shadow">
@@ -158,129 +154,22 @@
                 </div>
             </div>
         </nav>
-
-        <main class="flex-grow-1">
-            <div id="main">
-                <div id="TermekAdatok">
-                    <a href="/WebShop" id="visszaWebshop">&larr; Vissza a webshopra</a>
-                    <div id="TermekCimDiv">
-                        <h2 id="TermekCim"></h2>
-                    </div>
-                    <div id="TermekAdatokMainContent">
-                        <div id="TermekKep">
-                            <img class="img-fluid" id="TermekImg" alt="koktelPic" />
-                        </div>
-                        <div id="TermekLeiras">
-                            <div id="TermekSzovegDiv">
-                                <p id="TermekSzoveg"></p>
-                            </div>
-
-                            <div id="Tulajdonsagok">
-                                <div id="TulGomb">
-                                    <button type="button" class="TovGomb" id="Tbtn">Adatok</button>
-                                    <div class="content" id="TulContent"class="w-100">
-                                        <table id="Tablazat"></table>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="hasonloTermekek">
-                                <h2>Hasonló Termékek</h2>
-
-                                <div id="TermekSor"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="MegrendelesDiv">
-                    <div id="VanePolcon">
-                        <p id="VaneSzoveg">Raktáron</p>
-                    </div>
-                    <div id="ar">
-                        <h1 id="arHely">67Ft</h1>
-                        <h3 id="akciosAr"></h3>
-                        <p id="LiterAr">egységár ft/L: (dinamikus ár)</p>
-                    </div>
-                    <div id="KosarDiv">
-                        <div id="mennyiseg">
-                            <input type="number" value="1" id="mennyisegInput" class="form-control" min="1" max="100" />
-                        </div>
-
-                        <button id="kosarba" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            Kosárba
-                        </button>
-                    </div>
-                    <div id="Ertekeles">
-                        <h2 id="ertekelesCim">Értékelés</h2>
-                        <p id="ErtekelPar">Kérjük értékelje a terméket!</p>
-                        <div id="csillagok">
-                            <input type="button" value="☆" id="star1" class="btn fs-1 p-0 border-0 csillag" />
-                            <input type="button" value="☆" id="star2" class="btn fs-1 p-0 border-0 csillag" />
-                            <input type="button" value="☆" id="star3" class="btn fs-1 p-0 border-0 csillag" />
-                            <input type="button" value="☆" id="star4" class="btn fs-1 p-0 border-0 csillag" />
-                            <input type="button" value="☆" id="star5" class="btn fs-1 p-0 border-0 csillag" />
-                        </div>
-                        <button type="button" id="ErtekelesKuldes" value="">Küldés</button>
-                    </div>
-                </div>
+        <div class="container flex-grow-1">
+            <div class="row fs-1 text-center">
+                <p>Váratlan hiba történt</p>
             </div>
-            <div id="TovabbVissza">
-                <a id="EloTermek"><span id="eloNyil"> &#x2190;</span><span id="eloSzoveg">az Előző termékre</span> </a>
-                <a id="koviTermek"
-                    ><span id="KoviSzoveg">Tovább a következő termékre</span><span id="koviNyil"> &#8594;</span></a
-                >
-            </div>
-        </main>
-        <!--Modal letrehozasa-->
-        <div
-            class="modal fade"
-            id="staticBackdrop"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            tabindex="-1"
-            aria-labelledby="staticBackdropLabel"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h5 id="siker">A Terméket sikeresen kosárba rakta!</h5>
-                        <h5 id="Sokhiba" style="display: none">Kérem adja meg, hogy hány darabot szeretne rendelni!</h5>
-                        <h5 id="raktarhiba" style="display: none">A termék sajnos nincs raktáron!</h5>
-                         <h5 id="MennyisegHiba" style="display: none">A megadott mennyiség érvénytelen!</h5>
-                        <!--<img id="" src="img/test3 copy.gif" alt="Computer man" style="width: 100px; height: 100px" />-->
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            id="tovabb"
-                            class="btn btn-primary"
-                            aria-haspopup=""
-                            data-bs-dismiss="modal"
-                        >
-                            Irány a kosár!
-                        </button>
-                        <button
-                            type="button"
-                            style="display: none"
-                            id="vissza"
-                            class="btn btn-primary"
-                            data-bs-dismiss="modal"
-                        >
-                            vissza
-                        </button>
-                    </div>
-                </div>
+            <div class="row">
+                <input type="button" value="Vissza a Főoldalra" class="btn" id="vissza" />
             </div>
         </div>
         <script src="../kellékek/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../kellékek/themeSwitcher.js"></script>
-        <script src="../kellékek/navBar.js"></script>
-        <script src="../TermekOldal/TermekOldal.js"></script>
+        <script>
+            document.getElementById('vissza').addEventListener('click', () => {
+                window.location.href = '/';
+            });
+        </script>
+        <script type="module" src="../kellékek/navBar.js"></script>
+        <script type="module" src="../kellékek/themeSwitcher.js"></script>
         <script src="../kellékek/footer.js"></script>
     </body>
 </html>

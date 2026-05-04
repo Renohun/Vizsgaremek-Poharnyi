@@ -75,15 +75,15 @@
 }
 
 .TovGomb {
+  padding: 5px;
+  width: 100%;
+  border-radius: 5px;
   margin-top: 5px;
-  margin-bottom: 10px;
-  padding: 0;
-  width: 25%;
-  height: 25px;
+  margin-bottom: 5px;
   color: rgb(31, 31, 31);
   border: none;
-  text-align: left;
-  background-color: rgb(223, 223, 223);
+  text-align: center;
+  background-color: rgb(255, 255, 255);
 }
 .TovGomb:hover {
   background-color: rgb(180, 180, 180);
@@ -108,16 +108,10 @@ table,
 }
 #TulContent {
   margin-top: 30px;
-  width: 300px;
+  width: 100%;
   text-align: left;
-  position: relative;
-  right: 18px;
-  z-index: -1;
-  padding-left: 18px;
   margin: auto;
   justify-self: center;
-  margin: auto;
-  width: 100%;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
