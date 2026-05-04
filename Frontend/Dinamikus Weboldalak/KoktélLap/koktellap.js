@@ -43,48 +43,85 @@ document.addEventListener("DOMContentLoaded",async()=>{
 })
 
 const AdatLekeres=async(url)=>{
-    const valasz=await fetch(url)
-    if (valasz.ok) {
-        return valasz.json()
+    try {
+        const valasz=await fetch(url)
+        if (valasz.ok) {
+            return valasz.json()
+        }
+        else{
+            throw new Error("Hiba");
+            
+        }
+    } 
+    catch (error) {
+        console.log(error);
     }
 }
 const AdatLekeresKep=async(url)=>{
-    const valasz=await fetch(url,{
-        method:"GET",
-        headers:{"Content-Type":"image/jpg"}
-    })
-    if (valasz.ok) {
-        return valasz.blob()
+    try {
+        const valasz=await fetch(url,{
+            method:"GET",
+            headers:{"Content-Type":"image/jpg"}
+        })
+        if (valasz.ok) {
+            return valasz.blob()
+        }
+        else{
+            throw new Error("Hiba");
+            
+        }
+    } 
+    catch (error) {
+        console.log(error);
+        
     }
 }
 
 const AdatKuldes=async(url,adat,tipus)=>{
-    let valasz
-    if (adat!="") {
-        valasz=await fetch(url,{
-            method:tipus,
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify(adat)
-        })
-    }
-    else{
-        valasz=await fetch(url,{
-            method:tipus,
-            headers:{"Content-Type":"application/json"}
-        })
-    }
-    if (valasz.ok) {
-        return valasz.json()
+    try {
+        let valasz
+        if (adat!="") {
+            valasz=await fetch(url,{
+                method:tipus,
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify(adat)
+            })
+        }
+        else{
+            valasz=await fetch(url,{
+                method:tipus,
+                headers:{"Content-Type":"application/json"}
+            })
+        }
+        if (valasz.ok) {
+            return valasz.json()
+        }
+        else{
+            throw new Error("Hiba");
+        }
+        
+    } 
+    catch (error) {
+        console.log(error);
     }
 }
 
 const AdatKuldesKep=async(url,adat,tipus)=>{
-    let valasz=await fetch(url,{
+    try {
+        let valasz=await fetch(url,{
             method:tipus,
             body:adat
-    })
-    if (valasz.ok) {
-        return valasz.json()
+        })
+        if (valasz.ok) {
+            return valasz.json()
+        } 
+        else{
+            throw new Error("Hiba");
+        }
+    } 
+    catch (error) {
+        console.log(error);
+        
     }
 }
 
@@ -312,8 +349,8 @@ async function kommentCreate(adat,i,adatok) {
             document.getElementById("RegDate").innerHTML=`Regisztráció dátuma: `+((Kommadatok.adat.RegisztracioDatuma).split("T"))[0]
             document.getElementById("Nev").innerHTML=`Felhasználónév: `+Kommadatok.adat.Felhasználónév
             document.getElementById("KeszitNum").innerHTML=`Készített koktélok: `+Kommadatok.statisztika.KoktelDB
-            
-            if (adatok.belepette==true&&(adatok.adat.FelhID!=adat.Keszito)==true) {
+
+            if (adatok.belepette==true&&(adatok.adat.FelhID!=adat.Keszito)==true&&adat.UgyanazE==false) {
                 
                 let jelentesGomb=document.createElement("input")
                 jelentesGomb.setAttribute("type","button")

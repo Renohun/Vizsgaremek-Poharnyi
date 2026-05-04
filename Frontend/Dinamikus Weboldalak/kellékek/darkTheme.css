@@ -158,6 +158,6 @@ body {
 #cimsor>a,#linkek>li,#linkek>li>a{
     color: #9acd32 !important;
 }
-.cimsor,.aszfSzoveg,section,#szoveg>p,#szoveg>ol{
+.cimsor,.aszfSzoveg,section,#szoveg>p,#szoveg>ul{
     color: black;
 }

@@ -324,8 +324,6 @@ async function AdatlapLekeres(){
                         }
                         //Ha nem
                         else{
-                            console.log("?");
-                            
                             //Értesítjük a felhasználót hogy hiba van
                             modal("Hiba","Váratlan Hiba Történt!")
                         }
